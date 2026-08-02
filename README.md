@@ -26,6 +26,13 @@
 ### 3. 🚨 Failure Report Protocol
 เมื่อพยายามแก้ไข Error ล้มเหลวครบ 2 ครั้ง Agent จะต้องหยุดทำงานและส่ง **Failure Report** พร้อม Root Cause และ Rollback Status ทันที
 
+## 🧱 Rule Architecture & Modules
+
+โปรเจกต์นี้ออกแบบโครงสร้างกฎแบบ **Modular (Public Core + Internal Domain Rules)**:
+
+- 🌐 **Public Core ([`AGENTS.md`](./AGENTS.md)):** ปรัชญาหลัก, โครงสร้างการทำงาน 4 ขั้นตอน, และสไตล์การตอบกลับแบบ Action-First & High-Density (ADHD-Friendly)
+- 🔒 **Internal Domain Rules (12 Modules):** กฎเชิงลึกเฉพาะทาง 12 ด้าน (Security, Coding Standards, API Guidelines, DB Design, UX/UI, Observability, Infrastructure ฯลฯ) ที่ถูกเก็บเป็น Private Module สำหรับมาตรฐานภายในองค์กร
+
 ---
 
 ## 🚀 How to Use
@@ -40,3 +47,4 @@
 ## 📄 Core Configuration File
 
 - [`AGENTS.md`](./AGENTS.md) — Master Agent Configuration & Rules (ไฟล์หลักที่กำหนดกรอบแนวคิดและกฎการสื่อสารทั้งหมด)
+
