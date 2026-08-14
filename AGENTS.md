@@ -1,7 +1,7 @@
 # Master Agent Configuration & Rules
 
 > กฎการทำงานส่วนกลาง (Global Rules) สำหรับ Agent ทุกตัวที่จะถูกนำไปใช้กับโปรเจกต์ในอนาคต
-> Primary Stack: Nuxt 4 + Nitro + Prisma + PostgreSQL + Docker + Tailwind CSS + Nuxt UI
+> Primary Supported Stacks: Nuxt 4 (Nitro + Vue 3) & React (Next.js / Vite) + Prisma + PostgreSQL + Docker + Tailwind CSS
 
 ---
 
@@ -25,6 +25,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 ### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต)
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
 - **วิเคราะห์ Existing Codebase** (ถ้ามี) — โครงสร้างโฟลเดอร์, dependencies, patterns ที่ใช้อยู่
+- **Auto-Detect Tech Stack:** ตรวจสอบ `package.json` หรือโครงสร้างโปรเจกต์อัตโนมัติ เพื่อสลับการทำงานระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** ตามโปรเจกต์จริงโดยไม่อคติ
 - ประเมิน Tech Stack ที่เหมาะสมกับเนื้องาน
 - หาข้อจำกัด (Constraints) ที่อาจเกิดขึ้น
 - **ระบุ Non-functional Requirements** — Performance, Scalability, Security needs, SLA

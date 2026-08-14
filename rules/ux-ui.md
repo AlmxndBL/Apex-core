@@ -18,12 +18,13 @@
   - 🚫 **No Self-Referencing Recursion:** ตรวจสอบการ Import และ Render ตัวเอง เพื่อป้องกัน Infinite Recursion Error
 
 ## 2. Styling Rules
-- ใช้ **Tailwind CSS + Nuxt UI** เป็นค่าเริ่มต้น
-- Nuxt UI เป็น component library หลัก (UButton, UInput, UModal, UTable, etc.)
+- ใช้ **Tailwind CSS** เป็นค่าเริ่มต้นสำหรับทุก Framework
+- **Component Libraries:**
+  - สำหรับ Nuxt 4: ใช้ **Nuxt UI** (`UButton`, `UInput`, `UModal`, `UTable` ฯลฯ)
+  - สำหรับ React: ใช้ **Shadcn UI** / **Radix UI** หรือ Tailwind primitives
 - ใช้ Tailwind utility classes สำหรับ custom styling
 - หลีกเลี่ยง Inline Styles ยกเว้น dynamic values
 - ออกแบบโดยยึดหลัก Mobile-first เสมอ
-- สี: ใช้ Nuxt UI color system (`primary`, `gray`, `error`) + Tailwind custom colors
 
 ## 3. Accessibility (a11y)
 - องค์ประกอบ Interactive ทุกอย่าง (เช่น ปุ่ม) ต้องมี ARIA attributes หรือ `alt` tags ให้ครบถ้วน
@@ -37,12 +38,13 @@
   - `/redesign-existing-projects` หรือ `/stitch-design-taste` สำหรับการ Rework หน้าจอเดิม
   - `/minimalist-ui` หรือ `/industrial-brutalist-ui` หากผู้ใช้ต้องการสไตล์ที่ชัดเจนเฉพาะทาง
 
-## 5. State Management
-- ใช้ **Pinia** เป็น default (built-in กับ Nuxt)
-- Local state: `ref()`, `reactive()` สำหรับ component-level state
-- Shared state: Pinia store สำหรับ state ที่ใช้ข้าม component
-- Server state: `useAsyncData()` / `useFetch()` สำหรับ server data (ห้ามเก็บใน Pinia)
-- กฎ: ห้ามเก็บ server response ใน Pinia — ใช้ Nuxt data fetching composables แทน (built-in cache + SSR support)
+## 5. State Management & Data Fetching
+- **สำหรับ Nuxt 4 (Vue):**
+  - Shared State: ใช้ **Pinia** หรือ `useState()`
+  - Server Data: ใช้ `useAsyncData()` / `useFetch()` (ห้ามเก็บ server response ใน Pinia)
+- **สำหรับ React (Next.js / Vite):**
+  - Shared State: ใช้ **Zustand** หรือ React Context
+  - Server Data: ใช้ **TanStack Query (React Query)** หรือ SWR (หรือ Next.js Server Components)
 
 ## 6. Performance Optimization
 - ใช้ `<NuxtImage>` แทน `<img>` เสมอ (auto optimization, lazy loading)

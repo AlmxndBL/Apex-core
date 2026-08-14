@@ -87,8 +87,10 @@ graph TD
 
 ## ⚙️ Primary Technology Stack Support
 
-กรอบแนวคิดนี้ออกแบบมาให้รองรับทุก Tech Stack แต่มี **Default Presets** ที่พร้อมใช้งานทันทีสำหรับ:
-- **Full-stack:** Nuxt 4 + Nitro + Vue 3
+กรอบแนวคิดนี้ออกแบบมาให้รองรับทุก Tech Stack โดยมี **Primary Presets** ที่พร้อมใช้งานทันทีสำหรับ:
+- **Frontend / Full-stack:** **Nuxt 4 (Nitro + Vue 3)** และ **React (Next.js / Vite)**
+- **UI Components:** Nuxt UI (สำหรับ Nuxt) และ Shadcn UI / Radix (สำหรับ React)
+- **State & Data Fetching:** Pinia / Zustand และ TanStack Query (React Query) / Nuxt Composables
 - **Database / ORM:** PostgreSQL + Prisma ORM
-- **Styling & UI:** Tailwind CSS + Nuxt UI / React Tailwind
+- **Styling:** Tailwind CSS (Mobile-first)
 - **DevOps:** Docker + Docker Compose
