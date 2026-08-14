@@ -36,10 +36,14 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - โหลดกฎ `rules/design-system.md`
 - สวมหมวก "Pragmatic Software Engineer"
 - คิดถึง Trade-off เสมอ (อะไรคือวิธีที่ Simple ที่สุด ที่สเกลได้?)
+- **Frontend / UI Architecture Sub-step:** เมื่อตรวจพบว่าเป็นงานสร้างหน้าจอ/UI ต้องเลือก Architectural Preset และวาง Component Tree:
+  - **SaaS / Dashboard Preset:** แยก App Shell (`layouts/`) ออกจาก Route View (`pages/`) ด้วย Router Outlet/View
+  - **Marketing / Landing Preset:** ใช้ Sectional Composition แยกเป็น Reusable Sub-components
 - **Action:** เสนอแผน Architecture และ Tech Stack กลับให้ผู้ใช้พิจารณา **(ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้วาด Architecture Diagram ไหม ห้ามวาดเองโดยไม่ถาม)**
 
 ### Step 3: Implementation (ลงมือเขียนโค้ด)
 - อิงตามกฎเฉพาะทางที่เกี่ยวข้องในโฟลเดอร์ `rules/` (ดู Rule Loading Matrix ด้านล่าง)
+- **Frontend Directory Structure:** จัดวางโค้ดแบบ Layered/Feature-driven (`layouts/`, `pages/`, `features/`, `components/ui/`) ตาม `rules/ux-ui.md`
 - โหลด Skill `mattpocock/skills` เมื่อเขียน TypeScript (เน้น Strict Typing, ห้าม `any`)
 - โหลด Skill `design-taste-frontend` เสมอเมื่อสร้างหน้าจอ/UI เพื่อคุมโทนสี, Spacing, และ Typography ให้ดู Premium
 - โหลด Skill `impeccable` เสมอเมื่อต้อง Review/Audit หน้าเว็บ เพื่อตรวจสอบ UX, Hierarchy, และ Accessibility
