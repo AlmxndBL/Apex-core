@@ -78,7 +78,13 @@ graph TD
 
 ### สำหรับ Google Antigravity / Cursor / Windsurf
 1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md) และโฟลเดอร์ [`rules/`](./rules) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
-2. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` มาใช้อัตโนมัติในทุกๆ Task
+2. คัดลอกไฟล์ [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) ไปไว้ที่ Root เพื่อสร้างแผนผังระบบสรุปให้ AI อ่านเข้าใจโครงสร้างทันที
+3. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` มาใช้อัตโนมัติในทุกๆ Task
+
+### สำหรับขึ้นโปรเจกต์ใหม่จาก 0 (Greenfield Project Blueprint)
+เมื่อให้ Agent สร้างโปรเจกต์ใหม่จากศูนย์ Agent จะสร้างโครงสร้าง Root Directory ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) ดังนี้:
+- **สำหรับ Nuxt 4:** สร้าง `app/layouts/`, `app/pages/`, `app/features/`, `app/components/ui/`, `server/api/`
+- **สำหรับ React:** สร้าง `src/layouts/`, `src/pages/`, `src/features/`, `src/components/ui/`, `src/routes/`
 
 ### สำหรับ Claude Code
 - นำเนื้อหาหลักใน [`AGENTS.md`](./AGENTS.md) ไปใส่ไว้ในไฟล์ `CLAUDE.md` ที่ Root ของโปรเจกต์
