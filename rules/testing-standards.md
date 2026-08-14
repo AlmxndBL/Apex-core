@@ -26,7 +26,7 @@
 - Test Runner: **Vitest** เป็น default (เร็วกว่า Jest, ESM native, TypeScript built-in, Jest-compatible API)
 - API Mocking: **MSW (Mock Service Worker)** สำหรับ mock HTTP requests (ทั้ง browser และ Node)
 - E2E Testing: **Playwright** เป็น default (cross-browser, auto-wait, faster than Cypress)
-- Component Testing: `@nuxt/test-utils` + `mountSuspended` สำหรับ Nuxt components
+- Component Testing: Nuxt: `@nuxt/test-utils` + `mountSuspended` / React: `@testing-library/react` + `render`
 - ตารางเปรียบเทียบ:
   | Feature | Vitest | Jest |
   |---|---|---|
@@ -52,3 +52,9 @@
 - ใช้ `mountSuspended` แทน `mount` สำหรับ async components
 - ใช้ `mockNuxtImport` สำหรับ mock auto-imported composables
 - Server API routes: test ด้วย `$fetch` ใน integration test หรือ unit test ด้วย `eventHandler`
+
+## 9. React-specific Testing
+- ใช้ `@testing-library/react` + `@testing-library/user-event` สำหรับ component tests
+- ใช้ `renderHook` สำหรับ test custom hooks
+- Next.js: ใช้ `next/jest` config สำหรับ Jest/Vitest integration
+- Server Components: test ด้วย `async/await` render pattern

@@ -48,8 +48,16 @@
 - Feature Flags: ใช้สำหรับ features ที่ยังไม่พร้อม release (เช่น environment variable `FEATURE_NEW_CHECKOUT=true`)
 - ห้าม test ใน production เด็ดขาด
 
-## ⚡ Nuxt-specific Architecture
+## ⚡ Framework-specific Architecture
+
+### Nuxt 4 (Vue)
 - ใช้ Nuxt Layers สำหรับ shared code across projects
 - Nuxt Modules: ใช้ official modules เป็น priority (เช่น `@nuxt/image`, `@nuxt/fonts`, `nuxt-security`)
 - Server vs Client: ใช้ `server/` สำหรับ business logic, `composables/` สำหรับ client state, `utils/` สำหรับ shared utilities
 - Auto-imports: ใช้ Nuxt auto-imports แต่ explicit import สำหรับ third-party libraries
+
+### React (Next.js / Vite)
+- Next.js: ใช้ App Router + Server Components เป็น default
+- Shared code: ใช้ Monorepo (Turborepo / pnpm workspaces) สำหรับ shared packages
+- Server vs Client: ใช้ `'use server'` / `'use client'` directives (Next.js) หรือแยก `src/api/` สำหรับ backend logic (Vite)
+- Explicit imports เสมอ (React ไม่มี auto-imports)

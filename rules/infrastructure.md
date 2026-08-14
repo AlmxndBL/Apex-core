@@ -25,8 +25,9 @@
 - จัดเตรียมระบบออกเป็น 3 Environments: `development`, `staging`, `production`
 - แยกไฟล์การตั้งค่าออกเป็น: `.env.development`, `.env.staging`, `.env.production`
 - **Naming convention:**
-  - ตัวแปรที่เปิดเผยฝั่ง Client ให้ขึ้นต้นด้วย `NUXT_PUBLIC_*`
-  - ตัวแปรที่ใช้เฉพาะบน Server (เช่น Database URL, API Keys) ให้ขึ้นต้นด้วย `NUXT_*` (ไม่มี PUBLIC)
+  - Nuxt: Client = `NUXT_PUBLIC_*` / Server-only = `NUXT_*`
+  - Next.js: Client = `NEXT_PUBLIC_*` / Server-only = ไม่มี prefix
+  - Vite: Client = `VITE_*` / Server-only = ไม่มี prefix
 
 ## 5. CI/CD Pipeline
 - ใช้ **GitHub Actions** สำหรับทำ Workflow: Build → Lint → Test → Build Docker → Deploy
@@ -43,3 +44,8 @@
   - รายสัปดาห์: 4 สัปดาห์ล่าสุด
   - รายเดือน: 3 เดือนล่าสุด
 - **Test restore:** ต้องมีการซ้อมกู้คืนข้อมูล (Test restore) อย่างน้อยทุกๆ ไตรมาส (Quarterly)
+
+## 7. Environment Variable Validation
+- ต้อง Validate ทุก Environment Variable ตอน App เริ่มรัน (Fail Fast)
+- ใช้ Zod หรือ `@t3-oss/env-core` สร้าง Schema สำหรับ ENV ทั้งหมด
+- หาก ENV ที่จำเป็นขาดหายไป แอปต้องหยุดทำงานทันทีพร้อมแจ้ง Error ชัดเจนว่าขาดตัวแปรอะไร

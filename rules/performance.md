@@ -19,11 +19,11 @@
 ## 3. Bundle Size Budget
 - **Initial JS:** ขนาดไม่ควรเกิน **200KB** (gzipped) เพื่อการโหลดหน้าแรกที่รวดเร็ว
 - ใช้เทคนิค **Lazy load routes** เพื่อโหลดเฉพาะสิ่งที่จำเป็น
-- หมั่นตรวจสอบและ Audit Bundle size โดยใช้คำสั่ง `nuxt analyze`
+- หมั่นตรวจสอบและ Audit Bundle size (Nuxt: `nuxt analyze` / React: `vite-bundle-visualizer` หรือ `@next/bundle-analyzer`)
 
 ## 4. Frontend Optimization
-- **Code splitting:** ปล่อยให้ระบบจัดการอัตโนมัติ (Auto via Nuxt)
-- **Image optimization:** ใช้ component `<NuxtImage>` และฟอร์แมตสมัยใหม่เช่น WebP หรือ AVIF
+- **Code splitting:** ปล่อยให้ระบบจัดการอัตโนมัติ (Nuxt: Auto / React: `React.lazy()` + `Suspense` หรือ Next.js dynamic imports)
+- **Image optimization:** ใช้ component เฉพาะทาง (Nuxt: `<NuxtImage>` / Next.js: `next/image` / Vite: `vite-imagetools`) และฟอร์แมตสมัยใหม่เช่น WebP หรือ AVIF
 - **Font optimization:**
   - โหลดเฉพาะชุดอักษร (Subset) ที่ใช้
   - กำหนด `font-display: swap` เสมอ
@@ -38,5 +38,5 @@
 กำหนดกลยุทธ์การแคชระดับต่างๆ:
 - **CDN Caching:** สำหรับ Static assets (เช่น รูปภาพ, ไฟล์ JS/CSS) ควรกำหนดให้เป็น immutable และมีอายุ `max-age=1year`
 - **API Response Caching:** ใช้เทคนิค Stale-while-revalidate สำหรับข้อมูลที่มีการเปลี่ยนแปลงบ่อยแต่ไม่ต้องการความเรียลไทม์ขั้นสุด
-- **Server-side Caching:** ใช้ `defineCachedEventHandler` ของ Nuxt (Nitro) เพื่อจำกัดภาระของเซิร์ฟเวอร์
+- **Server-side Caching:** Nuxt: ใช้ `defineCachedEventHandler` (Nitro) / Next.js: ใช้ ISR (`revalidate`) หรือ Route Segment Config / React: ใช้ TanStack Query cache
 - **Redis:** ใช้งานเมื่อจำเป็น เช่น การจัดการ Sessions หรือแคชผลลัพธ์ของ Queries ที่ถูกเรียกซ้ำถี่ๆ ในระบบที่มีสเกลใหญ่ขึ้น

@@ -12,7 +12,7 @@
   - สำหรับ Web App / Dashboard: ต้องใช้ Layout Shell + Router Outlet (`<NuxtPage />` หรือ `<Outlet />`) ห้าม hardcode content รวมไว้ใน Layout เดียว
   - สำหรับ Marketing / Landing Page: ใช้ Sectional Composition Pattern (`<HeroSection>`, `<FeatureSection>`)
 - **Strict Component Red-Lines:**
-  - 🚫 **No Monolithic Component:** ห้ามสร้างไฟล์ UI เดียวเกิน 150 บรรทัด ให้ย่อยเป็น Sub-components
+  - 🚫 **No Monolithic Component:** ห้ามสร้างไฟล์ UI เดียวเกิน 200 บรรทัด ให้ย่อยเป็น Sub-components (ไม่นับรวม Template/JSX ที่มี Tailwind classes เป็นหลัก)
   - 🚫 **No Prop Drilling > 2 Levels:** เกิน 2 ชั้นให้ใช้ Store / Context API / Composition Slot
   - 🚫 **No Direct API Calls in UI Layer:** ห้ามเรียก API ตรงใน Atomic UI Components ให้ผ่าน Composables / Hooks / Service Layer เสมอ
   - 🚫 **No Self-Referencing Recursion:** ตรวจสอบการ Import และ Render ตัวเอง เพื่อป้องกัน Infinite Recursion Error
@@ -47,21 +47,23 @@
   - Server Data: ใช้ **TanStack Query (React Query)** หรือ SWR (หรือ Next.js Server Components)
 
 ## 6. Performance Optimization
-- ใช้ `<NuxtImage>` แทน `<img>` เสมอ (auto optimization, lazy loading)
-- Lazy load components: `const LazyComponent = defineAsyncComponent(() => import('...'))` หรือ prefix `Lazy` ใน Nuxt
-- Virtual scrolling: ใช้สำหรับ list > 100 items (เช่น `vue-virtual-scroller`)
-- ห้ามใช้ `v-if` + `v-for` บน element เดียวกัน
-- ใช้ `v-show` แทน `v-if` สำหรับ elements ที่ toggle บ่อย
+- **Image Optimization:**
+  - Nuxt: ใช้ `<NuxtImage>` แทน `<img>` เสมอ (auto optimization, lazy loading)
+  - React: ใช้ `next/image` (Next.js) หรือ `vite-imagetools` (Vite)
+- **Lazy load components:**
+  - Nuxt: prefix `Lazy` หรือ `defineAsyncComponent()`
+  - React: ใช้ `React.lazy()` + `<Suspense>` หรือ `next/dynamic`
+- Virtual scrolling: ใช้สำหรับ list > 100 items (เช่น `vue-virtual-scroller` หรือ `@tanstack/react-virtual`)
 
 ## 7. Error Boundary
-- ใช้ `<NuxtErrorBoundary>` ครอบ section ที่อาจเกิด error
+- **Nuxt:** ใช้ `<NuxtErrorBoundary>` ครอบ section ที่อาจเกิด error + สร้าง `error.vue` ที่ root
+- **React:** ใช้ React Error Boundary class component หรือ `react-error-boundary` package
 - ต้องมี Fallback UI ที่สื่อความหมาย (ไม่ใช่หน้าว่าง)
 - Report errors ไปยัง Sentry ผ่าน `onError` callback
-- Global error page: สร้าง `error.vue` ที่ root สำหรับ unhandled errors
 
 ## 8. Form Handling
-- ใช้ **VeeValidate + Zod** สำหรับ form validation (Nuxt UI form integration)
-- หรือใช้ Nuxt UI `<UForm>` component ที่ integrate กับ Zod schema
+- **Nuxt:** ใช้ VeeValidate + Zod หรือ Nuxt UI `<UForm>` ที่ integrate กับ Zod schema
+- **React:** ใช้ React Hook Form + Zod (`@hookform/resolvers/zod`)
 - Client-side validation ก่อน submit เสมอ
 - Server-side validation ต้องมีอีกชั้นเสมอ (อย่าเชื่อ client)
 - แสดง error messages ใต้ field ที่ผิด ไม่ใช่รวมไว้ที่เดียว

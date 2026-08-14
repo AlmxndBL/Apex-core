@@ -38,6 +38,7 @@
 - Version เก่าต้อง deprecate ล่วงหน้าอย่างน้อย 3 เดือน (หรือ 2 releases)
 - ส่ง `Deprecation` header ใน response ของ API ที่กำลังจะ deprecate
 - Nuxt: จัดโครงสร้าง `server/api/v1/` และ `server/api/v2/` แยกกัน
+  - Next.js: จัดโครงสร้าง `app/api/v1/` และ `app/api/v2/` แยกกัน
 
 ## 6. Error Response Standard
 - Error response ต้องมีโครงสร้างที่ชัดเจน:
@@ -60,6 +61,7 @@
 - ทุก endpoint ต้อง validate request ก่อนประมวลผล
 - ใช้ Zod schema สำหรับ validate: body, query params, path params
 - Nuxt/Nitro: ใช้ `readValidatedBody()` และ `getValidatedQuery()` เป็น default
+  - Next.js: ใช้ Zod `.parse()` ร่วมกับ `NextRequest` ใน Route Handlers
 - Validation errors ต้องคืนค่าเป็น 400 Bad Request พร้อม details
 
 ## 8. Timeout & Retry
@@ -86,4 +88,11 @@
 - จัดกลุ่ม routes ตาม resource: `server/api/users/`, `server/api/posts/`
 - ใช้ `server/utils/` สำหรับ shared logic (DB client, validators)
 - ใช้ `server/middleware/` สำหรับ auth, logging, rate limiting
+- Return type ต้อง typed ชัดเจน (ไม่ใช่ `any`)
+
+## 12. Next.js / React API Best Practices
+- Next.js App Router: ใช้ Route Handlers (`route.ts`) ใน `app/api/`
+- ใช้ `NextRequest` / `NextResponse` สำหรับ type-safe request/response
+- จัดกลุ่ม routes ตาม resource: `app/api/users/route.ts`, `app/api/posts/route.ts`
+- ใช้ middleware (`middleware.ts`) สำหรับ auth, rate limiting
 - Return type ต้อง typed ชัดเจน (ไม่ใช่ `any`)

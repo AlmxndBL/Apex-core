@@ -44,6 +44,7 @@ feat(auth): add login with google
 - Feature branches - แยกจาก develop และรวมกลับเข้า develop
 
 **ข้อห้าม:** ห้าม Push โค้ดตรงเข้า `main` หรือ `develop` โดยเด็ดขาด การนำโค้ดเข้าระบบหลักต้องผ่านการทำ Pull Request (PR) เท่านั้น
+- **ข้อยกเว้นสำหรับ Solo Developer:** อนุญาตให้ push ตรงเข้า `main` ได้ และใช้ Feature branch เฉพาะเมื่อทำงานขนาดใหญ่
 
 ## 4. Pull Request Standards
 PR ทุกอันต้องมี Template ที่ชัดเจน ดังนี้:

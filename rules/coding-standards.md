@@ -21,7 +21,7 @@
 - Files/Directories: `kebab-case` (e.g., `user-profile.ts`)
 - Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`)
 - Types/Interfaces: `PascalCase` with descriptive names (e.g., `UserCreateInput`)
-- Database columns: `snake_case` (e.g., `created_at`)
+- Database columns: ดูรายละเอียด Naming Conventions ที่ `rules/database-design.md` Section 10
 - Environment variables: `UPPER_SNAKE_CASE` with prefix (e.g., `NUXT_PUBLIC_API_URL`)
 - Boolean variables: prefix with `is`, `has`, `can`, `should` (e.g., `isActive`, `hasPermission`)
 
