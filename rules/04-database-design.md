@@ -1,0 +1,90 @@
+# 04. Database Design & Operations Standards
+
+> **Priority 4:** สถาปัตยกรรมฐานข้อมูล การจัดการข้อมูล และกระบวนการ Seeding ที่ปลอดภัย
+
+---
+
+## 🗄️ 1. Tools & ORM
+- ใช้ **Prisma** หรือ **Drizzle** เป็น ORM หลักร่วมกับ PostgreSQL เพื่อความ Type-safe 100%
+- **ห้ามแก้ไข Table ใน Database โดยตรง:** ทุกการเปลี่ยนแปลง Schema ต้องผ่านกระบวนการ Migration (`prisma migrate dev`) เสมอ
+
+---
+
+## 📐 2. Schema Design & Naming Conventions
+- **Table Names:** `PascalCase` เอกพจน์ (เช่น `User`, `OrderItem`)
+- **Column Names:** ใน Prisma Schema ใช้ `camelCase` และแมปเป็น `snake_case` ใน Database ด้วย `@map` (เช่น `createdAt DateTime @map("created_at")`)
+- **Foreign Keys:** `fk_{table}_{ref_table}`
+- **Indexes:** `idx_{table}_{columns}` (ใส่ Index ให้กับคอลัมน์ที่ถูกค้นหาด้วย `WHERE`, `JOIN` หรือ `ORDER BY` บ่อยๆ)
+- **Timestamps:** ทุก Table ต้องมี `created_at` และ `updated_at` เสมอ
+
+---
+
+## 🛡️ 3. Query Performance & Safety
+- **ห้ามต่อ String Raw SQL เด็ดขาด:** ป้องกัน SQL Injection 100% โดยใช้ Parameterized Query หรือ ORM Methods
+- **ป้องกันปัญหา N+1 Query:** ใช้ `include` หรือ `select` ใน Prisma เพื่อ Join ข้อมูลแทนการยิง Query ใน Loop
+- **Transaction Management:**
+  - ใช้ `prisma.$transaction()` เมื่อมีการเปลี่ยนแปลงข้อมูลมากกว่า 1 Table พร้อมกัน
+  - กำหนด Timeout ของ Transaction (ไม่เกิน 5 วินาที) เพื่อป้องกัน Table Lock ค้าง
+
+---
+
+## 🌱 4. Centralized Seeding Strategy (Prisma Seeding)
+
+เพื่อป้องกันปัญหา `npx prisma db seed` พัง และป้องกันข้อมูลทดสอบหลุดขึ้น Production ให้ใช้โครงสร้าง **Central Seeding Dispatcher**:
+
+```text
+prisma/
+├── seed.ts           # 🌟 Main Entrypoint ที่ Prisma เรียกใช้
+├── seeds/
+│   ├── dev.seed.ts   # ข้อมูลจำลองและบัญชีทดสอบทุก Role สำหรับ Dev/Local
+│   └── prod.seed.ts  # ข้อมูลเริ่มต้นระบบ (เฉพาะ Roles, Permissions, System Settings)
+```
+
+### 🔒 โค้ดมาตรฐานใน `prisma/seed.ts`:
+```typescript
+import { PrismaClient } from '@prisma/client'
+import { seedDev } from './seeds/dev.seed'
+import { seedProd } from './seeds/prod.seed'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  const env = process.env.APP_ENV || process.env.NODE_ENV || 'development'
+  console.log(`🌱 Running seed for environment: ${env}`)
+
+  // 1. รัน Production Master Seed เสมอ (Roles, Permissions)
+  await seedProd(prisma)
+
+  // 2. รัน Dev Mock Data เฉพาะเมื่อไม่ใช่ Production
+  if (env === 'development' || env === 'test' || env === 'local') {
+    await seedDev(prisma)
+  } else {
+    console.log('🔒 Production mode detected: Skipping mock user seeds.')
+  }
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Seeding error:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+```
+
+---
+
+## 🗑️ 5. Soft Delete & Data Purge Policy
+- ข้อมูลธุรกิจสำคัญห้าม Hard Delete (ใช้ `deleted_at DateTime?` แทน)
+- ทุก Query ปกติต้องกรอง `WHERE deleted_at IS NULL` เสมอ (ใช้ Prisma `$extends` สร้าง Default Scope)
+- **Unique Constraint with Soft Delete:** สร้าง Constraint แบบ `@@unique([email, deleted_at])` เพื่อให้สามารถสมัครด้วย Email เดิมได้หลังถูก Soft Delete
+- **Cascading Soft Delete:** เมื่อ Soft Delete ข้อมูลแม่ ต้องทำการ Soft Delete ข้อมูลลูกที่เกี่ยวข้องใน Application Layer
+- **Data Purge:** กำหนด Purge Job กวาดลบข้อมูลจริงหลังผ่านไป 90 วัน เพื่อความสอดคล้องกับกฎหมาย PDPA/GDPR
+
+---
+
+## 💾 6. Backup & Recovery Strategy
+- ทำ Automated Backup ประจำวันด้วย `pg_dump` และ Continuous WAL Archiving
+- **Retention Policy:** รายวันเก็บ 7 วันล่าสุด, รายสัปดาห์เก็บ 4 สัปดาห์, รายเดือนเก็บ 3 เดือน
+- **Test Restore:** ซ้อมกู้คืนข้อมูลทดสอบบน Staging อย่างน้อยทุกไตรมาส (Quarterly)

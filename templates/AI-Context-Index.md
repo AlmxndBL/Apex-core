@@ -1,6 +1,7 @@
 # 🗺️ AI Context Index & Project Architecture Map
 
 > **คำชี้แจงสำหรับ AI Agent:** ไฟล์นี้คือแผนที่สรุปบริบทของโปรเจกต์ (Single Source of Truth) เพื่อให้ Agent อ่านและเข้าใจโครงสร้างระบบทันทีโดยไม่ต้องสแกนหาไฟล์ทั้งโปรเจกต์
+> ⚠️ **Security Notice:** ห้ามใส่ Connection String, API Keys, Passwords หรือ Secrets จริงลงในไฟล์นี้โดยเด็ดขาด ให้ใช้ Environment Variables หรือ Pattern `<secret:VAR_NAME>` แทนเสมอ
 
 ---
 
@@ -21,7 +22,7 @@
 .
 ├── AGENTS.md                  # Master Agent Rules
 ├── AI-Context-Index.md        # แผนที่สรุปบริบทโปรเจกต์สำหรับ AI (ไฟล์นี้)
-├── rules/                     # โฟลเดอร์เก็บกฎเฉพาะทาง 12 โมดูล
+├── rules/                     # โฟลเดอร์เก็บกฎมาตรฐาน 6 เสาหลัก
 ├── app/ (หรือ root)
 │   ├── layouts/               # App Shell Layouts (default.vue, admin.vue)
 │   ├── pages/                 # File-based Routes & Route Views
@@ -41,7 +42,7 @@
 .
 ├── AGENTS.md                  # Master Agent Rules
 ├── AI-Context-Index.md        # แผนที่สรุปบริบทโปรเจกต์สำหรับ AI (ไฟล์นี้)
-├── rules/                     # โฟลเดอร์เก็บกฎเฉพาะทาง 12 โมดูล
+├── rules/                     # โฟลเดอร์เก็บกฎมาตรฐาน 6 เสาหลัก
 ├── src/                       # React Application Source
 │   ├── layouts/               # App Shell Layouts (RootLayout.tsx, AdminLayout.tsx)
 │   ├── pages/                 # Page View Components per Route

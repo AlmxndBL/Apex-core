@@ -1,0 +1,63 @@
+# 02. Coding Standards & Conventions
+
+> **Priority 2:** มาตรฐานการเขียนโค้ดและระเบียบปฏิบัติระดับ Production-Ready
+
+---
+
+## 1. Strict Type Safety (No `any`)
+- **ห้ามใช้ `any` ใน TypeScript โดยเด็ดขาด**
+- หากไม่แน่ใจในโครงสร้างข้อมูล ให้ใช้ `unknown` แล้วทำ **Type Narrowing** (เช่น Type Guards, Zod validation) เสมอ
+- ระบุ Type ของ Parameter, Function Return Type, และ State ให้ชัดเจน
+
+---
+
+## 2. Debuggable Error Handling
+- **ห้าม Swallow Error:** เมื่อใช้บล็อก `try-catch` ห้ามดักจับ Error แล้วปล่อยเงียบทิ้งไปเด็ดขาด
+- **Log ต้นฉบับที่ Server:** ในบล็อก `catch (error)` ต้องพิมพ์ Original Error พร้อม Context ลง Logger เสมอ เช่น `console.error('[Context] Failed to fetch user:', error)`
+- **Safe Client Error Response:** ค่าที่ส่งกลับไปยัง Client ต้องเป็นข้อความทั่วไปที่ปลอดภัย (เช่น `INTERNAL_SERVER_ERROR`) **ห้ามส่ง Raw SQL Error หรือ Stack Trace ออกไปหา Client เด็ดขาด**
+
+---
+
+## 3. No Placeholder Code
+- โค้ดที่สร้างขึ้นต้องสมบูรณ์พร้อมรันได้จริง 100%
+- **ห้ามทิ้งคอมเมนต์แบบ `// TODO: implement this`** หรือโครงฟังก์ชันว่างเอาไว้ให้เจ้าของโปรเจกต์ทำเอง
+
+---
+
+## 4. Naming Conventions & Organization
+- **Variables & Functions:** `camelCase` (e.g., `getUserById`, `calculateTotal`)
+- **Components & Classes:** `PascalCase` (e.g., `UserProfile.vue`, `AuthModal.tsx`)
+- **Files & Directories:** `kebab-case` (e.g., `user-profile.ts`, `auth-service/`)
+- **Constants & Enums:** `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`, `DEFAULT_PAGE_SIZE`)
+- **Types & Interfaces:** `PascalCase` (e.g., `UserCreateInput`, `ApiResponse<T>`)
+- **Booleans:** ขึ้นต้นด้วย `is`, `has`, `can`, `should` (e.g., `isActive`, `hasPermission`)
+- **File Length Limits:**
+  - Backend Logic / Services: สูงสุด **~300 บรรทัด** (หากเกินให้ Refactor แยกโมดูล)
+  - UI Components: สูงสุด **~200 บรรทัด** (หากเกินให้ย่อยเป็น Sub-components)
+- **Import Ordering:** 1) Built-in modules, 2) External packages, 3) Internal/Shared, 4) Relative imports (คั่นด้วยบรรทัดว่าง)
+- **Dead Code:** ลบโค้ดที่ไม่ใช้ทิ้งทันที ห้ามเก็บไว้เป็น Comment
+
+---
+
+## 5. Async / Await Best Practices
+- ใช้ `Promise.all()` เมื่อมี Asynchronous Operations หลายตัวที่ไม่ขึ้นต่อกัน (Parallel execution)
+- ใช้ Sequential `await` เฉพาะเมื่อ Operation ถัดไปต้องพึ่งผลลัพธ์ของตัวก่อนหน้า
+- ห้ามปล่อย Promise ทิ้งไว้โดยไม่ `await` หรือ `.catch()` (ป้องกัน Unhandled Rejection)
+- ระวัง Race Conditions: ใช้ Mutex หรือ Optimistic Locking เมื่อมีการแก้ไข Shared Resource พร้อมกัน
+
+---
+
+## 6. Git & Commit Conventions
+- **Conventional Commits:** รูปแบบ `type(scope): description` (Description ตัวพิมพ์เล็ก ไม่เกิน 72 ตัวอักษร)
+  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+- **Branch Naming:** `feature/xxx`, `fix/xxx`, `hotfix/xxx`, `release/xxx`
+- **Solo Developer Exception:** 
+  - ในการทำงานแบบทีม ให้แตก Branch จาก `develop` และรวมผ่าน PR
+  - สำหรับ **Solo Developer** อนุญาตให้ Push ตรงเข้า `main` ได้ และ Bypass PR review ได้ตามความคล่องตัว
+
+---
+
+## 7. Documentation & Code Comments
+- **Comment WHY, not WHAT:** คอมเมนต์เฉพาะ "เหตุผลในการตัดสินใจ" หรือ "ทำไมต้องเขียนแบบนี้" ไม่คอมเมนต์อธิบายสิ่งที่โค้ดบอกตัวเองอยู่แล้ว
+- ใช้ **JSDoc / TSDoc** สำหรับ Public Functions, Shared Composables, และ Interfaces
+- **Architecture Decision Records (ADRs):** บันทึกการตัดสินใจทางเทคนิคสำคัญลงใน `docs/adr/`

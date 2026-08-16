@@ -1,25 +1,74 @@
 # 🧠 Agent Skill & Master Configuration Framework
 
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
-> สถาปัตยกรรมและกรอบแนวคิดควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
+> สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-2.1.1-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
 ## 📌 ภาพรวมโปรเจกต์ (Project Overview)
 
-**`agent-skill`** คือกรอบควบคุมพฤติกรรม (Behavioral Framework) และชุดกฎระเบียบ (Rule Architecture) สำหรับ AI Coding Agent ถูกออกแบบขึ้นเพื่อแก้ปัญหาพฤติกรรมของ AI ทั่วไป และยกระดับ AI ให้กลายเป็น **Pragmatic Engineering Partner** ที่ทำงานร่วมกับโปรแกรมเมอร์ได้อย่างมีประสิทธิภาพ ปลอดภัย และมีมาตรฐานสูงสุด
+**`agent-skill`** คือกรอบควบคุมพฤติกรรม (Behavioral Framework) และชุดสถาปัตยกรรมกฎระเบียบ (3-Tier Rule Architecture) สำหรับ AI Coding Agent ถูกออกแบบขึ้นเพื่อแก้ปัญหาพฤติกรรมของ AI ทั่วไป และยกระดับ AI ให้กลายเป็น **Pragmatic Engineering Partner** ที่ทำงานร่วมกับโปรแกรมเมอร์ได้อย่างมีประสิทธิภาพ ปลอดภัย และมีมาตรฐานสูงสุด
 
 ### 🎯 ปัญหาที่โปรเจกต์นี้เข้ามาแก้ไข (Problem & Solution)
 
 | ❌ ปัญหาของ AI ทั่วไป (Generic AI Agent) | ✅ สิ่งที่ `agent-skill` บังคับให้ทำ (Pragmatic Agent) |
 |---|---|
-| **เป็น "Yes-Man":** เออออตามผู้ใช้แม้ไอเดียจะพังหรือเสี่ยงต่อ Security | **Pragmatic Challenger:** กล้าท้าทาย ค้านอย่างมีเหตุผล พร้อมนำเสนอข้อดี/ข้อเสีย (Pros/Cons/Trade-offs) |
-| **Preamble & Fluff:** ชอบพูดคำทักทายไร้สาระ ("ได้ครับ", "ยินดีครับ") และเกริ่นยืดยาว | **Action-First (BLUF):** ตอบสรุปสาระสำคัญไว้ที่บรรทัดแรกสุด (Bottom Line Up Front) ตัดคำไร้สาระออก 100% |
+| **เป็น "Yes-Man":** เออออตามผู้ใช้แม้ไอเดียจะเสี่ยงหรือ Over-engineered | **Pragmatic Challenger:** กล้าท้าทาย ค้านอย่างมีเหตุผล พร้อมนำเสนอ Pros/Cons/Trade-offs |
+| **Preamble & Fluff:** ชอบพูดคำทักทายไร้สาระ ("ได้ครับ", "ยินดีครับ") และเกริ่นยืดยาว | **Action-First (BLUF):** สรุปสาระสำคัญไว้ที่บรรทัดแรกสุด (Bottom Line Up Front) ตัดคำไร้สาระออก 100% |
 | **Hallucination & Guesswork:** มโนชื่อไฟล์ หรือแอบข้ามไฟล์ที่หาไม่เจอ | **Zero Hallucination:** หากข้อมูลไม่ชัดเจนหรือไฟล์หาย จะ **"หยุดถามทันที"** ห้ามเดาเอาเอง |
-| **Code Spaghetti / Monolithic Component:** เขียนโค้ดกระจุกในไฟล์เดียว หรือมี Infinite Loop Bug | **Strict Architecture:** บังคับจัดโครงสร้าง Feature-driven / Component Layering อย่างเป็นระบบ |
+| **Code Spaghetti / Buggy RBAC:** สับสนเรื่องการจัดการสิทธิ์หลายบทบาท หรือทำให้เกิด Hydration Error | **System Blueprints:** มีพิมพ์เขียวมาตรฐานสำเร็จรูป (`blueprints/`) ป้องกันบั๊กตั้งแต่ระดับโครงสร้าง |
 | **แก้บั๊กวนลูปไม่จบ:** แก้พังวนซ้ำไปเรื่อยๆ โดยไม่รายงานปัญหาที่แท้จริง | **Failure Report Protocol:** หากแก้ Error ล้มเหลวครบ 2 ครั้ง ต้องหยุดและส่งรายงาน Root Cause ทันที |
+
+---
+
+## 🏛️ สถาปัตยกรรมระบบ 3 ชั้น (The 3-Tier Rule Architecture)
+
+ระบบถูกจัดระเบียบใหม่ตามหลัก Separation of Concerns เพื่อความเรียบง่ายและไม่ซ้ำซ้อน:
+
+```text
+agent-skill/
+├── AGENTS.md                   # 🧠 [Tier 1: AI Brain & Orchestration] แม่บทควบคุมพฤติกรรมและ Workflow 4 ขั้น
+├── README.md                   # 📖 คู่มือการใช้งานและคำแนะนำสำหรับนักพัฒนา
+│
+├── rules/                      # 📜 [Tier 2: Engineering Standards] กฎคุณภาพ 6 เสาหลัก
+│   ├── 01-security-auth.md     # 🥇 ความปลอดภัย, Secrets, CSRF, CORS & Hard Gates
+│   ├── 02-coding-standards.md  # 🥈 Strict TypeScript, Try-Catch, Naming & Git Conventions
+│   ├── 03-system-architecture.md# 🥉 Pragmatic Monolith, RESTful API Standards & Presets
+│   ├── 04-database-design.md   # Prisma Schema, Migrations & Safe Seeding Dispatcher
+│   ├── 05-ux-ui-design.md      # Component Layering 4 ชั้น, Tailwind CSS & Performance
+│   └── 06-testing-devops.md    # Vitest/Playwright, Docker Multi-Stage & Structured Logging
+│
+└── templates/                  # 📐 [Tier 3: Blueprints & Context Maps] พิมพ์เขียวพร้อมใช้
+    ├── AI-Context-Index.md     # Single Source of Truth สรุปบริบทโปรเจกต์สำหรับ AI
+    └── blueprints/
+        └── rbac-multi-role.md  # พิมพ์เขียวระบบ Multi-Role, 1-Click Quick Login & Dual-Layer Guards
+```
+
+### 📋 ตารางสรุป 6 เสาหลักมาตรฐานวิศวกรรม (Tier 2 Matrix)
+
+| โมดูล | ขอบเขตหน้าที่ | หัวใจสำคัญ |
+|---|---|---|
+| **[`01-security-auth.md`](./rules/01-security-auth.md)** | Security & Protection | Zero Trust, `<secret:VAR_NAME>`, CSRF (Nuxt/Next.js), CORS Whitelist, Dev 404 Hard Gate |
+| **[`02-coding-standards.md`](./rules/02-coding-standards.md)** | Code Quality & Git | Strict TS (No `any`), Try-Catch Log Origin, Conventional Commits, Solo-Dev Push Rule |
+| **[`03-system-architecture.md`](./rules/03-system-architecture.md)** | System & API Design | Pragmatic Monolith, Ask before Diagram, RESTful Standards, Zod Validation, Idempotency |
+| **[`04-database-design.md`](./rules/04-database-design.md)** | Database & Seeding | Prisma Safe Migrations, Central Seed Dispatcher (`seed.ts`), Soft Delete Cascade |
+| **[`05-ux-ui-design.md`](./rules/05-ux-ui-design.md)** | Frontend & UX/UI | Component 4 Layers, Mobile-first Tailwind, Nuxt UI & Shadcn, Bundle < 200KB |
+| **[`06-testing-devops.md`](./rules/06-testing-devops.md)** | QA, Docker & Logging | Vitest, Test DB Isolation, Docker Multi-Stage, GitHub Actions CI/CD, Structured Pino Logs |
+
+---
+
+## 🛡️ System Blueprints & Production-Ready Patterns (Tier 3)
+
+จุดเด่นของ Framework นี้คือการมี **System Blueprints (`templates/blueprints/`)** ซึ่งเป็นพิมพ์เขียวสถาปัตยกรรมระดับระบบ เพื่อแก้ปัญหาข้อผิดพลาดทางเทคนิคที่พบบ่อยตั้งแต่ระดับโครงสร้าง:
+
+### 🌟 Multi-Role & RBAC Blueprint ([`rbac-multi-role.md`](./templates/blueprints/rbac-multi-role.md))
+พิมพ์เขียวสำหรับระบบที่มีหลายบทบาทหน้าที่ (เช่น Admin, Manager, Staff) ที่ฝังกลไกตัดบั๊กสำคัญ 4 ด้าน:
+1. **🌱 Safe Seeding Dispatcher:** สคริปต์ `prisma/seed.ts` ทำหน้าที่เป็น Main Dispatcher แยกการ Seed ข้อมูลจำลอง (`dev.seed.ts`) ออกจากบทบาทระบบ (`prod.seed.ts`) ป้องกันข้อมูลทดสอบและรหัสผ่านง่ายๆ หลุดเข้า Production Database
+2. **⚡ Hydration-Safe 1-Click Login:** ปุ่มลัดล็อกอินสำหรับโหมด Dev/QA ที่รองรับ `<ClientOnly>` และ Feature Flag `ENABLE_DEV_LOGIN` เพื่อเปิดใช้งานบน Staging ได้อย่างปลอดภัย และไม่ทำให้เกิด SSR Hydration Mismatch
+3. **🛡️ Dual-Layer Route Guards:** บังคับตรวจสอบสิทธิ์ 2 ชั้นทั้งฝั่งหน้าบ้าน (Client Route Guard ป้องกัน UI) และฝั่งหลังบ้าน (Server API Middleware ป้องกัน Data)
+4. **🔄 Anti-Redirect Loop Fallback:** กำหนดให้ผู้ใช้ที่ไม่มีสิทธิ์ถูกส่งไปยังหน้า `/403 (Forbidden)` เสมอ ป้องกันปัญหาเบราว์เซอร์ติดลูป Redirect หน้าขาว
 
 ---
 
@@ -35,56 +84,28 @@ graph TD
     D -- แก้ไขล้มเหลว 2 ครั้ง --> E[🚨 Failure Report]
 ```
 
-1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต):**
-   - วิเคราะห์ Requirements, Existing Codebase, Non-functional Requirements (Performance, Security, SLA) และประเมินความเสี่ยงก่อนลงมือเขียนโค้ด
-2. **Step 2: System Design - The 9arm Way (ออกแบบระบบ):**
-   - ออกแบบระบบด้วยหลักความเรียบง่ายที่สเกลได้ (Pragmatic & Simple)
-   - **Frontend / UI Sub-step:** เลือก Architectural Preset (**SaaS Dashboard App Shell** หรือ **Marketing Sectional Layout**) พร้อมวางแผน Component Tree เสนอผู้ใช้ก่อนเสมอ
-3. **Step 3: Implementation (ลงมือเขียนโค้ด):**
-   - เขียนโค้ดจริง 100% (ห้ามมี Placeholder Code)
-   - จัดโครงสร้างไฟล์แบบ Layered / Feature-driven (`layouts/`, `pages/`, `features/`, `components/ui/`)
-4. **Step 4: Verification (การตรวจสอบ):**
-   - ทำ Bounded Loop (Build $\rightarrow$ Lint $\rightarrow$ Test) จนมั่นใจว่าทำงานได้จริง
-
----
-
-## 🧱 โครงสร้างสถาปัตยกรรมกฎ (Rule Architecture & Modules)
-
-โปรเจกต์นี้จัดวางโครงสร้างแบบ **Modular Architecture** เพื่อความสะดวกในการนำไปใช้และบำรุงรักษา:
-
-### 📄 1. Master Configuration File
-- 🌐 **[`AGENTS.md`](./AGENTS.md):** ไฟล์แม่บทหลักที่กำหนด Persona, Priority Order, 4-Step Methodology, Failure Report Protocol และ Rule Loading Matrix
-
-### 🔒 2. Domain Rule Modules (12 กฎเฉพาะทางในโฟลเดอร์ `rules/`)
-
-ลำดับความสำคัญของกฎเมื่อเกิดข้อขัดแย้งกัน (Priority Order):
-
-1. 🥇 **[`security-and-auth.md`](./rules/security-and-auth.md):** กฎความปลอดภัยระดับสูงสุด (Zero Trust, CORS, CSP, Rate Limit, CSRF, Session, File Upload)
-2. 🥈 **[`coding-standards.md`](./rules/coding-standards.md):** มาตรฐานการเขียนโค้ด (Strict TypeScript, Error Handling, Naming Conventions, Async)
-3. 🥉 **[`api-guidelines.md`](./rules/api-guidelines.md):** มาตรฐานการออกแบบ REST API (Idempotency, Validation, Pagination, Error Responses)
-4. 🗄️ **[`database-design.md`](./rules/database-design.md):** สถาปัตยกรรมฐานข้อมูล (Prisma, PostgreSQL, Migrations, Connection Pooling, Soft Delete)
-5. 🎨 **[`ux-ui.md`](./rules/ux-ui.md):** มาตรฐาน Frontend UI (Component Layering, App Shell Layout, Tailwind CSS, Nuxt UI, Anti-patterns)
-6. 🏛️ **[`design-system.md`](./rules/design-system.md):** หลักการออกแบบระบบ (Pragmatic Monolith, Trade-off Analysis, Dependency Management)
-7. 🧪 **[`testing-standards.md`](./rules/testing-standards.md):** มาตรฐานการทดสอบ (Unit Test, Integration Test, Test Data Isolation)
-8. 📊 **[`observability.md`](./rules/observability.md):** ระบบติดตามและบันทึกข้อมูล (Structured Logging, Sentry, Health Checks)
-9. ⚡ **[`performance.md`](./rules/performance.md):** การวัดผลประสิทธิภาพ (Web Vitals, API SLA, Caching Strategy, Bundle Budget)
-10. 🐳 **[`infrastructure.md`](./rules/infrastructure.md):** โครงสร้างพื้นฐานและการติดตั้ง (Docker Compose, Production Environment, CI/CD)
-11. 🔀 **[`git-conventions.md`](./rules/git-conventions.md):** มาตรฐานการจัดการ Git (Conventional Commits, Branch Strategy, Code Review)
-12. 📝 **[`documentation.md`](./rules/documentation.md):** มาตรฐานการเขียนเอกสาร (README, API Docs, ADRs, Code Comments)
+1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต):** วิเคราะห์ Requirements, Existing Codebase, ค้นหา Test Runner ประจำโปรเจกต์ และประเมินความเสี่ยง
+2. **Step 2: System Design - The 9arm Way (ออกแบบระบบ):** ออกแบบระบบด้วยหลักความเรียบง่ายที่สเกลได้ (Pragmatic & Simple) สอดคล้องกับ System Blueprint และถามผู้ใช้ก่อนวาด Diagram
+3. **Step 3: Implementation (ลงมือเขียนโค้ด):** เขียนโค้ดจริง 100% (ห้ามมี Placeholder Code) ตามมาตรฐาน 6 เสาหลักใน `rules/`
+4. **Step 4: Verification (Universal DoD):** ตรวจสอบผ่าน Test Runner หรือ Ad-hoc Verification (Type Check/Rollback Assertion) พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
 
 ---
 
 ## 🚀 วิธีการนำไปใช้งาน (How to Use & Integration Guide)
 
 ### สำหรับ Google Antigravity / Cursor / Windsurf
-1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md) และโฟลเดอร์ [`rules/`](./rules) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
-2. คัดลอกไฟล์ [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) ไปไว้ที่ Root เพื่อสร้างแผนผังระบบสรุปให้ AI อ่านเข้าใจโครงสร้างทันที
+1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md), โฟลเดอร์ [`rules/`](./rules), [`templates/`](./templates) และสคริปต์ [`scripts/scan-context.js`](./scripts/scan-context.js) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
+2. รันคำสั่ง Auto-Scan เพื่อสร้างแผนผังบริบทโปรเจกต์อัตโนมัติใน 1 วินาที:
+   ```bash
+   node scripts/scan-context.js
+   ```
+   *(สคริปต์จะสแกน `package.json`, `schema.prisma`, และ API Routes เพื่อสร้าง `AI-Context-Index.md` ให้ทันที)*
 3. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` มาใช้อัตโนมัติในทุกๆ Task
 
-### สำหรับขึ้นโปรเจกต์ใหม่จาก 0 (Greenfield Project Blueprint)
-เมื่อให้ Agent สร้างโปรเจกต์ใหม่จากศูนย์ Agent จะสร้างโครงสร้าง Root Directory ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) ดังนี้:
-- **สำหรับ Nuxt 4:** สร้าง `app/layouts/`, `app/pages/`, `app/features/`, `app/components/ui/`, `server/api/`
-- **สำหรับ React:** สร้าง `src/layouts/`, `src/pages/`, `src/features/`, `src/components/ui/`, `src/routes/`
+### สำหรับขึ้นโปรเจกต์ใหม่จาก 0 (Greenfield Blueprint)
+เมื่อสร้างโปรเจกต์ใหม่ Agent จะวางโครงสร้างไฟล์ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md):
+- **Nuxt 4:** `app/layouts/`, `app/pages/`, `app/features/`, `app/components/ui/`, `server/api/`
+- **React (Next.js / Vite):** `src/layouts/`, `src/pages/`, `src/features/`, `src/components/ui/`, `src/store/`
 
 ### สำหรับ Claude Code
 - นำเนื้อหาหลักใน [`AGENTS.md`](./AGENTS.md) ไปใส่ไว้ในไฟล์ `CLAUDE.md` ที่ Root ของโปรเจกต์
@@ -100,3 +121,13 @@ graph TD
 - **Database / ORM:** PostgreSQL + Prisma ORM
 - **Styling:** Tailwind CSS (Mobile-first)
 - **DevOps:** Docker + Docker Compose
+
+---
+
+## ⚠️ คำแนะนำและข้อชี้แจงด้านสถาปัตยกรรม (Notice & Architecture Guidance)
+
+### 🔒 1. Nexus Private Layer (การจัดการความจำและสกิลส่วนบุคคล)
+- **Nexus Engine:** ระบบหน่วยความจำระยะยาว (Persistent Memory) และตัวจัดการโหลด Skill อัตโนมัติ (`skills/skills.json`) เป็น **โมดูลเสริมส่วนบุคคล (Private Setup)** ที่ไม่ได้ถูกแจกจ่ายออกไปภายนอก
+- **ความเข้ากันได้แบบ Standalone (Standalone Compatibility):** สำหรับผู้ที่นำชุด Master Rules นี้ไปใช้งาน สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันที 100% โดยไม่ต้องพึ่งพาระบบ Nexus:
+  - Agent จะอ่านกฎใน `AGENTS.md` และโมดูลย่อยใน `rules/` เพื่อควบคุมมาตรฐานโค้ดได้อย่างสมบูรณ์
+  - หากไม่มี External Skill ในเครื่อง Agent จะใช้มาตรฐานใน `rules/05-ux-ui-design.md` และ `rules/02-coding-standards.md` เป็นเกณฑ์หลักอัตโนมัติโดยไม่เกิดอาการค้างหรือหยุดทำงาน (No Halt Deadlock)
