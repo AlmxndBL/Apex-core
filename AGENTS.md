@@ -25,7 +25,8 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต)
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
-- **วิเคราะห์ Existing Codebase:** ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
+- **Codebase Archaeology & Onboarding:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` เพื่อสแกนประวัติ Git, Models, Routes และออกรายงาน **Project Executive Brief** ก่อนเริ่มงาน
+- **วิเคราะห์ Existing Codebase:** ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
 - **ค้นหา Test Runner ประจำโปรเจกต์:** ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
 - **ระบุ Non-functional Requirements & Risks:** ประเมิน Performance, SLA, Security needs และผลกระทบต่อระบบเดิม
 - **สร้าง Assumptions List:** สรุปสมมติฐานที่ต้องยืนยันกับผู้ใช้ก่อนลงมือ
@@ -40,14 +41,20 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **Action:** เสนอแผน Architecture และ Tech Stack กลับให้ผู้ใช้พิจารณา **(ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้วาด Architecture Diagram ไหม ห้ามวาดเองโดยไม่ถาม)**
 
 ### Step 3: Implementation (ลงมือเขียนโค้ด)
-- อิงตามกฎเฉพาะทางในโฟลเดอร์ `rules/` (ดู Rule Loading Matrix ด้านล่าง)
-- **Skill Loading & Fallback:** โหลด Skill `mattpocock/skills` (TypeScript), `design-taste-frontend` (UI), หรือ `impeccable` (Audit) หากมีติดตั้งในเครื่อง **หากไม่มี ให้ยึดตามมาตรฐานใน `rules/05-ux-ui-design.md` และ `rules/02-coding-standards.md` ทันที ห้ามหยุดทำงาน**
+- อิงตามกฎเฉพาะทางในโฟลเดอร์ `rules/` และโหลด **Specialized Skills ใน `skills/`** ตามประเภทงาน:
+  - Frontend/UI: `skills/design-taste-frontend`
+  - TypeScript: `skills/typescript-wizard`
+  - Database: `skills/database-architect`
+  - Testing: `skills/sandbox-testing`
+  - DevOps: `skills/docker-devops-master`
+  - Security/Audit: `skills/impeccable-audit`
+- **Skill Fallback:** หากไม่มี External Skill ในเครื่อง ให้ยึดตามมาตรฐานใน `rules/` ทันที ห้ามหยุดทำงาน
 - เขียนโค้ดที่รันได้จริง 100% ห้ามมี Placeholder Code
 
 ### Step 4: Verification (Universal Quality Gate & Definition of Done)
 - **กฎเหล็ก (Build Pass != Functional Pass):** ห้ามถือเอาการคอมไพล์ผ่าน หรือ Docker รันติด เป็นการทดสอบเสร็จสิ้นเด็ดขาด
 - **Universal Definition of Done (DoD):**
-  1. **Run Project Test Runner:** หากโปรเจกต์มี Test Runner ให้สั่งรันเทสต์ที่เกี่ยวข้องทั้งหมดให้ผ่าน 100%
+  1. **Run Project Test Runner:** หากโปรเจกต์มี Test Runner ให้สั่งรันเทสต์ที่เกี่ยวข้องทั้งหมดให้ผ่าน 100% (สามารถใช้สกิล `skills/sandbox-testing` เพื่อช่วยรัน)
   2. **Ad-hoc Runtime Verification (กรณีไม่มี Test Suite):**
      - **Backend / Logic:** รัน Script หรือคำสั่ง inline (เช่น `node -e ...`, `python -c ...`) เพื่อพิสูจน์ว่าไม่มี Runtime Crash
      - **Frontend UI / Components:** ตรวจสอบความถูกต้องด้วย Type Checker (`npx vue-tsc --noEmit`, `npx tsc --noEmit`) ร่วมกับ Build Check
@@ -112,15 +119,18 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ---
 
-## 📋 Rule Loading Matrix
+## 📋 Rule & Skill Loading Matrix
 
-| ประเภทงาน | Must Read (ต้องอ่าน) | Contextual / Blueprint (โหลดเมื่อเกี่ยวข้อง) |
-|---|---|---|
-| **ทุกงาน** | `rules/02-coding-standards.md` | — |
-| **Frontend / UI** | `rules/05-ux-ui-design.md` | `rules/06-testing-devops.md` |
-| **Backend / API** | `rules/01-security-auth.md`, `rules/03-system-architecture.md` | `rules/04-database-design.md`, `rules/06-testing-devops.md` |
-| **Database** | `rules/04-database-design.md` | `rules/01-security-auth.md` |
-| **Full-stack / RBAC** | `rules/01-security-auth.md`, `rules/03-system-architecture.md`, `rules/05-ux-ui-design.md` | `rules/04-database-design.md`, `templates/blueprints/rbac-multi-role.md` |
-| **DevOps / CI/CD** | `rules/06-testing-devops.md` | `rules/01-security-auth.md` |
-| **New Project Setup** | `rules/03-system-architecture.md`, `templates/AI-Context-Index.md` | ทุกไฟล์ตามบริบท |
-| **Bug Fix** | `rules/02-coding-standards.md` | ไฟล์กฎประจำโดเมนที่มีปัญหา |
+| ประเภทงาน | Must Read (ต้องอ่าน) | Contextual / Blueprint | 🎯 Active Skills ที่ต้องโหลด |
+|---|---|---|---|
+| **ทุกงาน** | `rules/02-coding-standards.md` | — | `skills/typescript-wizard` |
+| **รื้อฟื้นโปรเจกต์ / Onboarding** | `rules/03-system-architecture.md` | `templates/AI-Context-Index.md` | `skills/codebase-cartographer` |
+| **Frontend / UI** | `rules/05-ux-ui-design.md` | `rules/06-testing-devops.md` | `skills/design-taste-frontend` |
+| **Backend / API** | `rules/01-security-auth.md`, `rules/03-system-architecture.md` | `rules/04-database-design.md` | `skills/database-architect` |
+| **Database & Migrations** | `rules/04-database-design.md` | `rules/01-security-auth.md` | `skills/database-architect` |
+| **Full-stack / RBAC** | `rules/01-security-auth.md`, `rules/03-system-architecture.md`, `rules/05-ux-ui-design.md` | `templates/blueprints/rbac-multi-role.md` | `skills/design-taste-frontend`, `skills/database-architect` |
+| **DevOps / CI/CD** | `rules/06-testing-devops.md` | `rules/01-security-auth.md` | `skills/docker-devops-master` |
+| **Testing / Verification** | `rules/06-testing-devops.md` | — | `skills/sandbox-testing` |
+| **Code Review / Audit** | `rules/01-security-auth.md`, `rules/02-coding-standards.md` | — | `skills/impeccable-audit` |
+| **New Project Setup** | `rules/03-system-architecture.md`, `templates/AI-Context-Index.md` | ทุกไฟล์ตามบริบท | `skills/codebase-cartographer` |
+| **Bug Fix** | `rules/02-coding-standards.md` | ไฟล์กฎประจำโดเมนที่มีปัญหา | `skills/sandbox-testing` |
