@@ -27,7 +27,9 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
 - **Codebase Archaeology & Onboarding:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` เพื่อสแกนประวัติ Git, Models, Routes และออกรายงาน **Project Executive Brief** ก่อนเริ่มงาน
 - **วิเคราะห์ Existing Codebase:** ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
-- **ค้นหา Test Runner ประจำโปรเจกต์:** ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
+- **ค้นหา Test Runner & Test Accounts ประจำโปรเจกต์:**
+  - ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
+  - **Test Role Discovery:** สแกนหาบัญชีทดสอบเดิมใน `seed.ts`, `.env.test`, หรือ Fixtures (หากไม่พบบัญชีเดิมและจำเป็นต้องใช้ ให้ถามผู้ใช้สั้นๆ ว่าต้องการให้สร้าง Mock Test Seed หรือมีบัญชีทดสอบเดิมอยู่แล้ว)
 - **ระบุ Non-functional Requirements & Risks:** ประเมิน Performance, SLA, Security needs และผลกระทบต่อระบบเดิม
 - **สร้าง Assumptions List:** สรุปสมมติฐานที่ต้องยืนยันกับผู้ใช้ก่อนลงมือ
 
@@ -38,7 +40,10 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - **SaaS / Dashboard Preset:** แยก App Shell (`layouts/`) ออกจาก Route View (`pages/`)
   - **Marketing / Landing Preset:** ใช้ Sectional Composition Pattern
 - **System Blueprint Matching:** หากระบบต้องรองรับหลายบทบาท (RBAC) ให้โหลด `templates/blueprints/rbac-multi-role.md`
-- **Action:** เสนอแผน Architecture และ Tech Stack กลับให้ผู้ใช้พิจารณา **(ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้วาด Architecture Diagram ไหม ห้ามวาดเองโดยไม่ถาม)**
+- **Proactive Permission Gates:**
+  - **Architecture Diagram:** ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้วาด Architecture Diagram ไหม ห้ามวาดเองโดยไม่ถาม
+  - **1-Click Quick Login:** หากเป็นระบบ RBAC **ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้สร้างปุ่ม/คอมโพเนนต์ 1-Click Quick Login (Dev/QA Helper) ไหม ห้ามสร้างเองโดยไม่ถาม**
+- **Action:** เสนอแผน Architecture และ Tech Stack กลับให้ผู้ใช้พิจารณา
 
 ### Step 3: Implementation (ลงมือเขียนโค้ด)
 - อิงตามกฎเฉพาะทางในโฟลเดอร์ `rules/` และโหลด **Specialized Skills ใน `skills/`** ตามประเภทงาน:
@@ -58,8 +63,8 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   2. **Ad-hoc Runtime Verification (กรณีไม่มี Test Suite):**
      - **Backend / Logic:** รัน Script หรือคำสั่ง inline (เช่น `node -e ...`, `python -c ...`) เพื่อพิสูจน์ว่าไม่มี Runtime Crash
      - **Frontend UI / Components:** ตรวจสอบความถูกต้องด้วย Type Checker (`npx vue-tsc --noEmit`, `npx tsc --noEmit`) ร่วมกับ Build Check
-  3. **Stateful & Database Verification:** หากมีการแก้ Data Logic ต้องรัน Script Assert ข้อมูลจริงใน DB โดยใช้ **Test Transaction Rollback** หรือ **Isolated Test DB** ป้องกันข้อมูลขยะตกค้าง
-  4. **End-to-End Persona Verification:** ต้องทดสอบครอบคลุมทุก User Journey และทุก Role ที่เกี่ยวข้อง
+  3. **Stateful & Database Verification (Zero DB Pollution):** หากมีการแก้ Data Logic ต้องรัน Script Assert ข้อมูลจริงใน DB โดยใช้ **Test Transaction Rollback** หรือ **Isolated Test DB** ป้องกันข้อมูลขยะตกค้าง
+  4. **Adaptive Persona Verification:** ทดสอบครอบคลุมทุก User Journey และทุก Role ที่เกี่ยวข้อง โดยดึง Existing Test Accounts ของโปรเจกต์มาใช้เป็นหลัก ห้ามสร้าง Mock Data ซ้ำซ้อนทับข้อมูลจริง
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
   - ห้ามรายงานผู้ใช้ว่างานเสร็จสิ้นเด็ดขาด หากในคำตอบ **ไม่มีหลักฐานผลลัพธ์การรันเทสต์ (Terminal Output / Logs / Assertion Results)** แนบมาด้วย
   - **Exemption (ข้อยกเว้น):** สำหรับงานประเภท Documentation, Architecture Planning, Code Audit หรือ Consultation ให้แสดงหลักฐานเป็นการตรวจสอบ Diff หรือ Verification Checklist แทน

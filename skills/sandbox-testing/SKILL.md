@@ -32,10 +32,14 @@ tests/
 
 ## 📋 4 เสาหลักของ Sandbox Test Suite
 
-### 1. 👥 Multi-Role Persona Matrix Verification
-ทดสอบว่าทุกบทบาท (Seeded Users) สามารถล็อกอินได้จริง และระบบ RBAC ป้องกัน Role ที่ไม่มีสิทธิ์เข้าถึง:
+### 1. 👥 Multi-Role Persona Matrix Verification (Adaptive Discovery)
+- **Existing Accounts First:** สแกนหาบัญชีทดสอบเดิมในระบบ (`seed.ts`, `.env.test`, Fixtures) ก่อนเสมอเพื่อใช้รันเทสต์จริง
+- **Ask Before Mocking:** หากไม่พบบัญชีเดิม ให้ถามผู้ใช้ก่อนสร้าง Mock Seed เสมอ
+- **Zero DB Pollution:** การทดสอบที่แตะ Database ต้องรันผ่าน **Test Transaction Rollback** หรือ **Isolated Test DB** เสมอ
+
 ```python
 def test_all_roles_can_authenticate(self):
+    # ดึงรายชื่อ credentials จาก Existing Fixture หรือ Config
     roles_credentials = [
         ("owner", "admin1234", UserRole.OWNER),
         ("manager", "mgr1234", UserRole.MANAGER),

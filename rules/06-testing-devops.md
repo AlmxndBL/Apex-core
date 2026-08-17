@@ -9,9 +9,11 @@
 - **API Mocking:** ใช้ **MSW (Mock Service Worker)** สำหรับ Mock Network Requests
 - **E2E Testing:** ใช้ **Playwright** สำหรับทดสอบ End-to-End User Journey
 - **Coverage Target:** มุ่งเน้น Branch Coverage ใน Core Business Logic และ Payment/Auth Flows ให้เกิน 80%+
-- **Test Isolation:**
+- **Test Isolation & Zero DB Pollution:**
   - Database Test ต้องแยกขาดจาก Production/Dev DB
   - ใช้ Transaction Rollback หรือ In-Memory/Isolated DB ทุกครั้งเพื่อป้องกัน Data Pollution
+  - **Existing Test Account Reuse:** หากระบบเดิมมีบัญชีทดสอบ/Seed อยู่แล้ว ให้ดึง Credential เดิมมาใช้ทดสอบ ห้าม Insert ข้อมูลซ้ำซ้อน
+  - **Ask Before Mocking:** หากระบบไม่มีบัญชีทดสอบ ให้ถามผู้ใช้ก่อนสร้าง Mock Test Seed เสมอ
 
 ---
 

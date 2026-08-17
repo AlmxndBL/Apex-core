@@ -73,7 +73,9 @@ main()
 
 ## ⚡ 3. Hydration-Safe 1-Click Persona Quick-Login
 
-เพื่อป้องกันบั๊ก **SSR Hydration Mismatch** และ **Staging QA ใช้งานไม่ได้** ให้ใช้แนวทางดังนี้:
+> ⚠️ **Permission Gate (กฎเหล็ก):** AI **ต้องถามผู้ใช้ก่อนเสมอ** ว่าต้องการให้สร้างปุ่ม/คอมโพเนนต์ 1-Click Quick Login (Dev/QA Helper) ไหม ห้ามสร้างเองโดยไม่ได้รับอนุญาต
+
+เพื่อป้องกันบั๊ก **SSR Hydration Mismatch**, **Staging QA ใช้งานไม่ได้** และรองรับทั้ง **บัญชีทดสอบเดิม (Existing Accounts)** หรือ Mock Personas:
 
 ### ฝั่ง Nuxt 4 (Vue):
 ```vue
@@ -83,9 +85,16 @@ main()
     <div v-if="isDevLoginEnabled" class="p-4 bg-muted/50 rounded-lg border border-dashed my-4">
       <p class="text-xs font-semibold text-muted-foreground mb-2">⚡ 1-Click Demo Personas (Dev/QA Only)</p>
       <div class="flex flex-wrap gap-2">
-        <UButton size="xs" color="primary" variant="soft" @click="quickLogin('admin@test.com')">👑 Admin</UButton>
-        <UButton size="xs" color="emerald" variant="soft" @click="quickLogin('manager@test.com')">📊 Manager</UButton>
-        <UButton size="xs" color="amber" variant="soft" @click="quickLogin('staff@test.com')">🛒 Staff</UButton>
+        <UButton
+          v-for="persona in devPersonas"
+          :key="persona.email"
+          size="xs"
+          :color="persona.color"
+          variant="soft"
+          @click="quickLogin(persona.email)"
+        >
+          {{ persona.label }}
+        </UButton>
       </div>
     </div>
   </ClientOnly>
@@ -95,6 +104,13 @@ main()
 const config = useRuntimeConfig()
 // เปิดใช้งานใน local dev หรือเมื่อมี flag ENABLE_DEV_LOGIN บน Staging
 const isDevLoginEnabled = import.meta.env.DEV || config.public.enableDevLogin === 'true'
+
+// ดึงรายชื่อบัญชีทดสอบจาก Config หรือใช้อัญเชิญค่าเริ่มต้น
+const devPersonas = [
+  { label: '👑 Admin', email: config.public.testAdminEmail || 'admin@test.com', color: 'primary' as const },
+  { label: '📊 Manager', email: config.public.testManagerEmail || 'manager@test.com', color: 'emerald' as const },
+  { label: '🛒 Staff', email: config.public.testStaffEmail || 'staff@test.com', color: 'amber' as const }
+]
 
 const quickLogin = async (email: string) => {
   // ทำการล็อกอินด้วยบัญชีทดสอบ
