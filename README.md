@@ -171,11 +171,25 @@ graph TD
 
 ---
 
-## 🧠 ระบบนิเวศและหน่วยความจำระยะยาว (Ecosystem & Long-Term Memory)
+## 🏛️ สถาปัตยกรรมคู่หู: Agent-Skill & Nexus 2.0 (The Twin-Engine Synergy)
 
-### 🔗 Project X Memory (Nexus Persistent Memory Layer)
-- **Persistent Memory & Experience Layer:** สำหรับผู้ที่ต้องการให้ AI Agent มีหน่วยความจำระยะยาวข้ามโปรเจกต์ (Cross-Project Memory), ซิงก์ประวัติการตัดสินใจทางสถาปัตยกรรม (ADRs) และโหลด Shared Skills อัตโนมัติ สามารถเชื่อมต่อใช้งานร่วมกับระบบ **Project X Memory** ได้ที่:
-  👉 **[AlmxndBL/nexus](https://github.com/AlmxndBL/nexus)**
-- **ความเข้ากันได้แบบ Standalone (100% Standalone Ready):** สำหรับผู้ที่ต้องการใช้งานเฉพาะ Framework และ Rules ชุดนี้ สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันที 100% โดยไม่ต้องพึ่งพาระบบ Memory ภายนอก:
-  - Agent จะอ่านกฎใน `AGENTS.md`, โมดูลย่อยใน `rules/` และสกิลใน `skills/` เพื่อควบคุมมาตรฐานโค้ดได้อย่างสมบูรณ์
-  - หากไม่มี External Skill ในเครื่อง Agent จะใช้มาตรฐานใน `rules/05-ux-ui-design.md` และ `rules/02-coding-standards.md` เป็นเกณฑ์หลักอัตโนมัติโดยไม่เกิดอาการค้างหรือหยุดทำงาน (No Halt Deadlock)
+ระบบถูกออกแบบให้ทำงานร่วมกันเป็น **Developer Productivity & AI Agent Ecosystem** แบ่งหน้าที่กันอย่างชัดเจนตามหลัก Single Responsibility:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│       🤖 Developer Productivity & AI Agent Framework        │
+├──────────────────────────────┬──────────────────────────────┤
+│ 🧠 Master Agent Skill Rules  │ 🏛️ Nexus 2.0 (Memory Vault) │
+│ (Rules & Behavioral Engine)  │ (Context & Engineering OS)   │
+├──────────────────────────────┼──────────────────────────────┤
+│ • 6 เสาหลักมาตรฐานวิศวกรรม   │ • Cross-Project Memory Vault │
+│ • Strict TS (Matt Pocock)    │ • JIT Context Compiler       │
+│ • Universal Definition of Done│ • 5 MCP Tools เชื่อมทุก IDE │
+│ • 🛡️ Git Shield ป้องกันหลุด  │ • บันทึก ADRs & Session Auto │
+└──────────────────────────────┴──────────────────────────────┘
+```
+
+### 🔗 เชื่อมต่อกับ Nexus 2.0
+- **Repository:** 👉 [AlmxndBL/project-x-memory (Nexus 2.0)](https://github.com/AlmxndBL/project-x-memory)
+- **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และบันทึกประวัติการตัดสินใจลง Obsidian Vault ผ่าน MCP Server ขณะที่ `agent-skill` จะคอยกำกับให้ AI ปฏิบัติตามมาตรฐานวิศวกรรมสูงสุด
+- **100% Standalone Ready:** สำหรับผู้ที่ต้องการนำเฉพาะ `agent-skill` ไปใช้งาน สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันทีโดยไม่ต้องติดตั้ง Nexus 2.0 โดย Agent จะทำงานตามกฎใน `AGENTS.md` และ `rules/` ได้อย่างสมบูรณ์แบบโดยไม่ติดขัด (No Halt Deadlock)
