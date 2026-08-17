@@ -175,7 +175,7 @@ graph TD
 
 ### 🔗 Project X Memory (Nexus Persistent Memory Layer)
 - **Persistent Memory & Experience Layer:** สำหรับผู้ที่ต้องการให้ AI Agent มีหน่วยความจำระยะยาวข้ามโปรเจกต์ (Cross-Project Memory), ซิงก์ประวัติการตัดสินใจทางสถาปัตยกรรม (ADRs) และโหลด Shared Skills อัตโนมัติ สามารถเชื่อมต่อใช้งานร่วมกับระบบ **Project X Memory** ได้ที่:
-  👉 **[AlmxndBL/project-x-memory](https://github.com/AlmxndBL/project-x-memory)**
+  👉 **[AlmxndBL/nexus](https://github.com/AlmxndBL/nexus)**
 - **ความเข้ากันได้แบบ Standalone (100% Standalone Ready):** สำหรับผู้ที่ต้องการใช้งานเฉพาะ Framework และ Rules ชุดนี้ สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันที 100% โดยไม่ต้องพึ่งพาระบบ Memory ภายนอก:
   - Agent จะอ่านกฎใน `AGENTS.md`, โมดูลย่อยใน `rules/` และสกิลใน `skills/` เพื่อควบคุมมาตรฐานโค้ดได้อย่างสมบูรณ์
   - หากไม่มี External Skill ในเครื่อง Agent จะใช้มาตรฐานใน `rules/05-ux-ui-design.md` และ `rules/02-coding-standards.md` เป็นเกณฑ์หลักอัตโนมัติโดยไม่เกิดอาการค้างหรือหยุดทำงาน (No Halt Deadlock)
