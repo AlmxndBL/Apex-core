@@ -190,6 +190,6 @@ graph TD
 ```
 
 ### 🔗 เชื่อมต่อกับ Nexus 2.0
-- **Repository:** 👉 [AlmxndBL/project-x-memory (Nexus 2.0)](https://github.com/AlmxndBL/project-x-memory)
+- **Repository:** 👉 [AlmxndBL/Nexus 2.0](https://github.com/AlmxndBL/nexus)
 - **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และบันทึกประวัติการตัดสินใจลง Obsidian Vault ผ่าน MCP Server ขณะที่ `agent-skill` จะคอยกำกับให้ AI ปฏิบัติตามมาตรฐานวิศวกรรมสูงสุด
 - **100% Standalone Ready:** สำหรับผู้ที่ต้องการนำเฉพาะ `agent-skill` ไปใช้งาน สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันทีโดยไม่ต้องติดตั้ง Nexus 2.0 โดย Agent จะทำงานตามกฎใน `AGENTS.md` และ `rules/` ได้อย่างสมบูรณ์แบบโดยไม่ติดขัด (No Halt Deadlock)
