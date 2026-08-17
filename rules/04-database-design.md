@@ -7,6 +7,10 @@
 ## 🗄️ 1. Tools & ORM
 - ใช้ **Prisma** หรือ **Drizzle** เป็น ORM หลักร่วมกับ PostgreSQL เพื่อความ Type-safe 100%
 - **ห้ามแก้ไข Table ใน Database โดยตรง:** ทุกการเปลี่ยนแปลง Schema ต้องผ่านกระบวนการ Migration (`prisma migrate dev`) เสมอ
+- **Migration Safety (ป้องกัน Data Loss):**
+  - **ห้ามสร้าง Migration ที่ Drop Column / Drop Table / Rename Column โดยไม่ถามผู้ใช้ก่อน** — หากจำเป็นต้องลบหรือเปลี่ยนชื่อ ต้องแจ้งผลกระทบและขออนุมัติก่อนเสมอ
+  - **เพิ่ม Column ใหม่ต้องมี Default Value หรือเป็น Optional (`?`)** เสมอ เพื่อป้องกัน NOT NULL Crash กับข้อมูลเดิมที่มีอยู่แล้ว
+  - **ก่อนรัน `migrate deploy` บน Production:** ต้องรีวิว SQL ที่ Migration สร้างขึ้น (`prisma migrate diff`) ก่อนทุกครั้ง
 
 ---
 
