@@ -102,6 +102,13 @@ agent-skill/
 3. **🛡️ Dual-Layer Route Guards:** บังคับตรวจสอบสิทธิ์ 2 ชั้นทั้งฝั่งหน้าบ้าน (Client Route Guard ป้องกัน UI) และฝั่งหลังบ้าน (Server API Middleware ป้องกัน Data)
 4. **🔄 Anti-Redirect Loop Fallback:** กำหนดให้ผู้ใช้ที่ไม่มีสิทธิ์ถูกส่งไปยังหน้า `/403 (Forbidden)` เสมอ ป้องกันปัญหาเบราว์เซอร์ติดลูป Redirect หน้าขาว
 
+### 🔒 Idempotent Webhook Receiver Blueprint ([`idempotent-webhook-receiver-with-hmac-signature.md`](./templates/blueprints/idempotent-webhook-receiver-with-hmac-signature.md))
+พิมพ์เขียวสำหรับระบบรับ Webhook ความปลอดภัยสูง (LINE Messaging API, Stripe, Payment Gateways):
+1. **🛡️ Timing-Safe HMAC SHA256 Signature Verification:** ป้องกัน Replay Attack และ Timing Attack
+2. **⚡ Immediate 200 OK Response:** ตอบกลับ Webhook ทันทีเพื่อป้องกัน Provider Timeout & Retry Loop
+3. **🔑 Deduplication Lock (Idempotency):** ป้องกันการทำงานของ Event ซ้ำซ้อนด้วย Unique Event Key
+4. **🪵 Zero Error Leaks:** บันทึกข้อผิดพลาดทั้งหมดลง Server Log โดยไม่พ่น Raw Error ออกสู่ภายนอก
+
 ---
 
 ## 🤖 Core AI Workflow (กระบวนการทำงาน 4 ขั้นตอน)
@@ -164,10 +171,11 @@ graph TD
 
 ---
 
-## ⚠️ คำแนะนำและข้อชี้แจงด้านสถาปัตยกรรม (Notice & Architecture Guidance)
+## 🧠 ระบบนิเวศและหน่วยความจำระยะยาว (Ecosystem & Long-Term Memory)
 
-### 🔒 1. Nexus Private Layer (การจัดการความจำและสกิลส่วนบุคคล)
-- **Nexus Engine:** ระบบหน่วยความจำระยะยาว (Persistent Memory) และตัวจัดการโหลด Skill อัตโนมัติ (`skills/skills.json`) เป็น **โมดูลเสริมส่วนบุคคล (Private Setup)** ที่ไม่ได้ถูกแจกจ่ายออกไปภายนอก
-- **ความเข้ากันได้แบบ Standalone (Standalone Compatibility):** สำหรับผู้ที่นำชุด Master Rules นี้ไปใช้งาน สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันที 100% โดยไม่ต้องพึ่งพาระบบ Nexus:
+### 🔗 Project X Memory (Nexus Persistent Memory Layer)
+- **Persistent Memory & Experience Layer:** สำหรับผู้ที่ต้องการให้ AI Agent มีหน่วยความจำระยะยาวข้ามโปรเจกต์ (Cross-Project Memory), ซิงก์ประวัติการตัดสินใจทางสถาปัตยกรรม (ADRs) และโหลด Shared Skills อัตโนมัติ สามารถเชื่อมต่อใช้งานร่วมกับระบบ **Project X Memory** ได้ที่:
+  👉 **[AlmxndBL/project-x-memory](https://github.com/AlmxndBL/project-x-memory)**
+- **ความเข้ากันได้แบบ Standalone (100% Standalone Ready):** สำหรับผู้ที่ต้องการใช้งานเฉพาะ Framework และ Rules ชุดนี้ สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันที 100% โดยไม่ต้องพึ่งพาระบบ Memory ภายนอก:
   - Agent จะอ่านกฎใน `AGENTS.md`, โมดูลย่อยใน `rules/` และสกิลใน `skills/` เพื่อควบคุมมาตรฐานโค้ดได้อย่างสมบูรณ์
   - หากไม่มี External Skill ในเครื่อง Agent จะใช้มาตรฐานใน `rules/05-ux-ui-design.md` และ `rules/02-coding-standards.md` เป็นเกณฑ์หลักอัตโนมัติโดยไม่เกิดอาการค้างหรือหยุดทำงาน (No Halt Deadlock)
