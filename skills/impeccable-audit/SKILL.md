@@ -30,6 +30,9 @@ description: Comprehensive Code Review, Web Quality, Accessibility (a11y), and S
 ## 🛡️ 2. Security & Secrets Leak Audit
 
 - [ ] **Hardcoded Secrets:** ตรวจสอบว่าไม่มี API Keys, Database Connection String หรือ JWT Secret หลุดอยู่ในซอร์สโค้ด
+- [ ] **Client-Side Env Leaks:** ตรวจสอบว่าไม่มี Server Secrets หลุดไปในตัวแปร Prefix หน้าบ้าน (`NEXT_PUBLIC_*`, `NUXT_PUBLIC_*`, `VITE_*`)
+- [ ] **Gitignore & Secrets Gate:** ตรวจสอบว่า `.gitignore` มีการ ignore `.env`, `.env.*`, `*.pem`, `*.key` และไม่มีไฟล์ `.env` ค้างอยู่ใน Git Staging
+- [ ] **AI Artifacts Quarantine:** ตรวจสอบว่า `.system_generated/`, `.gemini/`, `brain/` หรือไฟล์ internal AI ไม่ถูก commit เข้า repo ของโปรเจกต์
 - [ ] **SQL / ORM Injection:** ไม่มี Raw SQL String Concatenation (`$queryRawUnsafe`) โดยไม่ผ่าน Parameterized Query
 - [ ] **IDOR Check (Insecure Direct Object Reference):**
   - ในทุก Endpoint แก้ไขข้อมูล ต้องตรวจสอบสิทธิ์ความเป็นเจ้าของ เช่น:

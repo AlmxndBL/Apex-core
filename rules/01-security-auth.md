@@ -23,10 +23,14 @@
 
 ---
 
-## 3. Secrets Management
+## 3. Secrets Management & Git Hygiene
 - **ห้าม Hardcode API Keys, Passwords หรือ Secrets ลงใน Source Code เด็ดขาด** ให้ใช้ Environment Variables (`.env`) เสมอ
-- ตรวจสอบ ENV ทั้งหมดตอน App เริ่มทำงาน (Fail Fast) ด้วย Zod Schema
-- เมื่อบันทึกลงหน่วยความจำถาวรหรือสมองกล (Persistent Memory / AI Memory / Nexus) ให้ใช้ Masking Pattern `<secret:VAR_NAME>`
+- **Client-Side Prefix Guard:** ห้ามนำ Secret Keys หรือ Private Credentials ไปใส่ในตัวแปรที่มี Prefix สำหรับ Browser (`NEXT_PUBLIC_*`, `NUXT_PUBLIC_*`, `VITE_*`) เด็ดขาด เพราะจะถูก Bundle รวมไปใน Client JS ทันที
+- **Mandatory `.gitignore` Gate:** ทุกโปรเจกต์ต้องมี `.gitignore` ที่ระบุ `.env`, `.env.*`, `*.pem`, `*.key` เสมอ (อนุญาตเฉพาะ `.env.example` เท่านั้น)
+- **Safe `.env.example`:** ทุกครั้งที่มีการเพิ่ม Env Variable ใหม่ ต้องอัปเดต `.env.example` ด้วยค่าว่าง (`KEY=""`) ห้ามใส่ค่าจริง
+- **AI & Agent Artifact Isolation:** โฟลเดอร์ที่เกิดจากการทำงานของ AI (`.system_generated/`, `.gemini/`, `brain/`, `scratch/`) ต้องถูกระบุใน `.gitignore` หรือ `.git/info/exclude` เสมอ ห้าม Commit เข้า Repository ของโปรเจกต์
+- **Fail-Fast Validation:** ตรวจสอบ ENV ทั้งหมดตอน App เริ่มทำงานด้วย Zod Schema
+- **Memory Masking:** เมื่อบันทึกลงหน่วยความจำถาวรหรือสมองกล (Persistent Memory / AI Memory / Nexus) ให้ใช้ Masking Pattern `<secret:VAR_NAME>`
 
 ---
 

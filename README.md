@@ -3,7 +3,7 @@
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-2.2.1-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
@@ -31,6 +31,7 @@
 agent-skill/
 ├── AGENTS.md                   # 🧠 [Tier 1: AI Brain & Orchestration] แม่บทควบคุมพฤติกรรมและ Workflow 4 ขั้น
 ├── README.md                   # 📖 คู่มือการใช้งานและคำแนะนำสำหรับนักพัฒนา
+├── .gitignore                  # 🛡️ มาตรฐาน Ignore ป้องกัน Secrets & AI Artifacts
 │
 ├── rules/                      # 📜 [Tier 2: Engineering Standards] กฎคุณภาพ 6 เสาหลัก
 │   ├── 01-security-auth.md     # 🥇 ความปลอดภัย, Secrets, CSRF, CORS & Hard Gates
@@ -50,12 +51,15 @@ agent-skill/
 │   └── typescript-wizard/      # 🧙‍♂️ Strict TypeScript ไร้ Any สไตล์ Matt Pocock
 │
 ├── scripts/
-│   └── scan-context.js         # ⚡ สคริปต์ Auto-Scan สร้างแผนผังบริบทโปรเจกต์ใน 1 วินาที
+│   ├── scan-context.js         # ⚡ สคริปต์ Auto-Scan สร้างแผนผังบริบทโปรเจกต์ใน 1 วินาที
+│   └── setup-git-shield.js     # 🛡️ สคริปต์ติดตั้งระบบป้องกัน .env และ Secrets Leak อัตโนมัติ
 │
 └── templates/                  # 📐 [Tier 3: Blueprints & Context Maps] พิมพ์เขียวพร้อมใช้
     ├── AI-Context-Index.md     # Single Source of Truth สรุปบริบทโปรเจกต์สำหรับ AI
+    ├── gitignore-production.md # พิมพ์เขียว .gitignore มาตรฐานแยก AI & Secrets
     └── blueprints/
-        └── rbac-multi-role.md  # พิมพ์เขียวระบบ Multi-Role, 1-Click Quick Login & Dual-Layer Guards
+        ├── rbac-multi-role.md  # พิมพ์เขียวระบบ Multi-Role, 1-Click Quick Login & Dual-Layer Guards
+        └── idempotent-webhook-receiver-with-hmac-signature.md # พิมพ์เขียว Webhook Receiver ปลอดภัย
 ```
 
 ---
@@ -122,16 +126,24 @@ graph TD
 ## 🚀 วิธีการนำไปใช้งาน (How to Use & Integration Guide)
 
 ### สำหรับ Google Antigravity / Cursor / Windsurf
-1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md), โฟลเดอร์ [`rules/`](./rules), [`skills/`](./skills), [`templates/`](./templates) และสคริปต์ [`scripts/scan-context.js`](./scripts/scan-context.js) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
+1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md), โฟลเดอร์ [`rules/`](./rules), [`skills/`](./skills), [`templates/`](./templates) และสคริปต์ใน [`scripts/`](./scripts) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
 2. รันคำสั่ง Auto-Scan เพื่อสร้างแผนผังบริบทโปรเจกต์อัตโนมัติใน 1 วินาที:
    ```bash
    node scripts/scan-context.js
    ```
    *(สคริปต์จะสแกน `package.json`, `schema.prisma`, และ API Routes เพื่อสร้าง `AI-Context-Index.md` ให้ทันที)*
-3. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` และ `skills/` มาใช้อัตโนมัติในทุกๆ Task
+3. **🛡️ ติดตั้งระบบป้องกัน `.env` หลุด & Git Shield ในโปรเจกต์:**
+   ```bash
+   # ติดตั้งในโปรเจกต์ทั่วไป (อัปเดต .gitignore + ติดตั้ง pre-commit secret hook)
+   node scripts/setup-git-shield.js
+
+   # หรือโหมด Stealth (เขียนลง .git/info/exclude เพื่อซ่อนไฟล์ AI จากเพื่อนร่วมทีม)
+   node scripts/setup-git-shield.js --stealth
+   ```
+4. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` และ `skills/` มาใช้อัตโนมัติในทุกๆ Task
 
 ### สำหรับขึ้นโปรเจกต์ใหม่จาก 0 (Greenfield Blueprint)
-เมื่อสร้างโปรเจกต์ใหม่ Agent จะวางโครงสร้างไฟล์ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md):
+เมื่อสร้างโปรเจกต์ใหม่ Agent จะวางโครงสร้างไฟล์ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) พร้อมใช้ Preset `.gitignore` จาก [`templates/gitignore-production.md`](./templates/gitignore-production.md):
 - **Nuxt 4:** `app/layouts/`, `app/pages/`, `app/features/`, `app/components/ui/`, `server/api/`
 - **React (Next.js / Vite):** `src/layouts/`, `src/pages/`, `src/features/`, `src/components/ui/`, `src/store/`
 
