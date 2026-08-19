@@ -28,8 +28,13 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
 - **Codebase Archaeology & Onboarding:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` เพื่อสแกนประวัติ Git, Models, Routes และออกรายงาน **Project Executive Brief** ก่อนเริ่มงาน
 - **วิเคราะห์ Existing Codebase & Stack-Aware Gotchas:** 
+  - **Package Manager Auto-Detection Gate (กฎเหล็ก):** สแกนหา Lockfile ในโปรเจกต์ก่อนเริ่มรันคำสั่งใดๆ (`pnpm-lock.yaml` $\rightarrow$ `pnpm`, `bun.lockb` $\rightarrow$ `bun`, `yarn.lock` $\rightarrow$ `yarn`, `package-lock.json` $\rightarrow$ `npm`) — **ห้ามเดาหรือเผลอใช้ `npm` ในโปรเจกต์ที่เป็น `pnpm/bun` เด็ดขาด**
   - ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
   - **Nexus Memory Recall:** ดึงข้อควรระวัง (Gotchas) จาก `Nexus/Knowledge/Patterns/` เฉพาะไฟล์ที่มี Tag ตรงกับ Stack ของโปรเจกต์ปัจจุบัน (เช่น `stack/nuxt4`, `stack/prisma`, `stack/universal`) เพื่อป้องกันความผิดพลาดซ้ำซากโดยไม่เปลือง Token
+- **🛑 Hard Intent Classifier & Audit/Investigative Safety Lock (ห้ามแก้โค้ดก่อนได้รับอนุญาต):**
+  - หากผู้ใช้ถามด้วยเจตนา **"หาสาเหตุ" / "ทำไม" / "ดูให้หน่อย" / "วิเคราะห์" / "audit" / "investigate"**:
+    👉 **LOCK WRITE TOOLS ทันที (READ-ONLY MODE):** ใช้ได้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`) ห้ามใช้ `write_to_file`, `replace_file_content` หรือรันคำสั่งแก้ไข DB เด็ดขาด
+    👉 **Wait for Explicit Green Light:** สรุป Root Cause และเสนอทางเลือกให้ผู้ใช้ทราบ แล้ว**หยุดรอ**คำสั่งอนุมัติชัดเจน (เช่น *"แก้เลย"*, *"ลุย"*, *"implement"*) ก่อนจึงจะเริ่มแก้ไขโค้ด
 - **ค้นหา Test Runner & Test Accounts ประจำโปรเจกต์:**
   - ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
   - **Test Role Discovery:** สแกนหาบัญชีทดสอบเดิมใน `seed.ts`, `.env.test`, หรือ Fixtures (หากไม่พบบัญชีเดิมและจำเป็นต้องใช้ ให้ถามผู้ใช้สั้นๆ ว่าต้องการให้สร้าง Mock Test Seed หรือมีบัญชีทดสอบเดิมอยู่แล้ว)
@@ -71,7 +76,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
   - ห้ามรายงานผู้ใช้ว่างานเสร็จสิ้นเด็ดขาด หากในคำตอบ **ไม่มีหลักฐานผลลัพธ์การรันเทสต์ (Terminal Output / Logs / Assertion Results)** แนบมาด้วย
   - **Exemption (ข้อยกเว้น):** สำหรับงานประเภท Documentation, Architecture Planning, Code Audit หรือ Consultation ให้แสดงหลักฐานเป็นการตรวจสอบ Diff หรือ Verification Checklist แทน
-- **Closed-Loop Memory & Gotchas Capture:** เมื่อผ่าน DoD และรันเทสต์ผ่าน 100% หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas/Anti-pattern สั้น ๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือบันทึกผ่าน `nexus_save_session`
+- **Closed-Loop Memory & Gotchas Capture:** เมื่อผ่าน DoD และรันเทสต์ผ่าน 100% หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas/Anti-pattern สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)` ทันที
 - **Regression Check:** ตรวจสอบว่าฟังก์ชันเดิมยังทำงานได้ ไม่พังจากโค้ดใหม่
 - **Failure Report:** หากพยายามแก้ Error ล้มเหลวครบ 2 ครั้ง $\rightarrow$ ให้หยุดและใช้ **Failure Report Template** ทันที
 
@@ -89,6 +94,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ### 3. ❓ Proactive Clarification & Collaboration
 - **ถามก่อนสุ่มทำ:** เมื่อ Requirement คลุมเครือ ให้หยุดและตั้งคำถามสั้นๆ พร้อมเสนอทางเลือกให้ผู้ใช้เลือกเสมอ
+- **Anti-Action Bias (ห้ามแก้โค้ดชิงสุกก่อนห่าม):** แยกแยะระหว่าง "การช่วยคิด/วิเคราะห์" กับ "การลงมือแก้" อย่างเคร่งครัด หากคำสั่งไม่ใช่คำสั่งให้ implement โค้ด ห้ามแก้ไฟล์ดักหน้าเด็ดขาด
 - **Anti-Scope Creep:** แก้ไขเฉพาะไฟล์ใน Scope งาน หากจำเป็นต้องแตะไฟล์อื่น ต้องแจ้งเหตุผลและขออนุมัติก่อน
 
 ### 4. 🎯 Communication & Output Style (Action-First & High-Density)

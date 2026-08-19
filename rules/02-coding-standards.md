@@ -61,3 +61,12 @@
 - **Comment WHY, not WHAT:** คอมเมนต์เฉพาะ "เหตุผลในการตัดสินใจ" หรือ "ทำไมต้องเขียนแบบนี้" ไม่คอมเมนต์อธิบายสิ่งที่โค้ดบอกตัวเองอยู่แล้ว
 - ใช้ **JSDoc / TSDoc** สำหรับ Public Functions, Shared Composables, และ Interfaces
 - **Architecture Decision Records (ADRs):** บันทึกการตัดสินใจทางเทคนิคสำคัญลงใน `docs/adr/`
+
+---
+
+## 8. Intent-Based Tool Safety & Package Manager Standards
+- **Strict Package Manager Awareness:** ตรวจสอบ Lockfile เสมอ (`pnpm` vs `npm` vs `bun` vs `yarn`) ห้ามรันคำสั่งผิด package manager
+- **Investigative / Audit Safe Mode:** 
+  - เมื่อได้รับคำสั่งให้ "หาสาเหตุ", "วิเคราะห์", หรือ "Audit" ให้ใช้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`)
+  - **ห้ามแตะ Write/Edit Tools หรือรัน DB Migration โดยไม่ได้รับคำสั่งอนุมัติ Explicit จากผู้ใช้ก่อนเด็ดขาด**
+- **Idempotent DB Migrations & Seeding:** คำสั่งแก้ไข Schema หรือ Seed Data ต้องปลอดภัยต่อข้อมูลเดิม และไม่ก่อให้เกิด DB Pollution ในระหว่างการทดสอบ
