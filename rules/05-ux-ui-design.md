@@ -14,6 +14,7 @@
 
 ### 🚫 Strict Component Red-Lines
 - ❌ **No Monolithic Component:** ห้ามสร้างไฟล์ UI เดียวเกิน **200-250 บรรทัด** ให้ย่อยเป็น Sub-components
+- ❌ **No Hardcoded Mobile-Only Shells (Responsive Breakpoint Guard):** ห้ามใช้ Container Class แบบจำกัดความกว้างตายตัว (`max-w-sm`, `max-w-md`, `max-w-lg`) ใน App Shell Layout หรือ Shared Dashboard View โดยไม่มีคลาส Responsive ขยายสำหรับ Desktop (`lg:max-w-6xl` หรือ `w-full`) ป้องกันจอคอมโบ๋ตรงกลาง
 - ❌ **No Prop Drilling > 2 Levels:** หากส่ง Props ลึกเกิน 2 ชั้น ให้ใช้ State Store (Pinia/Zustand), Context หรือ Slot แทน
 - ❌ **No Direct API Calls in UI Layer:** ห้ามเรียก API ตรงใน Atomic UI Components ให้ผ่าน Composables / Custom Hooks / Service Layer เสมอ
 - ❌ **No Self-Referencing Recursion:** ตรวจสอบการ Import ตัวเองเพื่อป้องกัน Infinite Loop

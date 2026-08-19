@@ -64,11 +64,16 @@
 
 ---
 
-## 8. Intent-Based Tool Safety & Package Manager Standards
+## 8. Intent-Based Tool Safety, Refactoring & Package Manager Standards
 - **Strict Package Manager Awareness:** ตรวจสอบ Lockfile เสมอ (`pnpm` vs `npm` vs `bun` vs `yarn`) ห้ามรันคำสั่งผิด package manager
 - **Investigative / Audit Safe Mode:** 
   - เมื่อได้รับคำสั่งให้ "หาสาเหตุ", "วิเคราะห์", หรือ "Audit" ให้ใช้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`)
   - **ห้ามแตะ Write/Edit Tools หรือรัน DB Migration โดยไม่ได้รับคำสั่งอนุมัติ Explicit จากผู้ใช้ก่อนเด็ดขาด**
+- **Atomic Refactoring & Zero Legacy Clutter:**
+  - เมื่อย้ายเส้นทางโฟลเดอร์หรือเปลี่ยนโครงสร้าง Route (เช่น ย้ายไป `/admin/` หรือ `/tenant/`) **ต้องลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที** ห้ามปล่อยให้ไฟล์เดิมอยู่คู่กับไฟล์ใหม่เด็ดขาด
+- **Tool Transparency & Anti-Hidden Scripting:**
+  - การแก้ไขหรือสร้างไฟล์โปรเจกต์ต้องทำผ่าน Native Tools (`replace_file_content`, `write_to_file`) ที่แสดง Diff และ Path ชัดเจน
+  - **ห้ามสร้างหรือรัน Batch Script ชั่วคราวใน `/scratch/` เพื่อแอบแก้ไขโค้ดโปรเจกต์แบบทึบเด็ดขาด**
 - **Idempotent DB Migrations & Seeding:** คำสั่งแก้ไข Schema หรือ Seed Data ต้องปลอดภัยต่อข้อมูลเดิม และไม่ก่อให้เกิด DB Pollution ในระหว่างการทดสอบ
 
 

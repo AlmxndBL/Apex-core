@@ -30,7 +30,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **วิเคราะห์ Existing Codebase & Stack-Aware Gotchas:** 
   - **Package Manager Auto-Detection Gate (กฎเหล็ก):** สแกนหา Lockfile ในโปรเจกต์ก่อนเริ่มรันคำสั่งใดๆ (`pnpm-lock.yaml` $\rightarrow$ `pnpm`, `bun.lockb` $\rightarrow$ `bun`, `yarn.lock` $\rightarrow$ `yarn`, `package-lock.json` $\rightarrow$ `npm`) — **ห้ามเดาหรือเผลอใช้ `npm` ในโปรเจกต์ที่เป็น `pnpm/bun` เด็ดขาด**
   - ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
-  - **Nexus Memory Recall:** ดึงข้อควรระวัง (Gotchas) จาก `Nexus/Knowledge/Patterns/` เฉพาะไฟล์ที่มี Tag ตรงกับ Stack ของโปรเจกต์ปัจจุบัน (เช่น `stack/nuxt4`, `stack/prisma`, `stack/universal`) เพื่อป้องกันความผิดพลาดซ้ำซากโดยไม่เปลือง Token
+  - **Mandatory Pre-flight Gotchas Gate (กฎเหล็กบังคับอ่านความรู้เดิม):** ก่อนเริ่มแตะ Database, Framework Version ใหม่ (เช่น Prisma 7, Next.js 15, Nuxt 4), หรือขึ้นโครงสร้าง Layout ซับซ้อน **ต้องเปิดดูไฟล์ Gotchas ที่ตรงกับ Stack ใน `Nexus/Knowledge/Patterns/` เสมอ** (เช่น `gotchas-prisma-postgres.md`, `database-and-api-performance-gotchas.md`, `gotchas-nuxt4-nitro.md`) หากข้ามขั้นตอนนี้ห้ามเริ่มเขียนโค้ดเด็ดขาด
 - **🛑 Hard Intent Classifier & Audit/Investigative Safety Lock (ห้ามแก้โค้ดก่อนได้รับอนุญาต):**
   - หากผู้ใช้ถามด้วยเจตนา **"หาสาเหตุ" / "ทำไม" / "ดูให้หน่อย" / "วิเคราะห์" / "audit" / "investigate"**:
     👉 **LOCK WRITE TOOLS ทันที (READ-ONLY MODE):** ใช้ได้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`) ห้ามใช้ `write_to_file`, `replace_file_content` หรือรันคำสั่งแก้ไข DB เด็ดขาด
@@ -62,6 +62,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - DevOps: `skills/docker-devops-master`
   - Security/Audit: `skills/impeccable-audit`
 - **Skill Fallback:** หากไม่มี External Skill ในเครื่อง ให้ยึดตามมาตรฐานใน `rules/` ทันที ห้ามหยุดทำงาน
+- **Tool Transparency Standard (ห้ามใช้สคริปต์มืดแก้โค้ด):** การแก้ไขและสร้างโค้ดโปรเจกต์ต้องทำผ่าน Native Tools (`replace_file_content`, `write_to_file`) เท่านั้น เพื่อให้แสดง File Diff ชัดเจน ห้ามรัน Batch Script ในโฟลเดอร์ชั่วคราว (`scratch/`) ไปแอบเขียนทับไฟล์โปรเจกต์
 - เขียนโค้ดที่รันได้จริง 100% ห้ามมี Placeholder Code
 
 ### Step 4: Verification (Universal Quality Gate & Definition of Done)
@@ -76,6 +77,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
   - ห้ามรายงานผู้ใช้ว่างานเสร็จสิ้นเด็ดขาด หากในคำตอบ **ไม่มีหลักฐานผลลัพธ์การรันเทสต์ (Terminal Output / Logs / Assertion Results)** แนบมาด้วย
   - **Exemption (ข้อยกเว้น):** สำหรับงานประเภท Documentation, Architecture Planning, Code Audit หรือ Consultation ให้แสดงหลักฐานเป็นการตรวจสอบ Diff หรือ Verification Checklist แทน
+- **Atomic Refactoring & Zero Legacy Clutter Policy:** เมื่อมีการย้ายโครงสร้างโฟลเดอร์หรือเปลี่ยน Route Paths ต้องสั่งลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที ป้องกัน Dead Code และ Route ซ้ำซ้อน
 - **Closed-Loop Memory & Gotchas Capture:** เมื่อผ่าน DoD และรันเทสต์ผ่าน 100% หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas/Anti-pattern สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)` ทันที
 - **Regression Check:** ตรวจสอบว่าฟังก์ชันเดิมยังทำงานได้ ไม่พังจากโค้ดใหม่
 - **Failure Report:** หากพยายามแก้ Error ล้มเหลวครบ 2 ครั้ง $\rightarrow$ ให้หยุดและใช้ **Failure Report Template** ทันที

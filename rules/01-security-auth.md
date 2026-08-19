@@ -19,6 +19,7 @@
 - **Dual-Layer Authorization:**
   - ห้ามพึ่งพาเฉพาะ Client-side Route Guard หน้าบ้านเด็ดขาด
   - ทุก Server Endpoint / API Handler ต้องมี Middleware ตรวจสอบ Role และ Permissions ซ้ำ 100% ก่อนเข้าถึง Data Layer
+- **Explicit Public Route Whitelist:** ทุก Global Auth Middleware หรือ Navigation Guard จะต้องประกาศตัวแปร `PUBLIC_ROUTES` ไว้อย่างชัดเจน (เช่น `['/', '/login', '/register', '/terms', '/privacy']`) ก่อนทำ Session Guard เสมอ เพื่อป้องกันไม่ให้เผลอดัก Redirect บล็อกหน้าแรก Public Showcase
 - **Dev Quick-Login Hard Gate:** API หรือ Endpoint สำหรับช่วยล็อกอิน Dev/Test (ถ้ามี) ต้องเช็ก `if (process.env.APP_ENV === 'production' || process.env.NODE_ENV === 'production')` ที่บรรทัดแรก และคืนค่า `404 Not Found` ทันที
 
 ---
