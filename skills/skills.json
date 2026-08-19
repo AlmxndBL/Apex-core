@@ -1,11 +1,49 @@
 {
-  "nexus_skills_path": "${NEXUS_SKILLS_PATH}",
-  "repositories": [
-    "https://github.com/mattpocock/skills",
-    "https://github.com/jirayu-ct-dev/9arm-skills",
-    "https://github.com/shadcn-ui/ui-skills"
-  ],
-  "exclude": [
-    "andrej-karpathy-skills"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "2.3.0",
+  "description": "Specialized AI Engineering Skills Manifest for agent-skill",
+  "skills": [
+    {
+      "name": "codebase-cartographer",
+      "path": "./codebase-cartographer/SKILL.md",
+      "description": "Systematic Codebase Archaeology & Project Re-orientation (Executive Briefs, WIP hunt)",
+      "tags": ["onboarding", "git-history", "cartography", "architecture"]
+    },
+    {
+      "name": "database-architect",
+      "path": "./database-architect/SKILL.md",
+      "description": "PostgreSQL & Prisma/Drizzle Database Architecture, Index Tuning & Safe Migrations",
+      "tags": ["database", "prisma", "postgresql", "indexing", "transactions"]
+    },
+    {
+      "name": "design-taste-frontend",
+      "path": "./design-taste-frontend/SKILL.md",
+      "description": "High-end Frontend UI & Visual Design (HSL Palettes, Typography, Anti-Cliché Rules)",
+      "tags": ["frontend", "ui-ux", "tailwind", "design-system", "vue-react"]
+    },
+    {
+      "name": "docker-devops-master",
+      "path": "./docker-devops-master/SKILL.md",
+      "description": "Production Docker Multi-Stage Containerization, CI/CD & Structured Logging",
+      "tags": ["devops", "docker", "ci-cd", "github-actions", "logging"]
+    },
+    {
+      "name": "impeccable-audit",
+      "path": "./impeccable-audit/SKILL.md",
+      "description": "Comprehensive Code Review, Web Quality, Accessibility (a11y) & Security Pre-flight",
+      "tags": ["audit", "security", "a11y", "owasp", "code-review"]
+    },
+    {
+      "name": "sandbox-testing",
+      "path": "./sandbox-testing/SKILL.md",
+      "description": "Automated Sandbox Test Suite & Verification Engine (Vitest/Jest, DB Rollback, DoD)",
+      "tags": ["testing", "vitest", "verification", "rbac-matrix", "dod"]
+    },
+    {
+      "name": "typescript-wizard",
+      "path": "./typescript-wizard/SKILL.md",
+      "description": "Strict TypeScript Mastery & Type Gymnastics (Total TS Style, Discriminated Unions, Zero any)",
+      "tags": ["typescript", "strict-types", "zod", "generics", "matt-pocock-style"]
+    }
   ]
 }
