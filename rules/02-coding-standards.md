@@ -70,3 +70,21 @@
   - เมื่อได้รับคำสั่งให้ "หาสาเหตุ", "วิเคราะห์", หรือ "Audit" ให้ใช้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`)
   - **ห้ามแตะ Write/Edit Tools หรือรัน DB Migration โดยไม่ได้รับคำสั่งอนุมัติ Explicit จากผู้ใช้ก่อนเด็ดขาด**
 - **Idempotent DB Migrations & Seeding:** คำสั่งแก้ไข Schema หรือ Seed Data ต้องปลอดภัยต่อข้อมูลเดิม และไม่ก่อให้เกิด DB Pollution ในระหว่างการทดสอบ
+
+
+---
+
+## 8. Stack-Specific Gotchas & Architecture Lessons
+
+### A. Nuxt 4 + Prisma 7 Driver Adapter Rule
+- **Driver Adapter Mandatory:** Prisma v7 บังคับใช้งานผ่าน Driver Adapter (เช่น `@prisma/adapter-pg` สำหรับ PostgreSQL)
+- **Singleton Pattern:** ใน `server/utils/prisma.ts` ต้องสร้าง Pool และส่งต่อให้ `new PrismaClient({ adapter })` เสมอ ห้ามเรียก `new PrismaClient()` เปล่าๆ เด็ดขาด
+
+### B. PostCSS & CSS File Structure
+- **@import Precedence:** คำสั่ง `@import url(...);` สำหรับโหลดฟอนต์ภายนอก **ต้องอยู่บรรทัดแรกสุดของไฟล์ CSS** ก่อน `@tailwind base;` หรือคำสั่ง CSS อื่นๆ เสมอ เพื่อป้องกัน PostCSS parser warning
+
+### C. Typed Auth Function Returns
+- ฟังก์ชัน `login()` ใน Composable (`useAuth.ts`) **ต้อง Return Typed User Object (`UserProfile | null`) เสมอ** ห้าม Return แค่ Boolean `true` เพื่อป้องกันกรณีที่หน้าเรียกใช้เข้าถึง `res.role` แล้วได้ `undefined` ทำให้ Routing ทำงานผิดพลาด
+
+### D. Pre-Refactoring Dead Code Cleanup Protocol
+- เมื่อทำการยกระดับสถาปัตยกรรม (เช่น เปลี่ยนเป็น Dual-Role RBAC หรือแยก Version `/api/v1/*`) **ต้องลบไฟล์และโฟลเดอร์ Legacy เดิมทิ้งทันที** ป้องกันไม่ให้เกิด Shadow Files ที่ทำให้เกิดการสับสนหรือ Route ชนกัน

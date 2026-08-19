@@ -118,3 +118,28 @@
    - คลิกขวา (`@contextmenu.prevent`): ลดจำนวนสินค้า (-1)
    - ระบบสลับลูกค้า: ลูกค้าสมาชิก (ค้นหาชื่อ/เบอร์) vs ลูกค้าหน้าร้าน (มีปุ่มลัด "ไม่ระบุ")
 4. **LINE LIFF & Engagement Buttons:** ปุ่มเชื่อมต่อ LINE สีเขียวมาตรฐาน (`#06C755`)
+
+
+---
+
+## 6. Professional Vector SVG Icons vs Emojis (No-Toy UI Rule)
+- **Zero Toy Emojis in Core UI:** ห้ามใช้ Emoji ในองค์ประกอบ UI หลักของระบบระดับ Production (เช่น Navigation Bar, Sidebar, Stat Card Icons, Action Buttons, Table Action Columns)
+- **Standard Vector SVGs:** ใช้ไอคอน Vector SVG ที่มีความคมชัด น้ำหนักเส้นสม่ำเสมอ (เช่น Heroicons, Lucide Icons) กำหนดขนาด `w-4 h-4` ถึง `w-6 h-6` พร้อมสีที่มีคอนทราสต์เหมาะสมตาม State
+
+---
+
+## 7. Responsive Dual-Role App Shell Pattern
+- **Desktop View:**
+  - ขยายเต็มพื้นที่ความกว้าง (`max-w-6xl` ถึง `max-w-7xl`)
+  - ใช้ Multi-column Grid สำหรับแสดงผลภาพรวมและตาราง
+  - แถบเมนูด้านข้างรองรับการพับเก็บ (Collapsible Mini Mode)
+- **Mobile View:**
+  - แสดงผลในรูปแบบ Mobile App Shell
+  - แถบเมนูลอยตัวด้านล่าง (Floating Bottom Navigation) สำหรับการใช้งานด้วยมือเดียว
+
+---
+
+## 8. Universal Table Multi-Select & Floating Bulk Bar Pattern
+- **Checkbox State Management:** รองรับการเลือกทีละแถว (Row Selection) และเลือกทั้งหมด (Select All)
+- **Floating Bulk Action Bar:** แสดงผลเป็นแถบลอยตัวด้านล่างพร้อม Animation นุ่มนวลเมื่อ `selectedCount > 0`
+- **Confirmation Gate:** แสดง Modal หรือ Confirm Dialog แจ้งเตือนจำนวนรายการที่กำลังจะถูกลบเสมอ
