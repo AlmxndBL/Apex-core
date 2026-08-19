@@ -3,7 +3,7 @@
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![v2.2.1](https://img.shields.io/badge/v2.2.1-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![v2.3.0](https://img.shields.io/badge/v2.3.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
@@ -19,6 +19,7 @@
 | **Preamble & Fluff:** ชอบพูดคำทักทายไร้สาระ ("ได้ครับ", "ยินดีครับ") และเกริ่นยืดยาว | **Action-First (BLUF):** สรุปสาระสำคัญไว้ที่บรรทัดแรกสุด (Bottom Line Up Front) ตัดคำไร้สาระออก 100% |
 | **Hallucination & Guesswork:** มโนชื่อไฟล์ หรือแอบข้ามไฟล์ที่หาไม่เจอ | **Zero Hallucination:** หากข้อมูลไม่ชัดเจนหรือไฟล์หาย จะ **"หยุดถามทันที"** ห้ามเดาเอาเอง |
 | **Code Spaghetti / Buggy RBAC:** สับสนเรื่องการจัดการสิทธิ์หลายบทบาท หรือทำให้เกิด Hydration Error | **System Blueprints:** มีพิมพ์เขียวมาตรฐานสำเร็จรูป (`blueprints/`) ป้องกันบั๊กตั้งแต่ระดับโครงสร้าง |
+| **แก้บั๊กวนลูปซ้ำซาก:** ทำผิดซ้ำในเรื่องเดิมที่เคยแก้ไปแล้วข้าม Session | **Stack-Aware Memory & Gotchas:** ดึงบทเรียนและข้อควรระวังข้ามโปรเจกต์มาเตือนล่วงหน้าตาม Tech Stack |
 | **แก้บั๊กวนลูปไม่จบ:** แก้พังวนซ้ำไปเรื่อยๆ โดยไม่รายงานปัญหาที่แท้จริง | **Failure Report Protocol:** หากแก้ Error ล้มเหลวครบ 2 ครั้ง ต้องหยุดและส่งรายงาน Root Cause ทันที |
 
 ---
@@ -91,26 +92,6 @@ agent-skill/
 
 ---
 
-## 🛡️ System Blueprints & Production-Ready Patterns (Tier 3)
-
-จุดเด่นของ Framework นี้คือการมี **System Blueprints (`templates/blueprints/`)** ซึ่งเป็นพิมพ์เขียวสถาปัตยกรรมระดับระบบ เพื่อแก้ปัญหาข้อผิดพลาดทางเทคนิคที่พบบ่อยตั้งแต่ระดับโครงสร้าง:
-
-### 🌟 Multi-Role & RBAC Blueprint ([`rbac-multi-role.md`](./templates/blueprints/rbac-multi-role.md))
-พิมพ์เขียวสำหรับระบบที่มีหลายบทบาทหน้าที่ (เช่น Admin, Manager, Staff) ที่ฝังกลไกตัดบั๊กสำคัญ 4 ด้าน:
-1. **🌱 Safe Seeding Dispatcher:** สคริปต์ `prisma/seed.ts` ทำหน้าที่เป็น Main Dispatcher แยกการ Seed ข้อมูลจำลอง (`dev.seed.ts`) ออกจากบทบาทระบบ (`prod.seed.ts`) ป้องกันข้อมูลทดสอบและรหัสผ่านง่ายๆ หลุดเข้า Production Database
-2. **⚡ Hydration-Safe 1-Click Login:** ปุ่มลัดล็อกอินสำหรับโหมด Dev/QA ที่รองรับ `<ClientOnly>` และ Feature Flag `ENABLE_DEV_LOGIN` เพื่อเปิดใช้งานบน Staging ได้อย่างปลอดภัย และไม่ทำให้เกิด SSR Hydration Mismatch
-3. **🛡️ Dual-Layer Route Guards:** บังคับตรวจสอบสิทธิ์ 2 ชั้นทั้งฝั่งหน้าบ้าน (Client Route Guard ป้องกัน UI) และฝั่งหลังบ้าน (Server API Middleware ป้องกัน Data)
-4. **🔄 Anti-Redirect Loop Fallback:** กำหนดให้ผู้ใช้ที่ไม่มีสิทธิ์ถูกส่งไปยังหน้า `/403 (Forbidden)` เสมอ ป้องกันปัญหาเบราว์เซอร์ติดลูป Redirect หน้าขาว
-
-### 🔒 Idempotent Webhook Receiver Blueprint ([`idempotent-webhook-receiver-with-hmac-signature.md`](./templates/blueprints/idempotent-webhook-receiver-with-hmac-signature.md))
-พิมพ์เขียวสำหรับระบบรับ Webhook ความปลอดภัยสูง (LINE Messaging API, Stripe, Payment Gateways):
-1. **🛡️ Timing-Safe HMAC SHA256 Signature Verification:** ป้องกัน Replay Attack และ Timing Attack
-2. **⚡ Immediate 200 OK Response:** ตอบกลับ Webhook ทันทีเพื่อป้องกัน Provider Timeout & Retry Loop
-3. **🔑 Deduplication Lock (Idempotency):** ป้องกันการทำงานของ Event ซ้ำซ้อนด้วย Unique Event Key
-4. **🪵 Zero Error Leaks:** บันทึกข้อผิดพลาดทั้งหมดลง Server Log โดยไม่พ่น Raw Error ออกสู่ภายนอก
-
----
-
 ## 🤖 Core AI Workflow (กระบวนการทำงาน 4 ขั้นตอน)
 
 Agent ทุกตัวที่รันภายใต้กรอบนี้ จะต้องปฏิบัติตามลำดับ 4 ขั้นตอนอย่างเคร่งครัด:
@@ -123,16 +104,21 @@ graph TD
     D -- แก้ไขล้มเหลว 2 ครั้ง --> E[🚨 Failure Report]
 ```
 
-1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต):** วิเคราะห์ Requirements, Existing Codebase, ค้นหา Test Runner ประจำโปรเจกต์ และประเมินความเสี่ยง
+1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Memory Recall):** 
+   - วิเคราะห์ Requirements และ Existing Codebase
+   - **Stack-Aware Gotchas Recall:** ตรวจสอบ Tech Stack ของโปรเจกต์ แล้วโหลดเฉพาะ Gotchas จากคลังความรู้ที่มี Tag ตรงกัน (`stack/nuxt4`, `stack/react`, `stack/universal`) เพื่อป้องกันความผิดพลาดซ้ำซากโดยไม่เปลือง Token
+   - ค้นหา Test Runner ประจำโปรเจกต์ และประเมินความเสี่ยง
 2. **Step 2: System Design - The 9arm Way (ออกแบบระบบ):** ออกแบบระบบด้วยหลักความเรียบง่ายที่สเกลได้ (Pragmatic & Simple) สอดคล้องกับ System Blueprint และถามผู้ใช้ก่อนวาด Diagram
 3. **Step 3: Implementation (ลงมือเขียนโค้ด):** เขียนโค้ดจริง 100% (ห้ามมี Placeholder Code) ตามมาตรฐาน 6 เสาหลักใน `rules/`
-4. **Step 4: Verification (Universal DoD):** ตรวจสอบผ่าน Test Runner หรือ Ad-hoc Verification (Type Check/Rollback Assertion) พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
+4. **Step 4: Verification & Closed-Loop Memory (Universal DoD):**
+   - ตรวจสอบผ่าน Test Runner หรือ Ad-hoc Verification (Type Check/Rollback Assertion) พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
+   - **Closed-Loop Gotchas Capture:** เมื่อแก้บั๊กยากระดับสถาปัตยกรรมสำเร็จ หรือได้รับคำทักท้วง (User Correction) ให้บันทึก Gotchas สั้น ๆ 3 บรรทัดลงในคลังความรู้ทันที
 
 ---
 
 ## 🚀 วิธีการนำไปใช้งาน (How to Use & Integration Guide)
 
-### สำหรับ Google Antigravity / Cursor / Windsurf
+### 1. ใช้งานแบบ Standalone (นำไปใช้ในโปรเจกต์ของคุณ)
 1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md), โฟลเดอร์ [`rules/`](./rules), [`skills/`](./skills), [`templates/`](./templates) และสคริปต์ใน [`scripts/`](./scripts) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
 2. รันคำสั่ง Auto-Scan เพื่อสร้างแผนผังบริบทโปรเจกต์อัตโนมัติใน 1 วินาที:
    ```bash
@@ -147,27 +133,7 @@ graph TD
    # หรือโหมด Stealth (เขียนลง .git/info/exclude เพื่อซ่อนไฟล์ AI จากเพื่อนร่วมทีม)
    node scripts/setup-git-shield.js --stealth
    ```
-4. AI Agent จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` และ `skills/` มาใช้อัตโนมัติในทุกๆ Task
-
-### สำหรับขึ้นโปรเจกต์ใหม่จาก 0 (Greenfield Blueprint)
-เมื่อสร้างโปรเจกต์ใหม่ Agent จะวางโครงสร้างไฟล์ตาม Preset ใน [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) พร้อมใช้ Preset `.gitignore` จาก [`templates/gitignore-production.md`](./templates/gitignore-production.md):
-- **Nuxt 4:** `app/layouts/`, `app/pages/`, `app/features/`, `app/components/ui/`, `server/api/`
-- **React (Next.js / Vite):** `src/layouts/`, `src/pages/`, `src/features/`, `src/components/ui/`, `src/store/`
-
-### สำหรับ Claude Code
-- นำเนื้อหาหลักใน [`AGENTS.md`](./AGENTS.md) ไปใส่ไว้ในไฟล์ `CLAUDE.md` ที่ Root ของโปรเจกต์
-
----
-
-## ⚙️ Primary Technology Stack Support
-
-กรอบแนวคิดนี้ออกแบบมาให้รองรับทุก Tech Stack โดยมี **Primary Presets** ที่พร้อมใช้งานทันทีสำหรับ:
-- **Frontend / Full-stack:** **Nuxt 4 (Nitro + Vue 3)** และ **React (Next.js / Vite)**
-- **UI Components:** Nuxt UI (สำหรับ Nuxt) และ Shadcn UI / Radix (สำหรับ React)
-- **State & Data Fetching:** Pinia / Zustand และ TanStack Query (React Query) / Nuxt Composables
-- **Database / ORM:** PostgreSQL + Prisma ORM
-- **Styling:** Tailwind CSS (Mobile-first)
-- **DevOps:** Docker + Docker Compose
+4. AI Agent (Google Antigravity, Cursor, Windsurf, Claude Code) จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` และ `skills/` มาใช้อัตโนมัติในทุกๆ Task
 
 ---
 
@@ -176,20 +142,20 @@ graph TD
 ระบบถูกออกแบบให้ทำงานร่วมกันเป็น **Developer Productivity & AI Agent Ecosystem** แบ่งหน้าที่กันอย่างชัดเจนตามหลัก Single Responsibility:
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│       🤖 Developer Productivity & AI Agent Framework        │
-├──────────────────────────────┬──────────────────────────────┤
-│ 🧠 Master Agent Skill Rules  │ 🏛️ Nexus 2.0 (Memory Vault) │
-│ (Rules & Behavioral Engine)  │ (Context & Engineering OS)   │
-├──────────────────────────────┼──────────────────────────────┤
-│ • 6 เสาหลักมาตรฐานวิศวกรรม   │ • Cross-Project Memory Vault │
-│ • Strict TS (Matt Pocock)    │ • JIT Context Compiler       │
-│ • Universal Definition of Done│ • 5 MCP Tools เชื่อมทุก IDE │
-│ • 🛡️ Git Shield ป้องกันหลุด  │ • บันทึก ADRs & Session Auto │
-└──────────────────────────────┴──────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│         🤖 Developer Productivity & AI Agent Framework          │
+├────────────────────────────────┬────────────────────────────────┤
+│ 🧠 Master Agent Skill Rules    │ 🏛️ Nexus 2.0 (Memory Vault)   │
+│ (Rules & Behavioral Engine)    │ (Context & Engineering Memory) │
+├────────────────────────────────┼────────────────────────────────┤
+│ • 6 เสาหลักมาตรฐานวิศวกรรม     │ • Cross-Project Memory Vault   │
+│ • Strict TS (Matt Pocock)      │ • Stack-Aware Gotchas Library  │
+│ • Universal Definition of Done │ • JIT Context Compiler         │
+│ • 🛡️ Git Shield ป้องกันหลุด    │ • 8 MCP Tools เชื่อมทุก IDE    │
+└────────────────────────────────┴────────────────────────────────┘
 ```
 
 ### 🔗 เชื่อมต่อกับ Nexus 2.0
-- **Repository:** 👉 [AlmxndBL/Nexus 2.0](https://github.com/AlmxndBL/nexus)
-- **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และบันทึกประวัติการตัดสินใจลง Obsidian Vault ผ่าน MCP Server ขณะที่ `agent-skill` จะคอยกำกับให้ AI ปฏิบัติตามมาตรฐานวิศวกรรมสูงสุด
-- **100% Standalone Ready:** สำหรับผู้ที่ต้องการนำเฉพาะ `agent-skill` ไปใช้งาน สามารถนำไปใช้ร่วมกับ AI IDE (Google Antigravity, Cursor, Windsurf, Claude Code) ได้ทันทีโดยไม่ต้องติดตั้ง Nexus 2.0 โดย Agent จะทำงานตามกฎใน `AGENTS.md` และ `rules/` ได้อย่างสมบูรณ์แบบโดยไม่ติดขัด (No Halt Deadlock)
+- **Repository:** 👉 [AlmxndBL/project-x-memory](https://github.com/AlmxndBL/project-x-memory)
+- **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และคลัง **Stack-Aware Gotchas** ผ่าน Universal MCP Server
+- **100% Standalone Ready:** หากไม่มี Nexus 2.0 ระบบ `agent-skill` จะ Fallback ไปใช้กฎมาตรฐานใน `rules/` ได้อย่างสมบูรณ์แบบโดยไม่มี Error ใด ๆ
