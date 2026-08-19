@@ -1,4 +1,4 @@
-# 🧠 Agent Skill & Master Configuration Framework
+# ⚡ Apex — Production AI Agent Behavioral Framework & Rule Engine
 
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
@@ -9,11 +9,11 @@
 
 ## 📌 ภาพรวมโปรเจกต์ (Project Overview)
 
-**`agent-skill`** คือกรอบควบคุมพฤติกรรม (Behavioral Framework) และชุดสถาปัตยกรรมกฎระเบียบ (3-Tier Rule Architecture) สำหรับ AI Coding Agent ถูกออกแบบขึ้นเพื่อแก้ปัญหาพฤติกรรมของ AI ทั่วไป และยกระดับ AI ให้กลายเป็น **Pragmatic Engineering Partner** ที่ทำงานร่วมกับโปรแกรมเมอร์ได้อย่างมีประสิทธิภาพ ปลอดภัย และมีมาตรฐานสูงสุด
+**`Apex`** คือกรอบควบคุมพฤติกรรม (Behavioral Framework) และชุดสถาปัตยกรรมกฎระเบียบ (3-Tier Rule Architecture) สำหรับ AI Coding Agent ถูกออกแบบขึ้นเพื่อแก้ปัญหาพฤติกรรมของ AI ทั่วไป และยกระดับ AI ให้กลายเป็น **Pragmatic Engineering Partner** ที่ทำงานร่วมกับโปรแกรมเมอร์ได้อย่างมีประสิทธิภาพ ปลอดภัย และมีมาตรฐานสูงสุด
 
 ### 🎯 ปัญหาที่โปรเจกต์นี้เข้ามาแก้ไข (Problem & Solution)
 
-| ❌ ปัญหาของ AI ทั่วไป (Generic AI Agent) | ✅ สิ่งที่ `agent-skill` บังคับให้ทำ (Pragmatic Agent) |
+| ❌ ปัญหาของ AI ทั่วไป (Generic AI Agent) | ✅ สิ่งที่ `Apex` บังคับให้ทำ (Pragmatic Agent) |
 |---|---|
 | **เป็น "Yes-Man":** เออออตามผู้ใช้แม้ไอเดียจะเสี่ยงหรือ Over-engineered | **Pragmatic Challenger:** กล้าท้าทาย ค้านอย่างมีเหตุผล พร้อมนำเสนอ Pros/Cons/Trade-offs |
 | **Preamble & Fluff:** ชอบพูดคำทักทายไร้สาระ ("ได้ครับ", "ยินดีครับ") และเกริ่นยืดยาว | **Action-First (BLUF):** สรุปสาระสำคัญไว้ที่บรรทัดแรกสุด (Bottom Line Up Front) ตัดคำไร้สาระออก 100% |
@@ -137,7 +137,7 @@ graph TD
 
 ---
 
-## 🏛️ สถาปัตยกรรมคู่หู: Agent-Skill & Nexus 2.0 (The Twin-Engine Synergy)
+## 🏛️ สถาปัตยกรรมคู่หู: Apex & Nexus 2.0 (The Twin-Engine Synergy)
 
 ระบบถูกออกแบบให้ทำงานร่วมกันเป็น **Developer Productivity & AI Agent Ecosystem** แบ่งหน้าที่กันอย่างชัดเจนตามหลัก Single Responsibility:
 
@@ -145,7 +145,7 @@ graph TD
 ┌─────────────────────────────────────────────────────────────────┐
 │         🤖 Developer Productivity & AI Agent Framework          │
 ├────────────────────────────────┬────────────────────────────────┤
-│ 🧠 Master Agent Skill Rules    │ 🏛️ Nexus 2.0 (Memory Vault)   │
+│ ⚡ Apex (Rules & Engine)       │ 🏛️ Nexus 2.0 (Memory Vault)   │
 │ (Rules & Behavioral Engine)    │ (Context & Engineering Memory) │
 ├────────────────────────────────┼────────────────────────────────┤
 │ • 6 เสาหลักมาตรฐานวิศวกรรม     │ • Cross-Project Memory Vault   │
@@ -158,7 +158,8 @@ graph TD
 ### 🔗 เชื่อมต่อกับ Nexus 2.0
 - **Repository:** 👉 [AlmxndBL/nexus](https://github.com/AlmxndBL/nexus)
 - **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และคลัง **Stack-Aware Gotchas** ผ่าน Universal MCP Server
-- **100% Standalone Ready:** หากไม่มี Nexus 2.0 ระบบ `agent-skill` จะ Fallback ไปใช้กฎมาตรฐานใน `rules/` ได้อย่างสมบูรณ์แบบโดยไม่มี Error ใด ๆ
+- **100% Standalone Ready:** หากไม่มี Nexus 2.0 ระบบ `Apex` จะ Fallback ไปใช้กฎมาตรฐานใน `rules/` ได้อย่างสมบูรณ์แบบโดยไม่มี Error ใด ๆ
+
 
 ---
 

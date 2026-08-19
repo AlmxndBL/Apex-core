@@ -1,8 +1,9 @@
-# Master Agent Configuration & Rules
+# ⚡ Apex: Master Agent Configuration & Rules
 
-> **Tier 1: AI Brain & Orchestration**
+> **Tier 1: AI Brain & Orchestration (Apex Framework)**
 > กฎแม่บทควบคุมพฤติกรรมและกระบวนการทำงานของ AI Agent สำหรับการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 > Primary Supported Stacks: Nuxt 4 (Nitro + Vue 3) & React (Next.js / Vite) + Prisma + PostgreSQL + Docker + Tailwind CSS
+
 
 ---
 
