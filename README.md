@@ -159,3 +159,16 @@ graph TD
 - **Repository:** 👉 [AlmxndBL/project-x-memory](https://github.com/AlmxndBL/project-x-memory)
 - **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และคลัง **Stack-Aware Gotchas** ผ่าน Universal MCP Server
 - **100% Standalone Ready:** หากไม่มี Nexus 2.0 ระบบ `agent-skill` จะ Fallback ไปใช้กฎมาตรฐานใน `rules/` ได้อย่างสมบูรณ์แบบโดยไม่มี Error ใด ๆ
+
+---
+
+## 💖 Acknowledgements & Inspirations (ที่มาของแนวคิดและแรงบันดาลใจ)
+
+Framework นี้เกิดขึ้นจากการสังเคราะห์และผสานรวมแนวคิดทางวิศวกรรมซอฟต์แวร์ระดับสากล ขอขอบคุณชุมชน Open Source และผู้นำทางความคิดที่เป็นแรงบันดาลใจสำคัญ:
+
+- **🧙‍♂️ Matt Pocock (Total TypeScript)** — แรงบันดาลใจสำหรับ `skills/typescript-wizard` ในการวางมาตรฐาน Type-Safe ขั้นสูง, Discriminated Unions, Type Narrowing และ Zero `any` Policy
+- **🎯 The 9arm Way (Pragmatic Software Engineering)** — ปรัชญาการออกแบบระบบที่เรียบง่ายแต่สเกลได้จริง (Pragmatic Monolith), การประเมิน Trade-off และการไม่ Over-engineer เกินความจำเป็น
+- **🎨 Shadcn & Modern Design Systems** — แนวคิด Component Layering, Tokenized Styling (HSL) และ Anti-Cliché UI ใน `skills/design-taste-frontend`
+- **🛡️ OWASP & Web Quality Standards** — มาตรฐานการตรวจสอบความปลอดภัย ช่องโหว่เว็บ (IDOR/SQLi) และ Accessibility (WCAG 2.1 AA) ใน `skills/impeccable-audit`
+- **🤖 Anthropic Claude Code & Google Antigravity Ecosystem** — แรงบันดาลใจของโครงสร้าง System Prompting, Behavioral Guardrails และ Universal Definition of Done (DoD)
+
