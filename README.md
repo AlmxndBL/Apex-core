@@ -156,7 +156,7 @@ graph TD
 ```
 
 ### 🔗 เชื่อมต่อกับ Nexus 2.0
-- **Repository:** 👉 [AlmxndBL/project-x-memory](https://github.com/AlmxndBL/project-x-memory)
+- **Repository:** 👉 [AlmxndBL/nexus](https://github.com/AlmxndBL/nexus)
 - **เมื่อใช้งานร่วมกัน:** Nexus 2.0 จะทำหน้าที่เป็นสมองความจำระยะยาว เสิร์ฟบริบทโปรเจกต์ (JIT Context) และคลัง **Stack-Aware Gotchas** ผ่าน Universal MCP Server
 - **100% Standalone Ready:** หากไม่มี Nexus 2.0 ระบบ `agent-skill` จะ Fallback ไปใช้กฎมาตรฐานใน `rules/` ได้อย่างสมบูรณ์แบบโดยไม่มี Error ใด ๆ
 
