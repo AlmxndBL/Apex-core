@@ -92,3 +92,18 @@
 ## 📑 7. Pagination Guidance
 - **Cursor-based Pagination (`after` / `before`):** เหมาะสำหรับ User-facing feeds, Real-time lists, Infinite Scroll (ป้องกันข้อมูลตกหล่นเมื่อมีข้อมูลใหม่แทรก)
 - **Offset-based Pagination (`page` / `limit`):** เหมาะสำหรับ Admin Panel, Data Tables และรายงานผล
+
+---
+
+## 🧭 8. Domain-Driven Routing Integrity & Anti-God Page (กฎเหล็ก)
+
+- ❌ **Anti-God Page Pattern:** ห้ามนำ Data Listings, Forms, หรือ Business Logic ของหลาย Domain มากองรวมกันในหน้า Dashboard หน้าเดียว (เช่น นำ Rooms, Room Types, Contracts, Meter Readings, Bills, Payment Slips มารวมใน `/admin/index.vue`)
+- 💥 **Impact:**
+  1. **API Waterfall & Performance Drag:** หน้าแรกต้องยิง API พร้อมกัน 5-7 เส้น ทำให้หน้าเว็บค้างหรือโหลดช้า
+  2. **State Pollution & Race Conditions:** State ของแต่ละฟีเจอร์ปนเปื้อนกัน ดีบักยาก
+  3. **RBAC & Deep Linking Failure:** ไม่สามารถกำหนดสิทธิ์เข้าถึงรายเมนู (Granular RBAC) และผู้ใช้ไม่สามารถ Copy URL หน้าที่ต้องการแชร์ได้
+- ✅ **Domain-Driven Granular Routing:**
+  - **Overview / Dashboard Entry (`/admin`):** แสดงเฉพาะ Executive Summary, KPI Stat Cards, Shortcut Action, และ Real-time Alert Banner
+  - **Dedicated Domain Routes:** แยกเป็น Route อิสระ เช่น `/admin/rooms`, `/admin/contracts`, `/admin/payments`, `/admin/billing/batch`, `/admin/reports`
+  - **Isolated State & Lazy Data Fetching:** แต่ละ Route ยิง API เฉพาะ Domain ตัวเอง ทำให้ระบบตอบสนองเร็วและสเกลได้อย่างยั่งยืน
+

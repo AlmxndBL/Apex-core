@@ -6,7 +6,7 @@
 ---
 
 ## 📌 1. ภาพรวมโปรเจกต์ (Project Overview)
-- **ชื่อโปรเจกต์:** agent_skill
+- **ชื่อโปรเจกต์:** Apex-core
 - **คำอธิบาย:** ระบบจัดการแอปพลิเคชันและบริการส่วนกลาง
 - **Tech Stack หลัก:** TypeScript / Node.js
 - **Environment Status:** Development / Staging / Production
@@ -47,6 +47,7 @@
 ---
 
 ## 🚨 5. Project-Specific Red-Lines (ข้อห้ามเฉพาะโปรเจกต์นี้)
+(ข้อห้ามเฉพาะโปรเจกต์นี้)
 1. ห้ามแก้ไขไฟล์ `schema.prisma` โดยไม่ผ่านกระบวนการ Migration
 2. ห้าม Import component หรือฟังก์ชันข้าม Feature Domain โดยตรง (ให้ใช้ Shared Service / Store แทน)
 3. รหัสผ่านหรือข้อมูลลับทั้งหมดต้องเก็บใน Environment Variables ห้าม Hardcode เด็ดขาด

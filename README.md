@@ -3,7 +3,7 @@
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![v2.3.3](https://img.shields.io/badge/v2.3.3-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![v2.4.0](https://img.shields.io/badge/v2.4.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
@@ -29,7 +29,7 @@
 ระบบถูกจัดระเบียบใหม่ตามหลัก Separation of Concerns เพื่อความเรียบง่ายและไม่ซ้ำซ้อน:
 
 ```text
-agent-skill/
+Apex-core/
 ├── AGENTS.md                   # 🧠 [Tier 1: AI Brain & Orchestration] แม่บทควบคุมพฤติกรรมและ Workflow 4 ขั้น
 ├── README.md                   # 📖 คู่มือการใช้งานและคำแนะนำสำหรับนักพัฒนา
 ├── .gitignore                  # 🛡️ มาตรฐาน Ignore ป้องกัน Secrets & AI Artifacts

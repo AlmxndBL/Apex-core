@@ -1,23 +1,27 @@
 ---
 name: design-taste-frontend
-description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dashboard Skill (Shopee Dense Rhythm, Dual Responsive Tables, Unovis Visualizations, POS Catalogs, Thai Conventions, Micro-Interactions)
+description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dashboard Skill (Shopee Dense Rhythm, Dual Responsive Tables, Unovis Visualizations, POS Catalogs, Thai Conventions, Micro-Interactions, 3 UI Archetype Presets)
 ---
 
 # 🎨 Frontend Visual Design & Enterprise UI Skill
 
-> สกิลระดับสูงสำหรับการสร้างสรรค์ User Interface ระดับ Production-Ready ครอบคลุมทั้ง Aesthetics, High-Density Operational Dashboard, POS Workspace และ Dual Responsive Data Listings
+> สกิลระดับสูงสำหรับการสร้างสรรค์ User Interface ระดับ Production-Ready ครอบคลุมทั้ง Aesthetics, High-Density Operational Dashboard, POS Workspace, Marketing Landing Pages, และ Dual Responsive Data Listings
 
 ---
 
-## 🎯 เมื่อไหร่ที่ควรใช้ Skill นี้
-- เมื่อเริ่มออกแบบหน้าจอใหม่ (Admin Panel, SaaS Dashboard, POS Interface, หรือ Mobile App Views)
-- เมื่อต้องสร้างหรือปรับปรุงระบบตารางข้อมูล (Tables / Data Lists) ให้รองรับทั้ง Desktop และ Mobile
-- เมื่อต้องเพิ่มกราฟสถิติ/การเงิน (Unovis Charts) หรือแถบเครื่องมือช่วงเวลา (DateRangePicker พ.ศ.)
-- เมื่อได้รับคำสั่งให้ "ปรับ UI ให้ดูพรีเมียม สวยงาม น่าใช้ อ่านง่าย และใช้งานได้จริง"
+## 🎯 1. เลือกระบบ UI Archetype Preset ให้ตรงกับงาน (กฎข้อแรกก่อนเริ่มทำ UI)
+
+ก่อนลงมือเขียน Component ต้องประเมินและเลือกใช้สไตล์ให้ตรงตามประเภทของหน้าจอ:
+
+| Preset | ประเภทงาน | สไตล์ Spacing & Typography | กฎที่ต้องเน้น |
+|---|---|---|---|
+| **📊 Preset A: Operational & Admin** | Dashboard, POS, ERP, ระบบหอพัก, จัดการสต็อก | **Shopee-Dense:** `p-2 sm:p-6`, `gap-2` ถึง `gap-4`, ขอบคม `rounded-md` | Dual Responsive (Table vs Mobile Card), 2-Tier Header Navbar/Toolbar |
+| **🚀 Preset B: Marketing & Landing** | หน้าแรกของระบบ, Landing Page ขายของ, Portfolio | **Generous Whitespace:** `py-16 sm:py-24`, `max-w-6xl mx-auto`, แสงเงา Glow | Hero Storytelling, Bento Grid ฟีเจอร์, Frictionless CTA |
+| **📖 Preset C: Editorial & Docs** | บทความ, คู่มือการใช้งาน (Docs), Knowledge Hub | **Prose Focus:** `max-w-prose`, `leading-relaxed/loose`, `my-4` | Sticky TOC ด้านขวา, Breadcrumbs, Instant Search Bar |
 
 ---
 
-## 📚 1. Specialized Blueprint References (คู่มือโค้ดเฉพาะทาง)
+## 📚 2. Specialized Blueprint References (คู่มือโค้ดเฉพาะทาง)
 
 เมื่อต้องลงมือเขียน Component หรือหน้าจอเฉพาะด้าน ให้อ่าน Reference Modules ประกอบ:
 
@@ -30,7 +34,7 @@ description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dash
 
 ---
 
-## 🎨 2. Color Theory & Palette Curation (กฎ 60-30-10)
+## 🎨 3. Color Theory & Palette Curation (กฎ 60-30-10)
 
 อย่าใช้สี Random หรือสีพื้นฐานทื่อๆ (เช่น แดงล้วน `#FF0000`, น้ำเงินล้วน `#0000FF`) ให้ใช้ชุดสีที่ผ่านการเกลี่ยโทน:
 - **60% Dominant Color (สีหลัก):** พื้นหลังที่สะอาดตา (Light: `neutral-100 / slate-50`, Dark: `neutral-950 / zinc-950`)
@@ -45,17 +49,19 @@ description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dash
 
 ---
 
-## 🔤 3. Typography & Thai Conventions
+## 🔤 4. Typography & Thai Conventions
 
 - **Fonts:** แนะนำ `'Prompt', sans-serif` หรือ `'IBM Plex Sans Thai'` สำหรับระบบที่เน้นภาษาไทย
 - **Weights:** 400 (Body), 500 (Labels/Table cells), 600 (Semibold headers/numbers), 700 (Bold titles)
+- **Thai Typography Headroom:** ข้อความ Display/Headlines ขนาดใหญ่ (`text-3xl+`) ต้องแยก Discrete Block `<div>` + `leading-relaxed` + `space-y-4` เสมอ ห้ามใช้ `leading-snug` ซ้อน `<span>`
 - **Numbers:** บังคับใส่ CSS class `tabular-nums` ทุกครั้งที่แสดงตัวเลขทางการเงิน เพื่อให้หลักตัวเลขตรงกัน
 - **Years & Time:** แสดงผลปี พ.ศ. (`BE = CE + 543`) ในส่วนรายงานและ UI ของผู้ใช้ไทย
 
 ---
 
-## ✨ 4. Micro-Interactions & Depth
+## ✨ 5. Micro-Interactions, Switches & Geometry Math
 
+- **Switch & Slider Math Formula:** $\text{Translate} = \text{Track} - (2 \times \text{Padding}) - \text{Thumb}$ พร้อมล็อก `w-X h-X aspect-square shrink-0 rounded-full` ห้ามเดาคลาสที่ไม่มีใน Tailwind Scale (`w-13`, `w-5.5`)
 - **Interactive Hover & Active:**
   - ปุ่ม: `hover:brightness-105 active:scale-[0.98]`
   - การ์ด: `hover:border-default/50 dark:hover:bg-elevated/70 transition duration-150`
@@ -66,10 +72,11 @@ description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dash
 
 ---
 
-## 🚫 5. Forbidden Cliché Design Tropes (ข้อห้ามเด็ดขาด)
+## 🚫 6. Forbidden Cliché Design Tropes (ข้อห้ามเด็ดขาด)
 
 1. ❌ **ห้ามปล่อยให้ Table Scroll แนวนอนดิบๆ บนจอมือถือ** (ต้องสลับเป็น Mobile Card List เสมอ)
-2. ❌ **ห้ามใช้ `alert()`, `confirm()` จากบราวเซอร์** (ต้องใช้ `useToast()` หรือ `ConfirmModal`)
-3. ❌ **ห้ามใช้สีนีออนเรืองแสง / Purple on Pitch Black**
-4. ❌ **ห้าม Gradient ข้อความทุกคำที่เป็นคีย์เวิร์ด**
-5. ❌ **ห้ามทำการ์ดแบนราบไร้เส้นขอบบางๆ (Subtle Border)**
+2. ❌ **ห้ามนำสไตล์ Shopee-Dense Spacing ไปยัดเยียดใส่หน้า Marketing/Landing Page หรือ Docs**
+3. ❌ **ห้ามใช้ `alert()`, `confirm()` จากบราวเซอร์** (ต้องใช้ Toast System หรือ `ConfirmModal`)
+4. ❌ **ห้ามใช้สีนีออนเรืองแสง / Purple on Pitch Black**
+5. ❌ **ห้าม Gradient ข้อความทุกคำที่เป็นคีย์เวิร์ด**
+6. ❌ **ห้ามทำการ์ดแบนราบไร้เส้นขอบบางๆ (Subtle Border)**

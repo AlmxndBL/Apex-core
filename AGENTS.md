@@ -28,13 +28,19 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
 - **Codebase Archaeology & Onboarding:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` เพื่อสแกนประวัติ Git, Models, Routes และออกรายงาน **Project Executive Brief** ก่อนเริ่มงาน
 - **วิเคราะห์ Existing Codebase & Stack-Aware Gotchas:** 
-  - **Package Manager Auto-Detection Gate (กฎเหล็ก):** สแกนหา Lockfile ในโปรเจกต์ก่อนเริ่มรันคำสั่งใดๆ (`pnpm-lock.yaml` $\rightarrow$ `pnpm`, `bun.lockb` $\rightarrow$ `bun`, `yarn.lock` $\rightarrow$ `yarn`, `package-lock.json` $\rightarrow$ `npm`) — **ห้ามเดาหรือเผลอใช้ `npm` ในโปรเจกต์ที่เป็น `pnpm/bun` เด็ดขาด**
+  - **Package Manager Auto-Detection Gate (กฎเหล็ก):** สแกนหา Lockfile ในโปรเจกต์ก่อนเริ่มรันคำสั่งใดๆ: ทุกโปรเจกต์ใหม่และ Default หลักของระบบใช้ **`pnpm`** เสมอ (หากเป็นโปรเจกต์เดิมที่รับมาทำต่อ ให้ยึดตาม Lockfile เดิม: `pnpm-lock.yaml` $\rightarrow$ `pnpm`, `bun.lockb` $\rightarrow$ `bun`, `yarn.lock` $\rightarrow$ `yarn`, `package-lock.json` $\rightarrow$ `npm`) — **ห้ามใช้ npm สำหรับงานใหม่เด็ดขาด**
   - ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
   - **Mandatory Pre-flight Gotchas Gate (กฎเหล็กบังคับอ่านความรู้เดิม):** ก่อนเริ่มแตะ Database, Framework Version ใหม่ (เช่น Prisma 7, Next.js 15, Nuxt 4), หรือขึ้นโครงสร้าง Layout ซับซ้อน **ต้องเปิดดูไฟล์ Gotchas ที่ตรงกับ Stack ใน `Nexus/Knowledge/Patterns/` เสมอ** (เช่น `gotchas-prisma-postgres.md`, `database-and-api-performance-gotchas.md`, `gotchas-nuxt4-nitro.md`) หากข้ามขั้นตอนนี้ห้ามเริ่มเขียนโค้ดเด็ดขาด
 - **🛑 Hard Intent Classifier & Audit/Investigative Safety Lock (ห้ามแก้โค้ดก่อนได้รับอนุญาต):**
   - หากผู้ใช้ถามด้วยเจตนา **"หาสาเหตุ" / "ทำไม" / "ดูให้หน่อย" / "วิเคราะห์" / "audit" / "investigate"**:
     👉 **LOCK WRITE TOOLS ทันที (READ-ONLY MODE):** ใช้ได้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`) ห้ามใช้ `write_to_file`, `replace_file_content` หรือรันคำสั่งแก้ไข DB เด็ดขาด
     👉 **Wait for Explicit Green Light:** สรุป Root Cause และเสนอทางเลือกให้ผู้ใช้ทราบ แล้ว**หยุดรอ**คำสั่งอนุมัติชัดเจน (เช่น *"แก้เลย"*, *"ลุย"*, *"implement"*) ก่อนจึงจะเริ่มแก้ไขโค้ด
+- **🖼️ Visual Reference & UI Mockup Clarification Gate (กฎเหล็กห้ามรื้อดีไซน์สุ่มสี่สุ่มห้า):**
+  - เมื่อผู้ใช้ส่งรูปภาพ Reference, Mockup, หรือ Screenshot งานดีไซน์เข้ามา **ห้ามทึกทักเอาเองว่าผู้ใช้ต้องการรื้อทั้งหน้า หรือเปลี่ยน Mood & Tone ทั้งหมดเด็ดขาด**
+  - ต้องหยุดและตั้งคำถามเพื่อยืนยันขอบเขต (Scope) ให้ชัดเจนก่อนเสมอ:
+    1. *Layout Alignment:* ต้องการเพียงจัดวางองค์ประกอบให้ตรงบรรทัด / สัดส่วน
+    2. *Specific Component:* ต้องการนำเฉพาะบางคอมโพเนนต์มาประยุกต์
+    3. *Total Theme Overhaul:* ต้องการเปลี่ยนดีไซน์ยกชุดจริง
 - **ค้นหา Test Runner & Test Accounts ประจำโปรเจกต์:**
   - ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
   - **Test Role Discovery:** สแกนหาบัญชีทดสอบเดิมใน `seed.ts`, `.env.test`, หรือ Fixtures (หากไม่พบบัญชีเดิมและจำเป็นต้องใช้ ให้ถามผู้ใช้สั้นๆ ว่าต้องการให้สร้าง Mock Test Seed หรือมีบัญชีทดสอบเดิมอยู่แล้ว)
@@ -67,11 +73,16 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ### Step 4: Verification (Universal Quality Gate & Definition of Done)
 - **กฎเหล็ก (Build Pass != Functional Pass):** ห้ามถือเอาการคอมไพล์ผ่าน หรือ Docker รันติด เป็นการทดสอบเสร็จสิ้นเด็ดขาด
+- **⚡ Tiered Verification & Anti-Build-Bloat (ลดเวลาทดสอบ):**
+  - ❌ **ห้ามรัน `npm run build` / `nuxt build` / `next build` ทุกครั้งที่แก้โค้ดเล็กๆ** (เช่น แก้ UI, ปรับ CSS, แต่งคำ, หรือแก้ฟังก์ชันเดี่ยว) เพราะเสียเวลา Bundle/Prerender ทั้งระบบโดยไม่จำเป็น
+  - ✅ **Default Verification Gate (Fast TypeCheck 1-3 วินาที):** ใช้ `npx vue-tsc --noEmit` (Nuxt/Vue) หรือ `npx tsc --noEmit` (React/Next.js) เพื่อตรวจ Type Errors และ Syntax ใน RAM
+  - ✅ **Targeted Logic Testing (2-5 วินาที):** รันเทสต์เฉพาะไฟล์ที่แก้ (`npx vitest run <file>`) หรือรัน inline script
+  - 📦 **Full Build Reservation:** รัน `npm run build` เฉพาะเมื่อแก้ Global Config (`nuxt.config.ts`, `package.json`), Major Architecture Refactor, หรือก่อน Final Release เท่านั้น
 - **Universal Definition of Done (DoD):**
   1. **Run Project Test Runner:** หากโปรเจกต์มี Test Runner ให้สั่งรันเทสต์ที่เกี่ยวข้องทั้งหมดให้ผ่าน 100% (สามารถใช้สกิล `skills/sandbox-testing` เพื่อช่วยรัน)
   2. **Ad-hoc Runtime Verification (กรณีไม่มี Test Suite):**
      - **Backend / Logic:** รัน Script หรือคำสั่ง inline (เช่น `node -e ...`, `python -c ...`) เพื่อพิสูจน์ว่าไม่มี Runtime Crash
-     - **Frontend UI / Components:** ตรวจสอบความถูกต้องด้วย Type Checker (`npx vue-tsc --noEmit`, `npx tsc --noEmit`) ร่วมกับ Build Check
+     - **Frontend UI / Components:** ตรวจสอบความถูกต้องด้วย Type Checker (`npx vue-tsc --noEmit`, `npx tsc --noEmit`)
   3. **Stateful & Database Verification (Zero DB Pollution):** หากมีการแก้ Data Logic ต้องรัน Script Assert ข้อมูลจริงใน DB โดยใช้ **Test Transaction Rollback** หรือ **Isolated Test DB** ป้องกันข้อมูลขยะตกค้าง
   4. **Adaptive Persona Verification:** ทดสอบครอบคลุมทุก User Journey และทุก Role ที่เกี่ยวข้อง โดยดึง Existing Test Accounts ของโปรเจกต์มาใช้เป็นหลัก ห้ามสร้าง Mock Data ซ้ำซ้อนทับข้อมูลจริง
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
@@ -80,7 +91,7 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **Atomic Refactoring & Zero Legacy Clutter Policy:** เมื่อมีการย้ายโครงสร้างโฟลเดอร์หรือเปลี่ยน Route Paths ต้องสั่งลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที ป้องกัน Dead Code และ Route ซ้ำซ้อน
 - **Closed-Loop Memory & Gotchas Capture:** เมื่อผ่าน DoD และรันเทสต์ผ่าน 100% หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas/Anti-pattern สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)` ทันที
 - **Regression Check:** ตรวจสอบว่าฟังก์ชันเดิมยังทำงานได้ ไม่พังจากโค้ดใหม่
-- **Failure Report:** หากพยายามแก้ Error ล้มเหลวครบ 2 ครั้ง $\rightarrow$ ให้หยุดและใช้ **Failure Report Template** ทันที
+- **Failure Report:** หากพยายามแก้ Error ในเชิงตรรกะ/สถาปัตยกรรมล้มเหลวครบ 2 ครั้ง (2 Failed Hypotheses — การแก้ Minor Syntax/Import Typo ไม่นับเป็น Failed Hypothesis) $\rightarrow$ ให้หยุดและใช้ **Failure Report Template** ทันที เพื่อปรึกษาผู้ใช้ ห้ามวนลูปเดาสุ่ม
 
 ---
 

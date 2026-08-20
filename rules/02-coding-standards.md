@@ -66,6 +66,9 @@
 
 ## 8. Intent-Based Tool Safety, Refactoring & Package Manager Standards
 - **Strict Package Manager Awareness:** ตรวจสอบ Lockfile เสมอ (`pnpm` vs `npm` vs `bun` vs `yarn`) ห้ามรันคำสั่งผิด package manager
+- **Zero Guesswork & Mathematical Code Verification:**
+  - ห้ามเดาสุ่มตัวเลข CSS, Spacing, หรือ Utility Classes ที่ไม่มีอยู่จริง (เช่น คลาสเดา `w-13`, `w-5.5`)
+  - ทุกการคำนวณตำแหน่ง (Positioning), การเลื่อน (Translate), หรือสัดส่วน (Aspect Ratio) ต้องผ่านสูตรเรขาคณิตและหน่วยวัดที่ชัดเจน
 - **Investigative / Audit Safe Mode:** 
   - เมื่อได้รับคำสั่งให้ "หาสาเหตุ", "วิเคราะห์", หรือ "Audit" ให้ใช้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`)
   - **ห้ามแตะ Write/Edit Tools หรือรัน DB Migration โดยไม่ได้รับคำสั่งอนุมัติ Explicit จากผู้ใช้ก่อนเด็ดขาด**
@@ -76,10 +79,9 @@
   - **ห้ามสร้างหรือรัน Batch Script ชั่วคราวใน `/scratch/` เพื่อแอบแก้ไขโค้ดโปรเจกต์แบบทึบเด็ดขาด**
 - **Idempotent DB Migrations & Seeding:** คำสั่งแก้ไข Schema หรือ Seed Data ต้องปลอดภัยต่อข้อมูลเดิม และไม่ก่อให้เกิด DB Pollution ในระหว่างการทดสอบ
 
-
 ---
 
-## 8. Stack-Specific Gotchas & Architecture Lessons
+## 9. Stack-Specific Gotchas & Architecture Lessons
 
 ### A. Nuxt 4 + Prisma 7 Driver Adapter Rule
 - **Driver Adapter Mandatory:** Prisma v7 บังคับใช้งานผ่าน Driver Adapter (เช่น `@prisma/adapter-pg` สำหรับ PostgreSQL)

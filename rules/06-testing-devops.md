@@ -17,16 +17,15 @@
 
 ---
 
-## 🐳 2. Docker & Containerization Standards
-- **Multi-Stage Builds:** แยก Build Stage ออกจาก Production Stage เสมอ เพื่อให้ Image มีขนาดเล็กและปลอดภัย
-- **Security:** รัน Container ในฐานะ Non-root User
-- **Base Image:** Pin เวอร์ชันอย่างชัดเจน (เช่น `node:20-alpine`) ห้ามใช้ `latest`
-- **Docker Compose:** ใช้สำหรับ Development ในเครื่อง ประกอบด้วย App + PostgreSQL + Redis (ถ้ามี) พร้อม Volume Mounts รองรับ Hot Reload
+## 💻 2. Local-First Development & Deployment Standards
+- **Local Dev First (Default Workflow):** เน้นการพัฒนาและรันเทสต์แบบ Native Local Environment ด้วย **`pnpm`** (`pnpm dev`, `pnpm test`, `pnpm build`) ร่วมกับ Local PostgreSQL เพื่อความเร็วสูงสุดและตรงตาม User Preferences
+- **Docker Policy (On-Demand Only):** **ห้ามใช้ Docker หรือสร้าง Dockerfile/Compose เองโดยพลการ — จะใช้งาน Docker เฉพาะเมื่อได้รับคำสั่งชัดเจนจากผู้ใช้เท่านั้น (On-Demand Only)**
+  - เมื่อได้รับคำสั่งให้ทำ Docker: แยก Multi-stage build, รัน Non-root, Pin base image (`node:20-alpine`)
 
 ---
 
 ## 🚀 3. CI/CD Pipeline (GitHub Actions)
-- Workflow มาตรฐาน: `Build` $\rightarrow$ `Lint` $\rightarrow$ `TypeCheck` $\rightarrow$ `Test` $\rightarrow$ `Docker Build` $\rightarrow$ `Deploy`
+- Workflow มาตรฐาน: `Build` $\rightarrow$ `Lint` $\rightarrow$ `TypeCheck` $\rightarrow$ `Test` $\rightarrow$ `Deploy`
 - **Staging Deployment:** Auto-deploy ไปยัง Staging เมื่อ Push โค้ดเข้า branch `develop`
 - **Production Deployment:** Deploy ขึ้น Production เมื่อ Push โค้ดเข้า branch `main`
 - **Solo Developer:** อนุญาตให้ Deploy ตรงจาก `main` ได้โดยไม่ต้องรอ PR Review
@@ -45,3 +44,24 @@
 - ติดตั้ง Sentry สำหรับ Production Error Monitoring
 - แยก **Operational Errors** (4xx, จัดการได้) ออกจาก **Programmer Errors** (Unhandled crashes, ส่ง Sentry เสมอ)
 - อัปโหลด Source Maps เฉพาะตอน Build Production
+
+---
+
+## ⚡ 6. Tiered Verification Hierarchy & Build Efficiency (กฎการทดสอบตามขนาดงาน)
+
+- **Anti-Build-Bloat Principle (กฎเหล็ก):**
+  - คำสั่ง `pnpm run build` (หรือ `nuxt build`, `next build`) ทำการ Bundle, Minify, และ Prerender ทั้งระบบ ซึ่งกินเวลาตั้งแต่ 30 วินาที ถึงหลายนาทีในโปรเจกต์ขนาดใหญ่
+  - ❌ **ห้ามรัน `pnpm run build` ทุกครั้งที่แก้โค้ดเล็กๆ เด็ดขาด** (เช่น การแก้ CSS, ปรับแต่งสีปุ่ม, แก้วรรคตอน, หรือแก้ฟังก์ชันเดี่ยว)
+
+- **ลำดับขั้นการตรวจสอบ (Tiered Hierarchy):**
+  1. **Tier 1: Fast TypeCheck (1-3 วินาที) [Default Gate สำหรับทุกงาน]:**
+     - **Nuxt 4 / Vue:** `pnpm vue-tsc --noEmit` (หรือ `npx vue-tsc --noEmit`)
+     - **React / Next.js:** `pnpm tsc --noEmit` (หรือ `npx tsc --noEmit`)
+     - *ประโยชน์:* ตรวจสอบ Type Safety, Props, Broken Imports, และ Syntax Error ครบ 100% ในหน่วยความจำโดยไม่เสียเวลา Bundle ไฟล์ลงดิสก์
+  2. **Tier 2: Targeted Logic / Unit Test (2-5 วินาที) [สำหรับงาน Logic/API]:**
+     - รันเทสต์เฉพาะไฟล์: `pnpm vitest run path/to/file.test.ts`
+     - หรือรัน inline Node assertion script เพื่อพิสูจน์ว่า Logic ทำงานถูกต้อง
+  3. **Tier 3: Full Production Build (`pnpm run build`) [สงวนไว้เฉพาะ 3 กรณี]:**
+     - 1) เมื่อมีการแก้ไข Global Framework Config (เช่น `nuxt.config.ts`, `next.config.js`, `tailwind.config.js`, `package.json`)
+     - 2) เมื่อทำการย้ายโครงสร้างโปรเจกต์ครั้งใหญ่ (Major Refactoring / Global Route Migration)
+     - 3) ก่อนส่งมอบงาน Release ก้อนสุดท้าย (Final Delivery Milestone) หรือเมื่อผู้ใช้สั่งให้รัน Full Build ชัดเจน
