@@ -78,15 +78,10 @@
 
 ## 🇹🇭 5. Thai-First & Regional Conventions
 
-1. **Typography & Font Metrics:**
+1. **Typography:**
    - Font Family: `'Prompt', sans-serif` หรือ `'IBM Plex Sans Thai'` สำหรับทุก UI Surface
    - Weight Hierarchy: 400 (Regular body), 500 (Medium table/label), 600 (Semibold headers/prices), 700 (Bold titles)
-   - **Thai Typography Descender & Ascender Clearance (กฎป้องกันสระชนกัน):**
-     - สำหรับตัวหนังสือภาษาไทยขนาดใหญ่ (`text-2xl` ถึง `text-5xl+` เช่น Hero Headline หรือ Page Title):
-       - ❌ **ห้ามใช้ inline `<span>` ซ้อนกันใน `<h1>` เดียวกันโดยใช้ `line-height` แคบ:** เพราะสระล่าง (สระ ู, ุ) จะชนกับสระบน (สระ ไ, ใ, ไม้เอก, ไม้โท) ของบรรทัดถัดไป
-       - ✅ **ต้องแยกแต่ละบรรทัดเป็น discrete block `<div>` หรือ `<p>` เสมอ**
-       - ✅ กำหนด `leading-relaxed` (1.625x) ภายในแต่ละบรรทัด
-       - ✅ กำหนดระยะห่างแนวตั้งระหว่างบรรทัดด้วย `space-y-4 sm:space-y-6` (16px-24px) เพื่อให้ Bounding Box สระบน-ล่างมีระยะหายใจโปร่งตา
+   - **Thai Typography Bounding Box:** สำหรับ Display Headlines ขนาดใหญ่ (`text-3xl+`) ต้องรักษาระยะห่างสระบน-ล่างให้โปร่งตาเสมอ (ดูรายละเอียดใน `Nexus/Knowledge/Patterns/gotchas-thai-typography-and-custom-ui.md`)
 2. **Calendar & Years:**
    - ปี พ.ศ. (Buddhist Era): ใช้สูตร `BE = CE + 543` ในการแสดงผล DatePicker และรายงาน
    - Timezone: บังคับใช้ `Asia/Bangkok` (UTC+7) เสมอ
@@ -116,19 +111,13 @@
 
 ---
 
-## 🛠️ 7. Core Interactive Components & Micro-Interactions
+## 🛠️ 7. Core Interactive Components & Patterns
 
 1. **Standard Confirm Modal:** โมดอลยืนยันพร้อมไอคอนวงกลมสีตามประเภท (`info`, `warning`, `error`, `success`) ป้องกันการเผลอลบข้อมูล
 2. **Photo Upload & Direct Mobile Camera:** รองรับทั้งการอัปโหลดไฟล์จากเครื่อง (`accept="image/*"`) และการถ่ายภาพตรงจากกล้องมือถือ (`capture="environment"`)
-3. **Mathematical Precision for Sliders, Toggles & Pill Bars (กฎห้ามเดาขนาด CSS):**
-   - ❌ **ห้ามใช้คลาส Tailwind นอกมาตรฐาน (เช่น `w-5.5`, `h-5.5`):** เบราว์เซอร์จะตีความเป็น `width: auto` ทำให้ Thumb บิดเบี้ยวเป็นวงรี (Oval Distortion) และระยะเลื่อนหลุดกรอบ
-   - ✅ **ต้องใช้ Standard Tailwind Scale + ล็อก Aspect Ratio เสมอ:**
-     - **Track:** กำหนดขนาดมาตรฐาน เช่น `w-12` (48px) x `h-6` (24px) พร้อม padding เช่น `p-0.5` (2px)
-     - **Thumb:** กำหนดขนาด `w-5 h-5` (20px) พร้อมล็อก `aspect-square shrink-0 rounded-full`
-     - **Exact Travel Formula:** $\text{Track Width} - (2 \times \text{Padding}) - \text{Thumb Width} = \text{Translation Distance}$
-       *(ตัวอย่าง: $48 - 4 - 20 = 24\text{px} \rightarrow \text{translate-x-6}$)*
-4. **Professional Vector SVG Icons vs Emojis (No-Toy UI Rule):**
+3. **Professional Vector SVG Icons vs Emojis (No-Toy UI Rule):**
    - ห้ามใช้ Emoji ใน Navigation Bar, Sidebar, Stat Card Icons, Action Buttons หรือ Table Columns
    - ใช้ Vector SVG Icons (Heroicons, Lucide) ขนาด `w-4 h-4` ถึง `w-6 h-6` พร้อม Contrast เหมาะสม
-5. **Universal Table Multi-Select & Floating Bulk Bar Pattern:**
+4. **Universal Table Multi-Select & Floating Bulk Bar Pattern:**
    - รองรับ Row Selection และ Select All พร้อม Floating Action Bar แอนิเมชันด้านล่างเมื่อ `selectedCount > 0`
+5. **Micro-Interactions & Sliders:** การสร้างสวิตช์ Toggle, Slider หรือ Custom Indicators ต้องใช้ขนาดมาตรฐานและคำนวณระยะเรขาคณิตเสมอ (ดูสูตรคำนวณใน `Nexus/Knowledge/Patterns/gotchas-thai-typography-and-custom-ui.md`)
