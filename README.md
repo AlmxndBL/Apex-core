@@ -118,22 +118,29 @@ graph TD
 
 ## 🚀 วิธีการนำไปใช้งาน (How to Use & Integration Guide)
 
-### 1. ใช้งานแบบ Standalone (นำไปใช้ในโปรเจกต์ของคุณ)
-1. คัดลอกไฟล์ [`AGENTS.md`](./AGENTS.md), โฟลเดอร์ [`rules/`](./rules), [`skills/`](./skills), [`templates/`](./templates) และสคริปต์ใน [`scripts/`](./scripts) ไปไว้ที่ **Root Directory** ของโปรเจกต์คุณ
-2. รันคำสั่ง Auto-Scan เพื่อสร้างแผนผังบริบทโปรเจกต์อัตโนมัติใน 1 วินาที:
+### 1. ติดตั้งแบบ Clean Architecture (รวบ AI ใน `.apex/` ไม่รก Root)
+1. ติดตั้ง Apex เข้าสู่โปรเจกต์ของคุณด้วยคำสั่งเดียว:
    ```bash
-   node scripts/scan-context.js
+   node /path/to/Apex-core/scripts/install-apex.js /path/to/your-project
    ```
-   *(สคริปต์จะสแกน `package.json`, `schema.prisma`, และ API Routes เพื่อสร้าง `AI-Context-Index.md` ให้ทันที)*
-3. **🛡️ ติดตั้งระบบป้องกัน `.env` หลุด & Git Shield ในโปรเจกต์:**
-   ```bash
-   # ติดตั้งในโปรเจกต์ทั่วไป (อัปเดต .gitignore + ติดตั้ง pre-commit secret hook)
-   node scripts/setup-git-shield.js
+   *(หรือใส่ `--stealth` หากต้องการซ่อนไฟล์ AI จากเพื่อนร่วมทีมผ่าน Git Exclude)*
 
-   # หรือโหมด Stealth (เขียนลง .git/info/exclude เพื่อซ่อนไฟล์ AI จากเพื่อนร่วมทีม)
-   node scripts/setup-git-shield.js --stealth
+2. **โครงสร้างหลังการติดตั้ง (Clean Root Layout):**
+   ```text
+   your-project/
+   ├── 🧠 AGENTS.md                  # แม่บท AI บางๆ ชี้เข้า .apex/rules/
+   ├── 🗺️ AI-Context-Index.md        # แผนที่บริบทโปรเจกต์ (JIT Context)
+   │
+   ├── 📦 .apex/                     # 🛡️ รวม Governance & Rules ทั้งหมดไว้ที่นี่!
+   │   ├── rules/                   # กฎ 6 เสาหลัก
+   │   ├── skills/                  # Specialized Skills
+   │   ├── templates/               # Blueprints & Templates
+   │   └── scripts/                 # Context Scanner & Git Shield
+   │
+   ├── 💻 app/ / src/                # 🟢 Source Code ของแอป สะอาด 100%
+   └── ⚙️ package.json
    ```
-4. AI Agent (Google Antigravity, Cursor, Windsurf, Claude Code) จะอ่านและโหลดกฎใน `AGENTS.md` และดึงกฎย่อยใน `rules/` และ `skills/` มาใช้อัตโนมัติในทุกๆ Task
+3. AI Agent (Google Antigravity, Cursor, Windsurf, Claude Code) จะอ่าน `AGENTS.md` ที่ Root และโหลดกฎย่อยใน `.apex/` มาใช้อัตโนมัติในทุกๆ Task
 
 ---
 
