@@ -236,3 +236,150 @@ export const createColumns = (
   <USkeleton v-for="i in 6" :key="i" class="h-10 w-full rounded-md" />
 </div>
 ```
+
+---
+
+## ⚙️ 6. Deterministic Data Table Pipeline & URL State Composable
+
+โครงสร้าง Composable มาตรฐานสำหรับจัดการ Pipeline: `Source → Filter → Sort → Paginate` พร้อม Stable Selection ID และ URL Query Sync:
+
+```typescript
+// composables/useTableState.ts
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+export interface UseTableOptions<T extends { id: string }> {
+  data: Ref<T[]>;
+  initialPageSize?: number;
+  searchFields?: (keyof T)[];
+}
+
+export function useTableState<T extends { id: string }>(options: UseTableOptions<T>) {
+  const route = useRoute();
+  const router = useRouter();
+
+  // 1. Raw State synced with URL query
+  const searchQuery = ref((route.query.q as string) || "");
+  const statusFilter = ref((route.query.status as string) || "all");
+  const currentPage = ref(Number(route.query.page) || 1);
+  const pageSize = ref(options.initialPageSize || 10);
+  const sortKey = ref<keyof T | "">((route.query.sort as keyof T) || "");
+  const sortOrder = ref<"asc" | "desc">((route.query.order as "asc" | "desc") || "desc");
+
+  // 2. Stable Selection using Set of Item IDs (No Row Index)
+  const selectedIds = ref(new Set<string>());
+
+  const toggleSelectAll = (isAll: boolean, pageItems: T[]) => {
+    if (isAll) {
+      pageItems.forEach((item) => selectedIds.value.add(item.id));
+    } else {
+      pageItems.forEach((item) => selectedIds.value.delete(item.id));
+    }
+  };
+
+  const toggleSelectItem = (id: string) => {
+    if (selectedIds.value.has(id)) {
+      selectedIds.value.delete(id);
+    } else {
+      selectedIds.value.add(id);
+    }
+  };
+
+  // 3. Reset to page 1 on search or filter change
+  watch([searchQuery, statusFilter], () => {
+    currentPage.value = 1;
+    syncUrlQuery();
+  });
+
+  // 4. Sync State to URL Query
+  const syncUrlQuery = () => {
+    router.replace({
+      query: {
+        ...route.query,
+        page: currentPage.value > 1 ? String(currentPage.value) : undefined,
+        q: searchQuery.value ? searchQuery.value : undefined,
+        status: statusFilter.value !== "all" ? statusFilter.value : undefined,
+        sort: sortKey.value ? String(sortKey.value) : undefined,
+        order: sortKey.value ? sortOrder.value : undefined,
+      },
+    });
+  };
+
+  // 5. Deterministic Data Pipeline
+  // Pipeline Step 1 & 2: Search & Filter
+  const filteredData = computed(() => {
+    let result = options.data.value;
+
+    if (statusFilter.value !== "all") {
+      result = result.filter((item: any) => item.status === statusFilter.value);
+    }
+
+    if (searchQuery.value.trim() && options.searchFields?.length) {
+      const q = searchQuery.value.toLowerCase();
+      result = result.filter((item) =>
+        options.searchFields!.some((field) =>
+          String(item[field] || "").toLowerCase().includes(q)
+        )
+      );
+    }
+
+    return result;
+  });
+
+  // Pipeline Step 3: Sort
+  const sortedData = computed(() => {
+    if (!sortKey.value) return filteredData.value;
+    return [...filteredData.value].sort((a, b) => {
+      const valA = a[sortKey.value as keyof T];
+      const valB = b[sortKey.value as keyof T];
+      if (valA === valB) return 0;
+      const compare = valA > valB ? 1 : -1;
+      return sortOrder.value === "asc" ? compare : -compare;
+    });
+  });
+
+  // Pipeline Step 4 & 5: Paginate & Display
+  const totalItems = computed(() => sortedData.value.length);
+  const totalPages = computed(() => Math.ceil(totalItems.value / pageSize.value) || 1);
+
+  const paginatedData = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    return sortedData.value.slice(start, start + pageSize.value);
+  });
+
+  return {
+    searchQuery,
+    statusFilter,
+    currentPage,
+    pageSize,
+    sortKey,
+    sortOrder,
+    selectedIds,
+    toggleSelectAll,
+    toggleSelectItem,
+    filteredData,
+    sortedData,
+    paginatedData,
+    totalItems,
+    totalPages,
+    syncUrlQuery,
+  };
+}
+```
+
+---
+
+## 🏛️ 5. Modern Enterprise Compact Data Table Component
+
+คอมโพเนนต์ตารางข้อมูลมาตรฐานสำเร็จรูปสไตล์ Modern Enterprise Compact Data Density:
+- **Component File:** [`templates/ui/AppAdminDataTable.vue`](../../../templates/ui/AppAdminDataTable.vue)
+- **Floating Bulk Bar:** [`templates/ui/AppFloatingBulkBar.vue`](../../../templates/ui/AppFloatingBulkBar.vue)
+- **Full Blueprint & Guide:** [`templates/blueprints/enterprise-data-table.md`](../../../templates/blueprints/enterprise-data-table.md)
+- **ฟังก์ชันสำคัญ:**
+  - Toolbar & Search Capsule พร้อม Filter Tabs แนวนอน และ Smart Search
+  - Checkbox Multi-select ทั้งหมด และรายแถว (ไฮไลท์ `bg-blue-50/60 dark:bg-blue-950/30`)
+  - ฟอร์แมตตัวเลขการเงิน `font-mono tabular-nums` นำหน้าด้วย ฿
+  - ป้าย Status Pills พร้อมจุด Indicator กลมตามประเภทสถานะ
+  - เชื่อมต่อกับ `AppFloatingBulkBar` แสดงปุ่มลบลอยล่างจออัตโนมัติเมื่อเลือก $\ge 1$ รายการ
+
+

@@ -74,9 +74,10 @@
 ---
 
 ## 🛡️ 5. Request Validation (Zod)
-- ทุก Endpoint ต้อง Validate Request ก่อนประมวลผล (Body, Query Params, Path Params)
-- **Nuxt / Nitro:** ใช้ `readValidatedBody()` และ `getValidatedQuery()`
-- **Next.js / Express:** ใช้ Zod Schema `.parse()` หรือ `.safeParse()` ใน Route Handlers
+- ทุก Endpoint และ Server Action ต้อง Validate Request ก่อนประมวลผล (Body, Query Params, Path Params, Form Data)
+- **Nuxt 4 / Nitro:** ใช้ `readValidatedBody(event, schema.parse)` และ `getValidatedQuery(event, schema.parse)`
+- **Next.js 15 Route Handlers:** อ่าน `await req.json()` แล้วตรวจสอบผ่าน `schema.safeParse(body)` พร้อมคืน `NextResponse.json({ success: false, error: ... }, { status: 400 })`
+- **Next.js 15 Server Actions:** Validate arguments ด้วย `schema.safeParse(input)` ที่ต้นฟังก์ชัน Server Action เสมอ ก่อนแตะ Database
 - คืนค่า `400 Bad Request` พร้อม `details` เมื่อ Validation ไม่ผ่าน
 
 ---
@@ -106,4 +107,18 @@
   - **Overview / Dashboard Entry (`/admin`):** แสดงเฉพาะ Executive Summary, KPI Stat Cards, Shortcut Action, และ Real-time Alert Banner
   - **Dedicated Domain Routes:** แยกเป็น Route อิสระ เช่น `/admin/rooms`, `/admin/contracts`, `/admin/payments`, `/admin/billing/batch`, `/admin/reports`
   - **Isolated State & Lazy Data Fetching:** แต่ละ Route ยิง API เฉพาะ Domain ตัวเอง ทำให้ระบบตอบสนองเร็วและสเกลได้อย่างยั่งยืน
+
+---
+
+## 🎯 9. Safe Refactoring, Blast Radius & Smallest Safe Correction
+
+- **Blast Radius Analysis (ประเมินรัศมีผลกระทบ):**
+  - ก่อนทำการแก้ไข Shared Types, เปลี่ยน Contract ของ API, แก้ Database Schema, หรือย้ายฟังก์ชัน Utility ส่วนกลาง
+  - Agent จะต้องสแกนหา **Consumers / Caller List (`grep_search` หรือ Graph callers)** เพื่อดูว่ามีกี่ไฟล์และส่วนไหนบ้างที่ได้รับผลกระทบ
+- **The "Smallest Safe Correction" Standard:**
+  - เมื่อพบ Architecture Debt หรือปัญหาทางโครงสร้าง **ห้ามเสนอแผนรื้อทำใหม่ทั้งระบบ (Total Rewrite) หรือขยาย Scope โดยพลการ**
+  - ต้องเสนอการแก้ไขที่ **"เล็กที่สุดและปลอดภัยที่สุด"** เพื่ออุดช่องโหว่และคง Boundary เดิมไว้
+- **Traceability Gate (ที่มาของข้อสรุป):**
+  - ทุกข้อเสนอแนะในการปรับสถาปัตยกรรม ต้องระบุชัดเจนว่าสรุปจากโค้ดจริง `[Direct]` หรืออนุมาน `[Inferred]` ห้ามเดาสุ่ม
+
 

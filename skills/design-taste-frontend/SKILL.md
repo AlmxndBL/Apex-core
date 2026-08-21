@@ -27,10 +27,11 @@ description: High-end Enterprise Frontend UI, Aesthetic Taste & Operational Dash
 
 | หมวดหมู่ | ไฟล์ Reference | สิ่งที่บรรจุอยู่ภายใน |
 | :--- | :--- | :--- |
-| **ตาราง & รายการข้อมูล** | [`references/tables-and-lists.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/tables-and-lists.md) | `<UTable>` TanStack, Sticky Header, Mobile Card List, `AdminListToolbar`, Skeletons |
-| **ชาร์ต & สถิติ** | [`references/charts-and-visualizations.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/charts-and-visualizations.md) | `@unovis/vue` Cashflow Area/Line, Grouped Bar, DateRangePicker ปี พ.ศ. |
-| **ระบบขายหน้าร้าน** | [`references/pos-and-catalog.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/pos-and-catalog.md) | 2-Column POS Layout, Catalog Card (Left/Right Click Gestures), Customer Mode Switch |
-| **โมดอล & คอนโทรล** | [`references/components-and-modals.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/components-and-modals.md) | `ConfirmModal` (Colored icons), `PhotoUpload` (Direct Camera Capture), LINE Buttons |
+| **🧭 โครงสร้าง App Shell & Sidebar** | [`templates/blueprints/responsive-enterprise-sidebar.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/templates/blueprints/responsive-enterprise-sidebar.md) | **Apex Signature Universal Sidebar:** Desktop Collapse (`w-64`/`w-20`) พร้อม Floating Button, Mobile Drawer, 3-Tier Flexbox, Upward Profile Popover (ใช้ได้กับทุกประเภทงาน: Admin, Portal, SaaS, Workspace) |
+| **📊 ตาราง & รายการข้อมูล** | [`references/tables-and-lists.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/tables-and-lists.md) | **Enterprise Compact Data Table:** Capsule Toolbar, Filter Tabs, Smart Search, Multi-select Checkbox, Financial Currency Mono, Floating Bulk Action Bar (`AppFloatingBulkBar.vue`) |
+| **📈 ชาร์ต & สถิติ** | [`references/charts-and-visualizations.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/charts-and-visualizations.md) | `@unovis/vue` Cashflow Area/Line, Grouped Bar, DateRangePicker ปี พ.ศ. |
+| **🛒 ระบบขายหน้าร้าน** | [`references/pos-and-catalog.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/pos-and-catalog.md) | 2-Column POS Layout, Catalog Card (Left/Right Click Gestures), Customer Mode Switch |
+| **🧩 โมดอล & คอนโทรล & ฟอร์ม** | [`references/components-and-modals.md`](file:///C:/Users/Admin/Desktop/work/Apex-core/skills/design-taste-frontend/references/components-and-modals.md) | `ConfirmModal`, `PhotoUpload`, Zod Form Validation (`UForm`), Accessible Icon Buttons |
 
 ---
 

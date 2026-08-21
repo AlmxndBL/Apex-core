@@ -26,7 +26,10 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต)
 - อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
-- **Codebase Archaeology & Onboarding:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` เพื่อสแกนประวัติ Git, Models, Routes และออกรายงาน **Project Executive Brief** ก่อนเริ่มงาน
+- **Right-Sized Codebase Archaeology:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` โดยเลือกระดับ Pass ให้เหมาะสม:
+  - ⚡ *Scan Mode (Default):* ตรวจสอบสรุป 1 หน้าสั้นๆ ใน 15 วินาทีสำหรับงานสำรวจเบื้องต้น
+  - 🎯 *Focus Mode:* เจาะลึกเฉพาะ 1 โมดูล / Data Flow / Blast Radius ของฟีเจอร์ที่จะทำ
+  - 🏛️ *Full Mode:* รัน 5-Phase Archaeological Protocol เต็มรูปแบบเพื่อออก **Project Executive Brief**
 - **วิเคราะห์ Existing Codebase & Stack-Aware Gotchas:** 
   - **Package Manager Auto-Detection Gate (กฎเหล็ก):** สแกนหา Lockfile ในโปรเจกต์ก่อนเริ่มรันคำสั่งใดๆ: ทุกโปรเจกต์ใหม่และ Default หลักของระบบใช้ **`pnpm`** เสมอ (หากเป็นโปรเจกต์เดิมที่รับมาทำต่อ ให้ยึดตาม Lockfile เดิม: `pnpm-lock.yaml` $\rightarrow$ `pnpm`, `bun.lockb` $\rightarrow$ `bun`, `yarn.lock` $\rightarrow$ `yarn`, `package-lock.json` $\rightarrow$ `npm`) — **ห้ามใช้ npm สำหรับงานใหม่เด็ดขาด**
   - ตรวจสอบ `package.json` หรือ `AI-Context-Index.md` (หรือรัน `node scripts/scan-context.js`) เพื่อสลับ Tech Stack ระหว่าง **Nuxt 4 (Vue)** หรือ **React (Next.js / Vite)** อย่างถูกต้อง
@@ -44,12 +47,13 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **ค้นหา Test Runner & Test Accounts ประจำโปรเจกต์:**
   - ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
   - **Test Role Discovery:** สแกนหาบัญชีทดสอบเดิมใน `seed.ts`, `.env.test`, หรือ Fixtures (หากไม่พบบัญชีเดิมและจำเป็นต้องใช้ ให้ถามผู้ใช้สั้นๆ ว่าต้องการให้สร้าง Mock Test Seed หรือมีบัญชีทดสอบเดิมอยู่แล้ว)
-- **ระบุ Non-functional Requirements & Risks:** ประเมิน Performance, SLA, Security needs และผลกระทบต่อระบบเดิม
-- **สร้าง Assumptions List:** สรุปสมมติฐานที่ต้องยืนยันกับผู้ใช้ก่อนลงมือ
+- **ระบุ Non-functional Requirements, Risks & Blast Radius:** ประเมิน Performance, SLA, Security needs, รัศมีผลกระทบต่อโมดูลอื่น (Blast Radius) และผลกระทบต่อระบบเดิม
+- **สร้าง Assumptions & Evidence List (Zero Guesswork):** สรุปสมมติฐานโดยแยกชั้นข้อมูลอย่างชัดเจน (`[Direct]`, `[Inferred]`, `[Assumed]`, `[Verify first]`) ก่อนลงมือ
 
 ### Step 2: System Design - The 9arm Way (ออกแบบระบบ)
 - โหลดกฎ `rules/03-system-architecture.md`
 - สวมหมวก "Pragmatic Software Engineer" (เลือกวิธีที่เรียบง่ายที่สุดที่สเกลได้ และคิดถึง Trade-off เสมอ)
+- **Smallest Safe Correction Standard:** เมื่อแก้ปัญหาเชิงสถาปัตยกรรมหรือ Refactor ให้เสนอการแก้ไขที่เล็กที่สุดและปลอดภัยที่สุดก่อนเสมอ หลีกเลี่ยงการ Rewrite ทั้งระบบโดยไม่จำเป็น
 - **Frontend / UI Architecture Sub-step:** เลือก Preset ให้ตรงกับประเภทงาน:
   - **SaaS / Dashboard Preset:** แยก App Shell (`layouts/`) ออกจาก Route View (`pages/`)
   - **Marketing / Landing Preset:** ใช้ Sectional Composition Pattern

@@ -3,7 +3,7 @@
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![v2.4.0](https://img.shields.io/badge/v2.4.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![v2.5.3](https://img.shields.io/badge/v2.5.3-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
@@ -82,12 +82,12 @@ Apex-core/
 
 | หมวดหมู่ | Skill Name | ลิงก์ไฟล์ | หน้าที่สำคัญ |
 |---|---|---|---|
-| 🧭 **Onboarding & Exploration** | `codebase-cartographer` | [`SKILL.md`](./skills/codebase-cartographer/SKILL.md) | รื้อฟื้นและ Onboarding โปรเจกต์เก่า สแกน Git, Prisma, Routes และออกรายงาน **Project Executive Brief** |
+| 🧭 **Onboarding & Exploration** | `codebase-cartographer` | [`SKILL.md`](./skills/codebase-cartographer/SKILL.md) | สำรวจสถาปัตยกรรมด้วย Graded Pass (Scan/Focus/Full), Evidence-First Taxonomy, สแกน Git, Prisma, Routes และออกรายงาน **Project Executive Brief** |
 | 🎨 **Frontend & UI/UX** | `design-taste-frontend` | [`SKILL.md`](./skills/design-taste-frontend/SKILL.md) | คุมโทนสีพรีเมียม (สัดส่วน 60-30-10 & HSL), Typography tracking, และหลีกเลี่ยง UI เชยๆ |
 | 🧙‍♂️ **Code Quality & Typing** | `typescript-wizard` | [`SKILL.md`](./skills/typescript-wizard/SKILL.md) | สไตล์ **Matt Pocock** (Total TypeScript), Discriminated Unions, Zod Inference, กำจัด `any` 100% |
 | 🗄️ **Database & Performance** | `database-architect` | [`SKILL.md`](./skills/database-architect/SKILL.md) | แก้ปัญหา N+1 Query ด้วย `include`/`select`, วาง Index (`@@index`), ป้องกัน Deadlock ด้วย `$transaction` |
 | 🧪 **QA & Verification** | `sandbox-testing` | [`SKILL.md`](./skills/sandbox-testing/SKILL.md) | สร้าง Sandbox Test Suite รันเทสต์เร็วใน 1 วินาที, ตรวจสอบ RBAC Matrix ทุก Role, และทำ DB Rollback |
-| 🔍 **Audit & Pre-flight** | `impeccable-audit` | [`SKILL.md`](./skills/impeccable-audit/SKILL.md) | ตรวจสอบ Accessibility (WCAG 2.1 AA), สแกนช่องโหว่ OWASP/IDOR, และดักจับ Monolithic Components |
+| 🔍 **Audit & Pre-flight** | `impeccable-audit` | [`SKILL.md`](./skills/impeccable-audit/SKILL.md) | Dual-Baseline Architecture Audit (Framework + Project Patterns), ตรวจสอบ Accessibility (WCAG 2.1 AA), และสแกนช่องโหว่ OWASP/IDOR |
 | 🐳 **DevOps & Infrastructure** | `docker-devops-master` | [`SKILL.md`](./skills/docker-devops-master/SKILL.md) | Multi-stage Dockerfile ขนาดจิ๋ว ปลอดภัยด้วย Non-root user, Docker Compose, และ GitHub Actions CI/CD |
 
 ---

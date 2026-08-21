@@ -54,6 +54,69 @@
   *ตัวอย่าง:* Track `w-12` (48px) + Pad `p-0.5` (2px) + Thumb `w-5` (20px) $\rightarrow 48 - 4 - 20 = 24\text{px} \rightarrow \mathbf{translate\text{-}x\text{-}6}$
 
 ---
+
+## 🔔 4. Tri-Tier Feedback & Interaction Boundaries
+
+ห้ามปะปน Feedback แต่ละระดับ ต้องแยกขอบเขตการแจ้งเตือนและการยืนยันอย่างเคร่งครัด:
+
+1. **Tier 1 (Field Validation Level) $\rightarrow$ Inline Error Messages:**
+   - ข้อผิดพลาดในการกรอกฟอร์ม (Validation Error) ต้องแสดงแบบ **Inline ใต้ Input Field** ที่ผิดพลาดเสมอ
+   - ❌ **ห้ามใช้ Toast แจ้งเตือนข้อผิดพลาดระดับ Field** (เช่น ห้ามขึ้น Toast ว่า "กรุณากรอกเบอร์โทรศัพท์")
+2. **Tier 2 (Action Result Level) $\rightarrow$ Toast Notification (`useToast`):**
+   - ใช้สำหรับผลลัพธ์ของ Action: `success` (บันทึกสำเร็จ), `error` (Network/Server 500), `warning` (แจ้งเตือนสถานะ), `info`
+   - ต้องกระชับ สื่อความหมาย และหายไปเองตามเวลาที่เหมาะสม
+3. **Tier 3 (Destructive & High-Impact Level) $\rightarrow$ Modal Confirmation (`useConfirm` / `ConfirmModal`):**
+   - ต้องผ่านการกดยืนยันก่อนเสมอ สำหรับ Action: ลบข้อมูล (Delete), ลบเป็นชุด (Bulk Delete), คืนค่าเริ่มต้น (Reset), เพิกถอนสิทธิ์ (Revoke), ปิดการใช้งาน (Disable)
+   - ❌ **ห้ามใช้ `window.alert()` หรือ `window.confirm()` ของเบราว์เซอร์เด็ดขาด**
+
+---
+
+## 📝 5. Form State Resilience & Submission Guards
+
+1. **Anti-Duplicate Submission Lock:**
+   - ทุกปุ่ม Submit หรือ Action ที่เปลี่ยนแปลงข้อมูล (Mutation) ต้องมีสถานะ Loading Lock (`:loading="isSubmitting" :disabled="isSubmitting"`) เพื่อป้องกัน Double-click และ Race Conditions
+2. **Data Preservation on Error (ห้ามล้างข้อมูลผู้ใช้):**
+   - หาก Submit ล้มเหลว (Validation หรือ API Error) **ต้องคงค่าเดิมที่ผู้ใช้กรอกไว้ทั้งหมด** ห้ามสั่ง Reset Form ทิ้ง
+   - Auto-focus ไปยัง Input Field แรกที่มีปัญหาเสมอ เพื่อให้ผู้ใช้แก้ไขได้ทันที
+3. **No Direct Mutation of Source State:**
+   - อย่า Mutate ข้อมูลต้นฉบับตรงๆ โคลนข้อมูลสำหรับ Form State เสมอ เพื่อให้สามารถ Reset/Cancel หรือเปรียบเทียบ Diff ได้
+
+---
+
+## 📊 6. Data Table Processing Pipeline & Selection Integrity
+
+1. **Deterministic Processing Pipeline (ลำดับการประมวลผลตาราง):**
+   - ต้องเรียงลำดับ Data Flow เสมอ:
+     $$\text{Source Data} \longrightarrow \text{Search / Filter} \longrightarrow \text{Sorting} \longrightarrow \text{Pagination} \longrightarrow \text{Display}$$
+   - **Filter Reset Rule:** เมื่อ Search Query หรือ Filter เปลี่ยนแปลง **ต้องสั่ง Reset กลับไปหน้าที่ 1 เสมอ**
+2. **Stable Selection Identity:**
+   - การเลือกแถว (Selection / Checkbox) ต้องเก็บ State ด้วย **Stable Unique ID (`item.id`)** เสมอ
+   - ❌ **ห้ามใช้ Row Index หรือลำดับในหน้าปัจจุบันมาเป็น Selection Key** เพราะจะทำให้เลือกผิดแถวเมื่อมีการ Sort หรือเปลี่ยนหน้า
+3. **URL State Synchronization:**
+   - State ของการค้นหา ตัวกรอง เลขหน้า (`page`, `q`, `status`, `sort`) ควร Sync กับ URL Query เพื่อให้ผู้ใช้สามารถ Refresh, Bookmark หรือกดแชร์หน้าได้
+
+---
+
+## 🌐 7. SSR & Environmental Safety Guard
+
+1. **SSR Compatibility & Hydration Match:**
+   - ❌ ห้ามเรียกใช้ Browser-only APIs (`window`, `document`, `localStorage`, `navigator`) ใน Top-level `<script setup>` (Vue) หรือใน Component Function Body ก่อน Mount (React)
+   - **Vue / Nuxt:** ให้เรียกใน `onMounted()` หรือครอบด้วย `import.meta.client`
+   - **React / Next.js:** ให้เรียกใน `useEffect()` หรือตรวจสอบ `typeof window !== 'undefined'` เพื่อป้องกัน Server-Side Crash และ Hydration Mismatch
+2. **Runtime Config Segregation:**
+   - แยกแยะ Secret Token (Server-only เช่น `runtimeConfig` ใน Nuxt หรือ non-`NEXT_PUBLIC_` env vars ใน Next.js) ออกจาก Public Config อย่างเด็ดขาด ห้ามให้ Private Key หลุดสู่ Client Bundle
+
+---
+
+## 🎨 8. Iconography & Accessibility Guard
+
+1. **Single Icon Set Standard:**
+   - ใช้ **Lucide Icons** (`i-lucide-*` หรือ `<LucideIcon>`) เป็นชุดไอคอนหลักของระบบ ห้ามปะปน Icon Libraries หลายตัวโดยไม่จำเป็น
+   - ❌ **ห้ามใช้ Emoji แทน Functional Icon** ในปุ่ม ควบคุม หรือเมนูระบบ
+2. **Accessible Icon-Only Controls:**
+   - ทุกปุ่มที่เป็น Icon ล้วน (Icon-only Button) **ต้องมี `aria-label`, `title` หรือ Tooltip กำกับเสมอ** เพื่อให้ Screen Readers และผู้ใช้อ่านความหมายได้ถูกต้อง
+
+---
 ---
 
 # 🎛️ PART 2: Contextual UI Archetype Presets (เลือกตามประเภทเว็บ)

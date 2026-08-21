@@ -181,3 +181,71 @@ export default defineEventHandler(async (event) => {
   <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-arrow-right-on-rectangle" @click="logout" />
 </div>
 ```
+
+---
+
+## ⚡ 6. Concurrency-Safe Token Refresh & Dual Auth (Anti-Race Condition)
+
+ป้องกันปัญหาผู้ใช้ถูกเตะออกจากระบบเมื่อเปิดหลายแท็บ หรือมี API ยิงขนานพร้อมกันจังหวะ Access Token หมดอายุ:
+
+### 1. Client-Side Request Mutex Interceptor (`composables/useApi.ts`):
+```typescript
+let isRefreshing = false
+let refreshPromise: Promise<boolean> | null = null
+
+export const useApi = () => {
+  const auth = useAuthStore()
+
+  const apiFetch = $fetch.create({
+    retry: 1,
+    retryStatusCodes: [401],
+    async onResponseError({ response, options }) {
+      if (response.status === 401 && !options.url.toString().includes('/api/v1/auth/refresh')) {
+        // หากมี Request อื่นกำลัง Refresh อยู่ ให้รอ Promise เดียวกัน (Mutex Queue)
+        if (!isRefreshing) {
+          isRefreshing = true
+          refreshPromise = auth.refreshToken().finally(() => {
+            isRefreshing = false
+            refreshPromise = null
+          })
+        }
+
+        const success = await refreshPromise
+        if (!success) {
+          auth.logout()
+        }
+      }
+    }
+  })
+
+  return { apiFetch }
+}
+```
+
+### 2. Server Dual Auth & Grace Period Handler (`server/middleware/01.auth.ts`):
+```typescript
+import { H3Event, getCookie, getRequestHeader, createError } from 'h3'
+import { verifyJwt } from '~/server/utils/jwt'
+
+export default defineEventHandler(async (event: H3Event) => {
+  const path = getRequestPath(event)
+  if (path.startsWith('/api/v1/public') || path.startsWith('/api/v1/auth/login')) {
+    return
+  }
+
+  // 1. Dual Auth Extraction: ตรวจ HttpOnly Cookie ก่อน แล้ว Fallback ไป Bearer Header
+  const cookieToken = getCookie(event, 'access_token')
+  const authHeader = getRequestHeader(event, 'authorization')
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null
+  const token = cookieToken || bearerToken
+
+  if (!token) return
+
+  try {
+    const payload = verifyJwt(token)
+    event.context.auth = { user: payload }
+  } catch (err: any) {
+    // ปล่อยให้ handler หรือ RBAC middleware ตรวจสอบ status ต่อไป
+  }
+})
+```

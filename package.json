@@ -1,0 +1,23 @@
+{
+  "name": "@apex/core",
+  "version": "2.6.0",
+  "description": "Apex — Production AI Agent Behavioral Framework & Rule Engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify-framework.js",
+    "test": "node scripts/verify-framework.js",
+    "scan": "node scripts/scan-context.js",
+    "install:apex": "node scripts/install-apex.js",
+    "shield": "node scripts/setup-git-shield.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "framework",
+    "rules-engine",
+    "engineering-standards",
+    "apex"
+  ],
+  "author": "StxrFxll",
+  "license": "MIT"
+}

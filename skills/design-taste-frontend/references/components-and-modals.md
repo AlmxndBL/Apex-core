@@ -171,3 +171,134 @@ const handleFileChange = (e: Event) => {
   @click="loginWithLine"
 />
 ```
+
+---
+
+## 📝 4. Form Validation & Inline Errors Pattern (`UForm` + Zod)
+
+การจัดการ Form ที่มี Schema Validation แสดง Inline Error ชัดเจน พร้อม Anti-Duplicate Submit และ Auto-Focus Error Field:
+
+```vue
+<script setup lang="ts">
+import { z } from "zod";
+import type { FormSubmitEvent } from "@nuxt/ui";
+
+const toast = useToast();
+
+const schema = z.object({
+  name: z.string().min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร"),
+  phone: z.string().regex(/^0[0-9]{8,9}$/, "เบอร์โทรศัพท์ไม่ถูกต้อง (ต้องขึ้นต้นด้วย 0 ตามด้วยตัวเลข 9-10 หลัก)"),
+  amount: z.number({ invalid_type_error: "กรุณาระบุจำนวนเงิน" }).positive("จำนวนเงินต้องมากกว่า 0"),
+});
+
+type Schema = z.output<typeof schema>;
+
+const state = reactive({
+  name: "",
+  phone: "",
+  amount: undefined as number | undefined,
+});
+
+const isSubmitting = ref(false);
+
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  isSubmitting.value = true;
+  try {
+    // API Call
+    await $fetch("/api/rooms/billing", {
+      method: "POST",
+      body: event.data,
+    });
+
+    toast.add({
+      title: "บันทึกสำเร็จ",
+      description: "ข้อมูลถูกบันทึกลงระบบเรียบร้อยแล้ว",
+      color: "success",
+      icon: "i-lucide-check-circle",
+    });
+
+    // Reset Form only on SUCCESS
+    state.name = "";
+    state.phone = "";
+    state.amount = undefined;
+  } catch (err: any) {
+    // Keep user state on error, show system toast
+    toast.add({
+      title: "บันทึกไม่สำเร็จ",
+      description: err?.data?.message || "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์",
+      color: "error",
+      icon: "i-lucide-alert-circle",
+    });
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+</script>
+
+<template>
+  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+    <UFormField label="ชื่อผู้พักอาศัย" name="name" required>
+      <UInput v-model="state.name" placeholder="ระบุชื่อ-นามสกุล" class="w-full" />
+    </UFormField>
+
+    <UFormField label="เบอร์โทรศัพท์" name="phone" required>
+      <UInput v-model="state.phone" placeholder="08xxxxxxxx" class="w-full" />
+    </UFormField>
+
+    <UFormField label="จำนวนเงิน (บาท)" name="amount" required>
+      <UInput v-model.number="state.amount" type="number" placeholder="0.00" class="w-full tabular-nums" />
+    </UFormField>
+
+    <div class="flex justify-end gap-2 pt-2">
+      <UButton type="submit" label="บันทึกข้อมูล" color="primary" :loading="isSubmitting" :disabled="isSubmitting" />
+    </div>
+  </UForm>
+</template>
+```
+
+---
+
+## ♿ 5. Accessible Icon-Only Buttons & Tooltips
+
+ปุ่มที่มีเฉพาะไอคอนต้องมี Accessible Label และ Tooltip เสมอ:
+
+```vue
+<!-- Accessible Icon-only Action Button -->
+<UTooltip text="แก้ไขข้อมูล" :kbds="['meta', 'e']">
+  <UButton
+    icon="i-lucide-pencil"
+    size="xs"
+    color="neutral"
+    variant="ghost"
+    aria-label="แก้ไขข้อมูล"
+    @click="handleEdit"
+  />
+</UTooltip>
+
+<UTooltip text="ลบรายการนี้" color="error">
+  <UButton
+    icon="i-lucide-trash-2"
+    size="xs"
+    color="error"
+    variant="ghost"
+    aria-label="ลบรายการ"
+    @click="handleDelete"
+  />
+</UTooltip>
+```
+
+---
+
+## 🧭 6. Modern Enterprise Responsive Sidebar & Layout Shell
+
+ชุดคอมโพเนนต์ Sidebar และ Layout Shell สำหรับระบบ Admin Dashboard สไตล์ Modern Enterprise (Compact SaaS Density):
+- **Component File:** [`templates/ui/AppAdminSidebar.vue`](../../../templates/ui/AppAdminSidebar.vue)
+- **Layout Shell File:** [`templates/ui/AdminLayoutShell.vue`](../../../templates/ui/AdminLayoutShell.vue)
+- **Full Blueprint & Guide:** [`templates/blueprints/responsive-enterprise-sidebar.md`](../../../templates/blueprints/responsive-enterprise-sidebar.md)
+- **คุณสมบัติ:**
+  - Desktop: Dual State (`w-64` / `w-20`) พร้อม **Floating Border Button** และ `localStorage` Persistence
+  - Mobile: Off-canvas Slide Drawer (`z-50`) พร้อม Backdrop Blur Overlay
+  - โครงสร้าง 3-Tier Flexbox (Header Branding, Grouped Navigation, User Profile Upward Popover)
+  - รองรับ Dark Mode และ Design Tokens เฉดสี Deep Navy & Ice Blue (`#1C4D8D`, `#0F2854`)
+
+

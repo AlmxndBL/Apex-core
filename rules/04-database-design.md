@@ -23,12 +23,43 @@
 
 ---
 
-## 🛡️ 3. Query Performance & Safety
+## 🛡️ 3. Query Performance, Concurrency & Safety
+
 - **ห้ามต่อ String Raw SQL เด็ดขาด:** ป้องกัน SQL Injection 100% โดยใช้ Parameterized Query หรือ ORM Methods
 - **ป้องกันปัญหา N+1 Query:** ใช้ `include` หรือ `select` ใน Prisma เพื่อ Join ข้อมูลแทนการยิง Query ใน Loop
 - **Transaction Management:**
   - ใช้ `prisma.$transaction()` เมื่อมีการเปลี่ยนแปลงข้อมูลมากกว่า 1 Table พร้อมกัน
   - กำหนด Timeout ของ Transaction (ไม่เกิน 5 วินาที) เพื่อป้องกัน Table Lock ค้าง
+- **⚡ Concurrency Control & Lost Update Prevention (ป้องกัน Double-Spending & Overbooking):**
+  - สำหรับ Table ที่มีความอ่อนไหวสูง เช่น กระเป๋าเงิน/ยอดเงินคงเหลือ (Wallet/Balance), สต็อกสินค้า (Stock/Inventory), หรือสถานะการจองห้อง (Room Booking):
+    1. **Atomic Operations (อันดับแรก):** ใช้ `increment` / `decrement` ของ Prisma แทนการอ่านค่ามาบวกลบใน Javascript
+    2. **Optimistic Concurrency Control (OCC):** ใส่คอลัมน์ `version Int @default(0)` ใน Schema และทำการ Update ด้วยเงื่อนไข:
+       ```typescript
+       const updated = await prisma.wallet.updateMany({
+         where: { id: walletId, version: currentVersion },
+         data: { balance: newBalance, version: { increment: 1 } },
+       });
+       if (updated.count === 0) throw new Error("CONCURRENCY_CONFLICT: ข้อมูลถูกเปลี่ยนแปลงโดยผู้อื่น กรุณาลองใหม่อีกครั้ง");
+       ```
+- **🚪 Automated Tenant Scoping (Prisma Client Extension):**
+  - ในระบบ Multi-Tenant ให้สร้าง Scoped Prisma Client ผ่าน Extension แทนการใส่ `where: { tenantId }` ทีละจุด:
+    ```typescript
+    export const getTenantPrisma = (tenantId: string) =>
+      prisma.$extends({
+        query: {
+          $allModels: {
+            async $allOperations({ model, operation, args, query }) {
+              if (['Room', 'Bill', 'Contract', 'Order'].includes(model)) {
+                args.where = { ...args.where, tenantId };
+              }
+              return query(args);
+            },
+          },
+        },
+      });
+    ```
+- **🔁 Webhook & Payment Slip Replay Prevention:**
+  - ตารางที่บันทึกข้อมูลสลิปหรือ Transaction ธนาคาร **ต้องมี `@unique` Index ที่ `transactionRef` หรือ `slipHash`** เพื่อป้องกันการส่งสลิปเดิมซ้ำ (Replay Attack)
 
 ---
 
@@ -92,3 +123,26 @@ main()
 - ทำ Automated Backup ประจำวันด้วย `pg_dump` และ Continuous WAL Archiving
 - **Retention Policy:** รายวันเก็บ 7 วันล่าสุด, รายสัปดาห์เก็บ 4 สัปดาห์, รายเดือนเก็บ 3 เดือน
 - **Test Restore:** ซ้อมกู้คืนข้อมูลทดสอบบน Staging อย่างน้อยทุกไตรมาส (Quarterly)
+
+---
+
+## ⚡ 7. Connection Pooling & Resource Limits (Anti-Pool Exhaustion)
+
+- **Connection Pool Overflow Prevention (กฎเหล็ก):**
+  - ห้ามปล่อยให้ Prisma เชื่อมต่อฐานข้อมูลโดยไม่กำหนดขนาด Connection Pool บน Production เด็ดขาด
+  - **Connection Limits Parameter:** ในไฟล์ `.env` ของ Production ต้องกำหนด `connection_limit` และ `pool_timeout` เสมอ:
+    ```env
+    # สำหรับ Container / VPS (กำหนดขนาด Pool ตาม Worker Instance)
+    DATABASE_URL="postgresql://user:password@localhost:5432/dbname?connection_limit=5&pool_timeout=10"
+    ```
+- **Serverless & Cloud DB Pooling (Supabase / Neon / PgBouncer):**
+  - **Application Runtime (Nitro / Next.js):** ต้องชี้ไปยัง **Transaction Pooler URL (เช่น Port 6543 บน Supabase)** เสมอ เพื่อให้ PgBouncer ช่วยจัดการสลับ Connection
+  - **Prisma CLI & Migrations:** คำสั่ง `prisma migrate dev / deploy` ต้องใช้ Direct Connection URL (Port 5432) โดยแยกเป็นตัวแปร `DIRECT_URL` ใน `schema.prisma`:
+    ```prisma
+    datasource db {
+      provider  = "postgresql"
+      url       = env("DATABASE_URL")
+      directUrl = env("DIRECT_URL")
+    }
+    ```
+
