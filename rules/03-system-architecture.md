@@ -121,4 +121,31 @@
 - **Traceability Gate (ที่มาของข้อสรุป):**
   - ทุกข้อเสนอแนะในการปรับสถาปัตยกรรม ต้องระบุชัดเจนว่าสรุปจากโค้ดจริง `[Direct]` หรืออนุมาน `[Inferred]` ห้ามเดาสุ่ม
 
+---
+
+## 🏛️ 10. System Genesis & Major Redesign Protocol (กฎการวางรากฐานระบบใหม่)
+
+> **Execution Trigger:** ใช้เฉพาะเมื่อ **ขึ้นระบบใหม่ตั้งแต่ต้น (New Project Setup)** หรือ **ปรับโครงสร้างสถาปัตยกรรมระดับระบบ (Major Redesign)** เท่านั้น (งานประจำวันทั่วไปให้ใช้ Fast Path เพื่อความรวดเร็ว)
+
+เมื่อได้รับมอบหมายให้ออกแบบระบบใหม่ตั้งแต่ต้น หรือ Redesign สถาปัตยกรรม Agent จะต้องดำเนินการผ่าน 2 กลไกสำคัญ:
+
+### 1. 🎙️ Domain Elicitation 4 แกน (เค้นความต้องการธุรกิจให้รอบด้าน)
+ก่อนเริ่มลงมือ ให้ถามเพื่อความชัดเจนใน 4 แกนหลัก:
+1. **👤 Actors & RBAC:** ระบบมี Role อะไรบ้าง? ใครมีสิทธิ์สร้าง/ดู/อนุมัติ/ลบ? มีการแยก Multi-Tenant ไหม?
+2. **🔄 State Lifecycle:** สถานะของข้อมูลวิ่งอย่างไร? (เช่น `Draft` $\rightarrow$ `Pending` $\rightarrow$ `Approved` $\rightarrow$ `Rejected`) และในแต่ละสถานะมี Unhappy Path อย่างไร?
+3. **⚡ Triggers & Side Effects:** เมื่อเกิด Action สำเร็จ มี Side Effects อะไรบ้าง? (ส่ง LINE Notify, ตัด Stock, หัก Wallet, สร้าง Invoice, ยิง Webhook)
+4. **🛑 Business Constraints:** มีข้อจำกัดเฉพาะของธุรกิจไหม? (Limit รายวัน, ห้ามทำซ้ำ, ต้องแนบสลิป, สูตรคำนวณเฉพาะ)
+
+### 2. 📋 8-Point Table-Stakes Baseline (มาตรฐานฟังก์ชันที่ต้องมีระดับ Production)
+การออกแบบระบบใหม่ต้องครอบคลุม 8 ปัจจัยพื้นฐาน เพื่อป้องกันปัญหาระบบขาดฟังก์ชันที่ควรมี:
+1. **UI & State UX:** มีครบ 4 สถานะ: `Loading (Skeleton)`, `Empty (หน้าว่างพร้อม CTA)`, `Error (พร้อมปุ่ม Retry)`, `Success`
+2. **Edge Cases & Validation:** มี Schema Validation (Zod) ตรวจสอบละเอียดทั้งหน้าบ้านและหลังบ้าน
+3. **Data Control:** รองรับ Pagination / Infinite Scroll, Debounced Search (300ms), และ Sorting/Filter
+4. **Safety & Destruction:** มี Confirmation Dialog ก่อนการกระทำสำคัญ และใช้ Soft Delete แทน Hard Delete
+5. **Feedback Loop:** แจ้งเตือนผู้ใช้ด้วย Toast Notification (Success/Error) และ Disable ปุ่มขณะกำลัง Submit ป้องกันกดย้ำ
+6. **Security & RBAC Enforcement:** ตรวจสอบสิทธิ์ที่ Backend ซ้ำทุก API Endpoint ป้องกัน IDOR Bypass
+7. **Idempotency & Concurrency:** ใช้ Transaction Lock (`$transaction`), Unique Constraint ป้องกัน Race Condition
+8. **Audit & Tracking:** มีฟิลด์ `created_by`, `updated_at` และเก็บบันทึกประวัติการเปลี่ยนแปลง (Audit Log)
+
+
 

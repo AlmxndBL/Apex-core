@@ -220,5 +220,5 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 | **Testing / Verification** | `rules/06-testing-devops.md` | — | `skills/sandbox-testing` |
 | **Code Review / Audit** | `rules/01-security-auth.md`, `rules/02-coding-standards.md` | — | `skills/impeccable-audit` |
 | **Long Session / Deep Investigation** | `rules/02-coding-standards.md` | — | `skills/context-budget` |
-| **New Project Setup** | `rules/03-system-architecture.md`, `templates/AI-Context-Index.md` | ทุกไฟล์ตามบริบท | `skills/codebase-cartographer` |
+| **New Project Setup / Major Redesign** | `rules/03-system-architecture.md` (Genesis Protocol), `templates/AI-Context-Index.md` | ทุกไฟล์ตามบริบท | `skills/codebase-cartographer`, `skills/database-architect` |
 | **Bug Fix** | `rules/02-coding-standards.md` | ไฟล์กฎประจำโดเมนที่มีปัญหา | `skills/sandbox-testing` |
