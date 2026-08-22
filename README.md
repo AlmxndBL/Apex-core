@@ -3,7 +3,7 @@
 > **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
 > สถาปัตยกรรม 3 ชั้นควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
 
-![v2.5.3](https://img.shields.io/badge/v2.5.3-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![v3.1.0](https://img.shields.io/badge/v3.1.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ---
 
@@ -42,8 +42,9 @@ Apex-core/
 │   ├── 05-ux-ui-design.md      # Component Layering 4 ชั้น, Tailwind CSS & Performance
 │   └── 06-testing-devops.md    # Vitest/Playwright, Docker Multi-Stage & Structured Logging
 │
-├── skills/                     # 🧰 [Specialized AI Skills] ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 7 ตัว
+├── skills/                     # 🧰 [Specialized AI Skills] ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 8 ตัว
 │   ├── codebase-cartographer/  # 🧭 สำรวจและรื้อฟื้นบริบทโปรเจกต์เก่าที่ทิ้งไว้นาน
+│   ├── context-budget/         # 📉 Token Diet, Bounded Retrieval & Session Checkpoints
 │   ├── database-architect/     # 🗄️ จูน Query, Prisma Index & ป้องกัน Deadlock
 │   ├── design-taste-frontend/  # 🎨 คุมโทนสีพรีเมียม (HSL) & Anti-Cliché UI
 │   ├── docker-devops-master/   # 🐳 Multi-Stage Dockerfile & GitHub Actions CI/CD
@@ -78,11 +79,12 @@ Apex-core/
 
 ---
 
-### 🧰 ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 7 ตัว (Specialized Skills)
+### 🧰 ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 8 ตัว (Specialized Skills)
 
 | หมวดหมู่ | Skill Name | ลิงก์ไฟล์ | หน้าที่สำคัญ |
 |---|---|---|---|
 | 🧭 **Onboarding & Exploration** | `codebase-cartographer` | [`SKILL.md`](./skills/codebase-cartographer/SKILL.md) | สำรวจสถาปัตยกรรมด้วย Graded Pass (Scan/Focus/Full), Evidence-First Taxonomy, สแกน Git, Prisma, Routes และออกรายงาน **Project Executive Brief** |
+| 📉 **Token Diet & Context** | `context-budget` | [`SKILL.md`](./skills/context-budget/SKILL.md) | ควบคุม Context Window ป้องกัน Amnesia/Bloat, ทำ Selective Bounded Retrieval, และตัดแบ่ง Session Handoff |
 | 🎨 **Frontend & UI/UX** | `design-taste-frontend` | [`SKILL.md`](./skills/design-taste-frontend/SKILL.md) | คุมโทนสีพรีเมียม (สัดส่วน 60-30-10 & HSL), Typography tracking, และหลีกเลี่ยง UI เชยๆ |
 | 🧙‍♂️ **Code Quality & Typing** | `typescript-wizard` | [`SKILL.md`](./skills/typescript-wizard/SKILL.md) | สไตล์ **Matt Pocock** (Total TypeScript), Discriminated Unions, Zod Inference, กำจัด `any` 100% |
 | 🗄️ **Database & Performance** | `database-architect` | [`SKILL.md`](./skills/database-architect/SKILL.md) | แก้ปัญหา N+1 Query ด้วย `include`/`select`, วาง Index (`@@index`), ป้องกัน Deadlock ด้วย `$transaction` |
@@ -104,14 +106,18 @@ graph TD
     D -- แก้ไขล้มเหลว 2 ครั้ง --> E[🚨 Failure Report]
 ```
 
-1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Memory Recall):** 
+1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Seam Detection):** 
    - วิเคราะห์ Requirements และ Existing Codebase
+   - **Environment Seam Detection:** ตรวจสถานะของ Execution Environment และ Database Provider (Local vs Sandbox vs Docker)
    - **Stack-Aware Gotchas Recall:** ตรวจสอบ Tech Stack ของโปรเจกต์ แล้วโหลดเฉพาะ Gotchas จากคลังความรู้ที่มี Tag ตรงกัน (`stack/nuxt4`, `stack/react`, `stack/universal`) เพื่อป้องกันความผิดพลาดซ้ำซากโดยไม่เปลือง Token
    - ค้นหา Test Runner ประจำโปรเจกต์ และประเมินความเสี่ยง
 2. **Step 2: System Design - The 9arm Way (ออกแบบระบบ):** ออกแบบระบบด้วยหลักความเรียบง่ายที่สเกลได้ (Pragmatic & Simple) สอดคล้องกับ System Blueprint และถามผู้ใช้ก่อนวาด Diagram
-3. **Step 3: Implementation (ลงมือเขียนโค้ด):** เขียนโค้ดจริง 100% (ห้ามมี Placeholder Code) ตามมาตรฐาน 6 เสาหลักใน `rules/`
-4. **Step 4: Verification & Closed-Loop Memory (Universal DoD):**
-   - ตรวจสอบผ่าน Test Runner หรือ Ad-hoc Verification (Type Check/Rollback Assertion) พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
+3. **Step 3: Implementation (Seam-Aware & Dynamic Skill Mounting):**
+   - โหลดเฉพาะ **Profile Presets** ที่ตรงกับโปรเจกต์ (`profile:nuxt4-fullstack`, `profile:react-nextjs`, `profile:api-backend` ฯลฯ)
+   - ปฏิบัติตามมาตรฐาน 6 เสาหลักใน `rules/` และเขียนโค้ดจริง 100% (ห้ามมี Placeholder Code)
+4. **Step 4: Verification & Session Evidence Stream (Universal DoD & Memory):**
+   - ตรวจสอบผ่าน Test Runner หรือ Fast In-Memory TypeCheck พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
+   - **Session Evidence Stream:** บันทึก Action-Evidence Chain (`[Intent] → [Diff] → [Verification] → [Result]`) ลงใน Nexus เพื่อรองรับ Deterministic Replay
    - **Closed-Loop Gotchas Capture:** เมื่อแก้บั๊กยากระดับสถาปัตยกรรมสำเร็จ หรือได้รับคำทักท้วง (User Correction) ให้บันทึก Gotchas สั้น ๆ 3 บรรทัดลงในคลังความรู้ทันที
 
 ---

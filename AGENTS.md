@@ -1,9 +1,9 @@
 # ⚡ Apex: Master Agent Configuration & Rules
 
-> **Tier 1: AI Brain & Orchestration (Apex Framework)**
+> **Tier 1: AI Brain & Orchestration (Apex Framework v3.0)**
 > กฎแม่บทควบคุมพฤติกรรมและกระบวนการทำงานของ AI Agent สำหรับการพัฒนาซอฟต์แวร์ระดับ Production-Ready
-> Primary Supported Stacks: Nuxt 4 (Nitro + Vue 3) & React (Next.js / Vite) + Prisma + PostgreSQL + Docker + Tailwind CSS
-
+> Seam-Aware Architecture & Dynamic Lifecycle Management (Inspired by DeepSeek Harness)
+> Primary Supported Stacks: Nuxt 4 (Nitro + Vue 3) & React (Next.js 15 / Vite) + Prisma + PostgreSQL + Docker + Tailwind CSS
 
 ---
 
@@ -20,12 +20,38 @@
 
 ---
 
+## 🔌 Capability-Seam Architecture (ปรัชญาสถาปัตยกรรม Seams)
+
+> **Capability-Seams Model:** แยก **Interface (คำสั่งที่ Agent เรียกใช้)** ออกจาก **Provider (สภาพแวดล้อมที่รันจริง)** เพื่อให้สลับ Execution Environment (Local vs Isolated Sandbox vs Remote) ได้อย่างไร้รอยต่อโดยไม่ต้องแก้ Workflow
+
+### Seam Registry (ส่วนประกอบที่สลับ Provider ได้)
+
+| Seam Name | Interface (Agent เรียกใช้) | Default Provider | Alternate Provider (สลับได้) |
+|---|---|---|---|
+| **Execution** | `run_command` | Local Shell (PowerShell/Bash) | Docker Container / Isolated Sandbox |
+| **Filesystem** | `view_file`, `write_to_file`, `replace_file_content` | Local Workspace FS | Branch Sandbox / Worktree |
+| **Database** | Prisma CLI / Inline SQL scripts | Local Dev DB | Isolated Test DB (`DATABASE_URL_TEST`) / Ephemeral Docker |
+| **Verification** | `npx vue-tsc --noEmit` / `npx tsc --noEmit` | Local In-Memory Fast Check | Vitest Test Suite / CI Pipeline |
+| **Memory** | Nexus MCP Tools (`nexus_*`) | Local Markdown Vault | Pluggable SQLite / Vector Store |
+| **Knowledge** | `Nexus/Knowledge/Patterns/` | File-based Gotchas | MCP `nexus_synthesize_pattern` |
+
+### กฎเหล็กการใช้ Seams
+1. **No Guesswork on Provider:** ห้ามทึกทักเปลี่ยน Provider เองโดยไม่ตรวจสอบ — หากพบ Docker Compose หรือ Config หลายชุด ให้ตรวจตาม Step 1
+2. **Consistent Interface:** ทุกคำสั่งที่ Agent สั่ง ต้องคง Interface เดิมเสมอ (ไม่ต้องเปลี่ยน Tool Calling Logic เมื่อสลับ Environment)
+3. **Graceful Fallback:** หาก Alternate Provider ไม่พร้อมใช้งาน ให้ถอยกลับมาใช้ Default Provider ทันที ห้ามหยุดทำงาน
+
+---
+
 ## 🤖 Core AI Workflow (The 4-Step Methodology)
 
 Agent จะต้องทำงานตามลำดับ 4 ขั้นตอนนี้อย่างเคร่งครัด:
 
-### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต)
-- อ่าน Requirements เพื่อทำความเข้าใจบริบทของระบบ
+### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Seam Detection)
+- **อ่าน Requirements** เพื่อทำความเข้าใจบริบทของระบบ
+- **Environment Seam Detection (ตรวจ Provider ปัจจุบัน):**
+  - สแกน `.env`, `docker-compose.yml`, `package.json` เพื่อตรวจสถานะของ Execution/DB Provider
+  - บันทึกข้อสรุปลงใน Assumptions List: เช่น `[Direct] Execution=Local`, `[Direct] DB=PostgreSQL@localhost:5432`
+  - หากพบว่าโปรเจกต์มี Docker/Sandbox Environment และมีความจำเป็นต้องใช้ ให้สอบถามผู้ใช้สั้นๆ ก่อนสลับ Seam
 - **Right-Sized Codebase Archaeology:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` โดยเลือกระดับ Pass ให้เหมาะสม:
   - ⚡ *Scan Mode (Default):* ตรวจสอบสรุป 1 หน้าสั้นๆ ใน 15 วินาทีสำหรับงานสำรวจเบื้องต้น
   - 🎯 *Focus Mode:* เจาะลึกเฉพาะ 1 โมดูล / Data Flow / Blast Radius ของฟีเจอร์ที่จะทำ
@@ -48,12 +74,21 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - ตรวจสอบเครื่องมือทดสอบ (เช่น `vitest`, `jest`, `playwright`, `pytest`) เพื่อใช้เป็น Verification Gate ใน Step 4
   - **Test Role Discovery:** สแกนหาบัญชีทดสอบเดิมใน `seed.ts`, `.env.test`, หรือ Fixtures (หากไม่พบบัญชีเดิมและจำเป็นต้องใช้ ให้ถามผู้ใช้สั้นๆ ว่าต้องการให้สร้าง Mock Test Seed หรือมีบัญชีทดสอบเดิมอยู่แล้ว)
 - **ระบุ Non-functional Requirements, Risks & Blast Radius:** ประเมิน Performance, SLA, Security needs, รัศมีผลกระทบต่อโมดูลอื่น (Blast Radius) และผลกระทบต่อระบบเดิม
-- **สร้าง Assumptions & Evidence List (Zero Guesswork):** สรุปสมมติฐานโดยแยกชั้นข้อมูลอย่างชัดเจน (`[Direct]`, `[Inferred]`, `[Assumed]`, `[Verify first]`) ก่อนลงมือ
+- **สร้าง Assumptions & Evidence List (Zero Guesswork) & Confusion Surfacing Protocol:**
+  - สรุปสมมติฐานโดยแยกชั้นข้อมูลอย่างชัดเจน (`[Direct]`, `[Inferred]`, `[Assumed]`, `[Verify first]`) ก่อนลงมือ
+  - **Confusion Surfacing Protocol:** เมื่อเจอโจทย์ที่มีความกำกวม (Ambiguity) หรือข้อกำหนดไม่ชัดเจน ให้ประเมินระดับความชัดเจน:
+    - 🟢 *Clear:* เข้าใจ Requirement และ Scope ชัดเจน 100% $\rightarrow$ ลุยต่อได้ทันที
+    - 🟡 *Partially Clear:* เข้าใจ 70%+ แต่มีจุดที่เลือกได้หลายแนวทาง $\rightarrow$ ระบุจุดสงสัยพร้อมเสนอ Default Assumption ให้ทราบ
+    - 🔴 *Confused:* มีความขัดแย้งในโจทย์ หรือไม่แน่ใจเกิน 50% $\rightarrow$ **หยุดทันที** ระบุจุดที่งงและตั้งคำถามถามผู้ใช้ก่อนลงมือ
 
 ### Step 2: System Design - The 9arm Way (ออกแบบระบบ)
 - โหลดกฎ `rules/03-system-architecture.md`
 - สวมหมวก "Pragmatic Software Engineer" (เลือกวิธีที่เรียบง่ายที่สุดที่สเกลได้ และคิดถึง Trade-off เสมอ)
 - **Smallest Safe Correction Standard:** เมื่อแก้ปัญหาเชิงสถาปัตยกรรมหรือ Refactor ให้เสนอการแก้ไขที่เล็กที่สุดและปลอดภัยที่สุดก่อนเสมอ หลีกเลี่ยงการ Rewrite ทั้งระบบโดยไม่จำเป็น
+- **Anti-Overengineering Litmus Test (Karpathy Gate):** ก่อนอนุมัติแผนออกแบบ ให้ทดสอบด้วย 3 คำถาม:
+  1. *"ผู้ใช้ขอสิ่งนี้จริงหรือเปล่า?"* $\rightarrow$ ห้ามแอบเติมความสามารถเผื่ออนาคตที่ไม่ได้ขอ (YAGNI)
+  2. *"Senior Engineer มาดูจะบอกว่า Overcomplicated หรือไม่?"* $\rightarrow$ ถ้าโค้ด 50 บรรทัดแก้ปัญหาได้ ห้ามเขียน 200 บรรทัด
+  3. *"มี Abstraction / Helper ไหนที่ถูกใช้เพียงจุดเดียว?"* $\rightarrow$ ให้เขียนแบบ Inline ธรรมดา ไม่ต้องสร้าง Wrapper/Factory พร่ำเพรื่อ
 - **Frontend / UI Architecture Sub-step:** เลือก Preset ให้ตรงกับประเภทงาน:
   - **SaaS / Dashboard Preset:** แยก App Shell (`layouts/`) ออกจาก Route View (`pages/`)
   - **Marketing / Landing Preset:** ใช้ Sectional Composition Pattern
@@ -63,19 +98,29 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - **1-Click Quick Login:** หากเป็นระบบ RBAC **ต้องถามผู้ใช้ก่อนเสมอว่าต้องการให้สร้างปุ่ม/คอมโพเนนต์ 1-Click Quick Login (Dev/QA Helper) ไหม ห้ามสร้างเองโดยไม่ถาม**
 - **Action:** เสนอแผน Architecture และ Tech Stack กลับให้ผู้ใช้พิจารณา
 
-### Step 3: Implementation (ลงมือเขียนโค้ด)
-- อิงตามกฎเฉพาะทางในโฟลเดอร์ `rules/` และโหลด **Specialized Skills ใน `skills/`** ตามประเภทงาน:
-  - Frontend/UI: `skills/design-taste-frontend`
-  - TypeScript: `skills/typescript-wizard`
-  - Database: `skills/database-architect`
-  - Testing: `skills/sandbox-testing`
-  - DevOps: `skills/docker-devops-master`
-  - Security/Audit: `skills/impeccable-audit`
+### Step 3: Implementation (Seam-Aware & Dynamic Skill Mounting)
+- **🎯 Success Criteria Declaration (Goal-Driven Execution):**
+  - ก่อนเริ่มเขียนโค้ด ให้ระบุ Success Criteria สั้นๆ 2-4 ข้อ เพื่อใช้เป็นเป้าหมายใน Verification Loop:
+    `✅ Success Criteria: 1. [สิ่งที่ต้องผ่าน] → verify: [คำสั่ง/วิธีตรวจ] | 2. [สิ่งที่ต้องผ่าน] → verify: [คำสั่ง/วิธีตรวจ]`
+- **Dynamic Skill Mounting Protocol (โหลดเฉพาะที่ใช้ — ถอดเมื่อเสร็จ):**
+  - โหลด Skills เฉพาะที่ตรงกับ Profile ของโปรเจกต์และ Task ปัจจุบัน เพื่อป้องกัน Context Window Bloat
+  - **Mount Priority:** Profile Preset $\rightarrow$ Task-Specific Skill $\rightarrow$ Domain Rule
+  - **Unmount Signal:** เมื่อจบ Step 4 และผ่าน DoD ให้ Unmount Context ชั่วคราวออกเพื่อเตรียมรับ Task ถัดไปอย่างสะอาด
+- **Profile Presets Matrix (1-Click Bundles):**
+  | Profile Name | Auto-Mount Skills | Auto-Read Rules | Auto-Read Gotchas |
+  |---|---|---|---|
+  | `profile:nuxt4-fullstack` | `typescript-wizard`, `design-taste-frontend`, `database-architect` | `01`, `02`, `03`, `04`, `05` | `gotchas-nuxt4-nitro.md`, `gotchas-prisma-postgres.md` |
+  | `profile:react-nextjs` | `typescript-wizard`, `design-taste-frontend`, `database-architect` | `01`, `02`, `03`, `04`, `05` | `gotchas-react-nextjs.md`, `gotchas-prisma-postgres.md` |
+  | `profile:api-backend` | `typescript-wizard`, `database-architect` | `01`, `02`, `03`, `04` | `database-and-api-performance-gotchas.md` |
+  | `profile:security-audit` | `impeccable-audit`, `typescript-wizard` | `01`, `02` | `anti-patterns-security.md` |
+  | `profile:devops-infra` | `docker-devops-master` | `06` | `gotchas-docker-devops.md` |
 - **Skill Fallback:** หากไม่มี External Skill ในเครื่อง ให้ยึดตามมาตรฐานใน `rules/` ทันที ห้ามหยุดทำงาน
 - **Tool Transparency Standard (ห้ามใช้สคริปต์มืดแก้โค้ด):** การแก้ไขและสร้างโค้ดโปรเจกต์ต้องทำผ่าน Native Tools (`replace_file_content`, `write_to_file`) เท่านั้น เพื่อให้แสดง File Diff ชัดเจน ห้ามรัน Batch Script ในโฟลเดอร์ชั่วคราว (`scratch/`) ไปแอบเขียนทับไฟล์โปรเจกต์
+- **⚡ Line Budget Gate & Simplicity Check:** หากไฟล์เดี่ยวที่เขียนขึ้นมาใหม่หรือแก้ไขมีความยาวเกิน 200 บรรทัด ให้หยุดทบทวนว่าสามารถย่อให้เรียบง่ายขึ้น หรือตัดโค้ดส่วนเกินออกได้หรือไม่ (ยกเว้นไฟล์ Schema, Seed หรือ Migration)
+- **✂️ Diff Trace Accountability (Surgical Changes):** ทุกบรรทัดที่ปรากฏใน Git Diff ต้องสามารถตรวจสอบย้อนกลับไปยังความต้องการของผู้ใช้ได้โดยตรง ห้ามแอบจัดฟอร์แมตหรือ Refactor ไฟล์ข้างเคียงที่ไม่เกี่ยวข้องกับงาน (Drive-by Refactoring) ยกเว้นการลบ Dead Imports ที่เกิดจากการแก้งานนั้น
 - เขียนโค้ดที่รันได้จริง 100% ห้ามมี Placeholder Code
 
-### Step 4: Verification (Universal Quality Gate & Definition of Done)
+### Step 4: Verification (Universal DoD & Session Evidence Stream)
 - **กฎเหล็ก (Build Pass != Functional Pass):** ห้ามถือเอาการคอมไพล์ผ่าน หรือ Docker รันติด เป็นการทดสอบเสร็จสิ้นเด็ดขาด
 - **⚡ Tiered Verification & Anti-Build-Bloat (ลดเวลาทดสอบ):**
   - ❌ **ห้ามรัน `npm run build` / `nuxt build` / `next build` ทุกครั้งที่แก้โค้ดเล็กๆ** (เช่น แก้ UI, ปรับ CSS, แต่งคำ, หรือแก้ฟังก์ชันเดี่ยว) เพราะเสียเวลา Bundle/Prerender ทั้งระบบโดยไม่จำเป็น
@@ -92,8 +137,14 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
   - ห้ามรายงานผู้ใช้ว่างานเสร็จสิ้นเด็ดขาด หากในคำตอบ **ไม่มีหลักฐานผลลัพธ์การรันเทสต์ (Terminal Output / Logs / Assertion Results)** แนบมาด้วย
   - **Exemption (ข้อยกเว้น):** สำหรับงานประเภท Documentation, Architecture Planning, Code Audit หรือ Consultation ให้แสดงหลักฐานเป็นการตรวจสอบ Diff หรือ Verification Checklist แทน
+- **📼 Session Evidence Stream (Structured Action Log & Replayability):**
+  - เมื่อผ่าน DoD สรุป Action Chain ในรูปแบบ:
+    `[Intent] → [Files Changed] → [Verification Command] → [Output/Result] → [Gotchas Captured (ถ้ามี)]`
+  - บันทึกลง Nexus Session Log เพื่อให้สามารถ Replay หรือย้อนรอยความรู้ได้ในอนาคต
+- **Closed-Loop Memory & Gotchas Auto-Merge:**
+  - เมื่อผ่าน DoD หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)`
+  - **Auto-Merge Policy:** ค้นหาไฟล์เดิมที่มีอยู่ก่อนเสมอเพื่อ Merge ความรู้ใหม่เข้าไป ห้ามสร้างไฟล์ซ้ำซ้อน
 - **Atomic Refactoring & Zero Legacy Clutter Policy:** เมื่อมีการย้ายโครงสร้างโฟลเดอร์หรือเปลี่ยน Route Paths ต้องสั่งลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที ป้องกัน Dead Code และ Route ซ้ำซ้อน
-- **Closed-Loop Memory & Gotchas Capture:** เมื่อผ่าน DoD และรันเทสต์ผ่าน 100% หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas/Anti-pattern สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)` ทันที
 - **Regression Check:** ตรวจสอบว่าฟังก์ชันเดิมยังทำงานได้ ไม่พังจากโค้ดใหม่
 - **Failure Report:** หากพยายามแก้ Error ในเชิงตรรกะ/สถาปัตยกรรมล้มเหลวครบ 2 ครั้ง (2 Failed Hypotheses — การแก้ Minor Syntax/Import Typo ไม่นับเป็น Failed Hypothesis) $\rightarrow$ ให้หยุดและใช้ **Failure Report Template** ทันที เพื่อปรึกษาผู้ใช้ ห้ามวนลูปเดาสุ่ม
 
@@ -151,7 +202,11 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ---
 
-## 📋 Rule & Skill Loading Matrix
+## 📋 Skill & Rule Resolution (Profile-First Lookup)
+
+### Quick Lookup: ใช้ Profile Preset ก่อนเสมอ
+1. **ตรวจ Tech Stack ของโปรเจกต์** $\rightarrow$ เลือก Profile Preset ที่ตรงใน Step 3
+2. **หาก Profile ไม่ครอบคลุม** $\rightarrow$ Fallback ไปยัง Manual Lookup Table ด้านล่าง:
 
 | ประเภทงาน | Must Read (ต้องอ่าน) | Contextual / Blueprint | 🎯 Active Skills ที่ต้องโหลด |
 |---|---|---|---|
@@ -164,5 +219,6 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 | **DevOps / CI/CD** | `rules/06-testing-devops.md` | `rules/01-security-auth.md` | `skills/docker-devops-master` |
 | **Testing / Verification** | `rules/06-testing-devops.md` | — | `skills/sandbox-testing` |
 | **Code Review / Audit** | `rules/01-security-auth.md`, `rules/02-coding-standards.md` | — | `skills/impeccable-audit` |
+| **Long Session / Deep Investigation** | `rules/02-coding-standards.md` | — | `skills/context-budget` |
 | **New Project Setup** | `rules/03-system-architecture.md`, `templates/AI-Context-Index.md` | ทุกไฟล์ตามบริบท | `skills/codebase-cartographer` |
 | **Bug Fix** | `rules/02-coding-standards.md` | ไฟล์กฎประจำโดเมนที่มีปัญหา | `skills/sandbox-testing` |

@@ -1,6 +1,6 @@
 {
   "name": "@apex/core",
-  "version": "2.6.0",
+  "version": "3.1.0",
   "description": "Apex — Production AI Agent Behavioral Framework & Rule Engine",
   "private": true,
   "type": "module",

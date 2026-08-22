@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.0] - 2026-08-22
+
+### Added
+- **Karpathy-Infused Behavioral Safeguards:** Integrated 4 core tenets into Master Orchestration (`AGENTS.md`):
+  - *Confusion Surfacing Protocol:* Explicit clarity grading (🟢 Clear / 🟡 Partially Clear / 🔴 Confused) preventing silent assumptions on ambiguous requirements.
+  - *Anti-Overengineering Litmus Test:* 3-question Karpathy gate preventing single-use abstractions and speculative flexibility.
+  - *Success Criteria Declaration:* Goal-driven execution declaring testable criteria prior to implementation loops.
+  - *Line Budget Gate & Diff Trace Accountability:* 200-line simplicity check and surgical diff tracking ensuring every diff line maps to user intent.
+- **Context Budget & Token Diet Skill (`skills/context-budget`):** Specialized skill enforcing bounded file retrieval, token diet, and proactive session handoffs for deep-turn conversations.
+
+### Changed
+- Expanded Specialized Skills suite to 8 skills with full verification integrity coverage.
+- Synchronized master rule references and test suite assertions across the framework.
+
+---
+
+## [3.0.0] - 2026-08-22
+
+### Added
+- **Capability-Seams Architecture:** Declared decoupled Seam Registry (Execution, Filesystem, Database, Verification, Memory, Knowledge) separating agent tool interfaces from swappable underlying execution providers.
+- **Dynamic Skill Mounting & Unmounting Protocol:** Context-aware skill lifecycle reducing prompt clutter by mounting only active profile skills during Step 3 and cleanly unmounting on DoD pass.
+- **1-Click Profile Presets Matrix:** Introduced bundle presets (`profile:nuxt4-fullstack`, `profile:react-nextjs`, `profile:api-backend`, `profile:security-audit`, `profile:devops-infra`) for single-lookup rule and skill resolution.
+- **Session Evidence Stream:** Added structured Action-Evidence Chain protocol recording intents, file changes, verification commands, and outputs for deterministic session replay in Nexus.
+- **Environment Seam Detection:** Step 1 discovery sub-step automatically inspecting local vs containerized runtime and database providers.
+
+### Changed
+- Upgraded `AGENTS.md` to v3.0.0 master orchestration format.
+- Simplified Rule & Skill Loading Matrix to a profile-first resolution table.
+
+---
+
 ## [2.6.0] - 2026-08-22
 
 ### Added

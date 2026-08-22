@@ -20,6 +20,7 @@ const REQUIRED_RULES = [
 
 const REQUIRED_SKILLS = [
   'codebase-cartographer',
+  'context-budget',
   'database-architect',
   'design-taste-frontend',
   'docker-devops-master',
