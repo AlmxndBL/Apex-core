@@ -147,5 +147,19 @@
 7. **Idempotency & Concurrency:** ใช้ Transaction Lock (`$transaction`), Unique Constraint ป้องกัน Race Condition
 8. **Audit & Tracking:** มีฟิลด์ `created_by`, `updated_at` และเก็บบันทึกประวัติการเปลี่ยนแปลง (Audit Log)
 
+---
+
+## 📑 12. Spec-Driven Development (SDD) & Contract-First Gate (กฎเหล็ก)
+
+> **Contract-First Principle:** ก่อนเริ่มเขียน Business Logic หรือหน้าจอ UI สำหรับฟีเจอร์ใหม่ที่แตะ API หรือ Database ต้องประกาศ **Machine-Readable Contract** ให้เสร็จ 100% ก่อนเสมอ
+
+### 3 ขั้นตอนของ Contract-First Gate:
+1. **Declare Type & Schema First:** สร้างไฟล์ Contract (เช่น `server/contracts/`, `types/`, `schemas/`) โดยประกาศ **Zod Schemas + TypeScript Types (`z.infer<...>`)** ของ Request Body, Query Params, และ Response Payload ให้ครบทุกฟิลด์
+2. **Freeze the Contract:** ล็อค Interface ไว้เป็น Single Source of Truth ห้ามแก้ไข Type ตามใจชอบระหว่าง Implement Logic หากต้องแก้ ต้องปรับที่ Schema กลางก่อน
+3. **Dual Enforcement:** นำ Contract เดียวกันไปใช้ทั้ง 2 ฝั่ง:
+   - **Backend:** ใช้ Validate Input ผ่าน `readValidatedBody` / `safeParse`
+   - **Frontend:** ใช้เป็น Type ของ Form State และ API Response (`useFetch<ApiResponse<UserDto>>`)
+
+
 
 

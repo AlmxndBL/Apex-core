@@ -58,7 +58,8 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - สแกน `.env`, `docker-compose.yml`, `package.json` เพื่อตรวจสถานะของ Execution/DB Provider
   - บันทึกข้อสรุปลงใน Assumptions List: เช่น `[Direct] Execution=Local`, `[Direct] DB=PostgreSQL@localhost:5432`
   - หากพบว่าโปรเจกต์มี Docker/Sandbox Environment และมีความจำเป็นต้องใช้ ให้สอบถามผู้ใช้สั้นๆ ก่อนสลับ Seam
-- **Right-Sized Codebase Archaeology:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` โดยเลือกระดับ Pass ให้เหมาะสม:
+- **Right-Sized Codebase Archaeology & AST Skeleton Mapping:** หากเป็นการกลับมาทำโปรเจกต์เดิมที่ทิ้งไว้นาน หรือเข้าสู่ Codebase ใหม่ ให้โหลดสกิล `skills/codebase-cartographer` หรือเรียกเครื่องมือ **`nexus_get_repo_map`** เพื่อสร้าง **AST Codebase Skeleton Map** สรุปโครงสร้าง Type, Function, และ Endpoint ทั้งหมดใน 1 วินาที โดยเลือกระดับ Pass ให้เหมาะสม:
+  - ⚡ *AST Skeleton Mode (Fastest):* รัน `nexus_get_repo_map` ดึง Structural Signatures ทั้งระบบใน 500–800 tokens
   - ⚡ *Scan Mode (Default):* ตรวจสอบสรุป 1 หน้าสั้นๆ ใน 15 วินาทีสำหรับงานสำรวจเบื้องต้น
   - 🎯 *Focus Mode:* เจาะลึกเฉพาะ 1 โมดูล / Data Flow / Blast Radius ของฟีเจอร์ที่จะทำ
   - 🏛️ *Full Mode:* รัน 5-Phase Archaeological Protocol เต็มรูปแบบเพื่อออก **Project Executive Brief**
