@@ -48,6 +48,12 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
 
 ### Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Seam Detection)
 - **อ่าน Requirements** เพื่อทำความเข้าใจบริบทของระบบ
+- **🚦 Task Sizing Triage (กำหนดเกณฑ์ความเร็วตามขนาดงาน):**
+  - 🟢 *Fast Track (1–2 ไฟล์ / แก้ UI ย่อย / Typo / Minor Fix):* สามารถลุย Implementation ได้ทันที $\rightarrow$ ตรวจผ่าน Fast TypeCheck 1–3 วินาที $\rightarrow$ จบงาน
+  - 🟡 *Standard / Heavy Track (3+ ไฟล์ขึ้นไป / แตะ Database Schema / Auth / Core Refactor):* บังคับสรุป Scope, Assumptions และประเมิน Blast Radius ให้ชัดเจนก่อนลงมือ
+- **🥗 Token Diet & Tool Lean Standard (คุม Context ไม่ให้บวม):**
+  - *Token Diet:* ห้ามเท Raw Data ขนาดใหญ่ (Large JSON, Raw Logs ยาวเหยียด, SVG/XML ก้อนโต) เข้า Context ตรงๆ ให้ใช้ Shell / Scripts (`grep`, `jq`, `node -e`, slice `view_file`) สกัดเฉพาะจุดสำคัญ
+  - *CLI Over Bloated MCP:* ใช้ Native Shell/CLI (`pnpm`, `git`, `docker`, `gh`) เป็นด่านแรกเสมอ หลีกเลี่ยงการใช้ MCP ครอบคำสั่ง CLI ธรรมดาเพื่อประหยัด Context Window
 - **Environment Seam Detection (ตรวจ Provider ปัจจุบัน):**
   - สแกน `.env`, `docker-compose.yml`, `package.json` เพื่อตรวจสถานะของ Execution/DB Provider
   - บันทึกข้อสรุปลงใน Assumptions List: เช่น `[Direct] Execution=Local`, `[Direct] DB=PostgreSQL@localhost:5432`
@@ -134,6 +140,9 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
      - **Frontend UI / Components:** ตรวจสอบความถูกต้องด้วย Type Checker (`npx vue-tsc --noEmit`, `npx tsc --noEmit`)
   3. **Stateful & Database Verification (Zero DB Pollution):** หากมีการแก้ Data Logic ต้องรัน Script Assert ข้อมูลจริงใน DB โดยใช้ **Test Transaction Rollback** หรือ **Isolated Test DB** ป้องกันข้อมูลขยะตกค้าง
   4. **Adaptive Persona Verification:** ทดสอบครอบคลุมทุก User Journey และทุก Role ที่เกี่ยวข้อง โดยดึง Existing Test Accounts ของโปรเจกต์มาใช้เป็นหลัก ห้ามสร้าง Mock Data ซ้ำซ้อนทับข้อมูลจริง
+- **🛡️ Isolated Subagent Review Gate (Anti Self-Review Bias — สำหรับงาน High Blast Radius):**
+  - เมื่อเป็นงานขนาดใหญ่/วิกฤต (แก้ 3+ ไฟล์, แตะ Database Schema / Migration, Auth / Security, Payment หรือ Core Architecture) **ห้ามรีวิวตัวเองใน Context เดิมเพียงลำพัง**
+  - ให้เรียก Subagent (`invoke_subagent` Role: `Isolated Code Reviewer` หรือ `Impeccable Code Reviewer`) เข้ามารีวิว Git Diff ใน Context ที่แยกเดี่ยว (Fresh Perspective) เพื่อตัด Confirmation Bias ก่อนสรุปส่งมอบงานให้ผู้ใช้
 - **Mandatory Evidence Delivery Gate (No Evidence = Not Done):**
   - ห้ามรายงานผู้ใช้ว่างานเสร็จสิ้นเด็ดขาด หากในคำตอบ **ไม่มีหลักฐานผลลัพธ์การรันเทสต์ (Terminal Output / Logs / Assertion Results)** แนบมาด้วย
   - **Exemption (ข้อยกเว้น):** สำหรับงานประเภท Documentation, Architecture Planning, Code Audit หรือ Consultation ให้แสดงหลักฐานเป็นการตรวจสอบ Diff หรือ Verification Checklist แทน
@@ -141,8 +150,12 @@ Agent จะต้องทำงานตามลำดับ 4 ขั้น�
   - เมื่อผ่าน DoD สรุป Action Chain ในรูปแบบ:
     `[Intent] → [Files Changed] → [Verification Command] → [Output/Result] → [Gotchas Captured (ถ้ามี)]`
   - บันทึกลง Nexus Session Log เพื่อให้สามารถ Replay หรือย้อนรอยความรู้ได้ในอนาคต
-- **Closed-Loop Memory & Gotchas Auto-Merge:**
-  - เมื่อผ่าน DoD หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas สั้นๆ 3 บรรทัดลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)`
+- **Closed-Loop Memory & Gotchas Auto-Merge (4-Point Post-Mortem Protocol):**
+  - เมื่อผ่าน DoD หากเซสชันนั้นมีการแก้บั๊กยากระดับสถาปัตยกรรม, Performance Optimization, หรือได้รับคำแนะนำแก้ไขจากผู้ใช้ (User Correction) ให้บันทึก Gotchas ลงใน `Nexus/Knowledge/Patterns/` หรือเรียกใช้ MCP tool `call_mcp_tool(nexus, nexus_synthesize_pattern)` โดยใช้ **4-Point Template**:
+    1. `Root Cause:` ต้นตอที่แท้จริงคืออะไร
+    2. `Failed Attempts:` ทำไมแนวทางที่ลองก่อนหน้านี้ถึงไม่ได้ผล
+    3. `Misdirection:` อะไรคือสิ่งที่ทำให้หลงทางในตอนแรก
+    4. `Prevention Rule:` กฎหรือวิธีป้องกันไม่ให้เกิดปัญหานี้ซ้ำในอนาคต
   - **Auto-Merge Policy:** ค้นหาไฟล์เดิมที่มีอยู่ก่อนเสมอเพื่อ Merge ความรู้ใหม่เข้าไป ห้ามสร้างไฟล์ซ้ำซ้อน
 - **Atomic Refactoring & Zero Legacy Clutter Policy:** เมื่อมีการย้ายโครงสร้างโฟลเดอร์หรือเปลี่ยน Route Paths ต้องสั่งลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที ป้องกัน Dead Code และ Route ซ้ำซ้อน
 - **Regression Check:** ตรวจสอบว่าฟังก์ชันเดิมยังทำงานได้ ไม่พังจากโค้ดใหม่
