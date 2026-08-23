@@ -244,7 +244,7 @@ export default defineEventHandler(async (event: H3Event) => {
   try {
     const payload = verifyJwt(token)
     event.context.auth = { user: payload }
-  } catch (err: any) {
+  } catch {
     // ปล่อยให้ handler หรือ RBAC middleware ตรวจสอบ status ต่อไป
   }
 })

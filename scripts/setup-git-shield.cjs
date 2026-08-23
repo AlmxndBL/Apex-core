@@ -179,8 +179,8 @@ if [ -n "$LEAKED_KEYS" ]; then
   exit 1
 fi
 
-# ตรวจสอบ Hardcoded Common Secrets ใน Staged Diff
-SECRETS_PATTERN="(sk_live_[0-9a-zA-Z]{24}|ghp_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-[0-9a-zA-Z]{10,48})"
+# ตรวจสอบ Hardcoded Common Secrets ใน Staged Diff (Stripe, GitHub, Google, Slack, Anthropic, OpenAI, AWS, Postgres)
+SECRETS_PATTERN="(sk_live_[0-9a-zA-Z]{24}|gh[pousr]_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-[0-9a-zA-Z]{10,48}|sk-ant-api[0-9a-zA-Z_-]{20,}|sk-proj-[0-9a-zA-Z_-]{30,}|AKIA[0-9A-Z]{16}|postgres(?:ql)?:\/\/[^:]+:[^@]+@[^:]+:[0-9]+\/)"
 LEAKED_DIFF=$(git diff --cached -U0 | grep -E "^\\+" | grep -E "$SECRETS_PATTERN")
 
 if [ -n "$LEAKED_DIFF" ]; then

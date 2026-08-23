@@ -42,7 +42,7 @@
        if (updated.count === 0) throw new Error("CONCURRENCY_CONFLICT: ข้อมูลถูกเปลี่ยนแปลงโดยผู้อื่น กรุณาลองใหม่อีกครั้ง");
        ```
 - **🚪 Automated Tenant Scoping (Prisma Client Extension):**
-  - ในระบบ Multi-Tenant ให้สร้าง Scoped Prisma Client ผ่าน Extension แทนการใส่ `where: { tenantId }` ทีละจุด:
+  - ในระบบ Multi-Tenant ให้สร้าง Scoped Prisma Client ผ่าน Extension แทนการใส่ `where: { tenantId }` ทีละจุด (ครอบคลุมทั้ง Query และ Mutation):
     ```typescript
     export const getTenantPrisma = (tenantId: string) =>
       prisma.$extends({
@@ -50,7 +50,15 @@
           $allModels: {
             async $allOperations({ model, operation, args, query }) {
               if (['Room', 'Bill', 'Contract', 'Order'].includes(model)) {
-                args.where = { ...args.where, tenantId };
+                if (operation === 'create') {
+                  args.data = { ...args.data, tenantId };
+                } else if (operation === 'createMany') {
+                  args.data = Array.isArray(args.data)
+                    ? args.data.map((item: any) => ({ ...item, tenantId }))
+                    : { ...args.data, tenantId };
+                } else {
+                  args.where = { ...args.where, tenantId };
+                }
               }
               return query(args);
             },

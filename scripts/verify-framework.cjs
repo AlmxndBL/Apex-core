@@ -43,6 +43,7 @@ const REQUIRED_ROOT_FILES = [
   'AI-Context-Index.md',
   'README.md',
   'CHANGELOG.md',
+  'LICENSE',
   'plugin.json',
   'package.json',
 ];

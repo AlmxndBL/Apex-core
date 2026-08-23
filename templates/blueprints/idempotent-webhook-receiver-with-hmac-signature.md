@@ -59,7 +59,10 @@ export default defineEventHandler(async (event) => {
     .update(rawBody)
     .digest('base64');
 
-  if (!crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(signature))) {
+  const computedBuf = Buffer.from(hash, 'utf8');
+  const signatureBuf = Buffer.from(signature, 'utf8');
+
+  if (computedBuf.length !== signatureBuf.length || !crypto.timingSafeEqual(computedBuf, signatureBuf)) {
     throw createError({ statusCode: 401, statusMessage: 'Unauthorized: Invalid Signature' });
   }
 
