@@ -1,198 +1,109 @@
-# ⚡ Apex — Production AI Agent Behavioral Framework & Rule Engine
+# ⚡ Apex 4.0 — Lean AI Agent Operating Protocol
 
-> **Global AI Agent Rules & Architecture Framework for Modern Software Engineering**
-> สถาปัตยกรรมควบคุม AI Coding Agent (Google Antigravity, Cursor, Claude Code, Windsurf ฯลฯ) เพื่อการพัฒนาซอฟต์แวร์ระดับ Production-Ready
-> รองรับ Antigravity Plugin System, Capability-Seams Architecture, 8 Progressive Skills และ 6 Engineering Pillars
+> **Turn your AI Coding Agent into a Disciplined Senior Software Engineer in 10 Seconds.**  
+> ชุด System Rules & Guardrails สำหรับ AI Coding Agent (Cursor, Claude Code, Google Antigravity, Windsurf) เพื่อล็อกคอให้ AI ทำงานละเอียด รอบคอบ มีวินัย และรันเทสต์จริงระดับ **Production-Ready**
 
-![v3.1.0](https://img.shields.io/badge/v3.1.0-blue.svg) ![Plugin](https://img.shields.io/badge/Antigravity-Plugin--Ready-818CF8.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
-
----
-
-## 📌 ภาพรวมโปรเจกต์ (Project Overview)
-
-**`Apex`** คือกรอบควบคุมพฤติกรรม (Behavioral Framework) และชุดสถาปัตยกรรมกฎระเบียบสำหรับ AI Coding Agent ถูกออกแบบขึ้นเพื่อแก้ปัญหาพฤติกรรมของ AI ทั่วไป และยกระดับ AI ให้กลายเป็น **Pragmatic Engineering Partner** ที่ทำงานร่วมกับโปรแกรมเมอร์ได้อย่างมีประสิทธิภาพ ปลอดภัย และมีมาตรฐานสูงสุด
-
-### 🎯 ปัญหาที่โปรเจกต์นี้เข้ามาแก้ไข (Problem & Solution)
-
-| ❌ ปัญหาของ AI ทั่วไป (Generic AI Agent) | ✅ สิ่งที่ `Apex` บังคับให้ทำ (Pragmatic Agent) |
-|---|---|
-| **เป็น "Yes-Man":** เออออตามผู้ใช้แม้ไอเดียจะเสี่ยงหรือ Over-engineered | **Pragmatic Challenger:** กล้าท้าทาย ค้านอย่างมีเหตุผล พร้อมนำเสนอ Pros/Cons/Trade-offs |
-| **Preamble & Fluff:** ชอบพูดคำทักทายไร้สาระ ("ได้ครับ", "ยินดีครับ") และเกริ่นยืดยาว | **Action-First (BLUF):** สรุปสาระสำคัญไว้ที่บรรทัดแรกสุด (Bottom Line Up Front) ตัดคำไร้สาระออก 100% |
-| **Hallucination & Guesswork:** มโนชื่อไฟล์ หรือแอบข้ามไฟล์ที่หาไม่เจอ | **Zero Hallucination:** หากข้อมูลไม่ชัดเจนหรือไฟล์หาย จะ **"หยุดถามทันที"** ห้ามเดาเอาเอง |
-| **Code Spaghetti / Buggy RBAC:** สับสนเรื่องการจัดการสิทธิ์หลายบทบาท หรือทำให้เกิด Hydration Error | **System Blueprints:** มีพิมพ์เขียวมาตรฐานสำเร็จรูป (`blueprints/`) ป้องกันบั๊กตั้งแต่ระดับโครงสร้าง |
-| **แก้บั๊กวนลูปซ้ำซาก:** ทำผิดซ้ำในเรื่องเดิมที่เคยแก้ไปแล้วข้าม Session | **Stack-Aware Memory & Gotchas:** ดึงบทเรียนและข้อควรระวังข้ามโปรเจกต์มาเตือนล่วงหน้าตาม Tech Stack |
-| **แก้บั๊กวนลูปไม่จบ:** แก้พังวนซ้ำไปเรื่อยๆ โดยไม่รายงานปัญหาที่แท้จริง | **Failure Report Protocol:** หากแก้ Error ล้มเหลวครบ 2 ครั้ง ต้องหยุดและส่งรายงาน Root Cause ทันที |
+[![Version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Supported Tools](https://img.shields.io/badge/Agent-Cursor%20%7C%20Claude%20Code%20%7C%20Antigravity%20%7C%20Windsurf-818CF8.svg)](https://github.com/AlmxndBL/Apex-core)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## 🏛️ สถาปัตยกรรมระบบ 3 ชั้น (The 3-Tier Rule Architecture)
+## ⚡ เริ่มใช้งานใน 10 วินาที (10-Second Quickstart)
 
-ระบบถูกจัดระเบียบตามหลัก Separation of Concerns เพื่อความเรียบง่ายและไม่ซ้ำซ้อน:
+เลือกความต้องการของคุณ แล้วก๊อปปี้ไปวางที่ Root Directory ของโปรเจกต์ได้ทันที:
 
-```text
-Apex-core/
-├── plugin.json                 # 🔌 [Plugin Manifest] ประกาศตัวตนสำหรับ Antigravity Engine
-├── AGENTS.md                   # 🧠 [Tier 1: AI Brain & Orchestration] แม่บทควบคุมพฤติกรรมและ Workflow 4 ขั้น
-├── README.md                   # 📖 คู่มือการใช้งานและคำแนะนำสำหรับนักพัฒนา
-├── package.json                # 📦 Scripts จัดการ (verify, scan, test)
-│
-├── rules/                      # 📜 [Tier 2: Engineering Standards] กฎคุณภาพ 6 เสาหลัก
-│   ├── 01-security-auth.md     # 🥇 ความปลอดภัย, Secrets, CSRF, CORS & Hard Gates
-│   ├── 02-coding-standards.md  # 🥈 Strict TypeScript, Try-Catch, Naming & Git Conventions
-│   ├── 03-system-architecture.md# 🥉 Pragmatic Monolith, RESTful API Standards & Presets
-│   ├── 04-database-design.md   # Prisma Schema, Migrations & Safe Seeding Dispatcher
-│   ├── 05-ux-ui-design.md      # Component Layering 4 ชั้น, Tailwind CSS & Performance
-│   └── 06-testing-devops.md    # Vitest/Playwright, Docker Multi-Stage & Structured Logging
-│
-├── skills/                     # 🧰 [Specialized AI Skills] ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 8 ตัว (Progressive Loading)
-│   ├── codebase-cartographer/  # 🧭 สำรวจและรื้อฟื้นบริบทโปรเจกต์เก่าที่ทิ้งไว้นาน
-│   ├── context-budget/         # 📉 Token Diet, Bounded Retrieval & Session Checkpoints
-│   ├── database-architect/     # 🗄️ จูน Query, Prisma Index & ป้องกัน Deadlock
-│   ├── design-taste-frontend/  # 🎨 คุมโทนสีพรีเมียม (HSL) & Anti-Cliché UI
-│   ├── docker-devops-master/   # 🐳 Multi-Stage Dockerfile & GitHub Actions CI/CD
-│   ├── impeccable-audit/       # 🔍 Audit โค้ด, ความปลอดภัย (OWASP) & a11y
-│   ├── sandbox-testing/        # 🧪 รัน Test Suite อัตโนมัติ & RBAC Persona Matrix
-│   └── typescript-wizard/      # 🧙‍♂️ Strict TypeScript ไร้ Any สไตล์ Matt Pocock
-│
-├── scripts/
-│   ├── verify-framework.js     # 🧪 สคริปต์ตรวจความสมบูรณ์ของ Framework แบบ 100%
-│   ├── scan-context.js         # ⚡ สคริปต์ Auto-Scan สร้างแผนผังบริบทโปรเจกต์ใน 1 วินาที
-│   ├── setup-git-shield.js     # 🛡️ สคริปต์ติดตั้งระบบป้องกัน .env และ Secrets Leak อัตโนมัติ
-│   └── install-apex.js         # 📦 สคริปต์ติดตั้งแบบ Standalone Container (.apex/)
-│
-└── templates/                  # 📐 [Tier 3: Blueprints & Context Maps] พิมพ์เขียวพร้อมใช้
-    ├── AI-Context-Index.md     # Single Source of Truth สรุปบริบทโปรเจกต์สำหรับ AI
-    ├── gitignore-production.md # พิมพ์เขียว .gitignore มาตรฐานแยก AI & Secrets
-    └── blueprints/
-        ├── rbac-multi-role.md  # พิมพ์เขียวระบบ Multi-Role, 1-Click Quick Login & Dual-Layer Guards
-        ├── idempotent-webhook-receiver-with-hmac-signature.md # พิมพ์เขียว Webhook ปลอดภัย
-        ├── enterprise-data-table.md # พิมพ์เขียว Data Table รองรับ Pagination & Filter
-        └── responsive-enterprise-sidebar.md # พิมพ์เขียว Responsive Sidebar
+### 🟢 1. Apex Nano (แนะนำสำหรับทุกคน — 1 ไฟล์เดี่ยว จบในตัว)
+ก๊อปปี้ไฟล์ [`presets/nano/AGENTS.md`](./presets/nano/AGENTS.md) ไปวางที่ Root โปรเจกต์ของคุณ (หรือเปลี่ยนชื่อเป็น `.cursorrules` / `CLAUDE.md`):
+
+```markdown
+# ⚡ Apex Nano — Senior AI Coding Guardrails
+
+1. 🛑 HARD INTENT LOCK: If user asks "why/how/audit", DO NOT edit code. Report root cause first.
+2. 🧪 TIERED FAST CHECK: Run `tsc --noEmit` / `vue-tsc --noEmit` (1-2s). NEVER run full build for single edits.
+3. 📜 EVIDENCE DELIVERY: No terminal output proof = Task is NOT complete.
+4. ✂️ SURGICAL DIFFS: Modify ONLY targeted lines. Zero drive-by refactoring. Strict TypeScript (no any).
+5. 🚨 2-STRIKE LOOP BREAKER: If a fix fails twice, STOP immediately and ask the user.
 ```
 
 ---
 
-## 📋 ตารางสรุป 6 เสาหลักมาตรฐานวิศวกรรม (Tier 2 Matrix)
-
-| โมดูล | ขอบเขตหน้าที่ | หัวใจสำคัญ |
-|---|---|---|
-| **[`01-security-auth.md`](./rules/01-security-auth.md)** | Security & Protection | Zero Trust, `<secret:VAR_NAME>`, CSRF (Nuxt/Next.js), CORS Whitelist, Dev 404 Hard Gate |
-| **[`02-coding-standards.md`](./rules/02-coding-standards.md)** | Code Quality & Git | Strict TS (No `any`), Try-Catch Log Origin, Conventional Commits, Solo-Dev Push Rule |
-| **[`03-system-architecture.md`](./rules/03-system-architecture.md)** | System & API Design | Pragmatic Monolith, Ask before Diagram, RESTful Standards, Zod Validation, Idempotency |
-| **[`04-database-design.md`](./rules/04-database-design.md)** | Database & Seeding | Prisma Safe Migrations, Central Seed Dispatcher (`seed.ts`), Soft Delete Cascade |
-| **[`05-ux-ui-design.md`](./rules/05-ux-ui-design.md)** | Frontend & UX/UI | Component 4 Layers, Mobile-first Tailwind, Nuxt UI & Shadcn, Bundle < 200KB |
-| **[`06-testing-devops.md`](./rules/06-testing-devops.md)** | QA, Docker & Logging | Vitest, Test DB Isolation, Docker Multi-Stage, GitHub Actions CI/CD, Structured Pino Logs |
+### 🟡 2. Stack-Specific Presets (พร้อมใช้เฉพาะ Stack)
+* ⚡ **Next.js 15 / React 19:** ใช้ [`presets/nextjs/AGENTS.md`](./presets/nextjs/AGENTS.md) (RSC, Server Actions, Zod, Prisma)
+* 💚 **Nuxt 4 / Vue 3:** ใช้ [`presets/nuxt4/AGENTS.md`](./presets/nuxt4/AGENTS.md) (Nitro, Composables, Hydration-Safe, Prisma)
 
 ---
 
-## 🧰 ชุดสกิลผู้เชี่ยวชาญเฉพาะด้าน 8 ตัว (Specialized Skills)
-
-| หมวดหมู่ | Skill Name | ลิงก์ไฟล์ | หน้าที่สำคัญ |
-|---|---|---|---|
-| 🧭 **Onboarding & Exploration** | `codebase-cartographer` | [`SKILL.md`](./skills/codebase-cartographer/SKILL.md) | สำรวจสถาปัตยกรรมด้วย Graded Pass (Scan/Focus/Full), สแกน Git, Prisma, Routes และออกรายงาน **Project Executive Brief** |
-| 📉 **Token Diet & Context** | `context-budget` | [`SKILL.md`](./skills/context-budget/SKILL.md) | ควบคุม Context Window ป้องกัน Amnesia/Bloat, ทำ Selective Bounded Retrieval, และตัดแบ่ง Session Handoff |
-| 🎨 **Frontend & UI/UX** | `design-taste-frontend` | [`SKILL.md`](./skills/design-taste-frontend/SKILL.md) | คุมโทนสีพรีเมียม (สัดส่วน 60-30-10 & HSL), Typography tracking, และหลีกเลี่ยง UI เชยๆ |
-| 🧙‍♂️ **Code Quality & Typing** | `typescript-wizard` | [`SKILL.md`](./skills/typescript-wizard/SKILL.md) | สไตล์ **Matt Pocock** (Total TypeScript), Discriminated Unions, Zod Inference, กำจัด `any` 100% |
-| 🗄️ **Database & Performance** | `database-architect` | [`SKILL.md`](./skills/database-architect/SKILL.md) | แก้ปัญหา N+1 Query ด้วย `include`/`select`, วาง Index (`@@index`), ป้องกัน Deadlock ด้วย `$transaction` |
-| 🧪 **QA & Verification** | `sandbox-testing` | [`SKILL.md`](./skills/sandbox-testing/SKILL.md) | สร้าง Sandbox Test Suite รันเทสต์เร็วใน 1 วินาที, ตรวจสอบ RBAC Matrix ทุก Role, และทำ DB Rollback |
-| 🔍 **Audit & Pre-flight** | `impeccable-audit` | [`SKILL.md`](./skills/impeccable-audit/SKILL.md) | Dual-Baseline Architecture Audit, ตรวจสอบ Accessibility (WCAG 2.1 AA), และสแกนช่องโหว่ OWASP/IDOR |
-| 🐳 **DevOps & Infrastructure** | `docker-devops-master` | [`SKILL.md`](./skills/docker-devops-master/SKILL.md) | Multi-stage Dockerfile ขนาดจิ๋ว ปลอดภัยด้วย Non-root user, Docker Compose, และ GitHub Actions CI/CD |
-
----
-
-## 🤖 Core AI Workflow (กระบวนการทำงาน 4 ขั้นตอน)
-
-Agent ทุกตัวที่รันภายใต้กรอบนี้ จะต้องปฏิบัติตามลำดับ 4 ขั้นตอนอย่างเคร่งครัด:
-
-```mermaid
-graph TD
-    A[Step 1: Discovery & Scope] --> B[Step 2: System Design]
-    B --> C[Step 3: Implementation]
-    C --> D[Step 4: Verification]
-    D -- แก้ไขล้มเหลว 2 ครั้ง --> E[🚨 Failure Report]
-```
-
-1. **Step 1: Discovery & Scope (วิเคราะห์ขอบเขต & Seam Detection):** 
-   - วิเคราะห์ Requirements และ Existing Codebase
-   - **Environment Seam Detection:** ตรวจสถานะของ Execution Environment และ Database Provider (Local vs Sandbox vs Docker)
-   - **Stack-Aware Gotchas Recall:** ตรวจสอบ Tech Stack ของโปรเจกต์ แล้วโหลดเฉพาะ Gotchas จากคลังความรู้ที่มี Tag ตรงกัน (`stack/nuxt4`, `stack/react`, `stack/universal`)
-   - ค้นหา Test Runner ประจำโปรเจกต์ และประเมินความเสี่ยง
-2. **Step 2: System Design - The 9arm Way (ออกแบบระบบ):** ออกแบบระบบด้วยหลักความเรียบง่ายที่สเกลได้ (Pragmatic & Simple) สอดคล้องกับ System Blueprint และถามผู้ใช้ก่อนวาด Diagram
-3. **Step 3: Implementation (Seam-Aware & Dynamic Skill Mounting):**
-   - โหลดเฉพาะ **Profile Presets** ที่ตรงกับโปรเจกต์ (`profile:nuxt4-fullstack`, `profile:react-nextjs`, `profile:api-backend` ฯลฯ)
-   - ปฏิบัติตามมาตรฐาน 6 เสาหลักใน `rules/` และเขียนโค้ดจริง 100% (ห้ามมี Placeholder Code)
-4. **Step 4: Verification & Session Evidence Stream (Universal DoD & Memory):**
-   - ตรวจสอบผ่าน Test Runner หรือ Fast In-Memory TypeCheck พร้อมแนบหลักฐาน (Terminal Output / Diff Review) ก่อนส่งงานเสมอ
-   - **Session Evidence Stream:** บันทึก Action-Evidence Chain (`[Intent] → [Diff] → [Verification] → [Result]`) ลงใน Nexus เพื่อรองรับ Deterministic Replay
-   - **Closed-Loop Gotchas Capture:** เมื่อแก้บั๊กยากสำเร็จ บันทึก Gotchas สั้นๆ 3 บรรทัดลงในคลังความรู้ทันที
-
----
-
-## 🚀 วิธีการนำไปใช้งาน (Integration & Usage Guides)
-
-### 🌟 วิธีที่ 1: ติดตั้งผ่าน Antigravity Plugin System (Recommended 🏆)
-> **ดีที่สุด:** เชื่อมต่อตรงแบบ Live Reference ผ่าน `plugins.json` ทำให้ทุกโปรเจกต์ในเครื่องได้ความสามารถของ Apex ทันทีโดยไม่ต้องก๊อปปี้ไฟล์ และโปรเจกต์งานจริงสะอาด 100%
-
-เพิ่ม Path ของ `Apex-core` ลงในไฟล์ `~/.gemini/config/plugins.json` (หรือ `.agents/plugins.json` ในโปรเจกต์):
-
+### 🟣 3. Apex Pro Engine (สำหรับ Google Antigravity & Studio Workspaces)
+เชื่อมต่อเป็น Global Live Plugin ผ่าน `~/.gemini/config/plugins.json`:
 ```json
 {
   "entries": [
-    { "path": "C:/Users/Admin/Desktop/work/Apex-core" },
-    { "path": "C:/Users/Admin/Desktop/work/Nexus" },
-    { "path": "C:/Users/Admin/Desktop/work/Nexus/plugins" }
+    { "path": "/absolute/path/to/Apex-core" }
   ]
 }
 ```
 
-- **✨ จุดเด่น:** แก้ไขกฎหรือสกิลใน `Apex-core` ปุ๊บ ทุกโปรเจกต์อัปเดตทันทีแบบ Real-Time (Zero Copy, Zero Build)!
+---
+
+## ⚔️ ปัญหาจริงที่ Apex เข้ามาแก้ (Before vs After)
+
+| ❌ AI ทั่วไป (Generic AI Agent) | ✅ เมื่อใช้ Apex (Disciplined Senior Agent) |
+|---|---|
+| **ชอบแอบแก้โค้ดชิงสุกก่อนห่าม:** แค่ถามหาสาเหตุ แต่ AI ดันทะลึ่งแก้ไฟล์จนเละ | **🛑 Hard Intent Lock:** ถ้าคำสั่งเป็นการ "วิเคราะห์/หาสาเหตุ" ห้ามแตะต้องไฟล์โค้ดเด็ดขาด |
+| **มโนว่างานเสร็จ:** บอก "เสร็จแล้วครับ" ทั้งที่โค้ดยังรันไม่ผ่านหรือคอมไพล์พัง | **📜 Mandatory Evidence:** บังคับรัน TypeCheck/Test จริง และต้องโชว์ผลลัพธ์จาก Terminal เสมอ |
+| **สั่ง Build ใหญ่ทุกครั้ง:** รัน `npm run build` ตลอดเวลาจนเสียเวลา 2-3 นาที | **🧪 Fast In-Memory Check:** ตรวจ TypeCheck ใน RAM ผ่าน `tsc`/`vue-tsc` ใน 1-3 วินาที |
+| **แก้บั๊กวนลูปไม่รู้จบ:** แก้ผิดซ้ำๆ แล้ววนลูปเดิม 10 รอบจนเปลือง token | **🚨 2-Strike Loop Breaker:** หากแก้ไม่ผ่าน 2 ครั้ง ต้องหยุดและออกรายงานสรุป Root Cause ทันที |
+| **มือซนแอบแก้ไฟล์ข้างเคียง:** เปลี่ยน single quote เป็น double quote ทั่วโปรเจกต์ | **✂️ Surgical Diffs:** แก้เฉพาะบรรทัดที่เกี่ยวข้อง ห้ามทำ Drive-by Refactoring เด็ดขาด |
 
 ---
 
-### 📦 วิธีที่ 2: ติดตั้งแบบ Standalone Container (`.apex/`)
-> สำหรับโปรเจกต์ที่ไม่ต้องการใช้ระบบ Global Plugin หรือต้องการ Bundled กฎเข้า Git ของโปรเจกต์โดยตรง
+## 🏛️ สถาปัตยกรรม 3 ระดับ (The 3-Tier Model)
 
-```bash
-node /path/to/Apex-core/scripts/install-apex.js /path/to/your-project [--stealth]
-```
-
-โครงสร้างหลังการติดตั้ง:
 ```text
-your-project/
-├── 🧠 AGENTS.md                  # แม่บท AI บางๆ ชี้เข้า .apex/rules/
-├── 🗺️ AI-Context-Index.md        # แผนที่บริบทโปรเจกต์ (JIT Context)
-├── 📦 .apex/                     # 🛡️ รวม Governance & Rules ทั้งหมดไว้ที่นี่!
-├── 💻 app/ / src/                # 🟢 Source Code ของแอป สะอาด 100%
-└── ⚙️ package.json
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🟢 Tier 1: Apex Nano (1-File Drop-in — ~40 บรรทัด)                          │
+│    • เหมาะสำหรับ: Solo Devs, โปรเจกต์ทั่วไป, ก๊อปปี้ไปวางใน 5 วินาที         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 🟡 Tier 2: Apex Core (Stack Presets — Next.js / Nuxt 4)                     │
+│    • เหมาะสำหรับ: Full-Stack Devs ที่ต้องการมาตรฐานเฉพาะ Framework          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 🟣 Tier 3: Apex Pro Studio (Apex Engine + 4 Consolidated Skills + Templates)│
+│    • เหมาะสำหรับ: Multi-Agent Workspaces, Monorepos, และ Enterprise Projects│
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🏛️ สถาปัตยกรรมคู่หู: Apex & Nexus 2.0 (The Twin-Engine Synergy)
+## 🧰 ชุดสกิล 4 โดเมนหลัก (Consolidated Skills in v4.0)
 
-ระบบถูกออกแบบให้ทำงานร่วมกันเป็น **Developer Productivity & AI Agent Ecosystem** แบ่งหน้าที่กันอย่างชัดเจนตามหลัก Single Responsibility:
+1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** Enterprise UI/UX, Tailwind CSS, Dual Responsive Tables, HSL Palette, Vue/React Component Layers
+2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Strict TypeScript (No Any), PostgreSQL, Prisma Optimization, Indexing, Transactions, API Security
+3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-Memory TypeCheck, Vitest Runner, Sandbox DB Rollback, 2-Strike Failure Recovery
+4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Map, Search-First Token Diet, Session Handoff
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│         🤖 Developer Productivity & AI Agent Framework          │
-├────────────────────────────────┬────────────────────────────────┤
-│ ⚡ Apex (Rules & Engine)       │ 🏛️ Nexus 2.0 (Memory Vault)   │
-│ (Rules & Behavioral Engine)    │ (Context & Engineering Memory) │
-├────────────────────────────────┼────────────────────────────────┤
-│ • 6 เสาหลักมาตรฐานวิศวกรรม     │ • Cross-Project Memory Vault   │
-│ • Strict TS (Matt Pocock)      │ • Stack-Aware Gotchas Library  │
-│ • Universal Definition of Done │ • Personal Plugins Hub         │
-│ • 8 Progressive AI Skills      │ • 8 Universal MCP Tools        │
-│ • 🛡️ Git Shield ป้องกันหลุด    │ • JIT Context Compiler         │
-└────────────────────────────────┴────────────────────────────────┘
-```
+---
 
-- **Repository:** 👉 [AlmxndBL/Apex-core](https://github.com/AlmxndBL/Apex-core) · [AlmxndBL/nexus](https://github.com/AlmxndBL/nexus)
+## 🌌 Twin-Engine Synergy: Apex & Nexus
+
+Apex ถูกออกแบบให้ทำงานแบบ **100% Standalone (Zero-Dependency)** แต่สามารถเชื่อมต่อกับ **[Nexus](https://github.com/AlmxndBL/nexus)** เพื่อปลดล็อกระบบบันทึกความจำระยะยาวข้ามโปรเจกต์ (Long-Term Memory Vault):
+
+* **Apex:** กฎเกณฑ์และวินัยการเขียนโค้ด (HOW to build & verify)
+* **Nexus:** คลังความจำและบทเรียนข้ามโปรเจกต์ (WHAT we know & learned)
 
 ---
 
 ## 💖 Acknowledgements & Inspirations
 
-- **🧙‍♂️ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** — แรงบันดาลใจสำหรับ `skills/typescript-wizard` ในการวางมาตรฐาน Strict Type-Safe
-- **🎯 [The 9arm Way (Pragmatic Engineering)](https://github.com/jirayu-ct-dev/9arm-skills)** — ปรัชญาการออกแบบระบบที่เรียบง่ายแต่สเกลได้จริง (Pragmatic Monolith) และ Trade-off evaluation
-- **🧠 [Andrej Karpathy Skills Pattern](https://github.com/multica-ai/andrej-karpathy-skills)** — แรงบันดาลใจของแนวคิดการจัดโครงสร้าง Agent Skill และ Behavioral Safeguards
+* **🧙‍♂️ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** — ปรัชญา Strict Type-Safe
+* **🎯 [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** — แนวคิด Pragmatic Engineering และ Trade-off evaluation
+* **🧠 [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** — แรงบันดาลใจด้าน Agent Behavioral Safeguards & Anti-Overengineering
+
+---
+
+<div align="center">
+
+**Built for Developers who demand Production-Grade AI Engineering.**  
+Distributed under the MIT License.
+
+</div>

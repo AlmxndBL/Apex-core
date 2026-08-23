@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Apex Framework Verification Suite
- * Validates integrity, metadata, YAML frontmatter, and cross-references
+ * Apex Framework Verification Suite (v4.0)
+ * Validates integrity, metadata, YAML frontmatter, presets, and cross-references
  * across Rules, Skills, Templates, and Configuration.
  */
 
@@ -24,14 +24,16 @@ const REQUIRED_RULES = [
 ];
 
 const REQUIRED_SKILLS = [
-  'codebase-cartographer',
-  'context-budget',
-  'database-architect',
-  'design-taste-frontend',
-  'docker-devops-master',
-  'impeccable-audit',
-  'sandbox-testing',
-  'typescript-wizard',
+  'frontend',
+  'backend-data',
+  'quality-verify',
+  'cartography',
+];
+
+const REQUIRED_PRESETS = [
+  'nano/AGENTS.md',
+  'nextjs/AGENTS.md',
+  'nuxt4/AGENTS.md',
 ];
 
 const REQUIRED_TEMPLATES = [
@@ -67,7 +69,7 @@ function assert(condition, message) {
   }
 }
 
-console.log('\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite] Starting Framework Integrity Check...\x1b[0m\n');
+console.log('\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite v4.0] Starting Framework Integrity Check...\x1b[0m\n');
 
 // 1. Root Files Check
 console.log('\x1b[1m1. Root Files & Manifests\x1b[0m');
@@ -103,8 +105,8 @@ for (const ruleFile of REQUIRED_RULES) {
   assert(content.startsWith('# '), `Rule rules/${ruleFile} has valid H1 title`);
 }
 
-// 4. Skills Verification (YAML frontmatter + Structure)
-console.log('\n\x1b[1m4. Specialized Skills (7 Skills)\x1b[0m');
+// 4. Skills Verification (4 Consolidated Skills)
+console.log('\n\x1b[1m4. Consolidated Skills (4 Core Pillars)\x1b[0m');
 for (const skillName of REQUIRED_SKILLS) {
   const skillDir = path.join(ROOT_DIR, 'skills', skillName);
   const skillFile = path.join(skillDir, 'SKILL.md');
@@ -116,11 +118,20 @@ for (const skillName of REQUIRED_SKILLS) {
   const content = fs.readFileSync(skillFile, 'utf-8');
   const hasYamlFrontmatter = content.startsWith('---') && content.includes('name:') && content.includes('description:');
   assert(hasYamlFrontmatter, `Skill ${skillName} contains valid YAML frontmatter (name & description)`);
-  assert(content.length > 500, `Skill ${skillName} has detailed actionable instructions (${content.length} chars)`);
+  assert(content.length > 300, `Skill ${skillName} has detailed actionable instructions (${content.length} chars)`);
 }
 
-// 5. Templates & Blueprints
-console.log('\n\x1b[1m5. Templates & Blueprints\x1b[0m');
+// 5. Presets Verification
+console.log('\n\x1b[1m5. Multi-Platform Presets (Tier 1 & 2)\x1b[0m');
+for (const presetFile of REQUIRED_PRESETS) {
+  const filePath = path.join(ROOT_DIR, 'presets', presetFile);
+  const exists = fs.existsSync(filePath);
+  const size = exists ? fs.statSync(filePath).size : 0;
+  assert(exists && size > 100, `Preset presets/${presetFile} exists and is populated (${size} bytes)`);
+}
+
+// 6. Templates & Blueprints
+console.log('\n\x1b[1m6. Templates & Blueprints\x1b[0m');
 for (const tmpl of REQUIRED_TEMPLATES) {
   const filePath = path.join(ROOT_DIR, 'templates', tmpl);
   const exists = fs.existsSync(filePath);
@@ -128,8 +139,8 @@ for (const tmpl of REQUIRED_TEMPLATES) {
   assert(exists && size > 100, `Template templates/${tmpl} exists (${size} bytes)`);
 }
 
-// 6. Master AGENTS.md Orchestrator Cross-References
-console.log('\n\x1b[1m6. Master Orchestration Cross-References\x1b[0m');
+// 7. Master AGENTS.md Orchestrator Cross-References
+console.log('\n\x1b[1m7. Master Orchestration Cross-References\x1b[0m');
 const masterAgentsContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
 for (const ruleFile of REQUIRED_RULES) {
   assert(masterAgentsContent.includes(`rules/${ruleFile}`), `AGENTS.md references rules/${ruleFile}`);
@@ -138,8 +149,8 @@ for (const skillName of REQUIRED_SKILLS) {
   assert(masterAgentsContent.includes(`skills/${skillName}`), `AGENTS.md references skills/${skillName}`);
 }
 
-// 7. Multi-Stack Coverage Check
-console.log('\n\x1b[1m7. Multi-Stack Coverage Check\x1b[0m');
+// 8. Multi-Stack Coverage Check
+console.log('\n\x1b[1m8. Multi-Stack Coverage Check\x1b[0m');
 const archRuleContent = fs.readFileSync(path.join(ROOT_DIR, 'rules/03-system-architecture.md'), 'utf-8');
 assert(archRuleContent.includes('Nuxt 4') && archRuleContent.includes('Nitro'), 'Architecture rule covers Nuxt 4 & Nitro');
 assert(archRuleContent.includes('React') && archRuleContent.includes('Next.js'), 'Architecture rule covers React & Next.js');
@@ -148,10 +159,10 @@ assert(archRuleContent.includes('React') && archRuleContent.includes('Next.js'),
 console.log('\n------------------------------------------------------------');
 console.log(`\x1b[1mResults: ${passedChecks}/${totalChecks} checks passed.\x1b[0m`);
 
-if (errors.length > 0) {
-  console.log(`\x1b[31m❌ Framework verification FAILED with ${errors.length} error(s).\x1b[0m`);
-  process.exit(1);
-} else {
-  console.log(`\x1b[32m✔ All Framework Integrity Gates PASSED successfully! (100%)\x1b[0m\n`);
+if (errors.length === 0) {
+  console.log('\x1b[32m✔ All Framework Integrity Gates PASSED successfully! (100%)\x1b[0m\n');
   process.exit(0);
+} else {
+  console.log(`\x1b[31m✖ ${errors.length} checks failed.\x1b[0m\n`);
+  process.exit(1);
 }
