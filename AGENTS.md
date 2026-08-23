@@ -1,27 +1,27 @@
-# ⚡ Apex: Master AI Agent Operating Protocol (v4.0)
+# Apex: Master AI Agent Operating Protocol (v4.0)
 
 > **The Disciplined Senior Engineering Engine for AI Coding Agents**  
 > Pragmatic Full-Stack Architecture · Nuxt 4 (Vue 3) & React (Next.js 15) · Prisma · PostgreSQL · Tailwind CSS
 
 ---
 
-## 🛡️ 4 Golden Rules (Non-Negotiable)
+## 4 Golden Rules (Non-Negotiable)
 
-1. **🛑 Hard Intent Lock (Safety First):**
+1. **[RULE 1] Hard Intent Lock (Safety First):**
    - If the user asks to "explain", "investigate", "why", or "audit": **STRICTLY READ-ONLY**.
    - Diagnose the root cause and propose a plan. **DO NOT edit any code** until explicitly approved (e.g. "fix it", "proceed", "implement").
-2. **🧪 Fast In-Memory Verification (1-3 Seconds):**
+2. **[RULE 2] Fast In-Memory Verification (1-3 Seconds):**
    - Run in-RAM type checks (`npx vue-tsc --noEmit` or `npx tsc --noEmit`) and targeted tests (`npx vitest run <file>`).
    - **NEVER** run full `npm run build` / `next build` / `nuxt build` for minor single-file edits.
-3. **📜 Mandatory Evidence Delivery (No Evidence = Not Done):**
+3. **[RULE 3] Mandatory Evidence Delivery (No Evidence = Not Done):**
    - Never claim a task is complete without providing actual terminal output verification logs.
-4. **✂️ Surgical Diffs & Anti-Overengineering (YAGNI):**
+4. **[RULE 4] Surgical Diffs & Anti-Overengineering (YAGNI):**
    - Modify ONLY lines directly related to the user's request. Strictly zero drive-by refactoring of unrelated files.
    - Use the simplest scalable solution. No single-use wrappers or speculative abstractions. Strict TypeScript (no `any`).
 
 ---
 
-## 🤖 Core 4-State Execution Loop
+## Core 4-State Execution Loop
 
 Agent runs under a strict 4-state finite workflow:
 
@@ -32,11 +32,11 @@ Agent runs under a strict 4-state finite workflow:
 └─────────────────┘     └─────────────────┘     └─────────────────┘     └────────┬────────┘
                                                                                  │ Fail 2x
                                                                                  ▼
-                                                                        🚨 2-Strike Report
+                                                                        [FAIL] 2-Strike Report
 ```
 
 ### State 1: Discovery & Scope
-- **Task Triage:** 🟢 *Fast Track (1-2 files)* $\to$ Implement & Verify immediately | 🟡 *Heavy Track (3+ files / Schema / Auth)* $\to$ Summarize scope and blast radius first.
+- **Task Triage:** [Fast Track: 1-2 files] -> Implement & Verify immediately | [Heavy Track: 3+ files / Schema / Auth] -> Summarize scope and blast radius first.
 - **Token Diet:** Search target symbols first (`grep_search` / `find_by_name`). Read bounded line slices (max 150-200 lines). Never dump full files.
 - **Stack Detection:** Inspect lockfile (`pnpm` default) and `package.json` for Nuxt 4 (Vue) vs React (Next.js 15).
 
@@ -54,19 +54,19 @@ Agent runs under a strict 4-state finite workflow:
 
 ---
 
-## 🚨 Failure Report Template
+## Failure Report Template
 
 When a fix fails twice consecutively, halt and output:
 
 ```markdown
-## ❌ Failure Report
+## [FAIL] Failure Report
 
 ### What Was Attempted
 - [Goal description]
 
 ### Failed Attempts (2 Strikes)
-1. [Attempt 1] → Error: [output]
-2. [Attempt 2] → Error: [output]
+1. [Attempt 1] -> Error: [output]
+2. [Attempt 2] -> Error: [output]
 
 ### Root Cause Hypothesis
 - [Current best hypothesis]
@@ -77,7 +77,7 @@ When a fix fails twice consecutively, halt and output:
 
 ---
 
-## 📋 Rule & Skill Quick Lookup
+## Rule & Skill Quick Lookup
 
 | Domain | Engineering Rule | Specialized Skill |
 |---|---|---|
