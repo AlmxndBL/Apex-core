@@ -1,53 +1,58 @@
 # 🗺️ AI Context Index & Project Architecture Map
 
-> **คำชี้แจงสำหรับ AI Agent:** ไฟล์นี้คือแผนที่สรุปบริบทของโปรเจกต์ (Single Source of Truth) เพื่อให้ Agent อ่านและเข้าใจโครงสร้างระบบทันทีโดยไม่ต้องสแกนหาไฟล์ทั้งโปรเจกต์
-> ⚠️ **Security Notice:** ห้ามใส่ Connection String, API Keys, Passwords หรือ Secrets จริงลงในไฟล์นี้โดยเด็ดขาด ให้ใช้ Environment Variables หรือ Pattern `<secret:VAR_NAME>` แทนเสมอ
+> **Agent Guidance:** Single source of truth architectural map for AI coding agents to onboard instantly without scanning the entire workspace.
+> ⚠️ **Security Notice:** Never store raw connection strings, API keys, or credentials in this file. Use environment variables or `<secret:VAR_NAME>` placeholders.
 
 ---
 
-## 📌 1. ภาพรวมโปรเจกต์ (Project Overview)
-- **ชื่อโปรเจกต์:** Apex-core
-- **คำอธิบาย:** ระบบจัดการแอปพลิเคชันและบริการส่วนกลาง
-- **Tech Stack หลัก:** TypeScript / Node.js
-- **Environment Status:** Development / Staging / Production
+## 📌 1. Project Overview
+- **Project Name:** Apex-core
+- **Description:** Lean AI Agent Operating Protocol & Disciplined Engineering Engine
+- **Core Tech Stack:** Strict TypeScript, Node.js, Prisma ORM, PostgreSQL, Nuxt 4 (Vue 3) / Next.js 15 (React 19), Tailwind CSS
+- **Environment Status:** Active Protocol
 
 ---
 
-## 📁 2. โครงสร้างโฟลเดอร์หลัก (Root Directory Blueprint)
+## 📁 2. Directory Blueprint
 
 ```text
 .
-├── AGENTS.md                  # Master Agent Rules
-├── AI-Context-Index.md        # แผนที่สรุปบริบทโปรเจกต์สำหรับ AI (ไฟล์นี้)
-├── rules/                     # โฟลเดอร์เก็บกฎมาตรฐาน 6 เสาหลัก
-├── src/                       # React Application Source
-│   ├── layouts/               # App Shell Layouts (RootLayout.tsx, AdminLayout.tsx)
-│   ├── pages/                 # Page View Components per Route
-│   ├── features/              # Feature Domain Modules (components, hooks, types)
-│   ├── components/ui/         # Shared Atomic Components (Shadcn UI / Radix)
-│   ├── store/                 # Global Client State Stores (Zustand)
-│   └── routes/                # Router Configuration & Outlets
-├── prisma/ (ถ้าทำ backend)    # Database Schema & Migrations
-└── public/                    # Static Assets
+├── AGENTS.md                  # Master Agent Operating Protocol (v4.0)
+├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
+├── README.md                  # Global English Documentation & Quickstart
+├── README_TH.md               # Thai Documentation & Community Guide
+├── package.json               # Engine Configuration & Scripts
+├── plugin.json                # Live Antigravity Plugin Metadata
+├── presets/                   # Framework & Scope Presets (nano, nextjs, nuxt4)
+├── rules/                     # 6 Domain Engineering Standards
+│   ├── 01-security-auth.md
+│   ├── 02-coding-standards.md
+│   ├── 03-system-architecture.md
+│   ├── 04-database-design.md
+│   ├── 05-ux-ui-design.md
+│   └── 06-testing-devops.md
+├── skills/                    # 4 Consolidated Skills
+│   ├── backend-data/
+│   ├── cartography/
+│   ├── frontend/
+│   └── quality-verify/
+└── templates/                 # Production Starter Templates & Utilities
 ```
 
 ---
 
-## 🗄️ 3. Core Domain Models (ฐานข้อมูลหลัก)
-- **User / Account:** ระบบสิทธิ์ RBAC และข้อมูลบัญชี
-- [เพิ่ม Domain Models อื่นๆ ตาม Schema]
+## 🗄️ 3. Core Capabilities & Domains
+- **Security & Auth:** Better Auth, RBAC, Dual-Token Rotation, CORS, Rate Limiting
+- **Code Quality:** Strict TypeScript (no any), Zod validation, JSDoc/TSDoc
+- **Architecture:** Modular Monolith, Domain-Driven Granular Routing, Spec-Driven Development (SDD)
+- **Database:** Prisma ORM, PostgreSQL, OCC Concurrency Control, Zero DB Pollution Seeding
+- **Frontend UI/UX:** 4-Tier Component Layering, Semantic HSL Palette, Dual Responsive Tables
+- **Verification:** Sub-second In-Memory TypeCheck, Vitest, 2-Strike Loop-Breaker
 
 ---
 
-## 🔌 4. Key API Endpoints Map
-- `GET    /api/v1/health` $\rightarrow$ System Health Check
-- `POST   /api/v1/auth/login` $\rightarrow$ User Authentication
-- `GET    /api/v1/[resource]` $\rightarrow$ Resource List (Paginated)
-
----
-
-## 🚨 5. Project-Specific Red-Lines (ข้อห้ามเฉพาะโปรเจกต์นี้)
-(ข้อห้ามเฉพาะโปรเจกต์นี้)
-1. ห้ามแก้ไขไฟล์ `schema.prisma` โดยไม่ผ่านกระบวนการ Migration
-2. ห้าม Import component หรือฟังก์ชันข้าม Feature Domain โดยตรง (ให้ใช้ Shared Service / Store แทน)
-3. รหัสผ่านหรือข้อมูลลับทั้งหมดต้องเก็บใน Environment Variables ห้าม Hardcode เด็ดขาด
+## 🚨 4. Project-Specific Red Lines
+1. **Hard Intent Lock:** Treat "explain", "investigate", "why", and "audit" requests as STRICTLY READ-ONLY until approved.
+2. **Fast In-Memory Checks:** Run `tsc --noEmit` or `vue-tsc --noEmit` (1–3s). Never run full production builds for minor single-file edits.
+3. **Mandatory Evidence:** Always provide actual terminal verification output before claiming completion.
+4. **Surgical Diffs (YAGNI):** Edit only lines directly relevant to the user request. Zero drive-by refactoring.

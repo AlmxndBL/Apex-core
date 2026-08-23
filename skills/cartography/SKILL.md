@@ -5,21 +5,21 @@ description: AST Codebase Skeleton Mapping, Selective Token Diet, and Project Ex
 
 # Codebase Cartography & Token Diet Skill
 
-> สกิลสำรวจโครงสร้างโค้ดด้วย AST Skeleton Mapping และควบคุมการใช้ Token ใน Context Window ให้กระชับที่สุด ไม่บวม ไม่หลอน
+> Fast codebase discovery using AST Skeleton Mapping and strict token diet controls to prevent context window bloat and hallucination.
 
 ---
 
 ## 1. AST Skeleton Mapping (Fast Discovery in 1s)
 
-* เมื่อเข้าสู่โปรเจกต์ใหม่ หรือรื้อฟื้นโปรเจกต์เก่า ให้สร้างแผนผังโครงสร้าง Type, Function Headers และ Endpoints แบบย่อ
-* ใช้โครงสร้าง AST Skeleton เพื่อเห็นภาพรวมทั้งระบบใน 500-800 tokens โดยไม่ต้องเปิดอ่านโค้ดจริงทุกไฟล์
+* When onboarding to a new codebase or re-entering an existing project, generate a compact skeleton map of types, function signatures, and endpoint routes.
+* Keep the initial structural overview within 500–800 tokens to preserve working memory without reading full implementation files.
 
 ---
 
 ## 2. Selective Token Diet (Search First, Read Second)
 
-* [FORBIDDEN] **ห้ามใช้ `view_file` อ่านไฟล์ทั้งดุ้น 2,000 บรรทัด** หรือเปิดดูโค้ดของโมดูลข้างเคียงที่ไม่เกี่ยวข้อง
-* [STANDARD] **Selective Retrieval:**
-  1. ใช้ `grep_search` หรือ `find_by_name` หาจุดเป้าหมายก่อน
-  2. ใช้ `view_file` พร้อมระบุ `StartLine` และ `EndLine` แคบๆ (ไม่เกิน 150-200 บรรทัด) เฉพาะจุดที่จะแก้จริง
-  3. อาศัย Type Definitions และ Schema Interfaces ในการวางแผนแทนการอ่าน Implementation ทั้งหมด
+* [FORBIDDEN] **Never view entire 1,000+ line files** or load unrequested adjacent modules into context.
+* [STANDARD] **Selective Retrieval Protocol:**
+  1. Use `grep_search` or `find_by_name` to pinpoint exact symbols, functions, or file targets first.
+  2. Use bounded `view_file` calls with explicit `StartLine` and `EndLine` (150–200 lines maximum).
+  3. Rely on Type Definitions and Schema Interfaces to plan changes instead of reading full implementation details.

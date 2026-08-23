@@ -1,26 +1,26 @@
 # 02. Coding Standards & Conventions
 
-> **Priority 2:** มาตรฐานการเขียนโค้ดและระเบียบปฏิบัติระดับ Production-Ready
+> **Priority 2:** Production-ready code standards, TypeScript conventions, and async runtime rules.
 
 ---
 
 ## 1. Strict Type Safety (No `any`)
-- **ห้ามใช้ `any` ใน TypeScript โดยเด็ดขาด**
-- หากไม่แน่ใจในโครงสร้างข้อมูล ให้ใช้ `unknown` แล้วทำ **Type Narrowing** (เช่น Type Guards, Zod validation) เสมอ
-- ระบุ Type ของ Parameter, Function Return Type, และ State ให้ชัดเจน
+- **Strictly prohibit `any` in TypeScript.**
+- When data structures are dynamic or uncertain, use `unknown` with **Type Narrowing** (Type Guards, Zod validation).
+- Explicitly type all function parameters, return values, and state variables.
 
 ---
 
 ## 2. Debuggable Error Handling
-- **ห้าม Swallow Error:** เมื่อใช้บล็อก `try-catch` ห้ามดักจับ Error แล้วปล่อยเงียบทิ้งไปเด็ดขาด
-- **Log ต้นฉบับที่ Server:** ในบล็อก `catch (error)` ต้องพิมพ์ Original Error พร้อม Context ลง Logger เสมอ เช่น `console.error('[Context] Failed to fetch user:', error)`
-- **Safe Client Error Response:** ค่าที่ส่งกลับไปยัง Client ต้องเป็นข้อความทั่วไปที่ปลอดภัย (เช่น `INTERNAL_SERVER_ERROR`) **ห้ามส่ง Raw SQL Error หรือ Stack Trace ออกไปหา Client เด็ดขาด**
+- **Never swallow errors:** In `try-catch` blocks, never catch an error and discard it silently.
+- **Log root errors server-side:** Always log the original error with context (e.g. `console.error('[Context] Failed to fetch user:', error)`).
+- **Safe client error response:** Return safe, sanitized error codes to clients. **Never expose raw database errors or stack traces to clients.**
 
 ---
 
 ## 3. No Placeholder Code
-- โค้ดที่สร้างขึ้นต้องสมบูรณ์พร้อมรันได้จริง 100%
-- **ห้ามทิ้งคอมเมนต์แบบ `// TODO: implement this`** หรือโครงฟังก์ชันว่างเอาไว้ให้เจ้าของโปรเจกต์ทำเอง
+- All generated code must be 100% executable and functional.
+- **Never leave comments like `// TODO: implement this`** or empty function stubs.
 
 ---
 
@@ -30,78 +30,78 @@
 - **Files & Directories:** `kebab-case` (e.g., `user-profile.ts`, `auth-service/`)
 - **Constants & Enums:** `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`, `DEFAULT_PAGE_SIZE`)
 - **Types & Interfaces:** `PascalCase` (e.g., `UserCreateInput`, `ApiResponse<T>`)
-- **Booleans:** ขึ้นต้นด้วย `is`, `has`, `can`, `should` (e.g., `isActive`, `hasPermission`)
+- **Booleans:** Prefix with `is`, `has`, `can`, `should` (e.g., `isActive`, `hasPermission`)
 - **File Length Limits:**
-  - Backend Logic / Services: สูงสุด **~300 บรรทัด** (หากเกินให้ Refactor แยกโมดูล)
-  - UI Components: สูงสุด **~200 บรรทัด** (หากเกินให้ย่อยเป็น Sub-components)
-- **Import Ordering:** 1) Built-in modules, 2) External packages, 3) Internal/Shared, 4) Relative imports (คั่นด้วยบรรทัดว่าง)
-- **Dead Code:** ลบโค้ดที่ไม่ใช้ทิ้งทันที ห้ามเก็บไว้เป็น Comment
+  - Backend Services / Logic: Maximum **~300 lines** (refactor into focused modules if exceeded).
+  - UI Components: Maximum **~200 lines** (decompose into sub-components if exceeded).
+- **Import Ordering:** 1) Node built-ins, 2) External dependencies, 3) Internal/Shared modules, 4) Relative paths (separated by empty lines).
+- **Dead Code:** Remove unused code immediately. Do not keep dead code commented out.
 
 ---
 
 ## 5. Async / Await & Runtime Logic Best Practices
-- **ห้ามใช้ `Array.prototype.forEach` กับ Async Callbacks เด็ดขาด:** เพราะ `forEach` ไม่รอ `await` และกลืน Error ทิ้ง $\rightarrow$ ให้ใช้ `for (const item of items)` สำหรับงานเรียงลำดับ หรือ `await Promise.all(items.map(...))` สำหรับงาน Parallel
-- **Nullish Coalescing Guard (`??` vs `||`):** สำหรับตัวเลข (เช่น `0`) และ Boolean (`false`) **ต้องใช้ `??` เสมอ** ห้ามใช้ `||` เพราะจะทำให้ค่า `0` หรือ `false` ถูกทับด้วย Default Value
-- **Component Props Immutability:** ห้ามแก้ไข (Mutate) Property ใน Object/Array ที่ส่งผ่าน Props เข้ามาโดยตรง ให้ใช้ `emit('update:modelValue')` หรือโคลน State ก่อนแก้ไข
-- **Memory Leak & Listener Cleanup:** Event Listeners (`window.addEventListener`), Subscriptions, หรือ Timers (`setInterval`) ที่ผูกใน Component ต้องมี Cleanup ใน `onUnmounted()` (Vue) หรือ return cleanup function ใน `useEffect()` (React) เสมอ
-- **React Hook Dependencies & Stale Closures:** ใน React `useEffect` / `useCallback` / `useMemo` ต้องใส่ Exhaustive Dependencies ให้ครบ เพื่อป้องกัน Stale State Bugs
-- **React Server Actions Zero Trust:** Server Actions (`"use server"`) ถือเป็น Public HTTP Endpoints เสมอ — **ต้อง Validate Input ด้วย Zod และตรวจสอบ Session/Role ก่อนประมวลผลทุกครั้ง**
-- ใช้ `Promise.all()` เมื่อมี Asynchronous Operations หลายตัวที่ไม่ขึ้นต่อกัน (Parallel execution)
-- ห้ามปล่อย Promise ทิ้งไว้โดยไม่ `await` หรือ `.catch()` (ป้องกัน Unhandled Rejection)
-- ระวัง Race Conditions: ใช้ `AbortController` ใน Search/Debounce และใช้ Optimistic Locking เมื่อแก้ไข Shared Database Resource
+- **Never use `Array.prototype.forEach` with async callbacks:** `forEach` does not await promises and swallows errors. Use `for (const item of items)` for sequential execution or `await Promise.all(items.map(...))` for parallel tasks.
+- **Nullish Coalescing Guard (`??` vs `||`):** For numeric (`0`) and boolean (`false`) values, **always use `??`**. Using `||` causes valid falsy values to be overwritten by defaults.
+- **Component Props Immutability:** Never mutate properties in objects or arrays passed via props. Use `emit('update:modelValue')` or clone local state before mutation.
+- **Memory Leak & Listener Cleanup:** Event listeners (`window.addEventListener`), subscriptions, and timers (`setInterval`) bound within components must be cleaned up in `onUnmounted()` (Vue) or the cleanup return function of `useEffect()` (React).
+- **React Hook Dependencies:** Always provide exhaustive dependencies in `useEffect`, `useCallback`, and `useMemo` to prevent stale closure bugs.
+- **React Server Actions Zero Trust:** Server Actions (`"use server"`) are public HTTP endpoints. **Validate inputs with Zod and check session/roles before processing.**
+- Use `Promise.all()` for independent asynchronous operations to run concurrently.
+- Never leave promises unhandled without `await` or `.catch()`.
+- Guard against race conditions using `AbortController` in search inputs and optimistic locking for shared database records.
 
 ---
 
 ## 6. Git & Commit Conventions
-- **Conventional Commits:** รูปแบบ `type(scope): description` (Description ตัวพิมพ์เล็ก ไม่เกิน 72 ตัวอักษร)
-  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
-- **Branch Naming:** `feature/xxx`, `fix/xxx`, `hotfix/xxx`, `release/xxx`
+- **Conventional Commits:** Format as `type(scope): description` (lowercase description, under 72 characters).
+  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`.
+- **Branch Naming:** `feature/xxx`, `fix/xxx`, `hotfix/xxx`, `release/xxx`.
 - **Solo Developer Exception:** 
-  - ในการทำงานแบบทีม ให้แตก Branch จาก `develop` และรวมผ่าน PR
-  - สำหรับ **Solo Developer** อนุญาตให้ Push ตรงเข้า `main` ได้ และ Bypass PR review ได้ตามความคล่องตัว
+  - In team settings, branch from `develop` and merge via PR.
+  - Solo developers may commit directly to `main` for speed and simplicity.
 
 ---
 
 ## 7. Documentation & Code Comments
-- **Comment WHY, not WHAT:** คอมเมนต์เฉพาะ "เหตุผลในการตัดสินใจ" หรือ "ทำไมต้องเขียนแบบนี้" ไม่คอมเมนต์อธิบายสิ่งที่โค้ดบอกตัวเองอยู่แล้ว
-- ใช้ **JSDoc / TSDoc** สำหรับ Public Functions, Shared Composables, และ Interfaces
-- **Architecture Decision Records (ADRs):** บันทึกการตัดสินใจทางเทคนิคสำคัญลงใน `docs/adr/`
+- **Comment WHY, not WHAT:** Document the reasoning, architecture trade-offs, and non-obvious constraints. Avoid restating what the code visibly does.
+- Use **JSDoc / TSDoc** on public functions, shared composables, and interfaces.
+- **Architecture Decision Records (ADRs):** Record significant architectural decisions in `docs/adr/`.
 
 ---
 
 ## 8. Intent-Based Tool Safety, Refactoring & Package Manager Standards
-- **Strict Package Manager Awareness:** ตรวจสอบ Lockfile เสมอ (`pnpm` vs `npm` vs `bun` vs `yarn`) ห้ามรันคำสั่งผิด package manager
+- **Strict Package Manager Awareness:** Verify the repository lockfile (`pnpm` vs `npm` vs `bun` vs `yarn`) before executing commands.
 - **Zero Guesswork & Mathematical Code Verification:**
-  - ห้ามเดาสุ่มตัวเลข CSS, Spacing, หรือ Utility Classes ที่ไม่มีอยู่จริง (เช่น คลาสเดา `w-13`, `w-5.5`)
-  - ทุกการคำนวณตำแหน่ง (Positioning), การเลื่อน (Translate), หรือสัดส่วน (Aspect Ratio) ต้องผ่านสูตรเรขาคณิตและหน่วยวัดที่ชัดเจน
+  - Never guess non-existent CSS or Tailwind classes (e.g. `w-13`, `w-5.5`).
+  - All coordinate calculations, translations, and aspect ratios must use verified formulas and scale values.
 - **Investigative / Audit Safe Mode:** 
-  - เมื่อได้รับคำสั่งให้ "หาสาเหตุ", "วิเคราะห์", หรือ "Audit" ให้ใช้เฉพาะ Read Tools (`view_file`, `grep_search`, `find_by_name`, `list_dir`)
-  - **ห้ามแตะ Write/Edit Tools หรือรัน DB Migration โดยไม่ได้รับคำสั่งอนุมัติ Explicit จากผู้ใช้ก่อนเด็ดขาด**
+  - When asked to "explain", "investigate", or "audit", operate strictly in Read-Only mode (`view_file`, `grep_search`, `find_by_name`, `list_dir`).
+  - **Never use write/edit tools or execute database migrations without explicit user approval.**
 - **Atomic Refactoring & Zero Legacy Clutter:**
-  - เมื่อย้ายเส้นทางโฟลเดอร์หรือเปลี่ยนโครงสร้าง Route (เช่น ย้ายไป `/admin/` หรือ `/tenant/`) **ต้องลบไฟล์เก่า (Legacy Routes) ทิ้งใน Step เดียวกันทันที** ห้ามปล่อยให้ไฟล์เดิมอยู่คู่กับไฟล์ใหม่เด็ดขาด
+  - When migrating route paths or restructuring folders, remove legacy files within the same step. Never leave obsolete duplicates behind.
 - **Tool Transparency & Anti-Hidden Scripting:**
-  - การแก้ไขหรือสร้างไฟล์โปรเจกต์ต้องทำผ่าน Native Tools (`replace_file_content`, `write_to_file`) ที่แสดง Diff และ Path ชัดเจน
-  - **ห้ามสร้างหรือรัน Batch Script ชั่วคราวใน `/scratch/` เพื่อแอบแก้ไขโค้ดโปรเจกต์แบบทึบเด็ดขาด**
-- **Idempotent DB Migrations & Seeding:** คำสั่งแก้ไข Schema หรือ Seed Data ต้องปลอดภัยต่อข้อมูลเดิม และไม่ก่อให้เกิด DB Pollution ในระหว่างการทดสอบ
+  - Modify project files using native tools (`replace_file_content`, `write_to_file`) with explicit paths and diffs.
+  - Never execute unmonitored batch scripts in `/scratch/` to silently modify project source files.
+- **Idempotent DB Migrations & Seeding:** Schema modifications and seed scripts must be safe and idempotent to prevent database pollution during verification.
 
 ---
 
 ## 9. Stack-Specific Gotchas & Architecture Lessons
 
 ### A. Nuxt 4 + Prisma 7 Driver Adapter Rule
-- **Driver Adapter Mandatory:** Prisma v7 บังคับใช้งานผ่าน Driver Adapter (เช่น `@prisma/adapter-pg` สำหรับ PostgreSQL)
-- **Singleton Pattern:** ใน `server/utils/prisma.ts` ต้องสร้าง Pool และส่งต่อให้ `new PrismaClient({ adapter })` เสมอ ห้ามเรียก `new PrismaClient()` เปล่าๆ เด็ดขาด
+- **Driver Adapter Mandatory:** Prisma v7 requires explicit driver adapters (e.g. `@prisma/adapter-pg` for PostgreSQL).
+- **Singleton Pattern:** In `server/utils/prisma.ts`, configure connection pooling and pass the adapter to `new PrismaClient({ adapter })`.
 
 ### B. Next.js 15 & React 19 Server Components / Actions Rule
-- **RSC Boundary Discipline:** ใช้ `'use client'` เฉพาะส่วนที่จำเป็นต้องมี Interactive State (`useState`, `useEffect`, Event Handlers) เท่านั้น — ห้ามใส่ `'use client'` คลุมทั้งหน้า
-- **Non-Serializable Props Guard:** ห้ามส่งฟังก์ชัน หรือ Class Instance จาก Server Component ข้ามไปยัง Client Component เด็ดขาด
-- **Hydration Mismatch Prevention:** หลีกเลี่ยงการเรนเดอร์ค่าที่ขึ้นกับ Environment (`window`, `localStorage`, `Date.now()`, `Math.random()`) ในขั้นตอน Initial SSR Render
+- **RSC Boundary Discipline:** Add `'use client'` only where interactive state (`useState`, `useEffect`, event handlers) is strictly needed. Keep parent components Server Components.
+- **Non-Serializable Props Guard:** Never pass functions or class instances from Server Components to Client Components.
+- **Hydration Mismatch Prevention:** Avoid rendering environment-dependent values (`window`, `localStorage`, `Date.now()`, `Math.random()`) during initial SSR passes.
 
 ### C. PostCSS & CSS File Structure
-- **@import Precedence:** คำสั่ง `@import url(...);` สำหรับโหลดฟอนต์ภายนอก **ต้องอยู่บรรทัดแรกสุดของไฟล์ CSS** ก่อน `@tailwind base;` หรือคำสั่ง CSS อื่นๆ เสมอ เพื่อป้องกัน PostCSS parser warning
+- **@import Precedence:** External font `@import url(...);` directives must reside at the very first line of CSS files before `@tailwind base;` to prevent PostCSS parser warnings.
 
 ### D. Typed Auth Function Returns
-- ฟังก์ชัน `login()` ใน Composable / Custom Hook (`useAuth`) **ต้อง Return Typed User Object (`UserProfile | null`) เสมอ** ห้าม Return แค่ Boolean `true` เพื่อป้องกันกรณีที่หน้าเรียกใช้เข้าถึง `res.role` แล้วได้ `undefined` ทำให้ Routing ทำงานผิดพลาด
+- Composable / Hook `login()` methods must return typed user profiles (`UserProfile | null`) rather than a bare boolean `true` to ensure downstream routing has immediate access to user roles.
 
 ### E. Pre-Refactoring Dead Code Cleanup Protocol
-- เมื่อทำการยกระดับสถาปัตยกรรม (เช่น เปลี่ยนเป็น Dual-Role RBAC หรือแยก Version `/api/v1/*`) **ต้องลบไฟล์และโฟลเดอร์ Legacy เดิมทิ้งทันที** ป้องกันไม่ให้เกิด Shadow Files ที่ทำให้เกิดการสับสนหรือ Route ชนกัน
+- When upgrading architectures (e.g. switching to Dual-Role RBAC or versioned `/api/v1/*`), remove legacy files immediately to prevent shadow file collisions.

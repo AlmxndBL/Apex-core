@@ -1,113 +1,109 @@
 # 01. Security & Authentication Standards
 
-> **Priority 1 (Must Follow):** กฎความปลอดภัยระดับสูงสุดของระบบ ความปลอดภัยมาก่อนเสมอ
+> **Priority 1 (Must Follow):** Highest security rules for the system. Security always takes precedence.
 
 ---
 
 ## 1. Zero Trust Architecture
-- **ห้ามไว้ใจ Input จาก Client เด็ดขาด:** ข้อมูลที่รับเข้ามาทั้งหมดต้องผ่าน Validation เสมอ (ใช้ **Zod** หรือ Library ที่ Type-safe)
-- ตรวจสอบชนิดข้อมูล, ขนาด, รูปแบบ และ Sanitize ข้อมูลก่อนนำไปประมวลผลหรือบันทึกลง Database
-- **PII & PDPA Masking (Privacy by Design):** ข้อมูลส่วนบุคคลที่มีความอ่อนไหว (เบอร์โทรศัพท์, เลขบัตรประจำตัวประชาชน, เลขบัญชีธนาคาร) ต้องผ่านการ Mask ด้วย Utility (`templates/utils/mask.ts`) ก่อนส่งคืนไปยัง Client หรือแสดงผลบนหน้า UI ทั่วไป เพื่อความสอดคล้องกับกฎหมาย PDPA
+- **Never trust client input:** All incoming data must be validated using type-safe validation libraries (**Zod**).
+- Validate data types, string lengths, formats, and sanitize inputs before processing or persisting to the database.
+- **PII & Data Privacy Masking (Privacy by Design):** Sensitive personal information (phone numbers, national IDs, bank account numbers) must be masked using utility helpers (`templates/utils/mask.ts`) before returning to clients or rendering in public UI surfaces.
 
 ---
 
 ## 2. Authentication & Authorization (Better Auth & RBAC Standards)
 - **Primary Authentication Engine (Better Auth):**
-  - กำหนดให้ **Better Auth (`better-auth`)** เป็น Authentication Framework มาตรฐานหลัก (Default Standard) สำหรับทั้ง **Nuxt 4** (`@better-auth/vue`) และ **Next.js 15** (React App Router)
-  - ใช้ `@better-auth/prisma-adapter` ร่วมกับ PostgreSQL เพื่อให้ Session, User, Account, และ Verification จัดการผ่าน Prisma ORM แบบ Native Type-Safe 100%
-  - ใช้ Built-in Plugins ของ Better Auth ตามความเหมาะสม (Organization สำหรับ Multi-Tenancy/Teams, 2FA/Passkeys สำหรับ High-Security, Admin/Impersonation สำหรับ Debugging) แทนการเขียนระบบเองขึ้นมาใหม่ (Avoid Rolling Your Own Auth)
+  - Standardize on **Better Auth (`better-auth`)** as the default authentication framework for both **Nuxt 4** (`@better-auth/vue`) and **Next.js 15** (React App Router).
+  - Use `@better-auth/prisma-adapter` with PostgreSQL to ensure `Session`, `User`, `Account`, and `Verification` schemas are natively managed and 100% type-safe via Prisma ORM.
+  - Use official Better Auth plugins (`organization` for multi-tenancy/teams, `twoFactor`/`passkey` for high security, `admin`/`impersonation` for debugging) rather than building custom auth logic.
 - **Token Storage & Dual Auth Extraction:** 
-  - การส่ง Auth Token ฝั่ง Web Browser ควรส่งผ่าน `HttpOnly`, `Secure`, `SameSite=Lax/Strict` Cookies เพื่อป้องกัน XSS
-  - Server Auth Middleware ต้องออกแบบเป็น **Dual Auth Handler** (ตรวจหา Token จาก `HttpOnly` Cookie ก่อน หากไม่พบให้ Fallback ไปตรวจที่ `Authorization: Bearer <token>` Header อัตโนมัติ) เพื่อให้ Endpoint เดียวกันรองรับได้ทั้ง Web, Mobile App และ External APIs
-- **Token Expiration, Rotation & Grace Period (Anti-Zombie Token & Anti-Race Condition):**
-  - **Access Token:** กำหนดอายุสั้น **5-15 นาที** (ลด Attack Window เมื่อ Token หลุด)
-  - **Refresh Token:** อายุ 7-30 วัน พร้อมทำ Refresh Token Rotation (ออกใหม่และ Revoke ตัวเก่าทุกครั้งที่ใช้)
-  - **Rotation Grace Period (15-30 วินาที):** ฝั่ง Server ต้องอนุญาต Grace Period สั้นๆ 15-30 วินาที ให้ Refresh Token ตัวเดิมที่เพิ่งถูกหมุนเวียนไป ยังสามารถนำมาแลกได้ชั่วคราว เพื่อป้องกัน Race Condition จากการที่ Client ยิง Parallel Requests พร้อมกันหลายเส้นตอน Access Token หมดอายุ หรือเปิดใช้งานพร้อมกันหลาย Browser Tabs
-  - **Pragmatic Token Version Verification:** ตรวจสอบ `tokenVersion` หรือสถานะ `sessionId` กับ Database/Redis ใน 2 จังหวะสำคัญ: (1) ตอนทำ Token Refresh และ (2) ตอนทำธุรกรรมวิกฤต (Critical Mutations/Financial Endpoints) — **ห้าม Query DB เพื่อเช็ก tokenVersion ในทุกๆ Read Request ปกติ** เพื่อป้องกัน Database Bottleneck และรักษาข้อได้เปรียบด้าน Performance ของ JWT
-  - ห้ามเก็บข้อมูลความลับ (เช่น รหัสผ่าน, PII) ไว้ใน JWT Payload
+  - Web browser auth tokens must be stored in `HttpOnly`, `Secure`, `SameSite=Lax/Strict` cookies to mitigate XSS risks.
+  - Server auth middleware should implement a **Dual Auth Handler** (extract from `HttpOnly` cookies first, falling back to `Authorization: Bearer <token>` headers) so single endpoints support web, mobile, and external APIs seamlessly.
+- **Token Expiration, Rotation & Grace Period:**
+  - **Access Token:** Short lifespan (**5–15 minutes**) to minimize attack windows.
+  - **Refresh Token:** 7–30 days with automatic Refresh Token Rotation (issue new token and revoke old token upon each use).
+  - **Rotation Grace Period (15–30 Seconds):** Allow a brief 15–30 second grace period for recently rotated refresh tokens to prevent race conditions during concurrent client requests or multi-tab usage.
+  - **Pragmatic Token Version Verification:** Check `tokenVersion` or `sessionId` against Database/Redis strictly on (1) token refresh requests and (2) critical mutations / financial operations. **Never query DB to check token versions on standard read queries** to prevent database bottlenecks.
+  - Never store sensitive secrets (passwords, raw PII) in JWT payloads.
 - **Dual-Layer Authorization & Multi-Tenant Scoping (Anti-IDOR / BOLA):**
-  - ห้ามพึ่งพาเฉพาะ Client-side Route Guard หน้าบ้านเด็ดขาด
-  - ทุก Server Endpoint / API Handler ต้องมี Middleware ตรวจสอบ Role และ Permissions ซ้ำ 100% ก่อนเข้าถึง Data Layer
-  - **Automated Tenant Isolation:** สำหรับระบบ Multi-Tenant (เช่น หอพัก, ซักรีด, สาขา) ต้องใช้ Prisma Client Extension (`$extends.query`) หรือ Scoped Query Helper เพื่อบังคับใส่ `tenantId` / `organizationId` อัตโนมัติทุกครั้ง ห้ามพึ่งพาการเขียน `where: { tenantId }` แบบ Manual ทีละ Query *(⚠️ ข้อควรระวัง: Prisma Extension ไม่ครอบคลุม `$queryRaw` / `$executeRaw` ดังนั้นต้องระวังการใช้ Raw SQL และต้องใส่ tenantId กำกับใน Raw Query ด้วยตนเองเสมอ)*
-- **Explicit Public Route Whitelist:** ทุก Global Auth Middleware หรือ Navigation Guard จะต้องประกาศตัวแปร `PUBLIC_ROUTES` ไว้อย่างชัดเจน (เช่น `['/', '/login', '/register', '/terms', '/privacy']`) ก่อนทำ Session Guard เสมอ เพื่อป้องกันไม่ให้เผลอดัก Redirect บล็อกหน้าแรก Public Showcase
-- **Dev Quick-Login Hard Gate:** API หรือ Endpoint สำหรับช่วยล็อกอิน Dev/Test (ถ้ามี) ต้องเช็ก `if (process.env.APP_ENV === 'production' || process.env.NODE_ENV === 'production')` ที่บรรทัดแรก และคืนค่า `404 Not Found` ทันที
+  - Never rely solely on client-side route guards.
+  - Every server endpoint / API handler must re-verify roles and permissions at the data layer.
+  - **Automated Tenant Isolation:** For multi-tenant systems, use Prisma Client Extensions (`$extends.query`) or scoped query helpers to enforce `tenantId` / `organizationId` filtering automatically across all queries.
+- **Explicit Public Route Whitelist:** Global auth middleware must declare an explicit `PUBLIC_ROUTES` whitelist (e.g. `['/', '/login', '/register', '/terms', '/privacy']`) before enforcing session guards.
+- **Dev Quick-Login Hard Gate:** Development or test login endpoints must check `if (process.env.APP_ENV === 'production' || process.env.NODE_ENV === 'production')` at the very first line and immediately return `404 Not Found`.
 
 ---
 
 ## 3. Secrets Management & Git Hygiene
-- **ห้าม Hardcode API Keys, Passwords หรือ Secrets ลงใน Source Code เด็ดขาด** ให้ใช้ Environment Variables (`.env`) เสมอ
-- **Client-Side Prefix Guard:** ห้ามนำ Secret Keys หรือ Private Credentials ไปใส่ในตัวแปรที่มี Prefix สำหรับ Browser (`NEXT_PUBLIC_*`, `NUXT_PUBLIC_*`, `VITE_*`) เด็ดขาด เพราะจะถูก Bundle รวมไปใน Client JS ทันที
-- **Mandatory `.gitignore` Gate:** ทุกโปรเจกต์ต้องมี `.gitignore` ที่ระบุ `.env`, `.env.*`, `*.pem`, `*.key` เสมอ (อนุญาตเฉพาะ `.env.example` เท่านั้น)
-- **Safe `.env.example`:** ทุกครั้งที่มีการเพิ่ม Env Variable ใหม่ ต้องอัปเดต `.env.example` ด้วยค่าว่าง (`KEY=""`) ห้ามใส่ค่าจริง
-- **AI & Agent Artifact Isolation:** โฟลเดอร์ที่เกิดจากการทำงานของ AI (`.system_generated/`, `.gemini/`, `brain/`, `scratch/`) ต้องถูกระบุใน `.gitignore` หรือ `.git/info/exclude` เสมอ ห้าม Commit เข้า Repository ของโปรเจกต์
-- **Fail-Fast Validation:** ตรวจสอบ ENV ทั้งหมดตอน App เริ่มทำงานด้วย Zod Schema
+- **Zero Hardcoded Secrets:** Never hardcode API keys, passwords, or private keys into source code. Always use environment variables (`.env`).
+- **Client-Side Prefix Guard:** Never assign secret keys or private credentials to browser-prefixed variables (`NEXT_PUBLIC_*`, `NUXT_PUBLIC_*`, `VITE_*`).
+- **Mandatory `.gitignore` Rules:** Ensure `.gitignore` includes `.env`, `.env.*`, `*.pem`, and `*.key` (only `.env.example` is committed).
+- **Safe `.env.example`:** Whenever a new environment variable is introduced, update `.env.example` with empty strings (`KEY=""`).
+- **AI & Agent Artifact Isolation:** Directories generated by AI agents (`.system_generated/`, `.gemini/`, `brain/`, `scratch/`) must be included in `.gitignore` or `.git/info/exclude`.
+- **Fail-Fast Validation:** Validate all required environment variables at application startup using a Zod schema.
 - **Memory Masking & Terminal Output Cleanliness:**
-  - เมื่อบันทึกลงหน่วยความจำถาวรหรือสมองกล (Persistent Memory / AI Memory / Nexus) ให้ใช้ Masking Pattern `<secret:VAR_NAME>`
-  - ❌ **ห้ามสั่งพิมพ์ค่า Environment ทั้งหมดลง Terminal** (เช่น `env`, `printenv`, `console.log(process.env)`) เพราะจะทำให้ Secret รั่วไหลลงใน Agent Transcripts/Logs ทันที
+  - When saving to persistent memory vaults (Nexus / AI Memory), mask sensitive values using `<secret:VAR_NAME>`.
+  - ❌ **Never dump complete environment variables to the terminal** (e.g. `env`, `printenv`, `console.log(process.env)`).
 
 ---
 
 ## 4. CORS Policy
-- ห้ามใช้ `Access-Control-Allow-Origin: *` บน Production เด็ดขาด
-- ต้องกำหนด Whitelist ของ Allowed Origins ที่ชัดเจน
-- ระบุเฉพาะ HTTP Methods และ Headers ที่จำเป็นเท่านั้น
-- กำหนด `Access-Control-Max-Age` เพื่อ Cache preflight requests
+- Never use `Access-Control-Allow-Origin: *` in production.
+- Define an explicit whitelist of allowed origins.
+- Allow only necessary HTTP methods and headers.
+- Set `Access-Control-Max-Age` to cache preflight requests.
 
 ---
 
 ## 5. Security Headers
-ต้องตั้งค่า Security Headers ต่อไปนี้ในทุก HTTP Response:
-- `Content-Security-Policy` — ป้องกัน XSS และจำกัดแหล่งโหลด Resource
-- `X-Content-Type-Options: nosniff` — ป้องกัน MIME type sniffing
-- `X-Frame-Options: DENY` — ป้องกัน Clickjacking
-- `Strict-Transport-Security` (HSTS) — บังคับเชื่อมต่อผ่าน HTTPS
+Enforce the following security headers on all HTTP responses:
+- `Content-Security-Policy` — Mitigate XSS and restrict unauthorized resource loading.
+- `X-Content-Type-Options: nosniff` — Prevent MIME type sniffing.
+- `X-Frame-Options: DENY` — Prevent clickjacking.
+- `Strict-Transport-Security` (HSTS) — Enforce secure HTTPS connections.
 - `Referrer-Policy: strict-origin-when-cross-origin`
-- `Permissions-Policy` — ปิดการใช้งาน Browser Features ที่ไม่จำเป็น
-*(แนะนำใช้ `nuxt-security` สำหรับ Nuxt หรือ Helmet/Next.js config สำหรับ React)*
+- `Permissions-Policy` — Disable unneeded browser features.
 
 ---
 
 ## 6. Rate Limiting (Distributed & Memory Layering)
-กำหนด Rate Limiting ในทุก Public Endpoint:
-- **Auth Endpoints (Login/Register/Reset-Password):** 5-10 requests / minute / IP
-- **General APIs:** 100-200 requests / minute / IP
-- **File Upload:** 10 requests / minute / IP
-- **Distributed Storage Requirement:** สำหรับ Production ที่มีหลาย Container Replicas หรือรันบน Serverless (Cloudflare/Vercel) **ต้องใช้ Redis (Upstash / Valkey / Redis Cluster)** เป็น Storage สำหรับนับ Hit Counter ป้องกันการ Bypass ผ่าน Node สลับเครื่อง (In-memory อนุญาตเฉพาะ Local Dev เท่านั้น)
-- ส่งคืน Headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` และส่งคืน `429 Too Many Requests` เมื่อเกินลิมิต
+Enforce rate limiting on all public endpoints:
+- **Auth Endpoints (Login/Register/Reset-Password):** 5–10 requests / minute / IP
+- **General APIs:** 100–200 requests / minute / IP
+- **File Uploads:** 10 requests / minute / IP
+- **Distributed Storage Requirement:** For multi-instance or serverless deployments, use Redis (Upstash, Valkey, Redis Cluster) to back rate-limit counters.
+- Return standard headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` with `429 Too Many Requests` when exceeded.
 
 ---
 
 ## 7. CSRF Protection
-- สำหรับ Cookie-based Auth ต้องเปิดใช้งาน CSRF Protection เสมอ
-- ตั้งค่า `SameSite=Lax` หรือ `SameSite=Strict` ใน Cookie
-- **Nuxt:** ใช้ `useCsrfToken()` composable หรือ Nitro CSRF middleware
-- **Next.js:** Server Actions มี built-in Host/Origin verification, สำหรับ Route Handlers ให้ตรวจ `Origin` และ `Referer`
-- **React (Vite SPA):** ใช้ Custom Header (`X-Requested-With: XMLHttpRequest`) หรือ CSRF Double Submit Cookie Pattern
+- Enable CSRF protection for cookie-based authentication.
+- Set `SameSite=Lax` or `SameSite=Strict` on session cookies.
+- **Nuxt:** Use `useCsrfToken()` or Nitro CSRF middleware.
+- **Next.js:** Use Server Actions host/origin validation; verify `Origin` and `Referer` on Route Handlers.
+- **React (Vite SPA):** Use custom headers (`X-Requested-With: XMLHttpRequest`) or Double Submit Cookie patterns.
 
 ---
 
 ## 8. Password & Session Security
-- ห้ามเก็บ Password เป็น Plaintext เด็ดขาด
-- ใช้ **Argon2id** (แนะนำ) หรือ **bcrypt** สำหรับ Password Hashing
-- กำหนดความยาวรหัสผ่านอย่างน้อย 8 ตัวอักษรขึ้นไป
-- ห้าม Log ค่า Password แม้จะผ่านการ Hash แล้วก็ตาม
-- **Immediate Session Revocation:** เมื่อผู้ใช้ Logout หรือเปลี่ยนรหัสผ่าน ต้องทำลาย Token ฝั่ง Client (ลบ Cookie) และเพิกถอน Session ฝั่ง Server (อัปเดต `tokenVersion` หรือลบ Session Record ใน DB/Redis) ทันที
+- Never store passwords in plaintext.
+- Use **Argon2id** (recommended) or **bcrypt** for password hashing.
+- Require minimum password lengths (8+ characters).
+- Never log passwords, even in hashed format.
+- **Immediate Session Revocation:** Upon logout or password change, destroy client cookies and revoke server-side session records immediately.
 
 ---
 
-## 9. File Upload & Media Security (Anti-Stored XSS & Polyglots)
-- ตรวจสอบไฟล์ด้วย Extension + MIME Type + Magic Bytes (File Signature)
-- **SVG Upload Guard:**
-  - ห้ามเปิดให้ Upload ไฟล์ SVG โดยตรงหากไม่จำเป็น
-  - หากจำเป็นต้องรับ SVG ต้องผ่านกระบวนการ Sanitize ด้วย **DOMPurify** (ฝั่ง Server) เพื่อตัดแท็ก `<script>`, `onload`, `javascript:` ทั้งหมดทิ้ง
-- **Image Re-encoding & Metadata Stripping:** สำหรับไฟล์ภาพทั่วไป (JPEG/PNG) แนะนำให้ประมวลผลผ่าน `sharp` เพื่อแปลงเป็น WebP/PNG ใหม่ และลบ EXIF/GPS Metadata ทิ้ง ป้องกันทั้ง Polyglot Malicious Payloads และ Privacy Leakage
-- จำกัดขนาดไฟล์อย่างเข้มงวด (เช่น รูปภาพไม่เกิน 10MB, เอกสารไม่เกิน 50MB)
-- เปลี่ยนชื่อไฟล์เป็น UUID เสมอเพื่อป้องกัน Path Traversal
-- จัดเก็บไฟล์อัปโหลดไว้นอก Public Web Root หรือเก็บบน Cloud Storage (S3 / R2) ที่มี Pre-signed URLs
+## 9. File Upload & Media Security
+- Validate files by Extension + MIME Type + Magic Bytes (file signature).
+- **SVG Upload Guard:** Sanitize SVGs using server-side **DOMPurify** to strip `<script>`, `onload`, and `javascript:` handlers.
+- **Image Re-encoding & Metadata Stripping:** Process standard images (JPEG/PNG) via `sharp` to strip EXIF/GPS metadata and re-encode to clean WebP/PNG.
+- Enforce strict file size limits (e.g., 10MB for images, 50MB for documents).
+- Generate random UUID filenames to prevent path traversal.
+- Store uploaded assets outside public web roots or in Object Storage (S3 / Cloudflare R2) using Pre-signed URLs.
 
 ---
 
 ## 10. Dependency Security
-- รัน `pnpm audit` หรือ `npm audit` ก่อน Release ทุกครั้ง
-- ตั้งค่า Renovate หรือ Dependabot สำหรับ Update Security Patches
-- ล็อก Dependency Versions ด้วย Lock File (`pnpm-lock.yaml` / `package-lock.json`)
+- Run `pnpm audit` or `npm audit` prior to release milestones.
+- Keep dependency lock files committed (`pnpm-lock.yaml` / `package-lock.json`).

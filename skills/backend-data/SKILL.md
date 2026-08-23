@@ -5,38 +5,38 @@ description: Strict TypeScript Mastery, PostgreSQL & Prisma ORM Architecture, AP
 
 # Backend, Data Architecture & Strict TypeScript Skill
 
-> มาตรฐานวิศวกรรมฝั่ง Backend ฐานข้อมูล PostgreSQL, Prisma ORM, REST API และ TypeScript ไร้ `any` 100% สไตล์ Matt Pocock & Pragmatic Engineering
+> Production engineering standards for backend systems, PostgreSQL, Prisma ORM, RESTful APIs, and strict TypeScript without `any`.
 
 ---
 
-## 1. Strict TypeScript Standards (No Any Policy)
+## 1. Strict TypeScript Standards (No-Any Policy)
 
-* **Eliminate `any`:** ใช้ `unknown` ร่วมกับ Type Narrowing (Zod, `typeof`, `instanceof`) เสมอ
-* **Discriminated Unions:** ใช้ระบุสถานะข้อมูลที่ชัดเจน (เช่น `{ status: 'success'; data: T } | { status: 'error'; message: string }`)
-* **Zod Schema Inference:** สร้าง Type จาก Schema เสมอด้วย `z.infer<typeof MySchema>` เพื่อไม่ให้ Type กับ Validation หลุดออกจากกัน
+* **Eliminate `any`:** Use `unknown` combined with Type Narrowing (Zod schemas, `typeof`, `instanceof`) for untrusted or dynamic data.
+* **Discriminated Unions:** Define explicit states for asynchronous data operations (e.g., `{ status: 'success'; data: T } | { status: 'error'; message: string }`).
+* **Zod Schema Inference:** Always infer types directly from schemas using `z.infer<typeof MySchema>` to eliminate drift between runtime validation and static types.
 
 ---
 
 ## 2. Database & Prisma ORM Optimization
 
-* **Prevent N+1 Queries:** ดึงความสัมพันธ์ด้วย `select` หรือ `include` ที่ระบุ Field เฉพาะเจาะจง ห้ามดึงข้อมูลเกินจำเป็น
-* **Index Strategy:** วาง `@@index` บน Foreign Keys และ Column ที่ใช้ใน `WHERE`, `ORDER BY`, และ `JOIN` บ่อยๆ
-* **Safe Transactions:** ใช้ `prisma.$transaction([ ... ])` สำหรับกระบวนการที่ต้องทำหลายตารางพร้อมกัน (เช่น ตัดสต๊อก + สร้างบิล)
-* **Soft Deletes:** ใช้ Field `deletedAt DateTime?` และใส่ Filter `where: { deletedAt: null }` เสมอ
+* **Prevent N+1 Queries:** Select explicit fields using `select` or scoped `include`. Never load unbounded relational graphs.
+* **Index Strategy:** Place `@@index` on Foreign Keys and columns frequently used in `WHERE`, `ORDER BY`, and `JOIN` clauses.
+* **Safe Transactions:** Wrap multi-table state transitions in `prisma.$transaction([ ... ])` (e.g., stock decrement + invoice creation).
+* **Soft Deletes:** Standardize on `deletedAt DateTime?` and filter queries with `where: { deletedAt: null }`.
 
 ---
 
 ## 3. API Security & Validation
 
-* **Strict Input Parsing:** ทุก Endpoint / Server Action ต้องผ่าน Zod Validation ก่อนเข้า Business Logic
-* **No Secrets in Code:** ใช้ `<secret:VAR_NAME>` หรือ `.env` เสมอ ห้ามฮาร์ดโค้ด Key/Password เด็ดขาด
-* **Safe Error Responses:** ห้ามส่ง Raw Database Error หรือ Stack Trace ออกไปให้ Client -> แปลงเป็น Friendly Error Message เสมอ
+* **Strict Input Parsing:** All server endpoints and Server Actions must validate request bodies, query parameters, and headers with Zod before executing business logic.
+* **Zero Hardcoded Secrets:** Use environment variables (`.env`) or secret placeholders (`<secret:VAR_NAME>`).
+* **Sanitized Error Responses:** Never expose raw SQL errors, stack traces, or database schema internals to the client. Map all exceptions to structured, safe error messages.
 
 ---
 
 ## 4. Better Auth & Identity Standards
 
-* **Default Auth Stack:** ใช้ **Better Auth (`better-auth`)** เป็นตัวเลือกหลักเสมอ ร่วมกับ `@better-auth/prisma-adapter`
-* **Schema Alignment:** รัน `npx @better-auth/cli generate` เพื่อซิงค์ตาราง `User`, `Session`, `Account`, `Verification` ให้ตรงกับ Prisma Schema
-* **Type-Safe Client Hook:** ใช้ `authClient.useSession()` บน Vue (Nuxt 4) หรือ React (Next.js 15) รับ Type Inference เต็มรูปแบบโดยไม่ต้องประกาศ Type เอง
-* **Multi-Tenancy Integration:** ใช้ Better Auth `organization()` plugin ควบคู่กับ Prisma Multi-Tenant Scoping Extension เพื่อความปลอดภัยสูงสุด
+* **Default Auth Stack:** Standardize on **Better Auth (`better-auth`)** with `@better-auth/prisma-adapter`.
+* **Schema Alignment:** Run `npx @better-auth/cli generate` to ensure `User`, `Session`, `Account`, and `Verification` tables match the Prisma schema.
+* **Type-Safe Client Hooks:** Use `authClient.useSession()` on Vue (Nuxt 4) or React (Next.js 15) for full end-to-end type inference.
+* **Multi-Tenancy Integration:** Use Better Auth's `organization()` plugin paired with Prisma Multi-Tenant query extensions for automated tenant isolation.
