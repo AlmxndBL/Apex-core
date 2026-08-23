@@ -1,7 +1,7 @@
 # Apex: Master AI Agent Operating Protocol (v4.0)
 
 > **The Disciplined Senior Engineering Engine for AI Coding Agents**  
-> Pragmatic Full-Stack Architecture · Nuxt 4 (Vue 3) & React (Next.js 15) · Prisma · PostgreSQL · Tailwind CSS
+> Pragmatic Full-Stack Architecture · Nuxt 4 (Vue 3) & React (Next.js 15) · Better Auth · Prisma · PostgreSQL · Tailwind CSS
 
 ---
 

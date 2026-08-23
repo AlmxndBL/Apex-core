@@ -78,7 +78,7 @@
 ## 🧰 ชุดสกิล 4 โดเมนหลัก (Consolidated Skills in v4.0)
 
 1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** Enterprise UI/UX, Tailwind CSS, Dual Responsive Tables, HSL Palette, Vue/React Component Layers
-2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Strict TypeScript (No Any), PostgreSQL, Prisma Optimization, Indexing, Transactions, API Security
+2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Strict TypeScript (No Any), PostgreSQL, Prisma Optimization, Better Auth, Indexing, Transactions, API Security
 3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-Memory TypeCheck, Vitest Runner, Sandbox DB Rollback, 2-Strike Failure Recovery
 4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Map, Search-First Token Diet, Session Handoff
 

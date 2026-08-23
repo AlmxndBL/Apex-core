@@ -31,3 +31,12 @@ description: Strict TypeScript Mastery, PostgreSQL & Prisma ORM Architecture, AP
 * **Strict Input Parsing:** ทุก Endpoint / Server Action ต้องผ่าน Zod Validation ก่อนเข้า Business Logic
 * **No Secrets in Code:** ใช้ `<secret:VAR_NAME>` หรือ `.env` เสมอ ห้ามฮาร์ดโค้ด Key/Password เด็ดขาด
 * **Safe Error Responses:** ห้ามส่ง Raw Database Error หรือ Stack Trace ออกไปให้ Client -> แปลงเป็น Friendly Error Message เสมอ
+
+---
+
+## 4. Better Auth & Identity Standards
+
+* **Default Auth Stack:** ใช้ **Better Auth (`better-auth`)** เป็นตัวเลือกหลักเสมอ ร่วมกับ `@better-auth/prisma-adapter`
+* **Schema Alignment:** รัน `npx @better-auth/cli generate` เพื่อซิงค์ตาราง `User`, `Session`, `Account`, `Verification` ให้ตรงกับ Prisma Schema
+* **Type-Safe Client Hook:** ใช้ `authClient.useSession()` บน Vue (Nuxt 4) หรือ React (Next.js 15) รับ Type Inference เต็มรูปแบบโดยไม่ต้องประกาศ Type เอง
+* **Multi-Tenancy Integration:** ใช้ Better Auth `organization()` plugin ควบคู่กับ Prisma Multi-Tenant Scoping Extension เพื่อความปลอดภัยสูงสุด

@@ -11,7 +11,11 @@
 
 ---
 
-## 2. Authentication & Authorization (RBAC & Tenant Isolation)
+## 2. Authentication & Authorization (Better Auth & RBAC Standards)
+- **Primary Authentication Engine (Better Auth):**
+  - กำหนดให้ **Better Auth (`better-auth`)** เป็น Authentication Framework มาตรฐานหลัก (Default Standard) สำหรับทั้ง **Nuxt 4** (`@better-auth/vue`) และ **Next.js 15** (React App Router)
+  - ใช้ `@better-auth/prisma-adapter` ร่วมกับ PostgreSQL เพื่อให้ Session, User, Account, และ Verification จัดการผ่าน Prisma ORM แบบ Native Type-Safe 100%
+  - ใช้ Built-in Plugins ของ Better Auth ตามความเหมาะสม (Organization สำหรับ Multi-Tenancy/Teams, 2FA/Passkeys สำหรับ High-Security, Admin/Impersonation สำหรับ Debugging) แทนการเขียนระบบเองขึ้นมาใหม่ (Avoid Rolling Your Own Auth)
 - **Token Storage & Dual Auth Extraction:** 
   - การส่ง Auth Token ฝั่ง Web Browser ควรส่งผ่าน `HttpOnly`, `Secure`, `SameSite=Lax/Strict` Cookies เพื่อป้องกัน XSS
   - Server Auth Middleware ต้องออกแบบเป็น **Dual Auth Handler** (ตรวจหา Token จาก `HttpOnly` Cookie ก่อน หากไม่พบให้ Fallback ไปตรวจที่ `Authorization: Bearer <token>` Header อัตโนมัติ) เพื่อให้ Endpoint เดียวกันรองรับได้ทั้ง Web, Mobile App และ External APIs
