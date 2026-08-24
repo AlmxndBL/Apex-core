@@ -20,6 +20,8 @@ description: AST Codebase Skeleton Mapping, Selective Token Diet, and Project Ex
 
 * [FORBIDDEN] **Never view entire 1,000+ line files** or load unrequested adjacent modules into context.
 * [STANDARD] **Selective Retrieval Protocol:**
-  1. Use `grep_search` or `find_by_name` to pinpoint exact symbols, functions, or file targets first.
+  1. Use `grep_search`, `find_by_name`, or directory listing tools to pinpoint exact symbols, functions, or file targets first.
   2. Use bounded `view_file` calls with explicit `StartLine` and `EndLine` (150–200 lines maximum).
-  3. Rely on Type Definitions and Schema Interfaces to plan changes instead of reading full implementation details.
+  3. **Exception for Schemas/Contracts:** Allow viewing up to 600 lines for `schema.prisma`, OpenAPI specs, and core shared type definitions to prevent broken inverse relations (`@relation`) or missing discriminated union variants.
+  4. Rely on Type Definitions and Schema Interfaces to plan changes instead of reading full implementation details.
+

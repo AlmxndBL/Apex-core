@@ -53,7 +53,7 @@
                   args.data = { ...args.data, tenantId };
                 } else if (operation === 'createMany') {
                   args.data = Array.isArray(args.data)
-                    ? args.data.map((item: any) => ({ ...item, tenantId }))
+                    ? args.data.map((item: Record<string, unknown>) => ({ ...item, tenantId }))
                     : { ...args.data, tenantId };
                 } else {
                   args.where = { ...args.where, tenantId };

@@ -5,19 +5,26 @@
 
 ---
 
-## 4 Golden Rules (Non-Negotiable)
+## 5 Golden Rules (Non-Negotiable)
 
-1. **[RULE 1] Hard Intent Lock (Safety First):**
+0. **[RULE 0] Absolute Context Grounding & Zero Hedging:**
+   - **"Apex" ALWAYS means `Apex-core` in this workspace.** NEVER list Oracle APEX, Salesforce Apex, ApexCharts, or external unrelated products.
+   - For ANY system design, architecture request, or feature proposal: **MUST strictly follow Apex-core 3-Tier Architecture** ([`rules/03-system-architecture.md`](./rules/03-system-architecture.md)), apply the Karpathy Test (YAGNI), and use Prisma, Strict TypeScript, Better Auth, and Tailwind CSS. NEVER output generic ungrounded chatbot dumps.
+1. **[RULE 1] Hard Intent Lock & Mixed Intent Protocol (Safety First):**
    - If the user asks to "explain", "investigate", "why", or "audit": **STRICTLY READ-ONLY**.
-   - Diagnose the root cause and propose a plan. **DO NOT edit any code** until explicitly approved (e.g. "fix it", "proceed", "implement").
-2. **[RULE 2] Fast In-Memory Verification (1-3 Seconds):**
-   - Run in-RAM type checks (`npx vue-tsc --noEmit` or `npx tsc --noEmit`) and targeted tests (`npx vitest run <file>`).
+   - **Mixed Intent (Audit + Action):** If a request combines diagnosis and modification (e.g. *"Why is this slow and fix it"*), MUST diagnose the root cause in the first step BEFORE proposing or making any code changes. Never perform speculative refactoring without identifying the bottleneck first.
+   - Diagnose root cause and propose a plan. **DO NOT edit any code** until explicitly approved (e.g. "fix it", "proceed", "implement").
+2. **[RULE 2] Fast In-Memory Verification & Polyglot Fallback (1-3 Seconds):**
+   - Run lockfile-aware in-RAM type checks (`pnpm/npm/bun vue-tsc --noEmit` or `pnpm/npm/bun tsc --noEmit`) and targeted tests (`pnpm/npm/bun vitest run <file>`).
+   - **Polyglot / Non-TS Repos:** Use project-appropriate fast check (e.g., Python `pytest -q` / `mypy`, Go `go test` / `go vet`, Plain JS `node --check`).
    - **NEVER** run full `npm run build` / `next build` / `nuxt build` for minor single-file edits.
 3. **[RULE 3] Mandatory Evidence Delivery (No Evidence = Not Done):**
    - Never claim a task is complete without providing actual terminal output verification logs.
-4. **[RULE 4] Surgical Diffs & Anti-Overengineering (YAGNI):**
+4. **[RULE 4] Surgical Diffs, Anti-Overengineering (YAGNI) & Monorepo Propagation:**
    - Modify ONLY lines directly related to the user's request. Strictly zero drive-by refactoring of unrelated files.
+   - **Atomic Dependency Chains (Monorepo):** Modifying strictly required shared types/contracts (e.g. `schema.prisma` -> `types.ts` -> `api.ts` -> `ui.vue`) is permitted as part of the core task. Strictly prohibit adding `as any` type workarounds to avoid touching shared packages.
    - Use the simplest scalable solution. No single-use wrappers or speculative abstractions. Strict TypeScript (no `any`).
+
 
 ---
 
@@ -36,9 +43,9 @@ Agent runs under a strict 4-state finite workflow:
 ```
 
 ### State 1: Discovery & Scope
-- **Task Triage:** [Fast Track: 1-2 files] -> Implement & Verify immediately | [Heavy Track: 3+ files / Schema / Auth] -> Summarize scope and blast radius first.
-- **Token Diet:** Search target symbols first (`grep_search` / `find_by_name`). Read bounded line slices (max 150-200 lines). Never dump full files.
-- **Stack Detection:** Inspect lockfile (`pnpm` default) and `package.json` for Nuxt 4 (Vue) vs React (Next.js 15).
+- **Task Triage:** [Fast Track: 1-2 files] -> Implement & Verify immediately (NEVER bypasses Rule 1 Intent Lock or DB schema drop approval) | [Heavy Track: 3+ files / Schema / Auth] -> Summarize scope and blast radius first.
+- **Token Diet:** Search target symbols first (`grep_search` / `find_by_name`). Read bounded line slices (max 150-200 lines). **Exception:** Allow reading full or larger bounded slices (up to 600 lines) for `schema.prisma`, OpenAPI specs, and core shared type contracts to prevent broken bidirectional relations (`@relation`) or fragmented union types.
+- **Stack Detection:** Inspect lockfile (`pnpm` default) and `package.json` for Nuxt 4 (Vue) vs React (Next.js 15) vs Polyglot stack.
 
 ### State 2: System Design (The Pragmatic Way)
 - Check domain rules in `rules/` and load relevant skills (`skills/frontend`, `skills/backend-data`).
@@ -50,7 +57,9 @@ Agent runs under a strict 4-state finite workflow:
 
 ### State 4: Verification & 2-Strike Loop Breaker
 - Run fast in-memory typecheck and targeted test suite (`skills/quality-verify`).
-- **2-Strike Rule:** If verification fails twice consecutively, **STOP immediately**, rollback dirty state, and present the Failure Report below. Never loop blindly.
+- **Cumulative 2-Strike Rule:** Strike count is cumulative per task (Attempt 1 + Attempt 2). If 2 consecutive verification runs fail—even if the error signature changed (no whack-a-mole)—**STOP immediately**.
+- **Safe Turn Rollback:** Roll back ONLY the specific files modified during the current agent turn (restoring from pre-edit baseline snapshot). NEVER run global destructive `git restore .` that wipes the developer's pre-existing uncommitted work. Present the Failure Report below. Never loop blindly.
+
 
 ---
 
