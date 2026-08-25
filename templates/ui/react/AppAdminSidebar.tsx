@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, ReactNode } from 'react'
-import { Search, ChevronLeft, ChevronRight, User, Building, LogOut, ChevronDown } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export interface NavItem {
   id: string
@@ -60,7 +60,6 @@ export function AppAdminSidebar({
   storageKey = 'apex_admin_sidebar_collapsed',
 }: AppAdminSidebarProps) {
   const [internalCollapsed, setInternalCollapsed] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed
@@ -236,58 +235,18 @@ export function AppAdminSidebar({
           ))}
         </div>
 
-        {/* Tier 3: User Profile & Popover Footer */}
-        <div className="p-1.5 border-t border-zinc-200/80 dark:border-zinc-800 relative">
-          {isProfileOpen && (
-            <div
-              className={`absolute bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-xl p-1 space-y-0.5 z-50 text-[11px] select-none ${
-                isCollapsed ? 'left-[calc(100%+4px)] bottom-1 w-48' : 'bottom-12 left-1 right-1 w-auto'
-              }`}
-            >
-              <div className="px-2 py-1 border-b border-zinc-100 dark:border-zinc-800">
-                <p className="font-bold text-zinc-900 dark:text-zinc-100 truncate">{user.name}</p>
-                <p className="text-[9px] text-zinc-400 truncate">{user.email || user.role}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsProfileOpen(false)}
-                className="w-full flex items-center gap-2 px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition text-left"
-              >
-                <User className="w-3 h-3 text-zinc-400" />
-                <span>ข้อมูลส่วนตัว</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsProfileOpen(false)
-                  onLogout?.()
-                }}
-                className="w-full flex items-center gap-2 px-2 py-1 rounded hover:bg-rose-50 text-rose-600 dark:hover:bg-rose-950/50 font-medium transition text-left"
-              >
-                <LogOut className="w-3 h-3 text-rose-500" />
-                <span>ออกจากระบบ</span>
-              </button>
+        {/* Tier 3: Minimalist System Footer (Option 3) */}
+        <div className="px-2.5 py-2 border-t border-zinc-200/80 dark:border-zinc-800 shrink-0 text-zinc-400 dark:text-zinc-500 select-none">
+          {!isCollapsed ? (
+            <div className="flex items-center justify-between text-[9px]">
+              <span className="font-medium truncate text-zinc-500 dark:text-zinc-400">{systemName}</span>
+              <span className="font-mono text-zinc-400 dark:text-zinc-500">{systemTag}</span>
+            </div>
+          ) : (
+            <div className="flex justify-center py-0.5 text-[8px] font-mono text-zinc-400" title={`${systemName} ${systemTag}`}>
+              {systemTag.split(' ')[0] || 'v5'}
             </div>
           )}
-
-          <button
-            type="button"
-            onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="w-full flex items-center gap-1.5 p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-left"
-          >
-            <div className="w-6 h-6 rounded bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center font-bold text-[9px] text-zinc-700 dark:text-zinc-200 shrink-0">
-              {user.initials || 'US'}
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-[10px] font-semibold text-zinc-900 dark:text-zinc-100 truncate">
-                  {user.name}
-                </span>
-                <span className="text-[8px] text-zinc-400 truncate">{user.role}</span>
-              </div>
-            )}
-            {!isCollapsed && <ChevronDown className="w-3 h-3 text-zinc-400" />}
-          </button>
         </div>
       </aside>
     </>

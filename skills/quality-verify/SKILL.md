@@ -12,7 +12,7 @@ description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Str
 ## 1. Tiered Verification Strategy (Fast In-Memory First)
 
 * [FORBIDDEN] **Never run full production builds (`npm run build` / `next build` / `nuxt build`)** for minor single-file edits.
-* [STANDARD] **Fast In-Memory TypeCheck (1–3 Seconds):**
+* [STANDARD] **Fast In-Memory TypeCheck (Targeted & Incremental):**
   * **Nuxt / Vue 3:** `pnpm vue-tsc --noEmit` (or `npm`/`bun` matching lockfile)
   * **React / Next.js:** `pnpm tsc --noEmit` (or `npm`/`bun` matching lockfile)
   * **Polyglot / Other Stacks:** Run language-specific checks (e.g. `pytest -q`, `go test`, `node --check`).
@@ -34,6 +34,6 @@ description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Str
 
 Enforce strict failure recovery when errors occur:
 1. **Strike 1 (Surgical Fix):** Analyze the root cause and execute one targeted fix.
-2. **Strike 2 (Safe Snapshot Rollback & Halt):** If verification fails a second time (cumulative per task, regardless of error change), **immediately restore modified files to their pre-turn baseline** (never run global `git restore .` that wipes uncommitted developer work).
-3. **Report:** Halt execution, present the 2 attempted strategies with raw error logs, and request guidance from the user. Never loop blindly.
+2. **Strike 2 (Freeze State & Failure Report):** If verification fails a second time (cumulative per task, regardless of error change), **immediately STOP and freeze the working tree**. DO NOT blind-rollback or destroy partial progress.
+3. **Report & Await Guidance:** Present a structured Failure Report (1. Root Cause, 2. Raw Error Logs, 3. Proposed Targeted Fix Options) and request user guidance. Never loop blindly.
 

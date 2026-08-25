@@ -17,7 +17,7 @@
    - **Tier 2 (Actionable Flow — Direct & Mixed Intent):** Triggered by "fix", "แก้", "สร้าง", "refactor", "add", "implement", "ทำ feature X", or mixed intent (*"Why is this broken and fix it"* / *"ทำไมพังและแก้ด้วย"*). **Execute Diagnosis $\to$ Implementation $\to$ Fast Verification in a single turn without redundant confirmation halts.** (For changes spanning 4+ files, provide an executive plan first).
    - **Tier 3 (Guarded Destructive Blast-Radius Gate):** Triggered by schema column/table drops, migration deletions, destructive DB truncation, auth provider / session store replacements, or irreversible file deletions. **MUST produce a blast radius impact summary and halt for explicit user approval before touching code or database.**
 
-2. **[RULE 2] Fast In-Memory Verification & Polyglot Fallback (1-3 Seconds):**
+2. **[RULE 2] Fast Targeted In-Memory Verification & Polyglot Fallback:**
    - Run lockfile-aware in-RAM type checks (`pnpm vue-tsc --noEmit` or `pnpm tsc --noEmit`) and targeted tests (`pnpm vitest run <file>`).
    - **Polyglot / Non-TS Repos:** Use project-appropriate fast check (e.g., Python `pytest -q` / `mypy`, Go `go test` / `go vet`, Plain JS `node --check`).
    - **NEVER** run full `npm run build` / `next build` / `nuxt build` for minor single-file edits.
@@ -44,7 +44,7 @@ Auto-detect workspace stack via `package.json` in State 1. Match behavior strict
 | **View Presenter** | `<Feature>List.vue` (`<script setup lang="ts">`) | `<Feature>List.tsx` (`export function ...`) | Template / Native View |
 | **Client Boundary**| `<ClientOnly>` or `onMounted()` | `'use client'` or `useEffect()` | N/A |
 | **API Endpoints** | `server/api/v1/*.ts` (`defineEventHandler`) | `app/api/v1/*/route.ts` (`export async GET`) | Framework Route Handlers |
-| **Fast TypeCheck** | `pnpm vue-tsc --noEmit` (1-3s) | `pnpm tsc --noEmit` (1-3s) | `pytest -q` / `go test` |
+| **Fast TypeCheck** | `pnpm vue-tsc --noEmit` (In-RAM) | `pnpm tsc --noEmit` (In-RAM) | `pytest -q` / `go test` |
 
 ---
 
@@ -96,16 +96,16 @@ Every data-driven UI feature view MUST explicitly implement:
 ```text
 ┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
 │      S1: DISCOVERY      │ ──> │    S2: ADAPTIVE PLAN    │ ──> │      S3: EXECUTION      │ ──> │     S4: FAST VERIFY     │
-│ Scope, Triage & Stack   │     │ Skip if Fast Track (1-3)│     │ Patch or Synthesis Mode │     │ In-RAM TypeCheck (1-3s) │
+│ Scope, Triage & Stack   │     │ Skip if Fast Track (1-3)│     │ Patch or Synthesis Mode │     │ In-RAM Fast TypeCheck   │
 └─────────────────────────┘     └─────────────────────────┘     └─────────────────────────┘     └────────────┬────────────┘
                                                                                                              │ Fail 2x
                                                                                                              ▼
-                                                                                                    [FAIL] 2-Strike Report
+                                                                                                    [FAIL] 2-Strike Freeze
 ```
 
 - **Fast Track (1–3 files):** Proceed directly to S3 (Execution) and S4 (Verification).
 - **Heavy Track (4+ files / Schema / Auth):** Proceed to S2 (Plan) with blast radius summary before execution.
-- **2-Strike Loop Breaker:** If 2 consecutive verification runs fail—**STOP immediately**. Roll back ONLY files modified during the current turn (never global `git restore .`). Present Failure Report.
+- **2-Strike Loop Breaker:** If 2 consecutive verification runs fail—**STOP immediately and Freeze State**. DO NOT automatically destroy code or blind-rollback partial progress. Present a structured Failure Report (Root Cause, Error Logs, and Actionable Repair Options) and await direction.
 
 ---
 

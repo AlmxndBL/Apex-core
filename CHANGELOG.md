@@ -5,6 +5,17 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2026-08-26 — The Resilient Control & UI Shell Engine 🛡️
+
+### Changed
+- **2-Strike Freeze State Gate (`AGENTS.md` Rule 5 & `skills/quality-verify`):** Upgraded cumulative 2-strike loop breaker from destructive auto-rollback to a **Freeze State & Failure Report Gate**. Automatically halts execution and presents root causes and repair options without destroying partial progress or uncommitted changes.
+- **Fast Targeted In-Memory Verification (`AGENTS.md` Rule 2):** Refined verification protocol definition from fixed "1-3 seconds" claim to **Targeted In-Memory Incremental Verification**, accurately scaling with large enterprise monorepos while strictly banning full production build overhead.
+- **Universal Multi-Agent Compatibility Architecture (`README.md`):** Clarified Layer 1 (Core Directives) and Layer 2 (Deep Knowledge Engine) as architectural depth levels with 100% universal compatibility across Cursor, Claude Code, Windsurf, and Antigravity.
+
+### Added
+- **Top-Right Header User Menu Cluster (`templates/ui/`):** Standardized user account identity, workspace switcher, and logout actions into a responsive Top-Right Header trigger with 4-tier popover dropdown and click-outside handler across Vue 3 and React 19 templates.
+- **Minimalist System Footer (Option 3) (`templates/ui/`):** Replaced heavy sidebar footer profile popovers and fake storage gauges with a clean 1-line system identifier (`Apex Enterprise · v5.1`), ensuring zero-noise layout integrity for systems without telemetry quotas.
+
 ---
 
 ## [5.0.0] - 2026-08-25 — The Production Velocity Engine ⚡
