@@ -17,7 +17,7 @@
 
 ```text
 .
-├── AGENTS.md                  # Master Agent Operating Protocol (v4.0)
+├── AGENTS.md                  # Master Agent Operating Protocol (v5.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── README.md                  # Global English Documentation & Quickstart
 ├── README_TH.md               # Thai Documentation & Community Guide
@@ -43,16 +43,17 @@
 
 ## 🗄️ 3. Core Capabilities & Domains
 - **Security & Auth:** Better Auth, RBAC, Dual-Token Rotation, CORS, Rate Limiting
-- **Code Quality:** Strict TypeScript (no any), Zod validation, JSDoc/TSDoc
+- **Code Quality:** Strict TypeScript (no any), Zod validation, JSDoc/TSDoc, Container-Presenter pattern
 - **Architecture:** Modular Monolith, Domain-Driven Granular Routing, Spec-Driven Development (SDD)
 - **Database:** Prisma ORM, PostgreSQL, OCC Concurrency Control, Zero DB Pollution Seeding
-- **Frontend UI/UX:** 4-Tier Component Layering, Semantic HSL Palette, Dual Responsive Tables
+- **Frontend UI/UX:** 3-File Feature Architecture, Mandatory 4-State UI Contract, Dual Responsive Tables
 - **Verification:** Sub-second In-Memory TypeCheck, Vitest, 2-Strike Loop-Breaker
 
 ---
 
 ## 🚨 4. Project-Specific Red Lines
-1. **Hard Intent Lock:** Treat "explain", "investigate", "why", and "audit" requests as STRICTLY READ-ONLY until approved.
-2. **Fast In-Memory Checks:** Run `tsc --noEmit` or `vue-tsc --noEmit` (1–3s). Never run full production builds for minor single-file edits.
-3. **Mandatory Evidence:** Always provide actual terminal verification output before claiming completion.
-4. **Surgical Diffs (YAGNI):** Edit only lines directly relevant to the user request. Zero drive-by refactoring.
+1. **3-Tier Dynamic Intent:** Tier 1 (Read-Only) vs Tier 2 (Actionable: diagnose+fix in 1 turn) vs Tier 3 (Guarded Destructive: halt for approve).
+2. **Dual Execution Modes:** Patch Mode (surgical diffs for bug fixes) vs Synthesis Mode (holistic 3-file modules for new features & UI).
+3. **Fast In-Memory Checks:** Run `tsc --noEmit` or `vue-tsc --noEmit` (1–3s). Never run full production builds for minor single-file edits.
+4. **Mandatory Evidence:** Always provide actual terminal verification output before claiming completion.
+

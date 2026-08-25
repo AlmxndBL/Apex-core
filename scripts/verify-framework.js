@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Apex Framework Verification Suite (v4.0)
+ * Apex Framework Verification Suite (v5.0)
  * Validates integrity, metadata, YAML frontmatter, presets, and cross-references
  * across Rules, Skills, Templates, and Configuration.
  */
@@ -70,7 +70,7 @@ function assert(condition, message) {
   }
 }
 
-console.log('\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite v4.0] Starting Framework Integrity Check...\x1b[0m\n');
+console.log('\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite v5.0] Starting Framework Integrity Check...\x1b[0m\n');
 
 // 1. Root Files Check
 console.log('\x1b[1m1. Root Files & Manifests\x1b[0m');

@@ -34,6 +34,10 @@
 - **File Length Limits:**
   - Backend Services / Logic: Maximum **~300 lines** (refactor into focused modules if exceeded).
   - UI Components: Maximum **~200 lines** (decompose into sub-components if exceeded).
+- **Separation of Concerns (Container-Presenter Pattern):**
+  - Route views / Pages act strictly as **Containers**: call domain composables/hooks and pass state down via props.
+  - Presentational components (`components/<domain>/`) must be **Dumb UI**: receive typed props, emit user actions, and contain zero direct HTTP/API calls.
+  - Domain business logic, caching, and state machines belong strictly in **Composables/Hooks (`composables/use<Domain>.ts`)** or **Services (`server/services/<domain>.service.ts`)**.
 - **Import Ordering:** 1) Node built-ins, 2) External dependencies, 3) Internal/Shared modules, 4) Relative paths (separated by empty lines).
 - **Dead Code:** Remove unused code immediately. Do not keep dead code commented out.
 

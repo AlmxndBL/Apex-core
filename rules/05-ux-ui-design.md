@@ -188,3 +188,27 @@ Select the archetype preset matching the project domain:
 ### 3. Code & Media Formatting
 - Syntax-highlighted code blocks with 1-click copy buttons.
 - Captioned media (`text-xs text-slate-400 text-center mt-2`).
+
+---
+---
+
+# 🛡️ PART 3: UI Quality Gates & Anti-Generic Standards
+
+## 🔄 9. Mandatory 4-State UI Contract
+Every data-driven UI feature view MUST implement all 4 states explicitly:
+1. **Loading State:** Enforce skeleton loaders matching actual layout geometry. Never display a bare full-screen spinner.
+2. **Empty State:** Distinct dashed container + icon + friendly explanation + primary call-to-action button.
+3. **Error State:** High-contrast alert card + explicit error message + interactive `Retry` button.
+4. **Data State:** Fully rendered data presentation with responsive desktop table / mobile card adaptability.
+
+---
+
+## ✅ 10. Anti-Generic UI Quality Checklist
+Before completing any frontend task, verify against this checklist:
+- [ ] **Visual Depth & Surfaces:** 3-tier elevation (canvas `bg-zinc-50 dark:bg-zinc-950` $\to$ card `bg-white dark:bg-zinc-900` $\to$ elevated).
+- [ ] **Subtle Borders:** All cards have `border border-zinc-200/80 dark:border-zinc-800/80` (never harsh solid black/gray).
+- [ ] **Micro-Interactions:** Buttons have `hover:bg-*`, `active:scale-[0.98]`, and `transition duration-150`.
+- [ ] **Typography Contrast:** Heading weights (600/700) clearly contrast with body (400) and muted metadata (text-xs text-zinc-400).
+- [ ] **Mobile Touch Targets:** All touch targets on mobile meet minimum $44\times 44\text{px}$ standard.
+- [ ] **Zero Dark Mode Flash:** No unstyled white backgrounds or illegible dark text in dark mode.
+

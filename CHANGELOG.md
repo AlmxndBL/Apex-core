@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [5.0.0] - 2026-08-25 — The Production Velocity Engine ⚡
+
+### Changed
+- **3-Tier Dynamic Intent Protocol (`AGENTS.md` Rule 1):** Replaced binary Hard Intent Lock with a calibrated 3-tier model (Tier 1: Read-Only, Tier 2: Actionable Flow for instant 1-turn fix/verify, Tier 3: Guarded Destructive Gate). Eliminates redundant confirmation friction on direct bug fixes and mixed intent commands.
+- **Dual Execution Modes (`AGENTS.md` Rule 4):**
+  - **Patch Mode:** Strict surgical diffs for targeted bug fixes.
+  - **Synthesis Mode:** Holistic module creation for new features, UI design, and refactoring to eliminate "Frankenstein / patch-on-patch" degradation.
+- **Adaptive 4-State Execution Loop (`AGENTS.md`):** Fast Track (1–3 files) executes directly; Heavy Track (4+ files / schema) creates an adaptive system plan first.
+- **Separation of Concerns (SOC) Standard (`rules/02-coding-standards.md`):** Formalized Container-Presenter architectural standard separating views, presentational dumb UI, and composables/services.
+
+### Added
+- **Production Frontend Architecture Blueprint (`skills/frontend/SKILL.md`):**
+  - Strict 3-File Feature Module Pattern (`composables/use<Feature>.ts`, `components/<Feature>List.vue`, `types/<feature>.contract.ts`, `index.vue`).
+  - Mandatory 4-State UI Contract (`LoadingSkeleton`, `EmptyState`, `ErrorRecovery`, `DataContent`).
+  - 3-Tier Surface Elevation Hierarchy, typography rhythm, and interaction polish.
+  - Dual Responsive Layouts (Desktop Table vs Mobile Touch Cards).
+- **Production Backend Architecture Blueprint (`skills/backend-data/SKILL.md`):**
+  - Standard API Handler Blueprint with 4-step pipeline (Validate $\to$ Authorize $\to$ Service $\to$ Response).
+  - Dedicated Service Layer & Database Transaction Pattern.
+  - End-to-End Spec-Driven Development (SDD) contract sharing between client and server.
+- **UI Quality Gates & Anti-Generic Checklist (`rules/05-ux-ui-design.md`):** Added Section 9 (Mandatory 4-State Contract) and Section 10 (Anti-Generic UI Quality Checklist).
+
+---
+
 ## [4.0.0] - 2026-08-23 — The Lean Pragmatic Symphony 🚀
 
 ### Added
