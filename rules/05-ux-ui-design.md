@@ -208,7 +208,7 @@ Before completing any frontend task, verify against this checklist:
 - [ ] **Visual Depth & Surfaces:** 3-tier elevation (canvas `bg-zinc-50 dark:bg-zinc-950` $\to$ card `bg-white dark:bg-zinc-900` $\to$ elevated).
 - [ ] **Subtle Borders:** All cards have `border border-zinc-200/80 dark:border-zinc-800/80` (never harsh solid black/gray).
 - [ ] **Micro-Interactions:** Buttons have `hover:bg-*`, `active:scale-[0.98]`, and `transition duration-150`.
-- [ ] **Typography Contrast:** Heading weights (600/700) clearly contrast with body (400) and muted metadata (text-xs text-zinc-400).
-- [ ] **Mobile Touch Targets:** All touch targets on mobile meet minimum $44\times 44\text{px}$ standard.
+- [ ] **Zero Emojis in Enterprise UI:** Strictly prohibit raw emoji characters (e.g. 📊, 💰, 🌙, 👤) in UI templates, buttons, navbars, and cards. Always use clean Lucide SVG icons.
+- [ ] **Animated Theme Transition:** Use Magic UI / Lucide animated theme toggler (`AnimatedThemeToggler`) with smooth Sun/Moon rotation and scale transitions.
 - [ ] **Zero Dark Mode Flash:** No unstyled white backgrounds or illegible dark text in dark mode.
 

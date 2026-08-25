@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex v5.0 — Ultra-Compact Enterprise UI & Data Engine</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#1C4D8D',
+              600: '#174177',
+              700: '#12335e',
+              900: '#0F2854',
+            }
+          },
+          fontFamily: {
+            sans: ['Prompt', 'Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts: Prompt & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    [v-cloak] { display: none; }
+    /* Ultra-Slim Scrollbar for dense enterprise UI */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
+  </style>
+</head>
+<body class="h-full bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100 font-sans selection:bg-blue-100 selection:text-blue-900 text-xs">
+  <div id="app" v-cloak class="h-full flex flex-col overflow-hidden">
+    
+    <!-- 🎛️ TOP CONTROL BAR: Ultra-Compact Apex Live Inspector (h-8 / 32px) -->
+    <div class="h-8 bg-zinc-900 text-zinc-300 px-3 flex items-center justify-between text-[11px] shrink-0 border-b border-zinc-800 z-50">
+      
+      <!-- Left: Status Indicator & Title -->
+      <div class="flex items-center gap-1.5 font-medium">
+        <span class="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[9px] font-bold">
+          <span class="w-1 h-1 rounded-full bg-blue-400 animate-pulse"></span>
+          Apex v5.0 Ultra-Compact
+        </span>
+        <span class="hidden sm:inline text-zinc-400 text-[10px]">| State:</span>
+      </div>
+
+      <!-- Center: 4-State UI Switcher (Ultra-Compact Pills) -->
+      <div class="flex items-center gap-0.5 bg-zinc-800 p-0.5 rounded border border-zinc-700/60">
+        <button
+          v-for="s in uiStates"
+          :key="s.id"
+          @click="currentState = s.id"
+          :class="[
+            'px-2 py-0.2 rounded text-[10px] font-medium transition duration-150 flex items-center gap-1',
+            currentState === s.id
+              ? 'bg-blue-600 text-white shadow-xs font-semibold'
+              : 'text-zinc-400 hover:text-zinc-200'
+          ]"
+        >
+          <span class="w-1 h-1 rounded-full" :class="s.dotColor"></span>
+          <span>{{ s.label }}</span>
+        </button>
+      </div>
+
+      <!-- Right: Quick Info -->
+      <div class="hidden md:flex items-center gap-2 text-[10px] text-zinc-400 font-mono">
+        <span>Filtered: {{ filteredAndSortedData.length }} items</span>
+      </div>
+    </div>
+
+    <!-- 🏗️ MAIN APP LAYOUT (Sidebar + Viewport) -->
+    <div class="flex-1 flex flex-row overflow-hidden relative">
+      
+      <!-- ============================================================ -->
+      <!-- 📱 1. RESPONSIVE SIDEBAR (Ultra-Compact)                      -->
+      <!-- ============================================================ -->
+      
+      <!-- Mobile Backdrop Overlay -->
+      <div
+        v-if="isMobileOpen"
+        @click="isMobileOpen = false"
+        class="fixed inset-0 bg-zinc-950/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+      ></div>
+
+      <!-- Sidebar Container -->
+      <aside
+        :class="[
+          'fixed lg:static inset-y-0 left-0 z-50 flex flex-col bg-white dark:bg-zinc-900 border-r border-zinc-200/80 dark:border-zinc-800 transition-all duration-300 ease-in-out select-none shadow-xl lg:shadow-none',
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+          isCollapsed ? 'lg:w-14' : 'lg:w-56',
+          'w-56'
+        ]"
+      >
+        <!-- 🔘 Desktop Floating Expand Toggle Button (When Collapsed) -->
+        <button
+          v-if="isCollapsed"
+          @click="isCollapsed = false"
+          title="ขยายแถบเมนู (Expand Sidebar)"
+          class="hidden lg:flex absolute -right-2.5 top-3 w-5 h-5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-xs text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 items-center justify-center hover:scale-110 active:scale-95 transition z-30"
+        >
+          <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+        </button>
+
+        <!-- Tier 1: Header & Branding (h-11 / 44px) -->
+        <div class="h-11 px-2.5 flex items-center justify-between border-b border-zinc-200/80 dark:border-zinc-800 shrink-0">
+          <div class="flex items-center gap-2 min-w-0 overflow-hidden">
+            <!-- Brand Logo Icon -->
+            <div class="w-6 h-6 shrink-0 rounded-md bg-gradient-to-br from-[#1C4D8D] to-[#0F2854] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+
+            <!-- Brand Title & Tag (Hidden when collapsed on desktop) -->
+            <div v-show="!isCollapsed" class="flex flex-col min-w-0 transition-opacity">
+              <span class="font-bold text-xs tracking-tight text-zinc-900 dark:text-zinc-100 truncate leading-tight">
+                Apex Enterprise
+              </span>
+              <span class="text-[8px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center gap-1">
+                <span class="w-1 h-1 rounded-full bg-emerald-500"></span>
+                v5.0 Engine
+              </span>
+            </div>
+          </div>
+
+          <!-- Collapse Button -->
+          <button
+            v-if="!isCollapsed"
+            @click="isCollapsed = true"
+            class="hidden lg:flex w-5 h-5 rounded text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 items-center justify-center transition"
+            title="พับเก็บแถบเมนู (Collapse)"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+          </button>
+        </div>
+
+        <!-- Tier 2: Search Bar + Grouped Navigation -->
+        <div class="flex-1 overflow-y-auto px-2 py-2 space-y-2">
+          
+          <!-- 🔍 SEARCH BAR IN SIDEBAR -->
+          <div v-if="!isCollapsed" class="relative">
+            <input
+              type="text"
+              v-model="sidebarNavSearch"
+              placeholder="ค้นหาเมนู... (⌘K)"
+              class="w-full pl-6 pr-8 py-1 text-[10px] rounded-md bg-zinc-100/80 dark:bg-zinc-800/60 border border-zinc-200/70 dark:border-zinc-700/60 text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 focus:bg-white dark:focus:bg-zinc-900 transition"
+            />
+            <svg class="w-3 h-3 absolute left-1.5 top-1.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <kbd class="absolute right-1 top-1 text-[8px] bg-white dark:bg-zinc-700 text-zinc-500 px-1 py-0.2 rounded border border-zinc-200 dark:border-zinc-600 font-mono">⌘K</kbd>
+          </div>
+
+          <div v-else class="flex justify-center">
+            <button
+              @click="isCollapsed = false"
+              class="w-7 h-7 rounded flex items-center justify-center text-zinc-500 hover:text-blue-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              title="ค้นหาเมนู (⌘K)"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Navigation Groups -->
+          <div v-for="group in filteredNavGroups" :key="group.id" class="space-y-0.5">
+            <h4
+              v-show="!isCollapsed"
+              class="px-2 pt-0.5 text-[8px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500"
+            >
+              {{ group.title }}
+            </h4>
+            <div v-if="isCollapsed" class="border-t border-zinc-100 dark:border-zinc-800 my-1 mx-0.5"></div>
+
+            <!-- Nav Items -->
+            <a
+              v-for="item in group.items"
+              :key="item.id"
+              href="#"
+              @click.prevent="activeNavId = item.id; if(isMobileOpen) isMobileOpen = false"
+              :title="isCollapsed ? item.label : undefined"
+              :class="[
+                'group flex items-center gap-2 px-2 py-1 rounded text-[11px] font-medium transition duration-150 relative',
+                activeNavId === item.id
+                  ? 'bg-blue-600 text-white shadow-2xs font-semibold'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100'
+              ]"
+            >
+              <span class="shrink-0 w-3.5 h-3.5 flex items-center justify-center" v-html="item.iconSvg"></span>
+
+              <span v-show="!isCollapsed" class="truncate flex-1">
+                {{ item.label }}
+              </span>
+
+              <span
+                v-if="item.badge && !isCollapsed"
+                :class="[
+                  'px-1 py-0.2 rounded text-[8px] font-bold shrink-0',
+                  item.badgeColor === 'rose'
+                    ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                    : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                ]"
+              >
+                {{ item.badge }}
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Tier 3: User Profile (Ultra-Compact) -->
+        <div class="p-1.5 border-t border-zinc-200/80 dark:border-zinc-800 relative">
+          <!-- Popover Menu -->
+          <div
+            v-if="isProfileOpen"
+            :class="[
+              'absolute bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-xl p-1 space-y-0.5 z-50 text-[11px] select-none',
+              isCollapsed
+                ? 'left-[calc(100%+4px)] bottom-1 w-48'
+                : 'bottom-12 left-1 right-1 w-auto'
+            ]"
+          >
+            <div class="px-2 py-1 border-b border-zinc-100 dark:border-zinc-800">
+              <p class="font-bold text-zinc-900 dark:text-zinc-100 truncate">สมชาย พัฒนากร</p>
+              <p class="text-[9px] text-zinc-400 truncate">somchai@enterprise.co.th</p>
+            </div>
+            <a href="#" @click.prevent="isProfileOpen = false" class="flex items-center gap-2 px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition">
+              <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>ข้อมูลส่วนตัว</span>
+            </a>
+            <a href="#" @click.prevent="isProfileOpen = false" class="flex items-center gap-2 px-2 py-1 rounded hover:bg-rose-50 text-rose-600 dark:hover:bg-rose-950/50 font-medium transition">
+              <svg class="w-3 h-3 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              <span>ออกจากระบบ</span>
+            </a>
+          </div>
+
+          <!-- Trigger Button -->
+          <button
+            @click="isProfileOpen = !isProfileOpen"
+            class="w-full flex items-center gap-1.5 p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-left"
+          >
+            <div class="w-6 h-6 rounded bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center font-bold text-[9px] text-zinc-700 dark:text-zinc-200 shrink-0">
+              SC
+            </div>
+            <div v-show="!isCollapsed" class="flex flex-col min-w-0 flex-1">
+              <span class="text-[10px] font-semibold text-zinc-900 dark:text-zinc-100 truncate">สมชาย พัฒนากร</span>
+              <span class="text-[8px] text-zinc-400 truncate">Super Admin</span>
+            </div>
+            <svg v-show="!isCollapsed" class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" /></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ============================================================ -->
+      <!-- 🌟 2. MAIN VIEWPORT & NAVBAR (Ultra-Compact h-11 / 44px)      -->
+      <!-- ============================================================ -->
+      <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        
+        <!-- Top Navigation Header -->
+        <header class="h-11 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800 px-3 flex items-center justify-between gap-2.5 shrink-0 z-30">
+          
+          <!-- Left: Mobile Menu + Breadcrumbs + Title -->
+          <div class="flex items-center gap-2 min-w-0">
+            <button
+              @click="isMobileOpen = true"
+              class="lg:hidden p-1 rounded text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              title="Open Mobile Menu"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            </button>
+
+            <div class="flex items-center gap-1.5 min-w-0">
+              <nav class="hidden sm:flex items-center gap-1 text-[9px] font-medium text-zinc-400 dark:text-zinc-500 truncate">
+                <span>หน้าหลัก</span>
+                <span>/</span>
+                <span>ระบบจัดการ</span>
+                <span>/</span>
+              </nav>
+              <h1 class="text-xs font-bold text-zinc-900 dark:text-white tracking-tight truncate leading-tight">
+                ศูนย์ข้อมูลและรายงานสถิติ (Analytics Dashboard)
+              </h1>
+            </div>
+          </div>
+
+          <!-- Right: AnimatedThemeToggler + Notifications + Action CTA -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            
+            <!-- Magic UI AnimatedThemeToggler Component -->
+            <button
+              type="button"
+              @click="toggleDarkMode"
+              class="relative flex items-center justify-center w-7 h-7 rounded border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xs hover:bg-zinc-50 dark:hover:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 transition-colors focus:outline-none"
+              title="สลับโหมดมืด / สว่าง (Animated Theme Toggler)"
+            >
+              <svg
+                class="w-3 h-3 rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0 text-amber-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
+              </svg>
+              <svg
+                class="w-3 h-3 absolute rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100 text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              </svg>
+            </button>
+
+            <!-- Notifications Bell -->
+            <button class="relative p-1.5 rounded text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+              </svg>
+              <span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-rose-500 ring-1 ring-white dark:ring-zinc-900"></span>
+            </button>
+
+            <!-- Primary Action CTA Button -->
+            <button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold shadow-2xs active:scale-[0.98] transition">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              <span>สร้างรายการ</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- ============================================================ -->
+        <!-- 📄 3. CONTENT VIEWPORT (Ultra-Compact Spacing: space-y-2.5)  -->
+        <!-- ============================================================ -->
+        <main class="flex-1 overflow-y-auto p-2.5 sm:p-3 space-y-2.5">
+          
+          <!-- 📊 SECTION 1: 4 KPI METRICS CARDS (gap-2, p-2.5) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div
+              v-for="stat in kpiStats"
+              :key="stat.title"
+              class="p-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/90 shadow-2xs space-y-1 relative overflow-hidden"
+            >
+              <div class="flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400">
+                <span class="font-medium truncate">{{ stat.title }}</span>
+                <span class="w-3 h-3 text-zinc-400 dark:text-zinc-500 shrink-0" v-html="stat.iconSvg"></span>
+              </div>
+              <div class="flex items-baseline justify-between">
+                <span class="text-base font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight font-mono">
+                  {{ stat.value }}
+                </span>
+                <span
+                  :class="[
+                    'text-[9px] font-bold px-1 py-0.2 rounded flex items-center gap-0.5',
+                    stat.trendUp
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                      : 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300'
+                  ]"
+                >
+                  <svg v-if="stat.trendUp" class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <svg v-else class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
+                  <span>{{ stat.change }}</span>
+                </span>
+              </div>
+              <p class="text-[9px] text-zinc-400 dark:text-zinc-500 truncate">{{ stat.subtitle }}</p>
+            </div>
+          </div>
+
+          <!-- 📈 SECTION 2: CHARTS ROW (gap-2.5, h-48) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-2.5">
+            
+            <!-- 🌟 Chart A: Line Chart (7 Cols) -->
+            <div class="lg:col-span-7 p-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-2xs space-y-1.5">
+              <div class="flex flex-wrap items-center justify-between gap-1 border-b border-zinc-100 dark:border-zinc-800/80 pb-1.5">
+                <div>
+                  <h3 class="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                    <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    <span>แนวโน้มรายรับ & ค่าเช่ารายเดือน</span>
+                    <span class="text-[8px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-semibold">ปี 2569</span>
+                  </h3>
+                </div>
+                <div class="flex items-center gap-1 text-[9px] text-zinc-500 font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> รายรับจริง
+                </div>
+              </div>
+              
+              <!-- Canvas Container -->
+              <div class="relative h-44 w-full">
+                <canvas id="lineChartCanvas"></canvas>
+              </div>
+            </div>
+
+            <!-- 🌟 Chart B: Bar Chart (5 Cols) -->
+            <div class="lg:col-span-5 p-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-2xs space-y-1.5">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/80 pb-1.5">
+                <div>
+                  <h3 class="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                    <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    <span>สัดส่วนรายได้แยกตามประเภทห้อง</span>
+                  </h3>
+                </div>
+              </div>
+
+              <!-- Canvas Container -->
+              <div class="relative h-44 w-full">
+                <canvas id="barChartCanvas"></canvas>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========================================================== -->
+          <!-- 🎛️ SECTION 3: INTERACTIVE FILTER & SEARCH TOOLBAR           -->
+          <!-- ========================================================== -->
+          <div class="flex flex-wrap items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-2xs">
+            
+            <!-- Left: Search Input & Filter Dropdown -->
+            <div class="flex flex-wrap items-center gap-2">
+              
+              <!-- 🔍 Live Table Keyword Search Input -->
+              <div class="relative">
+                <input
+                  type="text"
+                  v-model="tableKeyword"
+                  placeholder="ค้นหาชื่อผู้เช่า, เลขห้อง, เลขสัญญา..."
+                  class="w-48 sm:w-64 pl-6 pr-6 py-1 text-[11px] rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+                />
+                <svg class="w-3 h-3 absolute left-1.5 top-2 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                <button
+                  v-if="tableKeyword"
+                  @click="tableKeyword = ''"
+                  class="absolute right-1.5 top-1.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-[10px]"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <!-- Status Dropdown Filter -->
+              <div class="flex items-center gap-1 text-[11px]">
+                <span class="text-zinc-400 font-medium hidden sm:inline">สถานะ:</span>
+                <select
+                  v-model="selectedStatus"
+                  class="px-2 py-1 text-[11px] rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80 text-zinc-700 dark:text-zinc-300 focus:ring-1 focus:ring-blue-600 font-medium"
+                >
+                  <option value="All">ทุกสถานะ (All)</option>
+                  <option value="Active">กำลังใช้งาน (Active)</option>
+                  <option value="Pending">รอดำเนินการ (Pending)</option>
+                  <option value="Expired">หมดสัญญา (Expired)</option>
+                </select>
+              </div>
+
+              <!-- Date Range Presets -->
+              <div class="hidden md:flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded text-[10px] font-medium">
+                <button
+                  v-for="p in ['7D', '30D', '1Y']"
+                  :key="p"
+                  @click="datePreset = p"
+                  :class="[
+                    'px-2 py-0.5 rounded transition',
+                    datePreset === p
+                      ? 'bg-white dark:bg-zinc-700 shadow-2xs text-zinc-900 dark:text-zinc-100 font-bold'
+                      : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
+                  ]"
+                >
+                  {{ p }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Bulk Actions & Export -->
+            <div class="flex items-center gap-1.5">
+              <!-- Selected Count Pill -->
+              <span
+                v-if="selectedRowIds.length > 0"
+                class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 text-[10px] font-bold border border-blue-200 dark:border-blue-800"
+              >
+                เลือกแล้ว {{ selectedRowIds.length }} รายการ
+              </span>
+
+              <!-- Reset Filters -->
+              <button
+                v-if="tableKeyword || selectedStatus !== 'All'"
+                @click="tableKeyword = ''; selectedStatus = 'All'"
+                class="px-2 py-1 rounded text-[10px] text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-medium transition"
+              >
+                ล้างตัวกรอง
+              </button>
+
+              <button class="px-2 py-1 rounded border border-zinc-200 dark:border-zinc-700 text-[10px] font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition flex items-center gap-1">
+                <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                <span>Export CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ========================================================== -->
+          <!-- 🔄 SECTION 4: 4-STATE UI & SORTABLE DATA TABLE             -->
+          <!-- ========================================================== -->
+
+          <!-- STATE 1: LOADING SKELETON STATE -->
+          <div v-if="currentState === 'loading'" class="space-y-2">
+            <div class="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3 space-y-2 animate-pulse">
+              <div class="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-1/4"></div>
+              <div class="space-y-1.5 pt-1">
+                <div v-for="i in 5" :key="i" class="h-6 bg-zinc-100 dark:bg-zinc-800/60 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STATE 2: ERROR RECOVERY STATE -->
+          <div
+            v-else-if="currentState === 'error'"
+            class="flex flex-col items-center justify-center rounded-lg border border-rose-200 bg-rose-50/50 p-6 text-center dark:border-rose-900/50 dark:bg-rose-950/20"
+          >
+            <div class="rounded-full bg-rose-100 p-2 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>
+              </svg>
+            </div>
+            <h3 class="mt-2 text-xs font-semibold text-rose-900 dark:text-rose-200">ไม่สามารถเชื่อมต่อฐานข้อมูลได้ (Prisma Query Timeout)</h3>
+            <p class="mt-0.5 text-[10px] text-rose-600 dark:text-rose-400 max-w-sm">ไม่สามารถดึงข้อมูลตารางและกราฟได้ กรุณาลองใหม่อีกครั้ง</p>
+            <button
+              @click="currentState = 'ready'"
+              class="mt-2.5 inline-flex items-center gap-1 rounded bg-rose-600 px-2.5 py-1 text-[10px] font-semibold text-white transition hover:bg-rose-700 active:scale-95 shadow-2xs"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+              <span>ลองใหม่อีกครั้ง (Retry)</span>
+            </button>
+          </div>
+
+          <!-- STATE 3: EMPTY STATE -->
+          <div
+            v-else-if="currentState === 'empty' || filteredAndSortedData.length === 0"
+            class="flex flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 p-8 text-center"
+          >
+            <div class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            </div>
+            <h3 class="mt-2 text-xs font-bold text-zinc-900 dark:text-zinc-100">
+              {{ tableKeyword || selectedStatus !== 'All' ? 'ไม่พบข้อมูลที่ตรงกับเงื่อนไขการค้นหา' : 'ยังไม่มีข้อมูลสัญญาเช่าในระบบ' }}
+            </h3>
+            <p class="mt-0.5 text-[10px] text-zinc-500 dark:text-zinc-400 max-w-xs">
+              {{ tableKeyword || selectedStatus !== 'All' ? 'ลองปรับเปลี่ยนคำค้นหา หรือกดล้างตัวกรอง' : 'เริ่มต้นการใช้งานโดยการสร้างสัญญาฉบับแรก' }}
+            </p>
+            <button
+              v-if="tableKeyword || selectedStatus !== 'All'"
+              @click="tableKeyword = ''; selectedStatus = 'All'"
+              class="mt-2.5 rounded bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900 px-3 py-1 text-[10px] font-semibold shadow-2xs active:scale-95 transition"
+            >
+              ล้างตัวกรองทั้งหมด
+            </button>
+            <button
+              v-else
+              class="mt-2.5 rounded bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 text-[10px] font-semibold shadow-2xs active:scale-95 transition"
+            >
+              + สร้างสัญญาฉบับแรก
+            </button>
+          </div>
+
+          <!-- STATE 4: READY / INTERACTIVE SORTABLE DATA TABLE -->
+          <div v-else-if="currentState === 'ready'" class="space-y-2">
+            
+            <!-- Desktop Data Table View (md+) -->
+            <div class="hidden md:block overflow-hidden rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xs">
+              <table class="min-w-full divide-y divide-zinc-200/80 dark:divide-zinc-800 text-left text-[11px]">
+                
+                <!-- Table Header with Click-to-Sort -->
+                <thead class="bg-zinc-50 dark:bg-zinc-900/60 text-[9px] font-bold text-zinc-500 uppercase tracking-wider select-none">
+                  <tr>
+                    <th class="py-2 px-3 w-8">
+                      <input
+                        type="checkbox"
+                        :checked="isAllSelected"
+                        @change="toggleSelectAll"
+                        class="rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </th>
+
+                    <!-- Sortable Column: Room Number -->
+                    <th
+                      @click="handleSort('roomNumber')"
+                      class="py-2 px-3 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    >
+                      <div class="flex items-center gap-1">
+                        <span>เลขที่สัญญา / ห้อง</span>
+                        <span v-if="sortKey === 'roomNumber'" class="text-blue-600 font-bold">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                      </div>
+                    </th>
+
+                    <!-- Sortable Column: Tenant Name -->
+                    <th
+                      @click="handleSort('tenantName')"
+                      class="py-2 px-3 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    >
+                      <div class="flex items-center gap-1">
+                        <span>ชื่อผู้ทำสัญญา</span>
+                        <span v-if="sortKey === 'tenantName'" class="text-blue-600 font-bold">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                      </div>
+                    </th>
+
+                    <!-- Sortable Column: Period -->
+                    <th
+                      @click="handleSort('period')"
+                      class="py-2 px-3 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    >
+                      <div class="flex items-center gap-1">
+                        <span>ระยะเวลาสัญญา</span>
+                        <span v-if="sortKey === 'period'" class="text-blue-600 font-bold">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                      </div>
+                    </th>
+
+                    <!-- Sortable Column: Rent Amount -->
+                    <th
+                      @click="handleSort('rent')"
+                      class="py-2 px-3 text-right cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    >
+                      <div class="flex items-center justify-end gap-1">
+                        <span>ค่าเช่ารายเดือน</span>
+                        <span v-if="sortKey === 'rent'" class="text-blue-600 font-bold">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                      </div>
+                    </th>
+
+                    <!-- Sortable Column: Status -->
+                    <th
+                      @click="handleSort('status')"
+                      class="py-2 px-3 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    >
+                      <div class="flex items-center gap-1">
+                        <span>สถานะ</span>
+                        <span v-if="sortKey === 'status'" class="text-blue-600 font-bold">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                      </div>
+                    </th>
+
+                    <th class="py-2 px-3 text-right">การจัดการ</th>
+                  </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/80 font-medium">
+                  <tr
+                    v-for="item in paginatedData"
+                    :key="item.id"
+                    :class="[
+                      'transition duration-100',
+                      selectedRowIds.includes(item.id)
+                        ? 'bg-blue-50/70 dark:bg-blue-950/30'
+                        : 'hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40'
+                    ]"
+                  >
+                    <td class="py-2 px-3">
+                      <input
+                        type="checkbox"
+                        :value="item.id"
+                        v-model="selectedRowIds"
+                        class="rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </td>
+                    <td class="py-2 px-3">
+                      <div class="font-bold text-zinc-900 dark:text-zinc-100">{{ item.roomNumber }}</div>
+                      <div class="text-[9px] text-zinc-400 font-mono">{{ item.contractNo }}</div>
+                    </td>
+                    <td class="py-2 px-3 text-zinc-800 dark:text-zinc-200">{{ item.tenantName }}</td>
+                    <td class="py-2 px-3 text-zinc-500 dark:text-zinc-400 text-[10px]">{{ item.period }}</td>
+                    <td class="py-2 px-3 text-right font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                      ฿{{ item.rent.toLocaleString() }}
+                    </td>
+                    <td class="py-2 px-3">
+                      <span
+                        :class="[
+                          'px-1.5 py-0.2 rounded text-[9px] font-bold inline-flex items-center gap-1',
+                          item.status === 'Active'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
+                            : item.status === 'Pending'
+                            ? 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800'
+                            : 'bg-zinc-100 text-zinc-600 border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'
+                        ]"
+                      >
+                        <span class="w-1 h-1 rounded-full" :class="item.status === 'Active' ? 'bg-emerald-500' : item.status === 'Pending' ? 'bg-amber-500' : 'bg-zinc-400'"></span>
+                        {{ item.status }}
+                      </span>
+                    </td>
+                    <td class="py-2 px-3 text-right space-x-1.5">
+                      <button class="text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 font-semibold">ดูข้อมูล</button>
+                      <button class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">แก้ไข</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Table Pagination Footer -->
+              <div class="px-3 py-1.5 bg-zinc-50/60 dark:bg-zinc-900/60 border-t border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between text-[10px] text-zinc-500">
+                <span>แสดง {{ paginatedData.length }} จากทั้งหมด {{ filteredAndSortedData.length }} รายการ</span>
+                
+                <div class="flex items-center gap-1">
+                  <button
+                    :disabled="currentPage === 1"
+                    @click="currentPage--"
+                    class="px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-100 transition"
+                  >
+                    ก่อนหน้า
+                  </button>
+                  <span class="px-2 font-semibold text-zinc-800 dark:text-zinc-200">{{ currentPage }} / {{ totalPages }}</span>
+                  <button
+                    :disabled="currentPage >= totalPages"
+                    @click="currentPage++"
+                    class="px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-100 transition"
+                  >
+                    ถัดไป
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Compact Card List View (< md) -->
+            <div class="space-y-1.5 md:hidden">
+              <div
+                v-for="item in paginatedData"
+                :key="item.id"
+                class="rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-2.5 shadow-2xs space-y-1.5"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="font-bold text-[11px] text-zinc-900 dark:text-zinc-100">{{ item.roomNumber }}</span>
+                    <span class="text-[9px] text-zinc-400 block font-mono">{{ item.contractNo }}</span>
+                  </div>
+                  <span
+                    :class="[
+                      'px-1.5 py-0.2 rounded text-[9px] font-bold',
+                      item.status === 'Active'
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                        : 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300'
+                    ]"
+                  >
+                    {{ item.status }}
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-[10px] text-zinc-500 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+                  <span>ผู้เช่า: <b class="text-zinc-800 dark:text-zinc-200">{{ item.tenantName }}</b></span>
+                  <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">฿{{ item.rent.toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-end gap-2 pt-0.5 text-[10px]">
+                  <button class="text-blue-600 dark:text-blue-400 font-semibold">ดูข้อมูล</button>
+                  <button class="text-zinc-500">แก้ไข</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Vue 3 Interactive App & Sort/Filter Logic Script -->
+  <script>
+    const { createApp, ref, computed, onMounted, nextTick } = Vue
+
+    createApp({
+      setup() {
+        const isCollapsed = ref(false)
+        const isMobileOpen = ref(false)
+        const isProfileOpen = ref(false)
+        const isDark = ref(false)
+        const activeNavId = ref('contracts')
+        const currentState = ref('ready')
+
+        // 🔍 Search & Filter Reactive States
+        const sidebarNavSearch = ref('')
+        const tableKeyword = ref('')
+        const selectedStatus = ref('All')
+        const datePreset = ref('7D')
+
+        // ↕️ Sorting Reactive States
+        const sortKey = ref('rent')
+        const sortOrder = ref('desc')
+
+        // ☑️ Selection & Pagination
+        const selectedRowIds = ref([])
+        const currentPage = ref(1)
+        const pageSize = ref(5)
+
+        const uiStates = [
+          { id: 'ready', label: 'Data View', dotColor: 'bg-emerald-400' },
+          { id: 'loading', label: 'Skeleton', dotColor: 'bg-amber-400' },
+          { id: 'empty', label: 'Empty State', dotColor: 'bg-zinc-400' },
+          { id: 'error', label: 'Error Retry', dotColor: 'bg-rose-400' },
+        ]
+
+        // Crisp SVG Lucide Icons
+        const icons = {
+          dashboard: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
+          analytics: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>`,
+          contracts: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>`,
+          billing: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`,
+          slips: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>`,
+          users: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+          settings: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+          revenue: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+          building: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>`,
+        }
+
+        const kpiStats = [
+          { title: 'รายได้รวมประจำเดือน', value: '฿482,500', change: '14.2%', trendUp: true, subtitle: 'เทียบกับเดือนก่อน', iconSvg: icons.revenue },
+          { title: 'อัตราการเข้าพักรวม', value: '92.4%', change: '3.8%', trendUp: true, subtitle: '48/52 ยูนิต', iconSvg: icons.building },
+          { title: 'สัญญาเช่ารอดำเนินการ', value: '18 รายการ', change: '2', trendUp: false, subtitle: 'รอลงนาม', iconSvg: icons.contracts },
+          { title: 'สลิปโอนเงินรอตรวจ', value: '5 รายการ', change: 'ด่วน', trendUp: true, subtitle: '฿72,500', iconSvg: icons.slips },
+        ]
+
+        const navGroups = [
+          {
+            id: 'main',
+            title: 'เมนูหลัก',
+            items: [
+              { id: 'dashboard', label: 'ภาพรวมระบบ', iconSvg: icons.dashboard },
+              { id: 'analytics', label: 'สถิติ & รายงาน', iconSvg: icons.analytics },
+            ]
+          },
+          {
+            id: 'ops',
+            title: 'บริการห้องพัก',
+            items: [
+              { id: 'contracts', label: 'สัญญาเช่า & ห้อง', iconSvg: icons.contracts, badge: '12 ใหม่', badgeColor: 'blue' },
+              { id: 'billing', label: 'รอบบิล & หนี้', iconSvg: icons.billing },
+              { id: 'slips', label: 'ตรวจสลิปโอน', iconSvg: icons.slips, badge: '5 ใหม่', badgeColor: 'rose' },
+            ]
+          },
+          {
+            id: 'system',
+            title: 'ตั้งค่าระบบ',
+            items: [
+              { id: 'users', label: 'ผู้ใช้งาน & สิทธิ์', iconSvg: icons.users },
+              { id: 'settings', label: 'ตั้งค่าระบบ', iconSvg: icons.settings },
+            ]
+          }
+        ]
+
+        // 8 Realistic Records
+        const rawTableData = [
+          { id: '1', roomNumber: 'ห้อง A-402 (Deluxe Suite)', contractNo: 'CT-2026-089', tenantName: 'กิตติศักดิ์ เจริญสุข', period: '01/01/69 - 31/12/69', rent: 14500, status: 'Active' },
+          { id: '2', roomNumber: 'ห้อง B-105 (Standard)', contractNo: 'CT-2026-092', tenantName: 'วิภาดา วงศ์สุวรรณ', period: '15/02/69 - 14/02/70', rent: 8500, status: 'Active' },
+          { id: '3', roomNumber: 'ห้อง C-801 (Penthouse)', contractNo: 'CT-2026-095', tenantName: 'ณัฐพงษ์ ศรีสุวัฒน์', period: '01/03/69 - 28/02/70', rent: 32000, status: 'Pending' },
+          { id: '4', roomNumber: 'ห้อง A-201 (Studio)', contractNo: 'CT-2026-099', tenantName: 'อนันต์ ทรงธรรม', period: '01/08/68 - 31/07/69', rent: 7200, status: 'Active' },
+          { id: '5', roomNumber: 'ห้อง B-304 (Standard)', contractNo: 'CT-2026-102', tenantName: 'พิมพาพร ลิขิตชัย', period: '10/01/69 - 09/01/70', rent: 9000, status: 'Active' },
+          { id: '6', roomNumber: 'ห้อง C-502 (Deluxe Suite)', contractNo: 'CT-2026-105', tenantName: 'ธนากร ภูริเดช', period: '01/05/68 - 30/04/69', rent: 15500, status: 'Expired' },
+          { id: '7', roomNumber: 'ห้อง A-305 (Studio)', contractNo: 'CT-2026-108', tenantName: 'ชลธิชา แก้วมณี', period: '15/03/69 - 14/03/70', rent: 7500, status: 'Pending' },
+          { id: '8', roomNumber: 'ห้อง B-202 (Standard)', contractNo: 'CT-2026-111', tenantName: 'เอกชัย ชัยวัฒน์', period: '01/04/68 - 31/03/69', rent: 8800, status: 'Expired' },
+        ]
+
+        // 🔄 Filter & Search Computed Pipeline
+        const filteredAndSortedData = computed(() => {
+          let list = [...rawTableData]
+
+          // 1. Status Filter
+          if (selectedStatus.value !== 'All') {
+            list = list.filter(item => item.status === selectedStatus.value)
+          }
+
+          // 2. Keyword Search Filter
+          if (tableKeyword.value.trim()) {
+            const q = tableKeyword.value.toLowerCase()
+            list = list.filter(item =>
+              item.roomNumber.toLowerCase().includes(q) ||
+              item.contractNo.toLowerCase().includes(q) ||
+              item.tenantName.toLowerCase().includes(q)
+            )
+          }
+
+          // 3. Multi-Field Sorting
+          list.sort((a, b) => {
+            let fieldA = a[sortKey.value]
+            let fieldB = b[sortKey.value]
+
+            if (typeof fieldA === 'string') {
+              const res = fieldA.localeCompare(fieldB, 'th')
+              return sortOrder.value === 'asc' ? res : -res
+            } else {
+              return sortOrder.value === 'asc' ? fieldA - fieldB : fieldB - fieldA
+            }
+          })
+
+          return list
+        })
+
+        // 📄 Pagination Slicing
+        const totalPages = computed(() => Math.max(1, Math.ceil(filteredAndSortedData.value.length / pageSize.value)))
+        const paginatedData = computed(() => {
+          const start = (currentPage.value - 1) * pageSize.value
+          return filteredAndSortedData.value.slice(start, start + pageSize.value)
+        })
+
+        // ↕️ Handle Sort Column Click
+        const handleSort = (key) => {
+          if (sortKey.value === key) {
+            sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+          } else {
+            sortKey.value = key
+            sortOrder.value = 'asc'
+          }
+        }
+
+        // ☑️ Selection Toggle
+        const isAllSelected = computed(() => {
+          return paginatedData.value.length > 0 && paginatedData.value.every(row => selectedRowIds.value.includes(row.id))
+        })
+
+        const toggleSelectAll = () => {
+          if (isAllSelected.value) {
+            selectedRowIds.value = []
+          } else {
+            selectedRowIds.value = paginatedData.value.map(row => row.id)
+          }
+        }
+
+        // Sidebar Navigation Filter
+        const filteredNavGroups = computed(() => {
+          if (!sidebarNavSearch.value.trim()) return navGroups
+          const q = sidebarNavSearch.value.toLowerCase()
+          return navGroups.map(group => ({
+            ...group,
+            items: group.items.filter(item => item.label.toLowerCase().includes(q))
+          })).filter(group => group.items.length > 0)
+        })
+
+        let lineChartInstance = null
+        let barChartInstance = null
+
+        const initCharts = () => {
+          const isDarkModeActive = isDark.value
+          const gridColor = isDarkModeActive ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)'
+          const labelColor = isDarkModeActive ? '#a1a1aa' : '#71717a'
+          const brandColor = '#1C4D8D'
+
+          // 1. Line Chart
+          const lineCtx = document.getElementById('lineChartCanvas')
+          if (lineCtx) {
+            if (lineChartInstance) lineChartInstance.destroy()
+            const ctx2d = lineCtx.getContext('2d')
+            const gradient = ctx2d.createLinearGradient(0, 0, 0, 160)
+            gradient.addColorStop(0, brandColor + '30')
+            gradient.addColorStop(1, brandColor + '00')
+
+            lineChartInstance = new Chart(lineCtx, {
+              type: 'line',
+              data: {
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.'],
+                datasets: [{
+                  label: 'รายรับสุทธิ',
+                  data: [320000, 345000, 390000, 410000, 435000, 420000, 465000, 482500],
+                  borderColor: brandColor,
+                  borderWidth: 2,
+                  pointBackgroundColor: brandColor,
+                  pointBorderColor: '#ffffff',
+                  pointBorderWidth: 1.5,
+                  pointRadius: 3,
+                  pointHoverRadius: 4.5,
+                  fill: true,
+                  backgroundColor: gradient,
+                  tension: 0.35,
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    backgroundColor: isDarkModeActive ? '#18181b' : '#ffffff',
+                    titleColor: isDarkModeActive ? '#f4f4f5' : '#18181b',
+                    bodyColor: isDarkModeActive ? '#d4d4d8' : '#3f3f46',
+                    borderColor: isDarkModeActive ? '#27272a' : '#e4e4e7',
+                    borderWidth: 1,
+                    padding: 6,
+                    callbacks: {
+                      label: (context) => ` ฿${context.parsed.y.toLocaleString()} บาท`
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    grid: { color: gridColor },
+                    ticks: { color: labelColor, font: { family: 'Prompt', size: 9 } }
+                  },
+                  y: {
+                    grid: { color: gridColor },
+                    ticks: {
+                      color: labelColor,
+                      font: { family: 'Inter', size: 8 },
+                      callback: (val) => '฿' + (val / 1000) + 'k'
+                    }
+                  }
+                }
+              }
+            })
+          }
+
+          // 2. Bar Chart
+          const barCtx = document.getElementById('barChartCanvas')
+          if (barCtx) {
+            if (barChartInstance) barChartInstance.destroy()
+            barChartInstance = new Chart(barCtx, {
+              type: 'bar',
+              data: {
+                labels: ['Studio', 'Standard', 'Deluxe', 'Penthouse'],
+                datasets: [{
+                  label: 'รายรับรวม',
+                  data: [86400, 136000, 174000, 86100],
+                  backgroundColor: [
+                    '#1C4D8Dcc',
+                    '#1C4D8D99',
+                    '#1C4D8Dff',
+                    '#1C4D8D77',
+                  ],
+                  borderRadius: 4,
+                  borderSkipped: false,
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    backgroundColor: isDarkModeActive ? '#18181b' : '#ffffff',
+                    titleColor: isDarkModeActive ? '#f4f4f5' : '#18181b',
+                    bodyColor: isDarkModeActive ? '#d4d4d8' : '#3f3f46',
+                    borderColor: isDarkModeActive ? '#27272a' : '#e4e4e7',
+                    borderWidth: 1,
+                    padding: 6,
+                    callbacks: {
+                      label: (context) => ` ฿${context.parsed.y.toLocaleString()} บาท`
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    grid: { display: false },
+                    ticks: { color: labelColor, font: { family: 'Prompt', size: 9 } }
+                  },
+                  y: {
+                    grid: { color: gridColor },
+                    ticks: {
+                      color: labelColor,
+                      font: { family: 'Inter', size: 8 },
+                      callback: (val) => '฿' + (val / 1000) + 'k'
+                    }
+                  }
+                }
+              }
+            })
+          }
+        }
+
+        const toggleDarkMode = () => {
+          isDark.value = !isDark.value
+          document.documentElement.classList.toggle('dark', isDark.value)
+          nextTick(() => {
+            initCharts()
+          })
+        }
+
+        onMounted(() => {
+          nextTick(() => {
+            initCharts()
+          })
+        })
+
+        return {
+          isCollapsed,
+          isMobileOpen,
+          isProfileOpen,
+          isDark,
+          activeNavId,
+          currentState,
+          sidebarNavSearch,
+          tableKeyword,
+          selectedStatus,
+          datePreset,
+          sortKey,
+          sortOrder,
+          selectedRowIds,
+          currentPage,
+          pageSize,
+          totalPages,
+          filteredNavGroups,
+          filteredAndSortedData,
+          paginatedData,
+          isAllSelected,
+          handleSort,
+          toggleSelectAll,
+          uiStates,
+          kpiStats,
+          toggleDarkMode
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>

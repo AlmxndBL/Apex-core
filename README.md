@@ -9,45 +9,16 @@
 
 ---
 
-## ⚡ เริ่มใช้งานใน 10 วินาที (10-Second Quickstart)
+## ⚡ เริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
 
-เลือกรูปแบบที่ต้องการ แล้วก๊อปปี้ไปวางที่ Root Directory ของโปรเจกต์ได้ทันที:
+ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณ (หรือเปลี่ยนชื่อตามเครื่องมือที่ใช้):
 
-### 🟢 1. Apex Nano (แนะนำสำหรับทุกคน — 1 ไฟล์เดี่ยว จบในตัว)
-ก๊อปปี้ไฟล์ [`presets/nano/AGENTS.md`](./presets/nano/AGENTS.md) ไปวางที่ Root โปรเจกต์ของคุณ (หรือเปลี่ยนชื่อเป็น `.cursorrules` / `CLAUDE.md`):
+* **Cursor IDE:** วางเป็น `.cursorrules` หรือ `AGENTS.md`
+* **Claude Code:** วางเป็น `CLAUDE.md` หรือ `AGENTS.md`
+* **Windsurf / Trae:** วางเป็น `AGENTS.md`
+* **Google Antigravity:** เชื่อมต่อเป็น Global Plugin ผ่าน `~/.gemini/config/plugins.json`
 
-```markdown
-# ⚡ Apex Nano — Senior AI Coding Guardrails (v5.0)
-
-1. 🎯 3-TIER DYNAMIC INTENT: 
-   - Tier 1 (Read-Only): If user asks "why/explain/audit", diagnose in READ-ONLY mode.
-   - Tier 2 (Actionable Flow): If user asks "fix/build/refactor", diagnose, implement, and fast-verify in 1 turn.
-   - Tier 3 (Guarded Destructive): Schema drops, auth rewrites, or deletions require user approval first.
-2. 🧪 FAST IN-MEMORY CHECK: Run `tsc --noEmit` / `vue-tsc --noEmit` (1-2s). NEVER run full build for single edits.
-3. 📜 EVIDENCE DELIVERY: No terminal output proof = Task is NOT complete.
-4. ✂️ DUAL EXECUTION MODES: 
-   - Patch Mode for targeted bug fixes (surgical diffs).
-   - Synthesis Mode for new features and UI components (holistic 3-file modules).
-5. 🚨 2-STRIKE LOOP BREAKER: If a fix fails twice, STOP immediately and ask the user.
-```
-
----
-
-### 🟡 2. Stack-Specific Presets (พร้อมใช้เฉพาะ Framework)
-* ⚡ **Next.js 15 / React 19:** ใช้ [`presets/nextjs/AGENTS.md`](./presets/nextjs/AGENTS.md) (RSC, Server Actions, 4-State UI, Zod, Prisma)
-* 💚 **Nuxt 4 / Vue 3:** ใช้ [`presets/nuxt4/AGENTS.md`](./presets/nuxt4/AGENTS.md) (Nitro, Composables, 4-State UI, Hydration-Safe, Prisma)
-
----
-
-### 🟣 3. Apex Pro Engine (สำหรับ Google Antigravity & Studio Workspaces)
-เชื่อมต่อเป็น Global Live Plugin ผ่าน `~/.gemini/config/plugins.json`:
-```json
-{
-  "entries": [
-    { "path": "/absolute/path/to/Apex-core" }
-  ]
-}
-```
+> 💡 **Unified Auto-Detection:** `AGENTS.md` จะอ่าน `package.json` ของคุณโดยอัตโนมัติ เพื่อเลือกไวยากรณ์ที่ถูกต้องทันที ไม่ว่าโปรเจกต์ของคุณจะเป็น **Nuxt 4 (Vue 3)** หรือ **Next.js 15 (React 19)** หรือ **Python / Go Backend** โดยไม่มีการสับสนไวยากรณ์
 
 ---
 
@@ -63,18 +34,17 @@
 
 ---
 
-## 🏛️ สถาปัตยกรรม 3 ระดับ (The 3-Tier Model)
+## 🏛️ สถาปัตยกรรม 2 ระดับ (The Two-Layer Model)
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 🟢 Tier 1: Apex Nano (1-File Drop-in — ~30 บรรทัด)                          │
-│    • เหมาะสำหรับ: Solo Devs, โปรเจกต์ทั่วไป, ก๊อปปี้ไปวางใน 5 วินาที         │
+│ 🟢 Layer 1: Universal Drop-in (`AGENTS.md` — ~150 บรรทัด)                    │
+│    • Single Source of Truth: ก๊อปปี้ไฟล์เดียวได้ทั้ง 5 กฎ + Matrix + Blueprints│
+│    • เหมาะสำหรับ: Cursor, Claude Code, Windsurf, ทุกโปรเจกต์                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 🟡 Tier 2: Apex Core (Stack Presets — Next.js 15 / Nuxt 4)                  │
-│    • เหมาะสำหรับ: Full-Stack Devs ที่ต้องการมาตรฐานเฉพาะ Framework          │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 🟣 Tier 3: Apex Pro Studio (Apex Engine + 4 Consolidated Skills + Templates)│
-│    • เหมาะสำหรับ: Multi-Agent Workspaces, Monorepos, และ Enterprise Projects│
+│ 🟣 Layer 2: Deep Knowledge Engine (`rules/` + `skills/` + `templates/`)      │
+│    • 6 เสาหลักความปลอดภัย, ฐานข้อมูล Prisma OCC, และ UI Tokens ละเอียดระดับลึก│
+│    • เหมาะสำหรับ: Antigravity Multi-Agent Studio และ Enterprise Monorepos   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -86,6 +56,14 @@
 2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard API Handler Pipeline, Dedicated Service Layer, Database Transactions, Strict TypeScript (No Any), Prisma ORM & OCC Concurrency, Better Auth Integration.
 3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-Memory Fast TypeCheck (1-3s), Vitest Runner, Safe Turn Rollback, Cumulative 2-Strike Failure Recovery.
 4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Search-First Token Diet, Session Handoff.
+
+---
+
+## 🖼️ มาตรฐานงาน UI/UX ระดับ Enterprise (Live Showcase)
+
+![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
+
+Apex บังคับใช้ **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, Magic UI Theme Toggler, Interactive Sort/Filter Data Tables, และ Crisp SVG Lucide Icons (Strict Zero Emojis) ทั้งใน **Vue 3 / Nuxt 4** และ **React 19 / Next.js 15** โดยมีชุด Starter Component Templates พร้อมใช้งานใน [`templates/ui/`](./templates/ui/)
 
 ---
 

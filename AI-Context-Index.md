@@ -17,13 +17,11 @@
 
 ```text
 .
-├── AGENTS.md                  # Master Agent Operating Protocol (v5.0)
+├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
-├── README.md                  # Global English Documentation & Quickstart
-├── README_TH.md               # Thai Documentation & Community Guide
+├── README.md                  # Master Documentation & Single Drop-in Guide
 ├── package.json               # Engine Configuration & Scripts
 ├── plugin.json                # Live Antigravity Plugin Metadata
-├── presets/                   # Framework & Scope Presets (nano, nextjs, nuxt4)
 ├── rules/                     # 6 Domain Engineering Standards
 │   ├── 01-security-auth.md
 │   ├── 02-coding-standards.md

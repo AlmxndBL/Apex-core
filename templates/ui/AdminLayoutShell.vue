@@ -95,18 +95,6 @@ const isDesktopCollapsed = ref(false)
         <!-- Right: Actions & User Header Extras -->
         <div class="flex items-center gap-2 sm:gap-3 shrink-0">
           <slot name="header-actions">
-            <!-- Search Bar Mockup -->
-            <div class="relative hidden md:block">
-              <input
-                type="text"
-                placeholder="ค้นหาด่วน... (Ctrl + K)"
-                class="w-48 lg:w-64 pl-8 pr-3 py-1.5 rounded-xl text-xs bg-slate-100 dark:bg-slate-800 border-none text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-[#1C4D8D] outline-none transition-all"
-              />
-              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-              </svg>
-            </div>
-
             <!-- Notifications Icon Button -->
             <button
               type="button"

@@ -93,6 +93,17 @@ const closeMobileDrawer = () => {
   isMobileOpen.value = false
 }
 
+const searchQuery = ref('')
+
+const filteredNavGroups = computed(() => {
+  if (!searchQuery.value.trim()) return props.navGroups
+  const q = searchQuery.value.toLowerCase()
+  return props.navGroups.map(group => ({
+    ...group,
+    items: group.items.filter(item => item.label.toLowerCase().includes(q))
+  })).filter(group => group.items.length > 0)
+})
+
 const handleItemClick = (item: NavItem) => {
   if (item.onClick) {
     item.onClick()
@@ -246,10 +257,39 @@ const getBadgeClass = (color: NavItem['badgeColor'] = 'blue') => {
       </div>
 
       <!-- ========================================== -->
-      <!-- Tier 2: Grouped Navigation (Scrollable)    -->
+      <!-- Tier 2: Search & Grouped Navigation        -->
       <!-- ========================================== -->
+      <div class="px-3 pt-3 pb-1">
+        <!-- Expanded Search Input -->
+        <div v-if="!isCollapsed" class="relative">
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="ค้นหาเมนู... (⌘K)"
+            class="w-full pl-8 pr-10 py-1.5 text-xs rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#1C4D8D] focus:border-[#1C4D8D] transition-colors"
+          />
+          <svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          <kbd class="absolute right-2 top-2 text-[9px] bg-white dark:bg-slate-700 text-slate-500 px-1 rounded border border-slate-200 dark:border-slate-600 font-mono">⌘K</kbd>
+        </div>
+        <!-- Collapsed Search Button -->
+        <div v-else class="flex justify-center">
+          <button
+            type="button"
+            @click="isCollapsed = false"
+            class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-[#1C4D8D] hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-colors"
+            title="ค้นหาเมนู (⌘K)"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <nav class="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-4 custom-scrollbar">
-        <div v-for="group in navGroups" :key="group.id" class="space-y-1">
+        <div v-for="group in filteredNavGroups" :key="group.id" class="space-y-1">
           <!-- Group Title -->
           <div v-if="!isCollapsed" class="px-3 pt-2 pb-1">
             <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
@@ -346,8 +386,8 @@ const getBadgeClass = (color: NavItem['badgeColor'] = 'blue') => {
             v-if="isProfilePopoverOpen"
             ref="profilePopoverRef"
             :class="[
-              'absolute bottom-full mb-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 z-50 text-xs select-none',
-              isCollapsed ? 'left-2 w-56' : 'left-3 right-3'
+              'absolute bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 z-50 text-xs select-none',
+              isCollapsed ? 'left-[calc(100%+8px)] bottom-2 w-56' : 'bottom-full mb-2 left-2 right-2'
             ]"
           >
             <!-- User Summary Header -->

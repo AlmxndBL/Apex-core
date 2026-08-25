@@ -30,12 +30,6 @@ const REQUIRED_SKILLS = [
   'cartography',
 ];
 
-const REQUIRED_PRESETS = [
-  'nano/AGENTS.md',
-  'nextjs/AGENTS.md',
-  'nuxt4/AGENTS.md',
-];
-
 const REQUIRED_TEMPLATES = [
   'AI-Context-Index.md',
   'gitignore-production.md',
@@ -122,14 +116,13 @@ for (const skillName of REQUIRED_SKILLS) {
   assert(content.length > 300, `Skill ${skillName} has detailed actionable instructions (${content.length} chars)`);
 }
 
-// 5. Presets Verification
-console.log('\n\x1b[1m5. Multi-Platform Presets (Tier 1 & 2)\x1b[0m');
-for (const presetFile of REQUIRED_PRESETS) {
-  const filePath = path.join(ROOT_DIR, 'presets', presetFile);
-  const exists = fs.existsSync(filePath);
-  const size = exists ? fs.statSync(filePath).size : 0;
-  assert(exists && size > 100, `Preset presets/${presetFile} exists and is populated (${size} bytes)`);
-}
+// 5. Unified Protocol Architecture Checks
+console.log('\n\x1b[1m5. Unified Protocol & Architecture Blueprint Verification\x1b[0m');
+const unifiedAgentsContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
+assert(unifiedAgentsContent.includes('Deterministic Stack Detection & Mapping Matrix'), 'AGENTS.md contains Stack Detection & Mapping Matrix');
+assert(unifiedAgentsContent.includes('Feature Module Pattern'), 'AGENTS.md contains 3-File Feature Module Architecture');
+assert(unifiedAgentsContent.includes('Mandatory 4-State UI Contract'), 'AGENTS.md contains Mandatory 4-State UI Contract');
+assert(unifiedAgentsContent.includes('Standard 4-Step Handler Pipeline'), 'AGENTS.md contains Standard 4-Step Backend API Pipeline');
 
 // 6. Templates & Blueprints
 console.log('\n\x1b[1m6. Templates & Blueprints\x1b[0m');
