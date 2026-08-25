@@ -38,13 +38,15 @@
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 🟢 Layer 1: Universal Drop-in (`AGENTS.md` — ~150 บรรทัด)                    │
-│    • Single Source of Truth: ก๊อปปี้ไฟล์เดียวได้ทั้ง 5 กฎ + Matrix + Blueprints│
-│    • เหมาะสำหรับ: Cursor, Claude Code, Windsurf, ทุกโปรเจกต์                 │
+│ 🟢 Layer 1: Core Directives (`AGENTS.md` — ~150 บรรทัด)                     │
+│    • Single Drop-in: ก๊อปปี้ไฟล์เดียวได้ทั้ง 5 กฎเหล็ก + Stack Matrix + Blueprints│
+│    • เหมาะสำหรับ: โปรเจกต์ทั่วไปที่ต้องการ Setup ไวใน 5 วินาที และประหยัด Context│
+│    • รองรับ: Cursor, Claude Code, Windsurf, Antigravity, ทุก Agent          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 🟣 Layer 2: Deep Knowledge Engine (`rules/` + `skills/` + `templates/`)      │
-│    • 6 เสาหลักความปลอดภัย, ฐานข้อมูล Prisma OCC, และ UI Tokens ละเอียดระดับลึก│
-│    • เหมาะสำหรับ: Antigravity Multi-Agent Studio และ Enterprise Monorepos   │
+│    • Full Repository: 6 เสาหลักความปลอดภัย, ฐานข้อมูล Prisma OCC, และ UI Tokens │
+│    • เหมาะสำหรับ: โปรเจกต์ขนาดกลาง-ใหญ่, Enterprise Monorepo, และ Multi-Agent    │
+│    • รองรับ: ทุก AI Agent ที่มีระบบอ่านไฟล์ / Indexing (On-Demand Deep Dives)│
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
