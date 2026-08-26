@@ -5,17 +5,29 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.2.3] - 2026-08-26 — Statistical Integrity & Honest Reporting 🧪
+## [5.3.0] - 2026-08-26 — Statistical Integrity, Honest Reporting & Test Suite 🧪
 
 ### Fixed
-- **Exact t-Distribution Statistics (`benchmark/lib/statistics.js`):** Replaced hardcoded p-value lookup thresholds with exact Student's t p-values computed via the regularized incomplete beta function `I_x(df/2, 1/2)`, and replaced the fixed CI critical value (2.262) with per-df bisection-derived critical values (n = 5 now correctly uses t* = 2.77645). All CI95 intervals widen accordingly.
-- **No More Fabricated Significance (`benchmark/runner.js`):** Reports, terminal output, and `results.json` now render the actually-computed p-value instead of a static `p < 0.0001` string. With the current 5-fixture dataset the compression comparison honestly reports as **not statistically significant** at α = 0.05 (p = 0.068); the Surgical-Patch-vs-Whole-File comparison is significant (p = 0.046).
-- **Projection Honesty:** The multi-turn session comparison (-94.4%) is now explicitly labeled an assumption-driven linear projection. Turn counts (incl. the 1.04 design target) and overhead constants (4500 / 2800 / 1100 tokens) are documented in `PROJECTION_ASSUMPTIONS` inside `runner.js` and serialized into `results.json`.
-- **Honest Trade-off Disclosure:** Benchmark reports now state plainly that the Surgical Patch costs ~50.9% more output tokens than Aider's Unified Diff format (its value is deterministic apply + closed-loop verification, not raw token cost).
-- **Latency Labeling:** The measured metric is documented as a line-scan proxy; vue-tsc/tsc typecheck is explicitly out-of-scope for this benchmark (it belongs to the quality-verify protocol).
+- **Exact t-Distribution Statistics (`benchmark/lib/statistics.js`):** Replaced hardcoded p-value lookup thresholds with exact Student's t p-values via the regularized incomplete beta function `I_x(df/2, 1/2)`, and replaced the fixed CI critical value (2.262) with per-df bisection-derived critical values (n = 5 now correctly uses t* = 2.77645).
+- **No More Fabricated Significance (`benchmark/runner.js`):** Reports, terminal output, and `results.json` render the actually-computed p-value instead of a static `p < 0.0001` string. After fixture expansion the compression comparison is now genuinely significant (p = 0.0031); Surgical-Patch-vs-Whole-File is significant (p = 0.046).
+- **Broken npm Scripts Removed:** `install:apex` / `shield` / `scan` proxies required `.cjs` files deleted in the v5.2.2 cleanup — broken proxies and their package.json entries are now removed (caught by new Script Integrity checks).
+- **Dead `--live-api` Flag Removed:** flag was declared in runner but never implemented while documented as a feature in the whitepaper; replaced by a planned live-agent experiment protocol.
+- **Projection Honesty:** Multi-turn session figures (-94%) explicitly labeled assumption-driven linear projections; turn counts (incl. 1.04 design target) and overhead constants documented in `PROJECTION_ASSUMPTIONS` and serialized into `results.json`.
+- **Honest Trade-off Disclosure:** Benchmark reports state plainly that the Surgical Patch costs +50.9% more output tokens than Aider's Unified Diff (value = deterministic apply + closed-loop verification, not raw token cost).
+- **Latency Labeling:** Measured metric documented as a line-scan proxy; vue-tsc/tsc typecheck is explicitly out-of-scope for this benchmark.
+- **Tokenizer Fallback Warning:** character-estimate fallback no longer silently mixes with exact BPE counts (warn-once). Cost label corrected to Claude-class pricing (GPT-4o differs).
 
 ### Added
-- **Unit Tests (`scripts/test-statistics.js`):** Validates incomplete-beta p-values and bisection critical values against published t-table references (df = 1…10000), CI width scaling, and paired t-test edge cases. Wired into `npm test` ahead of the framework integrity suite.
+- **Unit Test Suites wired into `npm test`:** statistics (28 checks vs published t-tables, df = 1…10000) and ast-extractor golden tests (27 checks locking TS / Vue SFC / Prisma extraction behavior).
+- **Fixture Expansion n = 5 → n = 13:** new domains (RBAC guard, payment provider service, paginated-query & form-validation composables, audit-table SFC, analytics Prisma schema) plus an intentional low-compression config fixture for honest variance. Output-burden arm remains on the defect-paired subset; report table generation is now data-driven.
+- **CI Workflow (`​.github/workflows/test.yml`):** unit tests + integrity suite + benchmark regeneration on push/PR with artifact upload.
+- **Experiment Protocol (`benchmark/EXPERIMENT_PROTOCOL.md`):** pre-registerable design for live-agent validation of turn-count/token/success-rate claims.
+- **Script Integrity Checks (`verify-framework` §9):** validates every `package.json` script target and every `require()` proxy target exists.
+- **2-Strike Reset Semantics (`AGENTS.md`, `skills/quality-verify`):** strike counter resets only on a new task or explicit user direction after a Freeze Report.
+- **Stack Matrix Override Hatch (`AGENTS.md`):** mappings declared in `AI-Context-Index.md` take precedence over default conventions; never force-refactor healthy structures.
+
+### Changed
+- **Extractor Honesty & Robustness (`benchmark/lib/ast-extractor.js`):** header renamed to a heuristic line-based scanner with documented KNOWN LIMITATIONS; handles default-exported functions, class signature lines, attribute-order-tolerant Vue `<script>` matching, and single-line interface declarations.
 
 ## [5.2.2] - 2026-08-26 — Lean Storefront & Dedicated Benchmark Encapsulation 🚀
 

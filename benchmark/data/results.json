@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-08-26T11:38:45.728Z",
+  "timestamp": "2026-08-26T12:04:40.345Z",
   "datasetVersion": "Apex-core 5",
   "tokenizer": "cl100k_base (gpt-tokenizer BPE)",
-  "fixturesCount": 5,
+  "fixturesCount": 13,
   "citations": [
     "Jimenez et al. (2024). SWE-bench: Can Language Models Resolve Real-World GitHub Issues? ICLR 2024.",
     "Paul Gauthier (2024). Aider: AI Pair Programming in Your Terminal - Benchmark Suite & Edit Formats.",
@@ -14,36 +14,36 @@
     "pValueComputation": "regularized incomplete beta function I_x(df/2, 1/2) — exact for given df",
     "confidenceInterval": "two-sided t critical value solved per sample df (bisection on t distribution)",
     "significanceAlpha": 0.05,
-    "caveat": "n = 5 fixtures per arm — study is underpowered; treat inferential flags as indicative"
+    "caveat": "compression arm n = 13; output-burden arm uses the defect-paired subset only"
   },
   "contextPruningBenchmark": {
     "rawSourceTokens": {
-      "mean": 799.6,
-      "stdDev": 597.82,
+      "mean": 525.31,
+      "stdDev": 417.22,
       "ci95": [
-        57.3,
-        1541.9
+        273.18,
+        777.43
       ],
-      "min": 399,
+      "min": 222,
       "max": 1858,
-      "count": 5
+      "count": 13
     },
     "astContractTokens": {
-      "mean": 107,
-      "stdDev": 43.67,
+      "mean": 92.92,
+      "stdDev": 39.18,
       "ci95": [
-        52.77,
-        161.23
+        69.25,
+        116.6
       ],
-      "min": 67,
+      "min": 19,
       "max": 166,
-      "count": 5
+      "count": 13
     },
-    "averageCompressionRatioPercent": 80.7,
+    "averageCompressionRatioPercent": 77.6,
     "inferentialStatistics": {
-      "tStat": 2.4845,
-      "pValue": 0.067882,
-      "significant": false
+      "tStat": 3.6889,
+      "pValue": 0.003098,
+      "significant": true
     }
   },
   "editFormatBurdenBenchmark": {
@@ -107,11 +107,11 @@
         "apexProtocol": 1100
       }
     },
-    "aiderGenericTokens": 17659,
-    "anthropicIndustryTokens": 6045,
-    "apexProtocolTokens": 338,
+    "aiderGenericTokens": 16667,
+    "anthropicIndustryTokens": 5392,
+    "apexProtocolTokens": 324,
     "netSavingsVsAiderPercent": 98.1,
-    "netSavingsVsAnthropicPercent": 94.4
+    "netSavingsVsAnthropicPercent": 94
   },
   "fixtureBreakdown": [
     {
@@ -125,7 +125,7 @@
         "astChars": 533,
         "astTokens": 138,
         "compressionRatioPercent": 78.3,
-        "extractDurationMs": 0.405
+        "extractDurationMs": 0.568
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 641,
@@ -134,7 +134,7 @@
         "savingsVsWholePercent": 90.2,
         "savingsVsDiffPercent": -21.2
       },
-      "latencyMs": 0.051
+      "latencyMs": 0.07
     },
     {
       "file": "02_frontend_view.vue",
@@ -147,7 +147,7 @@
         "astChars": 232,
         "astTokens": 67,
         "compressionRatioPercent": 96.4,
-        "extractDurationMs": 0.083
+        "extractDurationMs": 0.257
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 1903,
@@ -156,7 +156,7 @@
         "savingsVsWholePercent": 80.7,
         "savingsVsDiffPercent": -76.9
       },
-      "latencyMs": 0.019
+      "latencyMs": 0.018
     },
     {
       "file": "03_state_store.ts",
@@ -166,9 +166,9 @@
       "metrics": {
         "rawChars": 2271,
         "rawTokens": 544,
-        "astChars": 254,
-        "astTokens": 69,
-        "compressionRatioPercent": 87.3,
+        "astChars": 386,
+        "astTokens": 96,
+        "compressionRatioPercent": 82.4,
         "extractDurationMs": 0.056
       },
       "editBurdenExactTokens": {
@@ -191,7 +191,7 @@
         "astChars": 632,
         "astTokens": 166,
         "compressionRatioPercent": 58.4,
-        "extractDurationMs": 0.136
+        "extractDurationMs": 0.171
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 409,
@@ -200,7 +200,7 @@
         "savingsVsWholePercent": 79.2,
         "savingsVsDiffPercent": -44.1
       },
-      "latencyMs": 0.051
+      "latencyMs": 0.009
     },
     {
       "file": "05_webhook_hmac.ts",
@@ -213,7 +213,7 @@
         "astChars": 411,
         "astTokens": 95,
         "compressionRatioPercent": 83.1,
-        "extractDurationMs": 0.041
+        "extractDurationMs": 0.1
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 595,
@@ -223,6 +223,126 @@
         "savingsVsDiffPercent": -30.2
       },
       "latencyMs": 0.011
+    },
+    {
+      "file": "06_nitro_order_status_handler.ts",
+      "name": "Order Status Handler + Zod Validation + OCC",
+      "domain": "Backend & Database",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1281,
+        "rawTokens": 340,
+        "astChars": 87,
+        "astTokens": 19,
+        "compressionRatioPercent": 94.4,
+        "extractDurationMs": 0.04
+      },
+      "latencyMs": 0.006
+    },
+    {
+      "file": "07_rbac_permission_guard.ts",
+      "name": "RBAC Permission Matrix + Guard Class",
+      "domain": "Security & Auth",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1187,
+        "rawTokens": 294,
+        "astChars": 463,
+        "astTokens": 100,
+        "compressionRatioPercent": 66,
+        "extractDurationMs": 0.047
+      },
+      "latencyMs": 0.036
+    },
+    {
+      "file": "08_use_paginated_query.ts",
+      "name": "Paginated Query Composable + Zod Contract",
+      "domain": "State & Logic Layer",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1724,
+        "rawTokens": 447,
+        "astChars": 470,
+        "astTokens": 110,
+        "compressionRatioPercent": 75.4,
+        "extractDurationMs": 0.048
+      },
+      "latencyMs": 0.01
+    },
+    {
+      "file": "09_payment_provider_service.ts",
+      "name": "Payment Provider Interface + Idempotent Mock",
+      "domain": "Service Layer",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1551,
+        "rawTokens": 373,
+        "astChars": 552,
+        "astTokens": 126,
+        "compressionRatioPercent": 66.2,
+        "extractDurationMs": 0.034
+      },
+      "latencyMs": 0.005
+    },
+    {
+      "file": "10_admin_audit_table.vue",
+      "name": "Audit Table SFC + Danger-Action Badges",
+      "domain": "Frontend UI/UX",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1631,
+        "rawTokens": 467,
+        "astChars": 312,
+        "astTokens": 80,
+        "compressionRatioPercent": 82.9,
+        "extractDurationMs": 0.032
+      },
+      "latencyMs": 0.007
+    },
+    {
+      "file": "11_use_form_validation.ts",
+      "name": "Form Validation Composable + Field States",
+      "domain": "State & Logic Layer",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 1609,
+        "rawTokens": 393,
+        "astChars": 354,
+        "astTokens": 80,
+        "compressionRatioPercent": 79.6,
+        "extractDurationMs": 0.034
+      },
+      "latencyMs": 0.004
+    },
+    {
+      "file": "12_analytics_schema.prisma",
+      "name": "Analytics Schema + Metric Enums + Relations",
+      "domain": "Database & Architecture",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 928,
+        "rawTokens": 222,
+        "astChars": 387,
+        "astTokens": 94,
+        "compressionRatioPercent": 57.7,
+        "extractDurationMs": 0.057
+      },
+      "latencyMs": 0.004
+    },
+    {
+      "file": "13_bootstrap_config.ts",
+      "name": "Bootstrap Config Object (low-diet variance case)",
+      "domain": "Config & Bootstrap",
+      "defectScenario": null,
+      "metrics": {
+        "rawChars": 998,
+        "rawTokens": 295,
+        "astChars": 168,
+        "astTokens": 37,
+        "compressionRatioPercent": 87.5,
+        "extractDurationMs": 0.027
+      },
+      "latencyMs": 0.004
     }
   ]
 }

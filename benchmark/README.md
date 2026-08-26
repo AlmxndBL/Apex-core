@@ -7,7 +7,7 @@
 
 ## 1. Empirical Findings & Telemetry
 
-All empirical benchmarks were executed across 5 production-grade full-stack fixtures in [`benchmark/fixtures/`](./benchmark/fixtures/) using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) and high-resolution sub-millisecond hardware timers (`process.hrtime.bigint()`):
+All empirical benchmarks were executed across 13 production-grade full-stack fixture files in [`benchmark/fixtures/`](./benchmark/fixtures/) using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) and high-resolution sub-millisecond hardware timers (`process.hrtime.bigint()`):
 
 ### 1.1 Ingestion Context Compression (AST Context Compression Ratio - ACCR)
 
@@ -20,9 +20,9 @@ Evaluated via the **AST Cartographer (`ast-extractor.js`)**, which extracts inte
 | **03_state_store.ts** | State & Logic (Composable + Optimistic Rollback) | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.07ms |
 | **04_schema.prisma** | Database Architecture (Prisma Schema + Indexes) | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.16ms |
 | **05_webhook_hmac.ts** | Security & Cryptography (Stripe HMAC SHA-256 Guard) | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.07ms |
-| **GLOBAL MEAN (μ)** | **Average Across All 5 Full-Stack Domains** | **799.6 ± 597.8 tok** | **107.0 ± 43.7 tok** | **🔻 -80.7% (p = 0.068, n.s., n = 5)** | **< 0.35ms** |
+| **GLOBAL MEAN (μ)** | **Average Across All 13 Full-Stack Fixtures** | **525.3 ± 417.2 tok** | **92.9 ± 39.2 tok** | **🔻 -77.6% (p = 0.0031, significant at α = 0.05, n = 13)** | **< 0.35ms** |
 
-> **Statistical disclosure:** paired t-test with df = 4; the compression direction is consistent across all fixtures but not statistically significant at α = 0.05 due to the small fixture count.
+> **Statistical disclosure:** paired t-test with df = 12; the compression direction is consistent across all fixtures and is statistically significant at α = 0.05. The output-burden arm (§1.2) uses the defect-paired subset of fixtures.
 
 ---
 
@@ -54,13 +54,13 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ======================================================================================================
 Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard Frontier Tier)
 
-• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   17,659 tokens ($0.0954 USD)
-• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 6,045 tokens ($0.0326 USD)
-• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns — design target):         338 tokens ($0.0018 USD)
+• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   16,667 tokens ($0.0900 USD)
+• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 5,392 tokens ($0.0291 USD)
+• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns — design target):         324 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET SESSION EFFICIENCY:
-   • Apex-core 5 vs Aider Baseline:      🔻 -98.1% Cumulative Token Reduction ($0.0936 saved/task)
-   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.4% Cumulative Token Reduction ($0.0308 saved/task, modeled projection)
+   • Apex-core 5 vs Aider Baseline:      🔻 -98.1% Cumulative Token Reduction ($0.0882 saved/task)
+   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.0% Cumulative Token Reduction ($0.0273 saved/task, modeled projection)
 ======================================================================================================
 ```
 
@@ -80,7 +80,7 @@ Apex-core 5 decouples probabilistic code generation from deterministic state val
                                    │  Prunes Function Bodies, JSX/Templates & Comments │
                                    │     Extracts DTOs, Zod Schemas & Prisma AST       │
                                    └─────────────────────────┬─────────────────────────┘
-                                                             │ Context Ingestion Reduced by 80.7%
+                                                              │ Context Ingestion Reduced by 77.6% (p = 0.0031)
                                    ┌─────────────────────────▼─────────────────────────┐
                                    │      2. 3-Tier Finite State Machine (FSM)         │
                                    │  Tier 1: Read-Only  |  Tier 2: Single-Turn Patch  │
@@ -153,10 +153,9 @@ Apex-core 5 decouples probabilistic code generation from deterministic state val
 ```bash
 # Execute the empirical benchmark runner with exact BPE tokenizer:
 npm run benchmark
-
-# Optional: Run with live LLM API telemetry (if API key is provided)
-npm run benchmark -- --live-api
 ```
+
+> **Live-agent validation (planned):** end-to-end agent-run telemetry (turn counts, success rates) requires a controlled multi-protocol experiment — see `benchmark/EXPERIMENT_PROTOCOL.md`. Until that study is run, session-level figures remain labeled as modeled projections.
 
 ### Framework Self-Integrity Verification
 ```bash

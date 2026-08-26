@@ -32,8 +32,6 @@ const FIXTURES_DIR = path.join(__dirname, 'fixtures');
 const RESULTS_FILE = path.join(__dirname, 'data', 'results.json');
 const REPORT_FILE = path.join(__dirname, 'reports', 'EMPIRICAL_STUDY.md');
 
-const isLiveApiRequested = process.argv.includes('--live-api');
-
 // ANSI Colors
 const RESET = '\x1b[0m';
 const BOLD = '\x1b[1m';
@@ -53,6 +51,14 @@ const fixtureFiles = [
   { file: '03_state_store.ts', domain: 'State & Logic Layer', name: 'Composable State Store + Optimistic Rollback' },
   { file: '04_schema.prisma', domain: 'Database & Architecture', name: 'Prisma Multi-Model Schema + OCC & Indexes' },
   { file: '05_webhook_hmac.ts', domain: 'Security & Auth', name: 'Stripe Webhook HMAC SHA-256 Signature Guard' },
+  { file: '06_nitro_order_status_handler.ts', domain: 'Backend & Database', name: 'Order Status Handler + Zod Validation + OCC' },
+  { file: '07_rbac_permission_guard.ts', domain: 'Security & Auth', name: 'RBAC Permission Matrix + Guard Class' },
+  { file: '08_use_paginated_query.ts', domain: 'State & Logic Layer', name: 'Paginated Query Composable + Zod Contract' },
+  { file: '09_payment_provider_service.ts', domain: 'Service Layer', name: 'Payment Provider Interface + Idempotent Mock' },
+  { file: '10_admin_audit_table.vue', domain: 'Frontend UI/UX', name: 'Audit Table SFC + Danger-Action Badges' },
+  { file: '11_use_form_validation.ts', domain: 'State & Logic Layer', name: 'Form Validation Composable + Field States' },
+  { file: '12_analytics_schema.prisma', domain: 'Database & Architecture', name: 'Analytics Schema + Metric Enums + Relations' },
+  { file: '13_bootstrap_config.ts', domain: 'Config & Bootstrap', name: 'Bootstrap Config Object (low-diet variance case)' },
 ];
 
 const benchmarkData = [];
@@ -69,7 +75,7 @@ for (let i = 0; i < fixtureFiles.length; i++) {
   const filePath = path.join(FIXTURES_DIR, item.file);
   const rawContent = fs.readFileSync(filePath, 'utf-8');
   const rawChars = rawContent.length;
-  
+
   // Exact BPE Token Calculation using cl100k_base Tokenizer
   const rawTokens = countExactTokens(rawContent);
 
@@ -82,22 +88,35 @@ for (let i = 0; i < fixtureFiles.length; i++) {
   const astTokens = countExactTokens(astSkeleton);
   const compressionRatio = (((rawTokens - astTokens) / rawTokens) * 100).toFixed(1);
 
-  // Exact Edit Format Burden Calculation from Real Defect Strings
-  // 1. Whole File Rewrite: Modified entire file string
-  const modifiedWholeFile = rawContent.replace(defect.targetContent, defect.replacementContent);
-  const wholeFileTokens = countExactTokens(modifiedWholeFile);
+  // Edit-format burden is measured ONLY on fixtures paired with a concrete defect
+  // scenario (the curated set). Fixtures without defects contribute to the
+  // ingestion-compression statistics but not to the output-burden aggregates.
+  let editBurden = null;
+  if (defect) {
+    // 1. Whole File Rewrite: Modified entire file string
+    const modifiedWholeFile = rawContent.replace(defect.targetContent, defect.replacementContent);
+    const wholeFileTokens = countExactTokens(modifiedWholeFile);
 
-  // 2. Unified Diff Format: Actual Git diff hunk string
-  const unifiedDiffTokens = countExactTokens(defect.unifiedDiff);
+    // 2. Unified Diff Format: Actual Git diff hunk string
+    const unifiedDiffTokens = countExactTokens(defect.unifiedDiff);
 
-  // 3. Apex Surgical Patch: Exact Replace chunk payload (Rule 4)
-  const surgicalPatchPayload = JSON.stringify({
-    StartLine: defect.targetLineStart,
-    EndLine: defect.targetLineEnd,
-    TargetContent: defect.targetContent,
-    ReplacementContent: defect.replacementContent,
-  });
-  const surgicalPatchTokens = countExactTokens(surgicalPatchPayload);
+    // 3. Apex Surgical Patch: Exact Replace chunk payload (Rule 4)
+    const surgicalPatchPayload = JSON.stringify({
+      StartLine: defect.targetLineStart,
+      EndLine: defect.targetLineEnd,
+      TargetContent: defect.targetContent,
+      ReplacementContent: defect.replacementContent,
+    });
+    const surgicalPatchTokens = countExactTokens(surgicalPatchPayload);
+
+    editBurden = {
+      aiderWholeFile: wholeFileTokens,
+      aiderUnifiedDiff: unifiedDiffTokens,
+      apexSurgicalPatch: surgicalPatchTokens,
+      savingsVsWholePercent: Number((((wholeFileTokens - surgicalPatchTokens) / wholeFileTokens) * 100).toFixed(1)),
+      savingsVsDiffPercent: Number((((unifiedDiffTokens - surgicalPatchTokens) / unifiedDiffTokens) * 100).toFixed(1)),
+    };
+  }
 
   // Baseline line-scan latency proxy (string pipeline only).
   // NOTE: This does NOT measure vue-tsc / tsc compilation latency. Typecheck verification
@@ -112,7 +131,7 @@ for (let i = 0; i < fixtureFiles.length; i++) {
     file: item.file,
     name: item.name,
     domain: item.domain,
-    defectScenario: defect.name,
+    defectScenario: defect ? defect.name : null,
     metrics: {
       rawChars,
       rawTokens,
@@ -121,22 +140,18 @@ for (let i = 0; i < fixtureFiles.length; i++) {
       compressionRatioPercent: Number(compressionRatio),
       extractDurationMs: extractDuration.milliseconds,
     },
-    editBurdenExactTokens: {
-      aiderWholeFile: wholeFileTokens,
-      aiderUnifiedDiff: unifiedDiffTokens,
-      apexSurgicalPatch: surgicalPatchTokens,
-      savingsVsWholePercent: Number((((wholeFileTokens - surgicalPatchTokens) / wholeFileTokens) * 100).toFixed(1)),
-      savingsVsDiffPercent: Number((((unifiedDiffTokens - surgicalPatchTokens) / unifiedDiffTokens) * 100).toFixed(1)),
-    },
+    ...(editBurden ? { editBurdenExactTokens: editBurden } : {}),
     latencyMs: scanLatency.milliseconds,
   });
 
   aggregatedRawTokens.push(rawTokens);
   aggregatedAstTokens.push(astTokens);
   aggregatedCompressionRates.push(Number(compressionRatio));
-  aggregatedDiffSizes.wholeFile.push(wholeFileTokens);
-  aggregatedDiffSizes.unifiedDiff.push(unifiedDiffTokens);
-  aggregatedDiffSizes.surgicalPatch.push(surgicalPatchTokens);
+  if (editBurden) {
+    aggregatedDiffSizes.wholeFile.push(editBurden.aiderWholeFile);
+    aggregatedDiffSizes.unifiedDiff.push(editBurden.aiderUnifiedDiff);
+    aggregatedDiffSizes.surgicalPatch.push(editBurden.apexSurgicalPatch);
+  }
 }
 
 // 2. Compute Global Statistical Aggregates
@@ -236,7 +251,7 @@ const resultsPayload = {
     pValueComputation: 'regularized incomplete beta function I_x(df/2, 1/2) — exact for given df',
     confidenceInterval: 'two-sided t critical value solved per sample df (bisection on t distribution)',
     significanceAlpha: 0.05,
-    caveat: 'n = 5 fixtures per arm — study is underpowered; treat inferential flags as indicative',
+    caveat: `compression arm n = ${fixtureFiles.length}; output-burden arm uses the defect-paired subset only`,
   },
   contextPruningBenchmark: {
     rawSourceTokens: rawTokenStats,
@@ -302,14 +317,10 @@ Measured by executing programmatic AST extraction directly on real source code f
 
 | Fixture File | Domain | Raw BPE Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
 |---|---|---|---|---|---|
-| **01_backend_nitro.ts** | Backend & Database | **${benchmarkData[0].metrics.rawTokens} tok** | **${benchmarkData[0].metrics.astTokens} tok** | **🔻 -${benchmarkData[0].metrics.compressionRatioPercent}%** | ${benchmarkData[0].metrics.extractDurationMs}ms |
-| **02_frontend_view.vue** | Frontend UI/UX | **${benchmarkData[1].metrics.rawTokens} tok** | **${benchmarkData[1].metrics.astTokens} tok** | **🔻 -${benchmarkData[1].metrics.compressionRatioPercent}%** | ${benchmarkData[1].metrics.extractDurationMs}ms |
-| **03_state_store.ts** | State Layer | **${benchmarkData[2].metrics.rawTokens} tok** | **${benchmarkData[2].metrics.astTokens} tok** | **🔻 -${benchmarkData[2].metrics.compressionRatioPercent}%** | ${benchmarkData[2].metrics.extractDurationMs}ms |
-| **04_schema.prisma** | Database Architecture | **${benchmarkData[3].metrics.rawTokens} tok** | **${benchmarkData[3].metrics.astTokens} tok** | **🔻 -${benchmarkData[3].metrics.compressionRatioPercent}%** | ${benchmarkData[3].metrics.extractDurationMs}ms |
-| **05_webhook_hmac.ts** | Security & Auth | **${benchmarkData[4].metrics.rawTokens} tok** | **${benchmarkData[4].metrics.astTokens} tok** | **🔻 -${benchmarkData[4].metrics.compressionRatioPercent}%** | ${benchmarkData[4].metrics.extractDurationMs}ms |
+${benchmarkData.map((d) => `| **${d.file}** | ${d.domain} | **${d.metrics.rawTokens} tok** | **${d.metrics.astTokens} tok** | **🔻 -${d.metrics.compressionRatioPercent}%** | ${d.metrics.extractDurationMs}ms |`).join('\n')}
 | **GLOBAL MEAN (μ)** | **All 5 Domains** | **${rawTokenStats.mean} tok** | **${astTokenStats.mean} tok** | **🔻 -${avgCompression}% (${formatP(tTestCompression.pValue)})** | **< 1.0ms** |
 
-> **Statistical disclosure:** n = 5 fixtures per arm (paired t-test, df = 4). With this sample size the compression result is ${tTestCompression.significant ? 'statistically significant' : '**not statistically significant**'} at α = 0.05 (${formatP(tTestCompression.pValue)}). The direction of reduction is consistent across all five fixtures, but inferential strength requires a larger fixture set.
+> **Statistical disclosure:** n = ${fixtureFiles.length} fixtures for the compression arm (paired t-test, df = ${fixtureFiles.length - 1}); output-burden arm uses the ${aggregatedDiffSizes.wholeFile.length} defect-paired subset. The compression result is ${tTestCompression.significant ? 'statistically significant' : '**not statistically significant**'} at α = 0.05 (${formatP(tTestCompression.pValue)}).
 
 ---
 

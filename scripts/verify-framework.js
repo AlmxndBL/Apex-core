@@ -149,6 +149,24 @@ const archRuleContent = fs.readFileSync(path.join(ROOT_DIR, 'rules/03-system-arc
 assert(archRuleContent.includes('Nuxt 4') && archRuleContent.includes('Nitro'), 'Architecture rule covers Nuxt 4 & Nitro');
 assert(archRuleContent.includes('React') && archRuleContent.includes('Next.js'), 'Architecture rule covers React & Next.js');
 
+// 9. Script Integrity (package.json wiring & proxy targets)
+console.log('\n\x1b[1m9. Script Integrity\x1b[0m');
+const pkgScripts = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf-8')).scripts || {};
+for (const [scriptName, command] of Object.entries(pkgScripts)) {
+  for (const m of command.matchAll(/scripts[\\/](\S+?\.js)/g)) {
+    const target = path.join(ROOT_DIR, 'scripts', m[1]);
+    assert(fs.existsSync(target), `npm script "${scriptName}" -> scripts/${m[1]} exists`);
+  }
+}
+const scriptsDir = path.join(ROOT_DIR, 'scripts');
+for (const file of fs.readdirSync(scriptsDir)) {
+  if (!file.endsWith('.js')) continue;
+  const source = fs.readFileSync(path.join(scriptsDir, file), 'utf-8');
+  for (const req of source.matchAll(/require\(['"]\.\/([^'"]+)['"]\)/g)) {
+    assert(fs.existsSync(path.join(scriptsDir, req[1])), `scripts/${file} proxy target ${req[1]} exists`);
+  }
+}
+
 // Summary
 console.log('\n------------------------------------------------------------');
 console.log(`\x1b[1mResults: ${passedChecks}/${totalChecks} checks passed.\x1b[0m`);

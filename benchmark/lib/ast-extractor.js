@@ -1,11 +1,20 @@
 /**
- * Real AST Contract & Signature Extractor (Zero-Dependency)
- * 
- * Programmatically inspects TypeScript, Vue SFC, and Prisma schemas to extract:
- * 1. Interfaces, Types, DTOs (`interface`, `type`)
- * 2. Function and EventHandler signatures (excluding internal implementation bodies)
- * 3. Props and Emits contracts
- * 4. Prisma models, fields, enums, and relations (excluding internal generator settings)
+ * Signature & Contract Extractor (heuristic, line-based)
+ *
+ * Extracts type contracts and callable signatures from TypeScript, Vue SFC,
+ * and Prisma schema sources WITHOUT a compiler-grade parser:
+ * 1. Interfaces, Type Aliases, Enums (bodies kept)
+ * 2. Function / EventHandler / Class / Arrow-const signatures (bodies pruned)
+ * 3. Prisma models, fields, enums, and relations (attributes/indexes pruned)
+ *
+ * HONESTY NOTE — this is NOT a compiler AST. It is a fast heuristic scanner
+ * (<0.5ms on typical files). Known limitations:
+ * - Multi-line signatures split across lines capture only the first line
+ * - Decorators, generics constraints spanning lines, and nested namespace
+ *   blocks are not modeled
+ * - Non-TS script blocks in .vue files yield JS-level signatures only
+ * For compiler-grade extraction, integrate ts-morph / @vue/compiler-sfc
+ * (tracked as future work — see benchmark/EXPERIMENT_PROTOCOL.md).
  */
 
 export function extractAstSkeleton(filename, content) {
@@ -51,12 +60,14 @@ export function extractAstSkeleton(filename, content) {
     return skeletonLines.join('\n');
   }
 
-  // 2. VUE SFC EXTRACTOR
+  // 2. VUE SFC EXTRACTOR — accepts <script setup lang="ts">, <script lang="ts">,
+  //    and plain <script> blocks regardless of attribute order.
   if (ext === 'vue') {
-    const scriptMatch = content.match(/<script\s+setup\s+lang=["']ts["']>([\s\S]*?)<\/script>/);
+    const scriptMatch =
+      content.match(/<script\b[^>]*\blang=["']ts["'][^>]*>([\s\S]*?)<\/script>/i) ||
+      content.match(/<script\b[^>]*>([\s\S]*?)<\/script>/i);
     if (!scriptMatch) return '';
-    const scriptContent = scriptMatch[1];
-    return extractTypeScriptContracts(scriptContent);
+    return extractTypeScriptContracts(scriptMatch[1]);
   }
 
   // 3. TYPESCRIPT EXTRACTOR
@@ -69,18 +80,26 @@ function extractTypeScriptContracts(tsContent) {
   let inInterfaceOrType = false;
   let braceDepth = 0;
 
+  const pushSignature = (trimmed) => {
+    const sig = trimmed.split('{')[0].trim();
+    if (sig) {
+      contracts.push(sig.endsWith(';') ? sig : `${sig};`);
+    }
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
 
-    // Catch Interfaces & Type Aliases
+    // Catch Interfaces & Type Aliases & Enums
     if (trimmed.startsWith('export interface ') || trimmed.startsWith('interface ') ||
         trimmed.startsWith('export type ') || trimmed.startsWith('type ') ||
         trimmed.startsWith('export enum ') || trimmed.startsWith('enum ')) {
       contracts.push(line);
       if (line.includes('{')) {
-        inInterfaceOrType = true;
         braceDepth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+        // Self-closing single-line declaration (e.g. `type X = { a: string }`)
+        inInterfaceOrType = braceDepth > 0;
       }
       continue;
     }
@@ -94,12 +113,24 @@ function extractTypeScriptContracts(tsContent) {
       continue;
     }
 
+    // Catch class declarations (signature line only — methods/body pruned)
+    if (/^(export\s+)?(default\s+)?(abstract\s+)?class\s+\w+/.test(trimmed)) {
+      pushSignature(trimmed);
+      continue;
+    }
+
+    // Catch default exports of functions
+    if (/^export\s+default\s+(async\s+)?function\b/.test(trimmed)) {
+      pushSignature(trimmed);
+      continue;
+    }
+
     // Catch Function / Event Handler Signatures (strip body)
-    if (trimmed.startsWith('export function ') || trimmed.startsWith('function ') || trimmed.startsWith('export const ') || trimmed.startsWith('const props = defineProps') || trimmed.startsWith('const emit = defineEmits')) {
-      const sig = trimmed.split('{')[0].trim();
-      if (sig) {
-        contracts.push(sig.endsWith(';') ? sig : `${sig};`);
-      }
+    if (trimmed.startsWith('export function ') || trimmed.startsWith('function ') ||
+        trimmed.startsWith('export async function ') || trimmed.startsWith('async function ') ||
+        trimmed.startsWith('export const ') || trimmed.startsWith('const props = defineProps') ||
+        trimmed.startsWith('const emit = defineEmits')) {
+      pushSignature(trimmed);
     } else if (trimmed.startsWith('export default defineEventHandler')) {
       contracts.push('export declare function defineEventHandler(handler: (event: any) => Promise<any>): any;');
     }

@@ -46,6 +46,8 @@ Auto-detect workspace stack via `package.json` in State 1. Match behavior strict
 | **API Endpoints** | `server/api/v1/*.ts` (`defineEventHandler`) | `app/api/v1/*/route.ts` (`export async GET`) | Framework Route Handlers |
 | **Fast TypeCheck** | `pnpm vue-tsc --noEmit` (In-RAM) | `pnpm tsc --noEmit` (In-RAM) | `pytest -q` / `go test` |
 
+> **Override Hatch:** Repos with divergent structures (monorepos, atomic design, established conventions) may declare explicit path mappings in `AI-Context-Index.md` — declared mappings take precedence over this matrix. Never force-refactor an existing healthy structure to match the matrix.
+
 ---
 
 ## 3. Universal Frontend Architecture (The 3-File & 4-State Standard)
@@ -105,7 +107,7 @@ Every data-driven UI feature view MUST explicitly implement:
 
 - **Fast Track (1–3 files):** Proceed directly to S3 (Execution) and S4 (Verification).
 - **Heavy Track (4+ files / Schema / Auth):** Proceed to S2 (Plan) with blast radius summary before execution.
-- **2-Strike Loop Breaker:** If 2 consecutive verification runs fail—**STOP immediately and Freeze State**. DO NOT automatically destroy code or blind-rollback partial progress. Present a structured Failure Report (Root Cause, Error Logs, and Actionable Repair Options) and await direction.
+- **2-Strike Loop Breaker:** If 2 consecutive verification runs fail—**STOP immediately and Freeze State**. DO NOT automatically destroy code or blind-rollback partial progress. Present a structured Failure Report (Root Cause, Error Logs, and Actionable Repair Options) and await direction. **Strike counter resets ONLY when (a) a new task begins, or (b) the user replies to a Freeze Report with explicit direction — self-initiated retries never reset it.**
 
 ---
 

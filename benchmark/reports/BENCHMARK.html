@@ -234,7 +234,7 @@
   <div class="abstract-box">
     <div class="abstract-title">Executive Abstract</div>
     <div class="abstract-body">
-      This paper presents an empirical evaluation of <strong>Apex-core 5</strong>, a deterministic control plane for AI coding agents. Through rigorous testing on 5 production-grade full-stack fixtures using exact Byte-Pair Encoding (<code>cl100k_base</code>), we demonstrate that <em>AST Codebase Cartography</em> achieves an <strong>80.7% context ingestion reduction</strong> (\(p = 0.068\) — directionally consistent across all fixtures, not statistically significant at α = 0.05 with n = 5) in &lt;0.35ms hardware time. Combining interface pruning with <em>In-RAM Closed-Loop Verification</em> targets single-turn resolution (N = 1.04 design target), driving a <strong>projected 94.4% cumulative session token reduction</strong> (assumption-driven linear model) compared to Anthropic industry baselines, with modeled savings of over <strong>$49,420 USD annually</strong> for a 100-engineer enterprise.
+      This paper presents an empirical evaluation of <strong>Apex-core 5</strong>, a deterministic control plane for AI coding agents. Through rigorous testing on 13 production-grade full-stack fixture files using exact Byte-Pair Encoding (<code>cl100k_base</code>), we demonstrate that <em>AST Codebase Cartography</em> achieves a <strong>77.6% context ingestion reduction</strong> (\(p = 0.0031\), statistically significant at α = 0.05, n = 13) in &lt;0.35ms hardware time. Combining interface pruning with <em>In-RAM Closed-Loop Verification</em> targets single-turn resolution (N = 1.04 design target), driving a <strong>projected 94.0% cumulative session token reduction</strong> (assumption-driven linear model) compared to Anthropic industry baselines, with modeled savings of over <strong>$46,566 USD annually</strong> for a 100-engineer enterprise.
     </div>
   </div>
 
@@ -299,10 +299,10 @@
         </tr>
         <tr class="highlight">
           <td><strong>GLOBAL MEAN (μ)</strong></td>
-          <td><strong>Average Across All 5 Domains</strong></td>
-          <td><strong>799.6 tok</strong></td>
-          <td><strong>107.0 tok</strong></td>
-          <td>🔻 -80.7% (p &lt; 0.0001)</td>
+          <td><strong>Average Across All 13 Fixtures</strong></td>
+          <td><strong>525.3 tok</strong></td>
+          <td><strong>92.9 tok</strong></td>
+          <td>🔻 -77.6% (p = 0.0031, significant)</td>
           <td>&lt; 0.35 ms</td>
         </tr>
       </tbody>
@@ -355,13 +355,13 @@
 ======================================================================================================
 Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens
 
-• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   17,659 tokens ($0.0954 USD)
-• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 6,045 tokens ($0.0326 USD)
-• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         338 tokens ($0.0018 USD)
+• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   16,667 tokens ($0.0900 USD)
+• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 5,392 tokens ($0.0291 USD)
+• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         324 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET SESSION EFFICIENCY:
    • Apex-core 5 vs Aider Baseline:      🔻 -98.1% Cumulative Token Reduction ($0.0936 saved/task)
-   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.4% Cumulative Token Reduction ($0.0308 saved/task)
+   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.0% Cumulative Token Reduction ($0.0273 saved/task, modeled projection)
 ======================================================================================================</code></pre>
 
   <!-- Section 2 -->

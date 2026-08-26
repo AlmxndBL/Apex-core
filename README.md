@@ -1,7 +1,7 @@
 # ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> A deterministic control plane engineered for autonomous AI coding agents across Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, and full-stack ecosystems. Projects up to **94.4% modeled cumulative multi-turn token savings** versus standard industry practices (assumptions documented in the benchmark).
+> A deterministic control plane engineered for autonomous AI coding agents across Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, and full-stack ecosystems. Projects up to **94.0% modeled cumulative multi-turn token savings** versus standard industry practices (assumptions documented in the benchmark).
 
 <div align="center">
 
@@ -11,8 +11,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.2.3-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25_modeled-10b981.svg)](benchmark/README.md)
+[![Version](https://img.shields.io/badge/version-5.3.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.0%25_modeled-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
@@ -41,7 +41,7 @@ Most developers assume fixing a 5-line bug only costs tokens for those 5 lines. 
 ```
 
 Apex-core 5 replaces probabilistic soft prompts (`.cursorrules`) with a **Deterministic Control Plane**:
-1. **AST Codebase Cartography:** Prunes implementation bodies, passing pure type contracts (**-80.7% Context Diet**).
+1. **AST Codebase Cartography:** Prunes implementation bodies, passing pure type contracts (**-77.6% Context Diet**, p = 0.0031).
 2. **In-RAM Closed-Loop Verifier:** Runs `vue-tsc` / `tsc` in RAM in $<1\text{s}$, targeting single-turn resolution ($N \to 1.04$ design target).
 3. **2-Strike Circuit Breaker:** Hard-freezes execution on the 2nd failure, permanently eliminating infinite loops.
 
@@ -75,15 +75,15 @@ cp AGENTS.md CLAUDE.md
 
 ## 📊 3. Empirical Benchmark Summary
 
-Evaluated across 5 production-grade full-stack fixtures using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer):
+Evaluated across 13 production-grade full-stack fixture files using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer):
 
 | Metric | Status-Quo (Aider / Generic) | Anthropic Best Practice | Apex-core 5 Control Plane | Net Impact |
 |---|---|---|---|---|
-| **Context Ingestion** | 799.6 BPE tok (Full File) | 799.6 BPE tok | **107.0 BPE tok (AST)** | **🔻 -80.7% Context Diet** |
+| **Context Ingestion** | 525.3 BPE tok (Full File) | 525.3 BPE tok | **92.9 BPE tok (AST)** | **🔻 -77.6% Context Diet (p = 0.0031)** |
 | **Output Edit Burden** | 821.8 tok (Whole Rewrite) | 116.6 tok (Unified Diff) | **176.0 tok (Surgical Patch)** | **🔻 -78.6% vs Rewrite · +50.9% vs Diff** |
 | **Average Turns** | 3.62 turns (SWE-bench) | 2.38 turns | **1.04 turns (design target)** | **Single-Turn Resolution** |
-| **Cumulative Session Tokens** | 17,659 tokens ($0.0954) | 6,045 tokens ($0.0326) | **338 tokens ($0.0018)** | **🔻 -94.4% Savings (modeled)** |
-| **Annual Org API Cost (100 devs)** | $50,371 USD / yr | $17,212 USD / yr | **$950 USD / yr** | **💰 Saves +$49,420 / yr** |
+| **Cumulative Session Tokens** | 16,667 tokens ($0.0900) | 5,392 tokens ($0.0291) | **324 tokens ($0.0018)** | **🔻 -94.0% Savings (modeled)** |
+| **Annual Org API Cost (100 devs)** | $47,516 USD / yr | $15,363 USD / yr | **$950 USD / yr** | **💰 Saves +$46,566 / yr** |
 
 <div align="center">
 

@@ -238,7 +238,7 @@
   <div class="abstract-box">
     <div class="abstract-title">บทคัดย่อ (Abstract)</div>
     <div class="abstract-body">
-      รายงานวิจัยนี้นำเสนอผลการประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม <strong>Apex-core 5</strong> บนชุดรหัสต้นฉบับจริง 5 โดเมน Full-Stack ด้วยตัวนับโทเค็น <code>cl100k_base</code> BPE ผลการทดสอบพบว่ากลไก <em>AST Codebase Cartography</em> ช่วยลดขนาด Context Window ขาเข้าลง <strong>80.7%</strong> (\(p = 0.068\) — ทิศทางสอดคล้องกันทุก fixture แต่ยังไม่มีนัยสำคัญที่ α = 0.05 เมื่อ n = 5) โดยใช้เวลาประมวลผลบน RAM ต่ำกว่า 0.35ms และเมื่อผสานกับ <em>In-RAM Closed-Loop Verifier</em> ตั้งเป้าลดรอบการทำงานเหลือ 1.04 รอบ (เป้าหมายเชิงดีไซน์) ส่งผลให้การสะสมโทเค็นรวมตลอดกระบวนการทำงาน Multi-Turn ลดลงตามโมเดลคาดการณ์ที่ <strong>94.4%</strong> (assumption-driven linear model) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปของ Anthropic พร้อมการประหยัดค่าใช้จ่าย API เชิงโมเดลที่ <strong>$49,420 USD ต่อปี</strong> สำหรับองค์กรขนาด 100 คน
+      รายงานวิจัยนี้นำเสนอผลการประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม <strong>Apex-core 5</strong> บนชุดรหัสต้นฉบับจริง 13 ไฟล์หลายโดเมน Full-Stack ด้วยตัวนับโทเค็น <code>cl100k_base</code> BPE ผลการทดสอบพบว่ากลไก <em>AST Codebase Cartography</em> ช่วยลดขนาด Context Window ขาเข้าลง <strong>77.6%</strong> (\(p = 0.0031\) — มีนัยสำคัญที่ α = 0.05 เมื่อ n = 13) โดยใช้เวลาประมวลผลบน RAM ต่ำกว่า 0.35ms และเมื่อผสานกับ <em>In-RAM Closed-Loop Verifier</em> ตั้งเป้าลดรอบการทำงานเหลือ 1.04 รอบ (เป้าหมายเชิงดีไซน์) ส่งผลให้การสะสมโทเค็นรวมตลอดกระบวนการทำงาน Multi-Turn ลดลงตามโมเดลคาดการณ์ที่ <strong>94.0%</strong> (assumption-driven linear model) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปของ Anthropic พร้อมการประหยัดค่าใช้จ่าย API เชิงโมเดลที่ <strong>$46,566 USD ต่อปี</strong> สำหรับองค์กรขนาด 100 คน
     </div>
   </div>
 
@@ -303,10 +303,10 @@
         </tr>
         <tr class="highlight">
           <td><strong>GLOBAL MEAN (μ)</strong></td>
-          <td><strong>เฉลี่ยรวมทุกโดเมนระบบ</strong></td>
-          <td><strong>799.6 tok</strong></td>
-          <td><strong>107.0 tok</strong></td>
-          <td>🔻 -80.7% (p &lt; 0.0001)</td>
+          <td><strong>เฉลี่ยรวมทุกโดเมนระบบ (13 fixtures)</strong></td>
+          <td><strong>525.3 tok</strong></td>
+          <td><strong>92.9 tok</strong></td>
+          <td>🔻 -77.6% (p = 0.0031, มีนัยสำคัญ)</td>
           <td>&lt; 0.35 ms</td>
         </tr>
       </tbody>
@@ -359,13 +359,13 @@
 ======================================================================================================
 Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens
 
-• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   17,659 tokens ($0.0954 USD)
-• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 6,045 tokens ($0.0326 USD)
-• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         338 tokens ($0.0018 USD)
+• [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   16,667 tokens ($0.0900 USD)
+• [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 5,392 tokens ($0.0291 USD)
+• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         324 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ ผลลัพธ์ความคุ้มค่าสุทธิ:
    • Apex-core 5 เทียบกับ Aider Baseline:      🔻 ประหยัดลง -98.1% ($0.0936 ประหยัดต่อ Task)
-   • Apex-core 5 เทียบกับ Anthropic Baseline:  🔻 ประหยัดลง -94.4% ($0.0308 ประหยัดต่อ Task)
+   • Apex-core 5 เทียบกับ Anthropic Baseline:  🔻 ประหยัดลง -94.0% ($0.0273 ประหยัดต่อ Task — modeled projection)
 ======================================================================================================</code></pre>
 
   <!-- Section 2 -->

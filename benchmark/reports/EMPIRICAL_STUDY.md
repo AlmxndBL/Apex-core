@@ -1,7 +1,7 @@
 # ⚡ Empirical Research Study: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
 > **Objective Evaluation on Real Code Fixtures across 5 Full-Stack Domains**  
-> Evaluated at: `2026-08-26T11:38:45.728Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
+> Evaluated at: `2026-08-26T12:04:40.345Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
 
 ---
 
@@ -31,14 +31,22 @@ Measured by executing programmatic AST extraction directly on real source code f
 
 | Fixture File | Domain | Raw BPE Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
 |---|---|---|---|---|---|
-| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.405ms |
-| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.083ms |
-| **03_state_store.ts** | State Layer | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.056ms |
-| **04_schema.prisma** | Database Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.136ms |
-| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.041ms |
-| **GLOBAL MEAN (μ)** | **All 5 Domains** | **799.6 tok** | **107 tok** | **🔻 -80.7% (p = 0.0679)** | **< 1.0ms** |
+| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.568ms |
+| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.257ms |
+| **03_state_store.ts** | State & Logic Layer | **544 tok** | **96 tok** | **🔻 -82.4%** | 0.056ms |
+| **04_schema.prisma** | Database & Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.171ms |
+| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.1ms |
+| **06_nitro_order_status_handler.ts** | Backend & Database | **340 tok** | **19 tok** | **🔻 -94.4%** | 0.04ms |
+| **07_rbac_permission_guard.ts** | Security & Auth | **294 tok** | **100 tok** | **🔻 -66%** | 0.047ms |
+| **08_use_paginated_query.ts** | State & Logic Layer | **447 tok** | **110 tok** | **🔻 -75.4%** | 0.048ms |
+| **09_payment_provider_service.ts** | Service Layer | **373 tok** | **126 tok** | **🔻 -66.2%** | 0.034ms |
+| **10_admin_audit_table.vue** | Frontend UI/UX | **467 tok** | **80 tok** | **🔻 -82.9%** | 0.032ms |
+| **11_use_form_validation.ts** | State & Logic Layer | **393 tok** | **80 tok** | **🔻 -79.6%** | 0.034ms |
+| **12_analytics_schema.prisma** | Database & Architecture | **222 tok** | **94 tok** | **🔻 -57.7%** | 0.057ms |
+| **13_bootstrap_config.ts** | Config & Bootstrap | **295 tok** | **37 tok** | **🔻 -87.5%** | 0.027ms |
+| **GLOBAL MEAN (μ)** | **All 5 Domains** | **525.31 tok** | **92.92 tok** | **🔻 -77.6% (p = 0.0031)** | **< 1.0ms** |
 
-> **Statistical disclosure:** n = 5 fixtures per arm (paired t-test, df = 4). With this sample size the compression result is **not statistically significant** at α = 0.05 (p = 0.0679). The direction of reduction is consistent across all five fixtures, but inferential strength requires a larger fixture set.
+> **Statistical disclosure:** n = 13 fixtures for the compression arm (paired t-test, df = 12); output-burden arm uses the 5 defect-paired subset. The compression result is statistically significant at α = 0.05 (p = 0.0031).
 
 ---
 
@@ -69,13 +77,13 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ⚙ MODEL    : Assumption-driven linear projection (see modeling disclosure above)
 ⚙ TURNS    : [A]=3.62 · [B]=2.38 · [C]=1.04 (design target, pending live-agent validation)
 ⚙ OVERHEAD : per-extra-turn payload estimates [A]=4500 · [B]=2800 · [C]=1100 tok
-• [A] Aider Whole-File / Generic Baseline:      17,659 tokens ($0.0954 USD)
-• [B] Anthropic MCP / Industry Prompt Baseline: 6,045 tokens ($0.0326 USD)
-• [C] Apex-core 5 (Our Engine):                 338 tokens ($0.0018 USD)
+• [A] Aider Whole-File / Generic Baseline:      16,667 tokens ($0.0900 USD)
+• [B] Anthropic MCP / Industry Prompt Baseline: 5,392 tokens ($0.0291 USD)
+• [C] Apex-core 5 (Our Engine):                 324 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET EFFICIENCY:
    • Apex-core 5 vs Aider Baseline:     🔻 -98.1% Cumulative Token Reduction
-   • Apex-core 5 vs Anthropic Baseline: 🔻 -94.4% Cumulative Token Reduction
+   • Apex-core 5 vs Anthropic Baseline: 🔻 -94.0% Cumulative Token Reduction
 ======================================================================================================
 ```
 
@@ -84,6 +92,6 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ## 5. Summary Conclusion
 
 By replacing open-loop whole-file prompting with **AST Codebase Cartography** and **In-RAM Closed-Loop Verification**, Apex-core 5 achieves:
-1. **80.7% reduction in context window ingestion footprint** (measured via exact BPE tokenization)
+1. **77.6% reduction in context window ingestion footprint** (measured via exact BPE tokenization)
 2. **78.6% reduction in output edit token burden** compared to whole-file rewrites (measured from real defect patches)
-3. **94.4% projected cumulative session token savings** over multi-turn agent iterations (assumption-driven linear model — validate with live-agent telemetry before citing as measured fact).
+3. **94.0% projected cumulative session token savings** over multi-turn agent iterations (assumption-driven linear model — validate with live-agent telemetry before citing as measured fact).

@@ -1,7 +1,7 @@
 # ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — โปรเจกต์การประหยัด Token สะสมได้ราว **94.4%** (ตัวเลขจากโมเดลคาดการณ์ — ดูสมมติฐานใน benchmark) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปในอุตสาหกรรม
+> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — โปรเจกต์การประหยัด Token สะสมได้ราว **94.0%** (ตัวเลขจากโมเดลคาดการณ์ — ดูสมมติฐานใน benchmark) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปในอุตสาหกรรม
 
 <div align="center">
 
@@ -11,8 +11,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.2.3-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25_modeled-10b981.svg)](benchmark/README.md)
+[![Version](https://img.shields.io/badge/version-5.3.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.0%25_modeled-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
@@ -41,7 +41,7 @@
 ```
 
 Apex-core 5 เปลี่ยนการสั่งงานแบบคำขอร้อง (`.cursorrules`) ให้กลายเป็น **Deterministic Control Plane**:
-1. **AST Codebase Cartography:** กรองเนื้อในฟังก์ชันทิ้ง ส่งเฉพาะ Type Interface เข้าโมเดล (**-80.7% Context Diet**)
+1. **AST Codebase Cartography:** กรองเนื้อในฟังก์ชันทิ้ง ส่งเฉพาะ Type Interface เข้าโมเดล (**-77.6% Context Diet**, p = 0.0031)
 2. **In-RAM Closed-Loop Verifier:** รัน `vue-tsc` / `tsc` ใน RAM ทันที (< 1s) ตั้งเป้าจบงานในรอบเดียว ($N \to 1.04$ รอบ — เป้าหมายเชิงดีไซน์)
 3. **2-Strike Circuit Breaker:** ตัดวงจร Freeze ทันทีเมื่อแก้ไม่ผ่าน 2 ครั้งติด หยุดการเผาผลาญ Token โดยเปล่าประโยชน์
 
@@ -75,15 +75,15 @@ cp AGENTS.md CLAUDE.md
 
 ## 📊 3. สรุปผลการประเมินเชิงประจักษ์ (Benchmark Summary)
 
-วัดผลจากชุดโค้ดจริง 5 โดเมน Full-Stack ด้วย `cl100k_base` BPE Tokenizer:
+วัดผลจากชุดโค้ดจริง 13 ไฟล์ครอบคลุมหลายโดเมน Full-Stack ด้วย `cl100k_base` BPE Tokenizer:
 
 | ตัวชี้วัด | รูปแบบเดิม (Aider / ทั่วไป) | แนวทางปฏิบัติ Anthropic | Apex-core 5 Control Plane | ผลลัพธ์ที่ได้ |
 |---|---|---|---|---|
-| **Context Ingestion** | 799.6 BPE tok (ไฟล์เต็ม) | 799.6 BPE tok | **107.0 BPE tok (AST)** | **🔻 ลดขนาดลง 80.7%** |
+| **Context Ingestion** | 525.3 BPE tok (ไฟล์เต็ม) | 525.3 BPE tok | **92.9 BPE tok (AST)** | **🔻 ลดขนาดลง 77.6% (p = 0.0031)** |
 | **ภาระ Output โค้ดที่แก้** | 821.8 tok (เขียนทับทั้งไฟล์) | 116.6 tok (Unified Diff) | **176.0 tok (Surgical Patch)** | **🔻 -78.6% เทียบเขียนทับ · +50.9% เทียบ Diff** |
 | **จำนวนรอบเฉลี่ย** | 3.62 รอบ (SWE-bench) | 2.38 รอบ | **1.04 รอบ (เป้าหมายเชิงดีไซน์)** | **จบงานในรอบเดียว** |
-| **Token สะสมรวมทั้งงาน** | 17,659 tokens ($0.0954) | 6,045 tokens ($0.0326) | **338 tokens ($0.0018)** | **🔻 ประหยัดลง 94.4% (โมเดลคาดการณ์)** |
-| **ต้นทุนระดับองค์กร (100 devs)** | $50,371 USD / ปี | $17,212 USD / ปี | **$950 USD / ปี** | **💰 ประหยัดเงิน +$49,420 / ปี** |
+| **Token สะสมรวมทั้งงาน** | 16,667 tokens ($0.0900) | 5,392 tokens ($0.0291) | **324 tokens ($0.0018)** | **🔻 ประหยัดลง 94.0% (โมเดลคาดการณ์)** |
+| **ต้นทุนระดับองค์กร (100 devs)** | $47,516 USD / ปี | $15,363 USD / ปี | **$950 USD / ปี** | **💰 ประหยัดเงิน +$46,566 / ปี** |
 
 <div align="center">
 
