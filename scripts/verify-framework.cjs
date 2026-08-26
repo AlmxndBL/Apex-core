@@ -19,14 +19,10 @@ const REQUIRED_RULES = [
 ];
 
 const REQUIRED_SKILLS = [
-  'codebase-cartographer',
-  'context-budget',
-  'database-architect',
-  'design-taste-frontend',
-  'docker-devops-master',
-  'impeccable-audit',
-  'sandbox-testing',
-  'typescript-wizard',
+  'frontend',
+  'backend-data',
+  'quality-verify',
+  'cartography',
 ];
 
 const REQUIRED_TEMPLATES = [

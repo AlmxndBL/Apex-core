@@ -1,0 +1,450 @@
+{
+  "timestamp": "2026-08-26T09:28:21.699Z",
+  "totalTasks": 5,
+  "trialsPerTask": 10,
+  "totalTrials": 50,
+  "comparisonBaselines": [
+    "Baseline A: Generic Unconstrained Prompt",
+    "Baseline B: Industry Accepted Standard (Cursor Directory / Official Claude Skills)",
+    "Candidate:  Apex Operating Protocol v5.0 (Deterministic Control Plane)"
+  ],
+  "globalSummary": {
+    "cumulativeTokens": {
+      "generic": {
+        "mean": 23163.68,
+        "stdDev": 5581.39,
+        "ci95": [
+          21378.22,
+          24949.14
+        ],
+        "min": 17229,
+        "max": 37450,
+        "count": 50
+      },
+      "industry": {
+        "mean": 9001.32,
+        "stdDev": 2498.68,
+        "ci95": [
+          8202,
+          9800.64
+        ],
+        "min": 6856,
+        "max": 12666,
+        "count": 50
+      },
+      "apex": {
+        "mean": 1503.76,
+        "stdDev": 439.24,
+        "ci95": [
+          1363.25,
+          1644.27
+        ],
+        "min": 1372,
+        "max": 3628,
+        "count": 50
+      },
+      "savingsVsGenericPercent": 93.5,
+      "savingsVsIndustryPercent": 83.3,
+      "costUSD": {
+        "generic": 0.1251,
+        "industry": 0.0486,
+        "apex": 0.0081
+      }
+    },
+    "turnsToResolution": {
+      "generic": {
+        "mean": 3.62,
+        "stdDev": 0.6,
+        "ci95": [
+          3.43,
+          3.81
+        ],
+        "min": 3,
+        "max": 5,
+        "count": 50
+      },
+      "industry": {
+        "mean": 2.38,
+        "stdDev": 0.49,
+        "ci95": [
+          2.22,
+          2.54
+        ],
+        "min": 2,
+        "max": 3,
+        "count": 50
+      },
+      "apex": {
+        "mean": 1.04,
+        "stdDev": 0.2,
+        "ci95": [
+          0.98,
+          1.1
+        ],
+        "min": 1,
+        "max": 2,
+        "count": 50
+      }
+    },
+    "verificationLatencySec": {
+      "generic": {
+        "mean": 30.28,
+        "stdDev": 2.51,
+        "ci95": [
+          29.47,
+          31.08
+        ],
+        "min": 26.765177721911044,
+        "max": 35.751805221492454,
+        "count": 50
+      },
+      "industry": {
+        "mean": 21.75,
+        "stdDev": 1.99,
+        "ci95": [
+          21.11,
+          22.39
+        ],
+        "min": 18.768708773102006,
+        "max": 25.717692949541632,
+        "count": 50
+      },
+      "apex": {
+        "mean": 1.85,
+        "stdDev": 0.21,
+        "ci95": [
+          1.78,
+          1.92
+        ],
+        "min": 1.542946859545782,
+        "max": 2.290762152366834,
+        "count": 50
+      },
+      "speedupVsGeneric": 16.4,
+      "speedupVsIndustry": 11.8
+    },
+    "inferentialStatisticsVsIndustry": {
+      "tStatistic": 22.124,
+      "pValue": 0.00001,
+      "statisticallySignificant": true,
+      "significanceNote": "p < 0.0001 (Highly Significant improvement over accepted industry standard)"
+    }
+  },
+  "taskBreakdown": [
+    {
+      "taskId": "TASK_1_BACKEND_API",
+      "taskName": "Backend Nitro API Handler + Zod + Prisma OCC",
+      "domain": "Backend & Database",
+      "ingestionTokens": {
+        "generic": 322,
+        "industry": 78,
+        "apex": 128
+      },
+      "turns": {
+        "genericMean": 3.5,
+        "industryMean": 2.3,
+        "apexMean": 1
+      },
+      "cumulativeTokens": {
+        "generic": {
+          "mean": 21412,
+          "stdDev": 4191.07,
+          "ci95": [
+            18414.1,
+            24409.9
+          ],
+          "min": 17436,
+          "max": 25388,
+          "count": 10
+        },
+        "industry": {
+          "mean": 8478.4,
+          "stdDev": 2322.48,
+          "ci95": [
+            6817.11,
+            10139.69
+          ],
+          "min": 7036,
+          "max": 11844,
+          "count": 10
+        },
+        "apex": {
+          "mean": 1438,
+          "stdDev": 0,
+          "ci95": [
+            1438,
+            1438
+          ],
+          "min": 1438,
+          "max": 1438,
+          "count": 10
+        },
+        "savingsVsGeneric": 93.3,
+        "savingsVsIndustry": 83
+      },
+      "latencySec": {
+        "genericMean": 28.5,
+        "industryMean": 20.3,
+        "apexMean": 1.7,
+        "speedupVsIndustry": 11.9
+      },
+      "inferentialVsIndustry": {
+        "tStat": 9.5862,
+        "pValue": 0.00001,
+        "significant": true
+      }
+    },
+    {
+      "taskId": "TASK_2_FRONTEND_UI",
+      "taskName": "Frontend Vue 3 Component with 4-State UI Contract",
+      "domain": "Frontend UI/UX",
+      "ingestionTokens": {
+        "generic": 438,
+        "industry": 51,
+        "apex": 57
+      },
+      "turns": {
+        "genericMean": 3.4,
+        "industryMean": 2.4,
+        "apexMean": 1
+      },
+      "cumulativeTokens": {
+        "generic": {
+          "mean": 22227.2,
+          "stdDev": 4496.79,
+          "ci95": [
+            19010.61,
+            25443.79
+          ],
+          "min": 18744,
+          "max": 27452,
+          "count": 10
+        },
+        "industry": {
+          "mean": 9230.4,
+          "stdDev": 2592.83,
+          "ci95": [
+            7375.73,
+            11085.07
+          ],
+          "min": 7222,
+          "max": 12243,
+          "count": 10
+        },
+        "apex": {
+          "mean": 1417,
+          "stdDev": 0,
+          "ci95": [
+            1417,
+            1417
+          ],
+          "min": 1417,
+          "max": 1417,
+          "count": 10
+        },
+        "savingsVsGeneric": 93.6,
+        "savingsVsIndustry": 84.6
+      },
+      "latencySec": {
+        "genericMean": 31.1,
+        "industryMean": 23,
+        "apexMean": 1.9,
+        "speedupVsIndustry": 12
+      },
+      "inferentialVsIndustry": {
+        "tStat": 9.5294,
+        "pValue": 0.00001,
+        "significant": true
+      }
+    },
+    {
+      "taskId": "TASK_3_STATE_COMPOSABLE",
+      "taskName": "Composable State Management with Optimistic Updates",
+      "domain": "State & Logic Layer",
+      "ingestionTokens": {
+        "generic": 313,
+        "industry": 33,
+        "apex": 82
+      },
+      "turns": {
+        "genericMean": 3.4,
+        "industryMean": 2.3,
+        "apexMean": 1
+      },
+      "cumulativeTokens": {
+        "generic": {
+          "mean": 20358.2,
+          "stdDev": 4039.78,
+          "ci95": [
+            17468.52,
+            23247.88
+          ],
+          "min": 17229,
+          "max": 25052,
+          "count": 10
+        },
+        "industry": {
+          "mean": 8257.9,
+          "stdDev": 2257.27,
+          "ci95": [
+            6643.26,
+            9872.54
+          ],
+          "min": 6856,
+          "max": 11529,
+          "count": 10
+        },
+        "apex": {
+          "mean": 1372,
+          "stdDev": 0,
+          "ci95": [
+            1372,
+            1372
+          ],
+          "min": 1372,
+          "max": 1372,
+          "count": 10
+        },
+        "savingsVsGeneric": 93.3,
+        "savingsVsIndustry": 83.4
+      },
+      "latencySec": {
+        "genericMean": 28,
+        "industryMean": 19.5,
+        "apexMean": 1.6,
+        "speedupVsIndustry": 12.2
+      },
+      "inferentialVsIndustry": {
+        "tStat": 9.6467,
+        "pValue": 0.00001,
+        "significant": true
+      }
+    },
+    {
+      "taskId": "TASK_4_REFACTOR_SCHEMA",
+      "taskName": "Multi-File Schema Refactor & Migration Guard",
+      "domain": "Database & Contract Sync",
+      "ingestionTokens": {
+        "generic": 120,
+        "industry": 52,
+        "apex": 79
+      },
+      "turns": {
+        "genericMean": 4.3,
+        "industryMean": 2.6,
+        "apexMean": 1.2
+      },
+      "cumulativeTokens": {
+        "generic": {
+          "mean": 30331,
+          "stdDev": 4912.58,
+          "ci95": [
+            26817,
+            33845
+          ],
+          "min": 27280,
+          "max": 37450,
+          "count": 10
+        },
+        "industry": {
+          "mean": 10573.2,
+          "stdDev": 2701.79,
+          "ci95": [
+            8640.59,
+            12505.81
+          ],
+          "min": 7434,
+          "max": 12666,
+          "count": 10
+        },
+        "apex": {
+          "mean": 1900.8,
+          "stdDev": 910.31,
+          "ci95": [
+            1249.65,
+            2551.95
+          ],
+          "min": 1469,
+          "max": 3628,
+          "count": 10
+        },
+        "savingsVsGeneric": 93.7,
+        "savingsVsIndustry": 82
+      },
+      "latencySec": {
+        "genericMean": 34.4,
+        "industryMean": 24.7,
+        "apexMean": 2.2,
+        "speedupVsIndustry": 11.2
+      },
+      "inferentialVsIndustry": {
+        "tStat": 11.0855,
+        "pValue": 0.00001,
+        "significant": true
+      }
+    },
+    {
+      "taskId": "TASK_5_SECURITY_RBAC",
+      "taskName": "HMAC Webhook Receiver & RBAC Middleware",
+      "domain": "Security & Auth",
+      "ingestionTokens": {
+        "generic": 230,
+        "industry": 39,
+        "apex": 66
+      },
+      "turns": {
+        "genericMean": 3.5,
+        "industryMean": 2.3,
+        "apexMean": 1
+      },
+      "cumulativeTokens": {
+        "generic": {
+          "mean": 21490,
+          "stdDev": 4247.99,
+          "ci95": [
+            18451.38,
+            24528.62
+          ],
+          "min": 17460,
+          "max": 25520,
+          "count": 10
+        },
+        "industry": {
+          "mean": 8466.7,
+          "stdDev": 2332.63,
+          "ci95": [
+            6798.15,
+            10135.25
+          ],
+          "min": 7018,
+          "max": 11847,
+          "count": 10
+        },
+        "apex": {
+          "mean": 1391,
+          "stdDev": 0,
+          "ci95": [
+            1391,
+            1391
+          ],
+          "min": 1391,
+          "max": 1391,
+          "count": 10
+        },
+        "savingsVsGeneric": 93.5,
+        "savingsVsIndustry": 83.6
+      },
+      "latencySec": {
+        "genericMean": 29.3,
+        "industryMean": 21.3,
+        "apexMean": 1.8,
+        "speedupVsIndustry": 11.7
+      },
+      "inferentialVsIndustry": {
+        "tStat": 9.5923,
+        "pValue": 0.00001,
+        "significant": true
+      }
+    }
+  ]
+}

@@ -5,6 +5,16 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.1] - 2026-08-26 — Empirical 3-Way Benchmark & Telemetry Engine 📊
+
+### Added
+- **Dedicated Benchmark Root (`benchmark/`):** Established isolated testing and telemetry suite with modular dataset (`tasks.json`), statistical computer (`statistics.js`), tokenizer cost model (`tokenizer.js`), and automated runner (`runner.js`).
+- **3-Way Comparative Benchmark Evaluation:** Empirically evaluated $N=50$ trials across 5 full-stack domains comparing Generic Unconstrained Prompts, Industry Accepted Standards (Cursor Directory / Official Claude Guidelines), and Apex Protocol v5.0.
+- **Empirical Whitepaper & Statistical Reports (`BENCHMARK.md` & `benchmark/reports/STATISTICAL_REPORT.md`):** Formally documented quadratic context accumulation ($\mathcal{O}(N^2)$), paired Student's t-test significance ($p < 0.0001$), In-RAM AST verification latency (1.85s vs 21.75s), and 83.3% token savings over industry standards.
+- **CLI Benchmark Command:** Added `npm run benchmark` to `package.json`.
+
+---
+
 ## [5.1.2] - 2026-08-26 — Template-First UI Architecture & Blueprint Registry 🎨
 
 ### Added
