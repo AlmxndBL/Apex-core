@@ -13,9 +13,22 @@
 
 ---
 
+## ⚡ เริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
+
+ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณ:
+
+* **Cursor IDE:** วางเป็น `.cursorrules` หรือ `AGENTS.md`
+* **Claude Code:** วางเป็น `CLAUDE.md` หรือ `AGENTS.md`
+* **Windsurf / Trae:** วางเป็น `AGENTS.md`
+* **Google Antigravity:** เชื่อมต่อเป็น Global Plugin ใน Config
+
+> 💡 **Deterministic Auto-Detection:** `AGENTS.md` จะตรวจสอบ `package.json` ของโปรเจกต์โดยอัตโนมัติ เพื่อแมปไวยากรณ์และคำสั่ง TypeCheck ที่ถูกต้องทันที ไม่ว่าโปรเจกต์ของคุณจะเป็น **Nuxt 4 (Vue 3)**, **Next.js 15 (React 19)** หรือ **Python / Go Backend**
+
+---
+
 ## 🔬 การประเมินผลเชิงประจักษ์และแหล่งข้อมูลอ้างอิง (Empirical Evaluation & References)
 
-การประเมินประสิทธิภาพของ **Apex-core 5** ดำเนินการผ่านการวัดผลเชิงประจักษ์ (Empirical Telemetry) บนชุดโค้ดจริง 5 โดเมนของระบบ Full-Stack ใน [`benchmark/fixtures/`](./benchmark/fixtures/) โดยใช้ Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) และการจับเวลาประมวลผลระดับ Hardware Sub-millisecond เพื่อเปรียบเทียบกับรูปแบบการทำงานของ Agent ที่ได้รับการยอมรับ:
+การประเมินประสิทธิภาพของ **Apex-core 5** ดำเนินการผ่านการวัดผลเชิงประจักษ์ (Empirical Telemetry) บนชุดโค้ดจริง 5 โดเมนของระบบ Full-Stack ใน [`benchmark/fixtures/`](./benchmark/fixtures/) โดยประมวลผลผ่าน Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) และการจับเวลาประมวลผลระดับ Hardware Sub-millisecond เพื่อเปรียบเทียบกับรูปแบบการทำงานของ Agent ที่ได้รับการยอมรับในระดับสากล:
 
 ```text
 ======================================================================================================================
@@ -29,14 +42,14 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
   • ระยะเวลาการสกัดโครงสร้างบน RAM:             < 0.35ms (High-Speed In-RAM Parsing)
 
 [ 2. ภาระของ Output Token ในการแก้ไขข้อผิดพลาด (Edit Output Burden) ]
-  • [A] Aider Whole-File Format (Rewrite):   821.8 BPE tokens (เกณฑ์ฐาน 0%)
-  • [B] Aider Unified Diff Format (Hunk):    116.6 BPE tokens (🔻 ลดลง 85.8%)
-  • [C] Apex-core 5 Surgical Patch Mode:     176.0 BPE tokens (🔻 ลดลง 78.6% เทียบกับ Whole-File)
+  • [A] Aider Whole-File Format [2] (Rewrite):  821.8 BPE tokens (เกณฑ์ฐาน 0%)
+  • [B] Aider Unified Diff Format [2] (Hunk):   116.6 BPE tokens (🔻 ลดลง 85.8%)
+  • [C] Apex-core 5 Surgical Patch Mode:        176.0 BPE tokens (🔻 ลดลง 78.6% เทียบกับ Whole-File)
 
 [ 3. แบบจำลองการสะสม Token ตลอดการทำงานแบบต่อเนื่อง (Multi-Turn Session Accumulation) ]
-  • [A] Aider Whole-File Baseline:           17,659 tokens ($0.0954 USD)
-  • [B] Anthropic Industry Baseline:          6,045 tokens ($0.0326 USD)
-  • [C] Apex-core 5:                            338 tokens ($0.0018 USD) ──> 🔻 ประหยัดกว่า Anthropic 94.4%
+  • [A] Unconstrained Baseline [1, 2]:          17,659 tokens (เฉลี่ย 3.62 Turns ตามสถิติ SWE-bench)
+  • [B] Anthropic Industry Baseline [2, 3]:      6,045 tokens (เฉลี่ย 2.38 Turns ตาม Anthropic Best Practice)
+  • [C] Apex-core 5:                               338 tokens (เฉลี่ย 1.04 Turns ด้วย In-RAM Verifier) ──> 🔻 ประหยัดกว่า 94.4%
 ======================================================================================================================
 ⭐ สรุปผล: การใช้ AST Cartography ร่วมกับ Closed-Loop Verifier ช่วยลด Token สะสมลง 94.4% และยุติการวนลูปซ้ำ
 ======================================================================================================================
@@ -44,7 +57,7 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 
 ### ตารางเปรียบเทียบเชิงสถาปัตยกรรม (Comparative Architecture Matrix)
 
-| มิติการทำงาน | [A] Generic Unconstrained Prompt | [B] Industry Guideline (Aider / Anthropic) | [C] Apex-core 5 (Deterministic Control Plane) |
+| มิติการทำงาน | [A] Generic Unconstrained Prompt [1] | [B] Industry Guideline (Aider / Anthropic) [2, 3] | [C] Apex-core 5 (Deterministic Control Plane) |
 |---|---|---|---|
 | **การอ่าน Context** | โหลดไฟล์เต็ม (799.6 tok) | โหลดไฟล์เต็มเพื่อวิเคราะห์ | **AST Codebase Cartography:** สกัดเฉพาะ Type/Interface (107.0 tok, ลดลง 80.7%) |
 | **การควบคุมสิทธิ์คำสั่ง** | Open-loop ไม่มี Guard | ปฏิบัติตามคำสั่งตาม Prompt | **3-Tier Finite State Machine:** บังคับ Read-Only, Patch, และ Guarded Gate |
@@ -65,20 +78,9 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 
 ---
 
-## ⚡ เริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
+## 🏛️ สถาปัตยกรรมระบบและ 4 เสาหลักสกิล (System Architecture & Consolidated Skills)
 
-ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณ:
-
-* **Cursor IDE:** วางเป็น `.cursorrules` หรือ `AGENTS.md`
-* **Claude Code:** วางเป็น `CLAUDE.md` หรือ `AGENTS.md`
-* **Windsurf / Trae:** วางเป็น `AGENTS.md`
-* **Google Antigravity:** เชื่อมต่อเป็น Global Plugin ใน Config
-
-> 💡 **Deterministic Auto-Detection:** `AGENTS.md` จะอ่าน `package.json` ของคุณโดยอัตโนมัติ เพื่อแมปไวยากรณ์ที่ถูกต้องทันที ไม่ว่าโปรเจกต์ของคุณจะเป็น **Nuxt 4 (Vue 3)** หรือ **Next.js 15 (React 19)** หรือ **Python / Go Backend**
-
----
-
-## 🏛️ สถาปัตยกรรม 2 ระดับ (The Two-Layer Model)
+### 1. สถาปัตยกรรม 2 ระดับ (The Two-Layer Model)
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -94,9 +96,7 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## 🧰 ชุด 4 เสาหลักสกิล (Consolidated Skills in v5.0)
+### 2. ชุด 4 เสาหลักสกิล (Consolidated Skills in v5.0)
 
 1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
 2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
