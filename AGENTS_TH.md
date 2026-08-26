@@ -109,16 +109,17 @@ $$\text{ตรวจสอบข้อมูล (Zod)} \longrightarrow \text{ต
 
 ---
 
-## 6. ตารางค้นหากฎและสกิลแบบเร็ว (Rule & Skill Quick Lookup)
+## 6. ตารางค้นหากฎและสกิลแบบเร็ว (Rule, Skill & Blueprint Quick Lookup)
 
-ตารางเชื่อมโยงระหว่าง **"กฎหมายคุมกรอบ (Engineering Rule)"** และ **"คู่มือพิมพ์เขียวปฏิบัติงาน (Specialized Skill)"**:
+ตารางเชื่อมโยงระหว่าง **"กฎหมายคุมกรอบ (Engineering Rule)"**, **"คู่มือพิมพ์เขียวปฏิบัติงาน (Specialized Skill)"** และ **"เทมเพลตต้นแบบสำเร็จรูป (Production Blueprints & Templates)"**:
 
-| หมวดหมู่ (Domain) | กฎเกณฑ์ทางวิศวกรรม (Rule - กรอบข้อห้าม) | สกิลเฉพาะทาง (Skill - คู่มือ/พิมพ์เขียว) |
-|---|---|---|
-| **ความปลอดภัย & ยืนยันตัวตน (Auth)** | [`rules/01-security-auth.md`](./rules/01-security-auth.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **คุณภาพโค้ด & TypeScript** | [`rules/02-coding-standards.md`](./rules/02-coding-standards.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **สถาปัตยกรรมระบบ (Architecture)** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **ฐานข้อมูล & Prisma ORM** | [`rules/04-database-design.md`](./rules/04-database-design.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **การออกแบบหน้าตา UI/UX** | [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) | [`skills/frontend`](./skills/frontend/SKILL.md) |
-| **การทดสอบ & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) |
-| **การทำแผนที่ Codebase** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) |
+| หมวดหมู่ (Domain) | กฎเกณฑ์ทางวิศวกรรม (Rule - กรอบข้อห้าม) | สกิลเฉพาะทาง (Skill - คู่มือ/พิมพ์เขียว) | พิมพ์เขียว & เทมเพลตสำเร็จรูป (Blueprints & Templates) |
+|---|---|---|---|
+| **การออกแบบหน้าตา UI/UX** | [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) | [`skills/frontend`](./skills/frontend/SKILL.md) | [`templates/ui/`](./templates/ui/) (`vue/`, `react/`, `admin-ui-tokens.ts`) |
+| **ความปลอดภัย & ยืนยันตัวตน (Auth)** | [`rules/01-security-auth.md`](./rules/01-security-auth.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | [`templates/blueprints/rbac-multi-role.md`](./templates/blueprints/rbac-multi-role.md) |
+| **คุณภาพโค้ด & TypeScript** | [`rules/02-coding-standards.md`](./rules/02-coding-standards.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | N/A |
+| **สถาปัตยกรรมระบบ (Architecture)** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | [`templates/blueprints/`](./templates/blueprints/) |
+| **ฐานข้อมูล & Prisma ORM** | [`rules/04-database-design.md`](./rules/04-database-design.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | N/A |
+| **การทดสอบ & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) | [`templates/gitignore-production.md`](./templates/gitignore-production.md) |
+| **การทำแผนที่ Codebase** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) | [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) |
+

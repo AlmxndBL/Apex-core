@@ -3,7 +3,7 @@
 > **เปลี่ยน AI Coding Agent ของคุณให้กลายเป็น Senior Software Engineer ผู้มีวินัยใน 10 วินาที**  
 > ชุด System Rules & Guardrails สำหรับ AI Coding Assistant (Cursor, Claude Code, Google Antigravity, Windsurf) เพื่อปลดล็อกความเร็วในการพัฒนา ควบคุมคุณภาพ UI/UX และบังคับใช้สถาปัตยกรรมระดับ **Production-Ready**
 
-[![Version](https://img.shields.io/badge/version-5.1.0-blue.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Version](https://img.shields.io/badge/version-5.1.2-blue.svg)](https://github.com/AlmxndBL/Apex-core)
 [![Supported Tools](https://img.shields.io/badge/Agent-Cursor%20%7C%20Claude%20Code%20%7C%20Antigravity%20%7C%20Windsurf-818CF8.svg)](https://github.com/AlmxndBL/Apex-core)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 

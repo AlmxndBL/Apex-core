@@ -1,6 +1,6 @@
 {
   "name": "@apex/core",
-  "version": "5.1.0",
+  "version": "5.1.2",
   "description": "Apex — Lean AI Agent Operating Protocol & Rules Engine",
   "private": true,
   "type": "module",

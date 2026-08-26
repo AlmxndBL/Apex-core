@@ -43,17 +43,17 @@ graph TD
 ## 💻 3. Quick Start & Integration Example (Nuxt 4 / Vue 3)
 
 ### ไฟล์คอมโพเนนต์หลัก:
-- 📄 [`templates/ui/AppAdminDataTable.vue`](../ui/AppAdminDataTable.vue)
-- 📄 [`templates/ui/AppFloatingBulkBar.vue`](../ui/AppFloatingBulkBar.vue)
-- 📄 [`templates/ui/AdminLayoutShell.vue`](../ui/AdminLayoutShell.vue)
+- 📄 [`templates/ui/vue/AppAdminDataTable.vue`](../ui/vue/AppAdminDataTable.vue)
+- 📄 [`templates/ui/vue/AppFloatingBulkBar.vue`](../ui/vue/AppFloatingBulkBar.vue)
+- 📄 [`templates/ui/vue/AdminLayoutShell.vue`](../ui/vue/AdminLayoutShell.vue)
 
 ### ตัวอย่างการเรียกใช้ในหน้า Page:
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import AdminLayoutShell from '~/templates/ui/AdminLayoutShell.vue'
-import AppAdminDataTable, { type EnterpriseRecord } from '~/templates/ui/AppAdminDataTable.vue'
+import AdminLayoutShell from '~/templates/ui/vue/AdminLayoutShell.vue'
+import AppAdminDataTable, { type EnterpriseRecord } from '~/templates/ui/vue/AppAdminDataTable.vue'
 
 const isDeleteLoading = ref(false)
 
@@ -87,7 +87,56 @@ const handleDeleteSelected = async (ids: Array<string | number>) => {
 
 ---
 
-## 🛡️ 4. Backend Atomic Bulk Delete Endpoint (H3 / Nitro / Prisma)
+## ⚛️ 4. Quick Start & Integration Example (React 19 / Next.js 15)
+
+### ไฟล์คอมโพเนนต์หลัก:
+- 📄 [`templates/ui/react/AppAdminDataTable.tsx`](../ui/react/AppAdminDataTable.tsx)
+- 📄 [`templates/ui/react/AppFloatingBulkBar.tsx`](../ui/react/AppFloatingBulkBar.tsx)
+- 📄 [`templates/ui/react/AdminLayoutShell.tsx`](../ui/react/AdminLayoutShell.tsx)
+
+### ตัวอย่างการเรียกใช้ในหน้า Page:
+
+```tsx
+'use client'
+
+import React, { useState } from 'react'
+import { AdminLayoutShell } from '@/templates/ui/react/AdminLayoutShell'
+import { AppAdminDataTable, type EnterpriseRecord } from '@/templates/ui/react/AppAdminDataTable'
+
+export default function TransactionsPage() {
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+
+  const handleEdit = (record: EnterpriseRecord) => {
+    console.log('Edit record:', record.code)
+  }
+
+  const handleDeleteSelected = async (ids: (string | number)[]) => {
+    if (window.confirm(`คุณต้องการลบรายการที่เลือกจำนวน ${ids.length} รายการหรือไม่?`)) {
+      setIsDeleteLoading(true)
+      // Simulate API call
+      setTimeout(() => {
+        setIsDeleteLoading(false)
+        alert(`ลบรายการ ${ids.join(', ')} สำเร็จ`)
+      }, 1000)
+    }
+  }
+
+  return (
+    <AdminLayoutShell pageTitle="รายการธุรกรรม & บิล (Transactions)">
+      <AppAdminDataTable
+        title="รายการบิลและธุรกรรมทั้งหมด"
+        deleteLoading={isDeleteLoading}
+        onEdit={handleEdit}
+        onDeleteSelected={handleDeleteSelected}
+      />
+    </AdminLayoutShell>
+  )
+}
+```
+
+---
+
+## 🛡️ 5. Backend Atomic Bulk Delete Endpoint (H3 / Nitro / Route Handlers)
 
 ```typescript
 // server/api/v1/[resource]/bulk-delete.post.ts

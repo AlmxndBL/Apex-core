@@ -20,10 +20,12 @@ Strictly organize components into **4 distinct layers**:
 
 ### 🚫 Strict Component Red-Lines
 - ❌ **No Monolithic Components:** Never create single UI files exceeding **200–250 lines**. Decompose into focused sub-components.
+- ❌ **No Ad-Hoc Component Reinvention:** Always check and adopt pre-built production components from [`templates/ui/`](../templates/ui/) (`vue/` or `react/`) and [`templates/blueprints/`](../templates/blueprints/) before creating custom tables, shells, or 4-state wrappers.
 - ❌ **No Hardcoded Mobile-Only Shells:** Never restrict app shell layouts with fixed widths (`max-w-sm`, `max-w-md`) without responsive desktop expansion classes (`lg:max-w-6xl` or `w-full`).
 - ❌ **No Prop Drilling > 2 Levels:** For state shared across > 2 levels, use global state stores (Pinia / Zustand), context, or compound component slots.
 - ❌ **No Direct API Calls in UI Layer:** Never invoke HTTP APIs directly inside atomic UI components. Always delegate through composables, hooks, or service layers.
 - ❌ **No Raw Browser Alerts:** Never use native `alert()`, `confirm()`, or `prompt()`. Use toast systems or modal components.
+
 
 ---
 
@@ -205,10 +207,12 @@ Every data-driven UI feature view MUST implement all 4 states explicitly:
 
 ## ✅ 10. Anti-Generic UI Quality Checklist
 Before completing any frontend task, verify against this checklist:
+- [ ] **Template-First Blueprint Verification:** Inspected and adopted applicable components from [`templates/ui/`](../templates/ui/) (`App4StateContainer`, `AppAdminDataTable`, `AdminLayoutShell`, `AppFloatingBulkBar`, `admin-ui-tokens.ts`).
 - [ ] **Visual Depth & Surfaces:** 3-tier elevation (canvas `bg-zinc-50 dark:bg-zinc-950` $\to$ card `bg-white dark:bg-zinc-900` $\to$ elevated).
 - [ ] **Subtle Borders:** All cards have `border border-zinc-200/80 dark:border-zinc-800/80` (never harsh solid black/gray).
 - [ ] **Micro-Interactions:** Buttons have `hover:bg-*`, `active:scale-[0.98]`, and `transition duration-150`.
 - [ ] **Zero Emojis in Enterprise UI:** Strictly prohibit raw emoji characters (e.g. 📊, 💰, 🌙, 👤) in UI templates, buttons, navbars, and cards. Always use clean Lucide SVG icons.
 - [ ] **Animated Theme Transition:** Use Magic UI / Lucide animated theme toggler (`AnimatedThemeToggler`) with smooth Sun/Moon rotation and scale transitions.
 - [ ] **Zero Dark Mode Flash:** No unstyled white backgrounds or illegible dark text in dark mode.
+
 

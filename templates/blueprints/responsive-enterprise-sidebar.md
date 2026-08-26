@@ -43,12 +43,12 @@ graph TD
 
 ## 💻 3. Vue 3 / Nuxt 4 Implementation
 
-### A. Component File: [`templates/ui/AppAdminSidebar.vue`](../ui/AppAdminSidebar.vue)
+### A. Component File: [`templates/ui/vue/AppAdminSidebar.vue`](../ui/vue/AppAdminSidebar.vue)
 - Pure Vue 3 / Nuxt 4 Ready (Zero external CSS library dependencies)
 - รองรับ TypeScript Interface: `NavGroup`, `NavItem`, `UserProfile`
 - มี Upward Floating Popover สำหรับ Profile Footer พร้อมระบบตรวจจับ Click Outside อัตโนมัติ
 
-### B. Layout Shell File: [`templates/ui/AdminLayoutShell.vue`](../ui/AdminLayoutShell.vue)
+### B. Layout Shell File: [`templates/ui/vue/AdminLayoutShell.vue`](../ui/vue/AdminLayoutShell.vue)
 - แยก App Shell ออกจาก Page View ตามมาตรฐาน SaaS Dashboard Preset
 
 ### C. ตัวอย่างการเรียกใช้งานใน Nuxt 4 / Vue 3:
@@ -56,8 +56,8 @@ graph TD
 ```vue
 <!-- layouts/admin.vue หรือ pages/admin/index.vue -->
 <script setup lang="ts">
-import AdminLayoutShell from '~/templates/ui/AdminLayoutShell.vue'
-import type { NavGroup } from '~/templates/ui/AppAdminSidebar.vue'
+import AdminLayoutShell from '~/templates/ui/vue/AdminLayoutShell.vue'
+import type { NavGroup } from '~/templates/ui/vue/AppAdminSidebar.vue'
 
 const navGroups: NavGroup[] = [
   {
@@ -129,6 +129,89 @@ const handleLogout = () => {
 
 ---
 
-## ⚛️ 4. React (Next.js / Vite) Equivalent Pattern
+## ⚛️ 4. React (Next.js 15 / Vite) Implementation
 
-สำหรับโปรเจกต์ React / Next.js สามารถนำ Logic และคลาส Tailwind เดียวกันไปใช้ใน `src/layouts/AdminLayout.tsx` โดยใช้ `useState` และ `useEffect` จัดการกับ `localStorage` และ Click Outside Event Listener ตามโครงสร้างเดียวกัน 100%
+### A. Component File: [`templates/ui/react/AppAdminSidebar.tsx`](../ui/react/AppAdminSidebar.tsx)
+- Pure React 19 / Next.js 15 Ready (`'use client'`)
+- TypeScript Interface: `NavGroup`, `NavItem`, `UserProfile`
+- Upward Floating Popover for Profile Footer with Click Outside listener
+
+### B. Layout Shell File: [`templates/ui/react/AdminLayoutShell.tsx`](../ui/react/AdminLayoutShell.tsx)
+
+### C. ตัวอย่างการเรียกใช้งานใน Next.js 15 / React 19:
+
+```tsx
+'use client'
+
+import React from 'react'
+import { AdminLayoutShell } from '@/templates/ui/react/AdminLayoutShell'
+import type { NavGroup, UserProfile } from '@/templates/ui/react/AppAdminSidebar'
+
+const navGroups: NavGroup[] = [
+  {
+    id: 'main',
+    title: 'เมนูหลัก',
+    items: [
+      { id: 'dashboard', label: 'ภาพรวมระบบ', to: '/admin', active: true },
+      { id: 'analytics', label: 'สถิติ & รายงาน', to: '/admin/analytics' },
+    ],
+  },
+  {
+    id: 'services',
+    title: 'บริการ & การเงิน',
+    items: [
+      { id: 'billing', label: 'รอบบิล & แจ้งหนี้', to: '/admin/billing', badge: 'ประจำเดือน', badgeColor: 'blue' },
+      { id: 'slips', label: 'ตรวจสลิปโอนเงิน', to: '/admin/slips', badge: '5 ใหม่', badgeColor: 'rose' },
+      { id: 'contracts', label: 'สัญญาเช่า', to: '/admin/contracts' },
+    ],
+  },
+  {
+    id: 'system',
+    title: 'ระบบ & สิทธิ์',
+    items: [
+      { id: 'users', label: 'จัดการผู้ใช้งาน', to: '/admin/users' },
+      { id: 'settings', label: 'ตั้งค่าระบบ', to: '/admin/settings' },
+    ],
+  },
+]
+
+const currentUser: UserProfile = {
+  name: 'สมชาย พัฒนากร',
+  role: 'Super Administrator',
+  email: 'somchai@enterprise.co.th',
+  initials: 'SC',
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const handleNavigate = (item: any) => {
+    console.log('Navigate to:', item.to)
+  }
+
+  const handleLogout = () => {
+    console.log('Logging out...')
+  }
+
+  return (
+    <AdminLayoutShell
+      systemName="Apex Enterprise"
+      systemTag="Admin v2.5"
+      pageTitle="ภาพรวมระบบ (Dashboard)"
+      breadcrumbs={[{ label: 'หน้าหลัก', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Dashboard' }]}
+      navGroups={navGroups}
+      user={currentUser}
+      onNavigate={handleNavigate}
+      onLogout={handleLogout}
+    >
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+            <p className="text-xs font-semibold text-slate-400">ยอดชำระเดือนนี้</p>
+            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">฿245,000</p>
+          </div>
+        </div>
+        {children}
+      </div>
+    </AdminLayoutShell>
+  )
+}
+```

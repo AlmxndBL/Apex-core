@@ -5,6 +5,17 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.2] - 2026-08-26 — Template-First UI Architecture & Blueprint Registry 🎨
+
+### Added
+- **Production UI Component Registry (`skills/frontend/SKILL.md` Section 6):** Cataloged production-ready UI templates for Vue 3 / Nuxt 4 and React 19 / Next.js 15 (`App4StateContainer`, `AppAdminDataTable`, `AdminLayoutShell`, `AppFloatingBulkBar`, `AppKpiCard`, `AnimatedThemeToggler`, `admin-ui-tokens.ts`).
+- **Template-First Adoption Rule (`rules/05-ux-ui-design.md` & `AGENTS.md`):** Mandated that agents inspect and adopt pre-built blueprints in `templates/ui/` before hand-crafting unstandardized UI components or table implementations. Added blueprint verification to the anti-generic checklist.
+
+### Changed
+- **Quick Lookup Blueprint Mapping (`AGENTS.md` & `AGENTS_TH.md` Section 6):** Added dedicated Production Blueprints & Templates column linking Frontend UI/UX directly to `templates/ui/`.
+
+---
+
 ## [5.1.0] - 2026-08-26 — The Resilient Control & UI Shell Engine 🛡️
 
 ### Changed

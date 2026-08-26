@@ -45,8 +45,8 @@ features/<domain>/
 
 Every data-driven UI feature view MUST implement all 4 fundamental UI states:
 
+### 💚 Nuxt 4 / Vue 3 Pattern
 ```vue
-<!-- Nuxt 4 / Vue 3 Standard Container Pattern -->
 <template>
   <div class="space-y-6">
     <!-- State 1: Loading Skeleton -->
@@ -97,6 +97,58 @@ Every data-driven UI feature view MUST implement all 4 fundamental UI states:
 </template>
 ```
 
+### ⚡ React 19 / Next.js 15 Pattern
+```tsx
+export function FeatureContainer() {
+  const { data, isLoading, error, refresh } = useFeature()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+
+  // State 1: Loading Skeleton
+  if (isLoading) return <FeatureSkeleton />
+
+  // State 2: Error State with Retry
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-xl border border-rose-200 bg-rose-50/50 p-8 text-center dark:border-rose-900/50 dark:bg-rose-950/20">
+        <div className="rounded-full bg-rose-100 p-3 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400">
+          <AlertCircle className="h-6 w-6" />
+        </div>
+        <h3 className="mt-3 text-sm font-semibold text-rose-900 dark:text-rose-200">Unable to load data</h3>
+        <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{error.message}</p>
+        <button
+          type="button"
+          onClick={() => refresh()}
+          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-rose-700 active:scale-95"
+        >
+          <RotateCw className="h-3.5 w-3.5" /> Try Again
+        </button>
+      </div>
+    )
+  }
+
+  // State 3: Empty State with CTA
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50/50 p-12 text-center dark:border-zinc-800 dark:bg-zinc-900/30">
+        <Inbox className="h-10 w-10 text-zinc-400 dark:text-zinc-600" />
+        <h3 className="mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">No records found</h3>
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Get started by creating your first record.</p>
+        <button
+          type="button"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-medium text-white shadow-sm transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        >
+          + Add New Record
+        </button>
+      </div>
+    )
+  }
+
+  // State 4: Ready / Data Content
+  return <FeatureList items={data} onEdit={handleEdit} onDelete={handleDelete} />
+}
+```
+
 ---
 
 ## 3. Modern Design System & Aesthetic Polish Heuristics
@@ -125,6 +177,7 @@ Ban generic "AI-generated" wireframes. Apply modern aesthetic discipline:
 
 Never allow unformatted horizontal scroll tables to break mobile UX:
 
+### 💚 Nuxt 4 / Vue 3 Pattern
 ```vue
 <!-- Desktop View (md+) -->
 <div class="hidden md:block overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
@@ -166,6 +219,65 @@ Never allow unformatted horizontal scroll tables to break mobile UX:
 </div>
 ```
 
+### ⚡ React 19 / Next.js 15 Pattern
+```tsx
+export function FeatureList({ items, onEdit }: { items: Item[]; onEdit: (id: string) => void }) {
+  return (
+    <>
+      {/* Desktop View (md+) */}
+      <div className="hidden md:block overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+        <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-left text-sm">
+          <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-xs font-semibold text-zinc-500">
+            <tr>
+              <th className="py-3 px-4">Name</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
+            {items.map((item) => (
+              <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                <td className="py-3 px-4 font-medium text-zinc-900 dark:text-zinc-100">{item.name}</td>
+                <td className="py-3 px-4"><Badge status={item.status} /></td>
+                <td className="py-3 px-4 text-right space-x-2">
+                  <button type="button" onClick={() => onEdit(item.id)} className="text-xs text-zinc-600 hover:text-zinc-900">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile View (< md) */}
+      <div className="space-y-3 md:hidden">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-zinc-900 dark:text-zinc-100 text-sm">{item.name}</span>
+              <Badge status={item.status} />
+            </div>
+            <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-2 dark:border-zinc-800/60">
+              <button
+                type="button"
+                onClick={() => onEdit(item.id)}
+                className="text-xs font-medium text-zinc-600 dark:text-zinc-400"
+              >
+                Edit
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+```
+
 ---
 
 ## 5. SSR & Hydration Guardrails
@@ -173,3 +285,42 @@ Never allow unformatted horizontal scroll tables to break mobile UX:
 - **Browser Globals:** Never read `window`, `document`, or `localStorage` during setup or module initialization. Wrap in `onMounted()` (Vue) or `useEffect()` (React).
 - **Icon Bundling:** Import only required icon symbols (`import { Check, X } from 'lucide-vue-next'`). Never import complete wildcard packages.
 - **Client Directives:** Restrict `'use client'` (Next.js) or `<ClientOnly>` (Nuxt) strictly to leaf components requiring direct DOM interaction.
+
+---
+
+## 6. Apex Enterprise UI Component Registry & Template Directory
+
+Before creating or refactoring frontend components, **ALWAYS** check and adopt pre-built production components from [`Apex-core/templates/ui/`](../../templates/ui/):
+
+### 📁 Blueprint & Template Inventory
+
+```text
+Apex-core/templates/ui/
+├── admin-ui-tokens.ts          # Standardized classes, table presets, and getCatalogItemToneClass()
+├── demo-layout.html            # Standalone visual prototype & showcase
+├── vue/                        # Vue 3 / Nuxt 4 Production Components
+│   ├── AdminLayoutShell.vue    # Full admin shell (Sidebar + Navbar + Command header)
+│   ├── AppAdminSidebar.vue     # Responsive collapsible sidebar with mobile drawer
+│   ├── AppAdminDataTable.vue   # Unified table with search, pill filters, sort & mobile cards
+│   ├── App4StateContainer.vue  # Strict 4-State UI container (Loading, Error, Empty, Ready)
+│   ├── AppFloatingBulkBar.vue  # Floating bottom dock for batch selection actions
+│   ├── AppKpiCard.vue          # Metric/KPI card with trend badges & spark indicators
+│   ├── AnimatedThemeToggler.vue# Smooth animated Sun/Moon dark mode toggle
+│   ├── AppToastContainer.vue   # Enterprise toast container
+│   └── useToast.ts             # Composable for tri-tier toast alerts
+└── react/                      # React 19 / Next.js 15 Equivalent Components
+    ├── AdminLayoutShell.tsx
+    ├── AppAdminDataTable.tsx
+    ├── App4StateContainer.tsx
+    ├── AppFloatingBulkBar.tsx
+    ├── AppKpiCard.tsx
+    ├── AnimatedThemeToggler.tsx
+    ├── AppToastContainer.tsx
+    └── useToast.ts
+```
+
+### 🚀 Adoption Workflow (Synthesis Mode)
+1. **Container Integration:** Wrap all asynchronous data views with `App4StateContainer` (`:status="pending ? 'loading' : error ? 'error' : !data?.length ? 'empty' : 'ready'"`).
+2. **Data Listings:** Prefer `AppAdminDataTable` or match its dual responsive structure (`hidden md:block` table + `md:hidden` touch card list).
+3. **Design Tokens:** Import `adminDashboardCardClass`, `adminTableUi`, and `getCatalogItemToneClass` from `admin-ui-tokens.ts` for uniform visual hierarchy across all admin features.
+

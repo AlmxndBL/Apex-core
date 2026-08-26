@@ -109,15 +109,16 @@ Every data-driven UI feature view MUST explicitly implement:
 
 ---
 
-## 6. Rule & Skill Quick Lookup
+## 6. Rule, Skill & Blueprint Quick Lookup
 
-| Domain | Engineering Rule | Specialized Skill |
-|---|---|---|
-| **Security & Auth** | [`rules/01-security-auth.md`](./rules/01-security-auth.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **Code Quality & TS** | [`rules/02-coding-standards.md`](./rules/02-coding-standards.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **System Architecture** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **Database & Prisma** | [`rules/04-database-design.md`](./rules/04-database-design.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) |
-| **Frontend UI/UX** | [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) | [`skills/frontend`](./skills/frontend/SKILL.md) |
-| **Testing & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) |
-| **Codebase Mapping** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) |
+| Domain | Engineering Rule | Specialized Skill | Production Blueprints & Templates |
+|---|---|---|---|
+| **Frontend UI/UX** | [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) | [`skills/frontend`](./skills/frontend/SKILL.md) | [`templates/ui/`](./templates/ui/) (`vue/`, `react/`, `admin-ui-tokens.ts`) |
+| **Security & Auth** | [`rules/01-security-auth.md`](./rules/01-security-auth.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | [`templates/blueprints/rbac-multi-role.md`](./templates/blueprints/rbac-multi-role.md) |
+| **Code Quality & TS** | [`rules/02-coding-standards.md`](./rules/02-coding-standards.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | N/A |
+| **System Architecture** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | [`templates/blueprints/`](./templates/blueprints/) |
+| **Database & Prisma** | [`rules/04-database-design.md`](./rules/04-database-design.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | N/A |
+| **Testing & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) | [`templates/gitignore-production.md`](./templates/gitignore-production.md) |
+| **Codebase Mapping** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) | [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) |
+
 
