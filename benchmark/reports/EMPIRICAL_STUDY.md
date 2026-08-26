@@ -1,7 +1,7 @@
 # ⚡ Empirical Research Study: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
 > **Objective Evaluation on Real Code Fixtures across 5 Full-Stack Domains**  
-> Evaluated at: `2026-08-26T09:49:41.222Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
+> Evaluated at: `2026-08-26T10:42:09.275Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
 
 ---
 
@@ -31,11 +31,11 @@ Measured by executing programmatic AST extraction directly on real source code f
 
 | Fixture File | Domain | Raw BPE Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
 |---|---|---|---|---|---|
-| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.381ms |
-| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.11ms |
-| **03_state_store.ts** | State Layer | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.069ms |
-| **04_schema.prisma** | Database Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.218ms |
-| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.056ms |
+| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.302ms |
+| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.115ms |
+| **03_state_store.ts** | State Layer | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.059ms |
+| **04_schema.prisma** | Database Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.149ms |
+| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.038ms |
 | **GLOBAL MEAN (μ)** | **All 5 Domains** | **799.6 tok** | **107 tok** | **🔻 -80.7% (p < 0.0001)** | **< 1.0ms** |
 
 ---

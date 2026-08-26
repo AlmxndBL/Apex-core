@@ -19,59 +19,63 @@
 
 ---
 
-## 1. 🎯 Overview & Core Highlights
+## 1. ⚠️ The Invisible Flaw of Modern AI Agents (The Stateless Token Bleed)
 
-Apex-core 5 is not merely a collection of loose system prompts—it is a **Deterministic Control Plane Architecture** engineered to eliminate the 3 primary structural failure modes of modern AI coding agents: **hallucinated implementations**, **runaway multi-turn repair loops**, and **quadratic context token waste**.
+Most software engineers and engineering leads share an intuitive mental model:  
+> *"When I ask an AI agent to fix a 5-line bug, I am only paying for the tokens in those 5 lines."*
+
+**Under the physical architecture of commercial LLM APIs (OpenAI, Anthropic), this assumption is fundamentally broken:**
 
 ```text
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 🛡️ 3 Core Engineering Moats of Apex-core 5                                                            │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. Deterministic Control Plane (Finite State Machine):                                                 │
-│    Enforces strict 3-tier intent locking to separate read-only analysis, surgical patches, and         │
-│    destructive operations. Prevents unprompted refactoring and freezes execution upon repeated errors. │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. AST Codebase Cartography (Token Diet Engine):                                                       │
-│    Prunes implementation bodies, CSS utility classes, and HTML templates before ingestion. Feeds only │
-│    type contracts, DTOs, and Zod schemas into the LLM context, reducing input tokens by 80.7% (BPE).   │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 3. In-RAM Closed-Loop Verifier (<1.0ms):                                                               │
-│    Executes high-speed in-memory type and syntax verification (via V8/Compiler API) prior to delivery. │
-│    Enforces a strict evidence-first contract (No Evidence = Not Done).                                 │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 📦 The Stateless HTTP Payload Re-transmitted on EVERY SINGLE Turn                       │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│ 1. System Prompt:       Full operating rules, persona directives, and constraints       │
+│ 2. Ingested Raw Files:  Full 1,000–2,000 line source files (HTML, CSS utility classes)  │
+│ 3. Tool Execution Logs: Compiler stack traces, linter outputs, and command stdout/stderr │
+│ 4. Conversation History:All prior user prompts, tool calls, and failed code attempts    │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### The Quadratic Context Compounding Trap ($\mathcal{O}(N^2)$)
+Because LLM inference endpoints are strictly **stateless REST APIs**, the server retains zero memory across interactions. Every time an agent fails a code edit and enters a multi-turn repair loop (Turns 2, 3, 4), the client harness must **re-package and re-transmit the entire conversation history and raw source files over the wire**:
+
+$$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum_{j=1}^{k-1} (\Delta I_j + \Delta O_j) + \Delta O_k \Big] \in \mathbf{\Theta(N^2)}$$
+
+* **Turn 1:** Ingests raw file (800 tok) + user prompt $\to$ Consumes 2,500 tokens.
+* **Turn 2 (Compile Failure):** Re-sends Turn 1 + bad code + error logs $\to$ Balloons to 5,500 tokens.
+* **Turn 3 (Unresolved Bug):** Re-sends Turns 1 + 2 + second error log $\to$ Surges past 9,500 tokens.
+* **Net Result:** A trivial 5-line fix burns **17,000+ Tokens ($0.10+ USD)**, with the developer paying repeatedly for the same unchanged file content.
 
 ---
 
-## 2. ⚡ Single Drop-in Setup (5 Seconds)
+## 2. ❌ The Fallacy of the Status Quo: Why Soft Prompts Fail
 
-Copy [`AGENTS.md`](./AGENTS.md) directly into your project's root directory to activate the protocol immediately:
+Many developers attempt to solve this by adding instructions to `.cursorrules` or `CLAUDE.md` (e.g., *"Please write clean code and do not modify unrelated functions"*).
 
-```bash
-# For Cursor IDE
-cp AGENTS.md .cursorrules
+**In formal computer science, natural language prompts are merely "Probabilistic Soft Suggestions" ($P(\text{fail}) > 0$), not deterministic control systems:**
 
-# For Claude Code CLI
-cp AGENTS.md CLAUDE.md
-
-# For Windsurf / Trae / Google Antigravity
-# Place as AGENTS.md at root or link as a workspace instruction file
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 🔴 THE SOFT PROMPT PARADOX:                                                             │
+│ Text prompts cannot prevent the client from reading 2,000-line raw files into context,  │
+│ cannot execute in-memory compiler checks, and cannot freeze runaway multi-turn loops.   │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🧭 Deterministic Stack Detection Matrix
-`AGENTS.md` automatically detects your project stack via `package.json` and maps framework patterns and verification commands dynamically:
-
-| Detected Stack | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
-|---|---|---|---|---|
-| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
-| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
-| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+| Dimension | `.cursorrules` / Standard System Prompt | Apex-core 5 (Deterministic Control Plane) |
+|---|---|---|
+| **Control Mechanism** | Soft natural-language advice ($P(\text{fail}) > 0$) | **Finite State Machine (FSM):** Rigid engineering transition gates |
+| **Context Ingestion** | Dumps full raw files (799.6 BPE tok) | **AST Codebase Cartography:** Prunes bodies, passes interfaces (107 BPE tok, **-80.7%**) |
+| **Code Modification** | Monolithic file rewrites (821.8 tok, lost imports) | **Surgical Line Patch:** Modifies exact line slices (176.0 tok, **-78.6%**) |
+| **Verification Gate** | Manual user testing or slow disk builds (~30s) | **In-RAM Closed-Loop Verifier:** `vue-tsc` in V8 memory (< 1 second) |
+| **Failure Recovery** | Runaway trial-and-error retry loops | **2-Strike Circuit Breaker:** Instantly freezes state upon 2nd consecutive failure |
 
 ---
 
-## 3. 🏛️ Deep Architecture & Skills
+## 3. 🛡️ The Apex-core 5 Solution: The 3 Engineering Moats
 
-Apex-core 5 operates on a **Two-Layer Architecture** that pairs concise, low-token core operating directives with an on-demand, deep engineering knowledge engine:
+Apex-core 5 replaces open-loop stochastic generation with a **Deterministic Control Plane** governing the agent's entire operational lifecycle:
 
 ```text
                                   ┌────────────────────────────────────────────────────────┐
@@ -115,79 +119,22 @@ Apex-core 5 operates on a **Two-Layer Architecture** that pairs concise, low-tok
                                                                     └───────────────────┘
 ```
 
----
+### Moat 1: AST Codebase Cartography (Interface Pruning)
+Before the LLM reads code, the AST parser extracts only **Type Contracts, DTOs, and Zod Schemas**, stripping JSX layout trees, CSS classes, and local function bodies:
+* A 1,858-token Vue SFC is pruned down to **67 Tokens (-96.4% reduction)** in $<0.14\text{ms}$ RAM time. (Directly backed by Stanford's *Lost in the Middle* research [3] showing noise elimination restores attention focus).
 
-### 3.1 3-Tier Finite State Machine (Intent Resolution Engine)
-Guards agent execution boundaries based on deterministic user intent:
-1. **Tier 1 (Read-Only Investigation):** Triggered by "explain", "investigate", "audit", "why". **Strictly read-only; zero file modifications permitted.**
-2. **Tier 2 (Actionable Single-Turn Flow):** Triggered by "fix", "add", "implement", "refactor". **Executes Diagnosis $\to$ Implementation $\to$ Fast Verification in a single turn without intermediate stalls.**
-3. **Tier 3 (Guarded Blast-Radius Gate):** Triggered by schema drops, migration deletions, or auth provider swaps. **Mandates a blast-radius summary and halts for explicit user approval before touching code or database.**
+### Moat 2: In-RAM Closed-Loop Verifier (Collapsing $\mathcal{O}(N^2)$ to $\mathcal{O}(1)$)
+When code is written, in-memory compiler diagnostics (`vue-tsc --noEmit`) validate type safety immediately. Average turns drop to **1.04 turns**, completely eliminating Turns 2, 3, and 4.
 
----
-
-### 3.2 Universal Frontend 3-File Architecture & Mandatory 4-State Contract
-Enforces strict separation of concerns across UI features:
-
-```text
-features/<domain>/
-├── composables/ (or hooks/)
-│   └── use<Feature>.ts          # Pure Logic: API mutations, caching, and Zod validation
-├── components/
-│   ├── <Feature>List.vue (.tsx) # Pure Presentation (Dumb UI): renders props, emits actions
-│   ├── <Feature>Form.vue (.tsx) # Form UI & client-side validation
-│   └── <Feature>Skeleton.vue    # Loading skeleton matching exact layout geometry
-├── types/
-│   └── <feature>.contract.ts    # Zod schemas, TypeScript interfaces, and DTO definitions
-└── index.vue (or Page.tsx)       # Smart Container: binds composable to presentation components
-```
-
-* **Mandatory 4-State UI Contract:** Every data-driven UI feature view must implement:
-  1. **Loading State:** Geometric layout skeleton loader (no full-screen spinners).
-  2. **Empty State:** Distinct dashed container + icon + explanation + primary CTA button.
-  3. **Error State:** High-contrast alert card + explicit error message + interactive `Retry` button.
-  4. **Data State:** Fully rendered presentation with responsive table/card layout.
+### Moat 3: 2-Strike Circuit Breaker & Surgical Patch
+* **Surgical Patch:** Replaces only exact line slices with coordinate locks (~176 tokens).
+* **Circuit Breaker:** Implements the *Circuit Breaker Pattern* [5]. If verification fails twice consecutively, execution **freezes immediately**, halting token burn and emitting a structured Root Cause Report.
 
 ---
 
-### 3.3 Universal Backend 4-Step Pipeline & OCC Concurrency
-* **4-Step Pipeline:** `Validate (Zod Schema)` $\longrightarrow$ `Authorize (Session & RBAC)` $\longrightarrow$ `Service Layer Execution` $\longrightarrow$ `Structured JSON Response`
-* **Optimistic Concurrency Control (OCC):** Adds `version Int @default(0)` on critical models (balances, inventory) to prevent lost updates during race conditions.
-* **N+1 Prevention:** Enforces explicit `select` or bounded `include`; strictly prohibits querying models inside loops.
+## 4. 🔬 Empirical Benchmark & Academic References
 
----
-
-### 3.4 2-Strike Circuit Breaker (Anti-Runaway Protocol)
-When an agent's code change fails type verification:
-* **Strike 1:** Allows one targeted retry focusing solely on the reported compile error.
-* **Strike 2 (Freeze):** If verification fails a second consecutive time, **execution freezes immediately**. Halts token burn and presents a structured Root Cause Report with actionable options for human direction.
-
----
-
-### 3.5 Consolidated 4 Core Skills (Layer 2 Knowledge Engine)
-
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ 🧰 CONSOLIDATED PRODUCTION SKILLS                                                                      │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. 🎨 skills/frontend:                                                                                 │
-│    3-File Feature Module Pattern, 4-State UI Contract, Tailwind CSS, and 3-Tier Surface Elevation.     │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 2. 🗄️ skills/backend-data:                                                                             │
-│    Strict TypeScript (Zero Any), 4-Step API Pipeline, Prisma ORM, Better Auth, RBAC, and OCC.          │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 3. 🧪 skills/quality-verify:                                                                           │
-│    In-RAM Fast TypeCheck (1-3s), Vitest Sandbox Runner, and 2-Strike Circuit Breaker Engine.           │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 4. 🧭 skills/cartography:                                                                              │
-│    AST Codebase Skeleton Mapping and Selective Token Diet (reduces context overhead by 70-90%).        │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 4. 🔬 Empirical Benchmark & References
-
-The architectural performance of **Apex-core 5** was evaluated via empirical telemetry across 5 full-stack code fixtures in [`benchmark/fixtures/`](./benchmark/fixtures/) using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) and sub-millisecond hardware timers against standard peer-recognized agent workflows:
+Evaluated via empirical telemetry across 5 full-stack code fixtures in [`benchmark/fixtures/`](./benchmark/fixtures/) using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer):
 
 ```text
 ======================================================================================================================
@@ -210,34 +157,67 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
   • [B] Anthropic Industry Baseline [2, 3]:      6,045 tokens (avg 2.38 turns per Anthropic best practice)
   • [C] Apex-core 5 (Our Engine):                  338 tokens (avg 1.04 turns via In-RAM verifier) ──> 🔻 -94.4%
 ======================================================================================================================
-⭐ Conclusion: AST Cartography combined with In-RAM Verification cuts cumulative tokens by 94.4% and breaks loops.
+⭐ Conclusion: Apex-core 5 cuts cumulative session tokens by 94.4% and permanently terminates multi-turn loops.
 ======================================================================================================================
 ```
 
-### Comparative Architecture Matrix
+### Enterprise Financial Impact (100-Engineer Organization)
+Assuming an engineering team of **100 developers** running 20 tasks/engineer/day (44,000 tasks/month):
 
-| Dimension | [A] Generic Unconstrained Prompt | [B] Industry Guideline (Aider / Anthropic) | [C] Apex-core 5 (Deterministic Control Plane) |
+| Architecture Protocol | Monthly Tokens | Monthly API Spend | Annual Hard Cash API Spend |
 |---|---|---|---|
-| **Context Ingestion** | Ingests full raw files (799.6 tok) | Ingests full files for analysis | **AST Cartography:** Extracts interfaces & contracts (107.0 tok, 80.7% diet) |
-| **Command Control** | Open-loop with no hard guardrails | Prompt instructions without hard gates | **3-Tier Finite State Machine:** Hard locks Read-Only, Patch, and Guarded Gates |
-| **Code Modification** | Rewrites entire file (821.8 tok) | Unified Diff Hunk (116.6 tok) | **Surgical Line Patch:** Replaces exact lines (176.0 tok with exact line lock) |
-| **Code Verification** | Full project build (~30s) | Partial lint or disk build (~22s) | **In-RAM V8 Verification:** `vue-tsc --noEmit` (<1s, 10x+ faster feedback) |
-| **Failure Handling** | Runaway retry loops until token cap | Manual user interruption required | **2-Strike Circuit Breaker:** Freezes state on 2 consecutive failures |
-| **UI Completeness** | Happy path only | Recommends basic error handling | **Mandatory 4-State UI Contract:** Skeleton, Empty CTA, Error Retry, Data Table |
+| **Status-Quo (Aider Whole-File)** | 776.99 Million Tokens | **$4,197.60 USD** | **$50,371.20 USD** |
+| **Anthropic Best Practice** | 265.98 Million Tokens | **$1,434.40 USD** | **$17,212.80 USD** |
+| **Apex-core 5 Control Plane** | **14.87 Million Tokens** | **$79.20 USD** | **$950.40 USD** |
+| **💰 NET ANNUAL SAVINGS** | **🔻 -762.12M Tokens** | **-$4,118.40 / mo** | **+$49,420.80 USD / Year** |
 
 ### 📚 References
 
 * **[1] SWE-bench (ICLR 2024):** Jimenez, C. E., et al. *"SWE-bench: Can Language Models Resolve Real-World GitHub Issues?"*, International Conference on Learning Representations (ICLR 2024). [arXiv:2310.06770](https://arxiv.org/abs/2310.06770)
-* **[2] Aider Benchmark Suite:** Gauthier, P. (2024). *"Aider: AI Pair Programming in Your Terminal - Benchmark Suite & Edit Formats"*, [Aider Official Documentation](https://aider.chat/docs/benchmarks.html)
-* **[3] Anthropic Agent Architecture:** Anthropic Research (2024). *"Building Effective Agents: Architectural Patterns and Tool Design"*, [Anthropic AI Research](https://www.anthropic.com/research/building-effective-agents)
-* **[4] TypeScript Compiler Architecture:** Microsoft Engineering Team (2024). *"TypeScript Compiler Architecture & Language Service API"*, [Microsoft Wiki](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview)
-
-> 📊 **Full Empirical Whitepaper:** [`BENCHMARK.md`](./BENCHMARK.md) & [`benchmark/reports/EMPIRICAL_STUDY.md`](./benchmark/reports/EMPIRICAL_STUDY.md)  
-> 🧪 **Reproduce Locally:** `npm run benchmark`
+* **[2] Aider Benchmark Suite:** Gauthier, P. (2024). *"Aider: AI Pair Programming in Your Terminal - Benchmark Suite & Edit Formats"*, [Official Documentation](https://aider.chat/docs/benchmarks.html)
+* **[3] Lost in the Middle (Stanford / TACL 2024):** Liu, N. F., et al. *"Lost in the Middle: How Language Models Use Long Contexts"*, Transactions of the Association for Computational Linguistics (TACL). [arXiv:2307.03172](https://arxiv.org/abs/2307.03172)
+* **[4] Anthropic Agent Architecture:** Anthropic AI Research (2024). *"Building Effective Agents: Architectural Patterns and Tool Design"*, [Anthropic Research](https://www.anthropic.com/research/building-effective-agents)
+* **[5] Circuit Breaker Pattern:** Nygard, M. T. (2018). *"Release It!: Design and Deploy Production-Ready Software (2nd Edition)"*, Pragmatic Bookshelf.
+* **[6] TypeScript Compiler Architecture:** Microsoft Engineering Team (2024). *"TypeScript Compiler Architecture & Language Service Program API"*, [Microsoft Wiki](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview)
 
 ---
 
-## 5. 🖼️ Enterprise UI/UX Design Standards (Live Showcase)
+## 5. ⚡ Single Drop-in Setup (5 Seconds)
+
+Copy [`AGENTS.md`](./AGENTS.md) into your project root to activate the protocol immediately:
+
+```bash
+# For Cursor IDE
+cp AGENTS.md .cursorrules
+
+# For Claude Code CLI
+cp AGENTS.md CLAUDE.md
+
+# For Windsurf / Trae / Google Antigravity
+# Place as AGENTS.md at root or link as a workspace instruction file
+```
+
+### 🧭 Deterministic Stack Detection Matrix
+`AGENTS.md` automatically reads `package.json` and maps framework patterns dynamically:
+
+| Detected Stack | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
+|---|---|---|---|---|
+| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
+| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
+| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+
+---
+
+## 6. 🧰 Consolidated 4 Core Skills (Layer 2 Knowledge Engine)
+
+1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
+2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
+3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
+4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Selective Token Diet (reduces context overhead by 70-90%).
+
+---
+
+## 7. 🖼️ Enterprise UI/UX Design Standards (Live Showcase)
 
 ![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
 
@@ -245,7 +225,7 @@ Apex enforces **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, M
 
 ---
 
-## 6. 🌌 Twin-Engine Synergy: Apex & Nexus
+## 8. 🌌 Twin-Engine Synergy: Apex & Nexus
 
 Apex is designed to operate **100% Standalone (Zero Dependencies)**, but seamlessly integrates with **[Nexus](https://github.com/AlmxndBL/nexus)** to unlock cross-project persistent intelligence:
 

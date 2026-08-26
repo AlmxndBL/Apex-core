@@ -102,7 +102,7 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 
 ---
 
-## 3. แหล่งข้อมูลอ้างอิง (References)
+## 3. แหล่งข้อมูลอ้างอิงมาตรฐานสากล (References)
 
 ```text
 [1] Jimenez, C. E., Yang, J., Wettig, A., Yao, S., Pei, K., Press, O., & Narasimhan, K. (2024). 
@@ -113,11 +113,19 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
     "Aider: AI Pair Programming in Your Terminal - Benchmark Suite & Edit Formats." 
     Official Aider Documentation. https://aider.chat/docs/benchmarks.html
 
-[3] Anthropic. (2024). 
+[3] Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2024). 
+    "Lost in the Middle: How Language Models Use Long Contexts." 
+    Transactions of the Association for Computational Linguistics (TACL / Stanford University). arXiv:2307.03172.
+
+[4] Anthropic. (2024). 
     "Building Effective Agents: Architectural Patterns and Tool Design." 
     Anthropic Research. https://www.anthropic.com/research/building-effective-agents
 
-[4] Microsoft TypeScript Engineering Team. (2024). 
+[5] Nygard, M. T. (2018). 
+    "Release It!: Design and Deploy Production-Ready Software (2nd Edition)." 
+    Pragmatic Bookshelf. (Circuit Breaker Architecture).
+
+[6] Microsoft TypeScript Engineering Team. (2024). 
     "TypeScript Compiler Architecture & Language Service API." 
     https://github.com/microsoft/TypeScript/wiki/Architectural-Overview
 ```

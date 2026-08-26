@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26T09:49:41.222Z",
+  "timestamp": "2026-08-26T10:42:09.275Z",
   "datasetVersion": "Apex-core 5",
   "tokenizer": "cl100k_base (gpt-tokenizer BPE)",
   "fixturesCount": 5,
@@ -100,7 +100,7 @@
         "astChars": 533,
         "astTokens": 138,
         "compressionRatioPercent": 78.3,
-        "extractDurationMs": 0.381
+        "extractDurationMs": 0.302
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 641,
@@ -109,7 +109,7 @@
         "savingsVsWholePercent": 90.2,
         "savingsVsDiffPercent": -21.2
       },
-      "latencyMs": 0.05
+      "latencyMs": 0.048
     },
     {
       "file": "02_frontend_view.vue",
@@ -122,7 +122,7 @@
         "astChars": 232,
         "astTokens": 67,
         "compressionRatioPercent": 96.4,
-        "extractDurationMs": 0.11
+        "extractDurationMs": 0.115
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 1903,
@@ -144,7 +144,7 @@
         "astChars": 254,
         "astTokens": 69,
         "compressionRatioPercent": 87.3,
-        "extractDurationMs": 0.069
+        "extractDurationMs": 0.059
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 561,
@@ -166,7 +166,7 @@
         "astChars": 632,
         "astTokens": 166,
         "compressionRatioPercent": 58.4,
-        "extractDurationMs": 0.218
+        "extractDurationMs": 0.149
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 409,
@@ -175,7 +175,7 @@
         "savingsVsWholePercent": 79.2,
         "savingsVsDiffPercent": -44.1
       },
-      "latencyMs": 0.01
+      "latencyMs": 0.009
     },
     {
       "file": "05_webhook_hmac.ts",
@@ -188,7 +188,7 @@
         "astChars": 411,
         "astTokens": 95,
         "compressionRatioPercent": 83.1,
-        "extractDurationMs": 0.056
+        "extractDurationMs": 0.038
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 595,
@@ -197,7 +197,7 @@
         "savingsVsWholePercent": 65.2,
         "savingsVsDiffPercent": -30.2
       },
-      "latencyMs": 0.012
+      "latencyMs": 0.017
     }
   ]
 }
