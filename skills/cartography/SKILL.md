@@ -25,3 +25,16 @@ description: AST Codebase Skeleton Mapping, Selective Token Diet, and Project Ex
   3. **Exception for Schemas/Contracts:** Allow viewing up to 600 lines for `schema.prisma`, OpenAPI specs, and core shared type definitions to prevent broken inverse relations (`@relation`) or missing discriminated union variants.
   4. Rely on Type Definitions and Schema Interfaces to plan changes instead of reading full implementation details.
 
+---
+
+## 3. High-Precision Compiler AST Extraction Tool
+
+* Use the dedicated TypeScript Compiler AST engine located at `skills/cartography/scripts/ast-extractor.js`:
+  ```javascript
+  import { extractAstSkeleton } from './scripts/ast-extractor.js';
+  const skeleton = extractAstSkeleton('service.ts', fullCode);
+  ```
+* **Capabilities:**
+  - **TypeScript & JavaScript (`.ts`, `.tsx`, `.js`, `.jsx`):** Parses full TypeScript AST via `ts.createSourceFile`. Prunes all function/method bodies while preserving 100% of signatures, interfaces, type aliases, generics (`<T>`), async/export flags, and arrow functions with destructuring.
+  - **Vue SFC (`.vue`):** Automatically extracts and parses `<script lang="ts">` / `<script setup>` contracts.
+  - **Prisma Schema (`.prisma`):** Preserves complete relation mappings (`@relation`), field modifiers (`@id`, `@unique`, `@default`), and model block attributes (`@@index`, `@@unique`, `@@id`, `@@map`).

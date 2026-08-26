@@ -1,43 +1,43 @@
-﻿# โก Apex-core 5 โ€” The Deterministic AI Agent Operating Protocol
+# ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
 > A deterministic control plane engineered for autonomous AI coding agents across Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, and full-stack ecosystems. Empirically proven to reduce input token consumption by **58.4% on average (and up to 88.9% on large production schemas)** (*p* = 4.87 × 10⁻¹¹) across 50 real-world benchmark tasks.
 
 <div align="center">
 
-**[ ๐ฌ๐ง English ](README.md) ยท [ ๐น๐ญ เธ เธฒเธฉเธฒเนเธ—เธข ](README.th.md)**
+**[ 🇬🇧 English ](README.md) · [ 🇹🇭 ภาษาไทย ](README.th.md)**
 
 </div>
 
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-5.4.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-๐”ป_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
 
 ---
 
-## ๐ฏ 1. The Invisible Problem: The Stateless Token Bleed
+## 🎯 1. The Invisible Problem: The Stateless Token Bleed
 
 Most developers assume fixing a 5-line bug only costs tokens for those 5 lines. In reality, **commercial LLM APIs (OpenAI, Anthropic) are stateless REST APIs**. Every turn re-transmits the entire conversation history and 2,000-line raw files, causing token consumption to compound quadratically ($\mathcal{O}(N^2)$).
 
 ```text
-โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”      โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”
-โ” โ STATUS-QUO (Raw Ingestion: 1,858 BPE tok)     โ”      โ” โ… APEX-CORE 5 AST DIET (Interface: 67 BPE tok)  โ”
-โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”ค      โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”ค
-โ” <template>                                       โ”      โ” // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            โ”
-โ”   <div class="min-h-screen bg-zinc-950 p-6">     โ” โ”€โ”€โ”€> โ” export interface UserTableRow {                  โ”
-โ”     <!-- 80+ lines of HTML markup & SVG icons -->โ”      โ”   id: string; email: string; role: Role;         โ”
-โ”     <table class="w-full border border-zinc-800">โ”      โ” }                                                โ”
-โ”   </div>                                         โ”      โ” export interface Props { users: UserTableRow[] } โ”
-โ” </template>                                      โ”      โ” export function useUserManagement(): StateStore; โ”
-โ” <script setup lang="ts">                         โ”      โ”                                                  โ”
-โ”   // 60 lines of internal function bodies        โ”      โ”                                                  โ”
-โ” </script>                                        โ”      โ”                                                  โ”
-โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”      โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”
-                 ๐”ป 96.4% Context Payload Eliminated (<0.14ms V8 In-RAM Extraction)
+┌──────────────────────────────────────────────────┐      ┌──────────────────────────────────────────────────┐
+│ ❌ STATUS-QUO (Raw Ingestion: 1,858 BPE tok)     │      │ ✅ APEX-CORE 5 AST DIET (Interface: 67 BPE tok)  │
+├──────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────┤
+│ <template>                                       │      │ // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            │
+│   <div class="min-h-screen bg-zinc-950 p-6">     │ ───> │ export interface UserTableRow {                  │
+│     <!-- 80+ lines of HTML markup & SVG icons -->│      │   id: string; email: string; role: Role;         │
+│     <table class="w-full border border-zinc-800">│      │ }                                                │
+│   </div>                                         │      │ export interface Props { users: UserTableRow[] } │
+│ </template>                                      │      │ export function useUserManagement(): StateStore; │
+│ <script setup lang="ts">                         │      │                                                  │
+│   // 60 lines of internal function bodies        │      │                                                  │
+│ </script>                                        │      │                                                  │
+└──────────────────────────────────────────────────┘      └──────────────────────────────────────────────────┘
+                 🔻 96.4% Context Payload Eliminated (<0.14ms V8 In-RAM Extraction)
 ```
 
 Apex-core 5 replaces probabilistic soft prompts (`.cursorrules`) with a **Deterministic Control Plane**:
@@ -47,10 +47,18 @@ Apex-core 5 replaces probabilistic soft prompts (`.cursorrules`) with a **Determ
 
 ---
 
-## โก 2. Single Drop-in Setup (5 Seconds)
+## ⚡ 2. Setup & Installation (3 Flexible Modes)
 
-Copy [`AGENTS.md`](./AGENTS.md) into your project root to activate the protocol immediately:
+### Option A: Global Agent Plugin (Recommended for Multi-Project Devs)
+Clone `Apex-core` once on your machine and connect it as a global skill/workspace to your AI coding agents (Antigravity, Cursor, Claude Desktop, Windsurf):
+```bash
+git clone https://github.com/AlmxndBL/Apex-core.git ~/.agents/Apex-core
+cd ~/.agents/Apex-core && npm install
+```
+*Your AI agent will automatically detect and apply `AGENTS.md`, 6 core rules, and skills across all workspaces without modifying project repositories.*
 
+### Option B: Single Project Drop-in (Team Repository Setup)
+Drop [`AGENTS.md`](./AGENTS.md) directly into your project root:
 ```bash
 # For Cursor IDE
 cp AGENTS.md .cursorrules
@@ -62,18 +70,22 @@ cp AGENTS.md CLAUDE.md
 # Place as AGENTS.md at repository root
 ```
 
-### ๐งญ Automatic Stack Detection Matrix
+> **Zero Runtime Overhead:** User projects require **zero Apex dependencies**. The target project uses its own existing `package.json` and lockfile; AI agents execute in-RAM verification directly via `pnpm vue-tsc --noEmit` or `pnpm tsc --noEmit`.
+
+---
+
+### 🧭 Automatic Stack Detection Matrix
 `AGENTS.md` automatically detects your stack from `package.json` and enforces the matching pipeline:
 
 | Detected Stack | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
 |---|---|---|---|---|
-| ๐’ **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
-| โก **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
-| ๐ **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
+| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
+| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
 
 ---
 
-## ๐“ 3. Empirical Benchmark & Verification Evidence
+## 📊 3. Empirical Benchmark & Verification Evidence
 
 Apex-core is empirically verified using the dedicated **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** execution-based benchmark suite across **$N = 50$ real-world production tasks** extracted from 10 actual GitHub repositories (150 live trajectories evaluated on Frontier APIs):
 
@@ -82,29 +94,29 @@ Apex-core is empirically verified using the dedicated **[Apex-eval](https://gith
 | **Pass@1 Accuracy** | **100% (50/50)** | **100% (50/50)** | **100% (50/50)** | Zero-shot defect resolution |
 | **Pass@5 Recovery** | **100%** | **100%** | **100%** | Total problem resolution |
 | **Mean Turns** | **1.00** | **1.00** | **1.00** | Single-turn resolution |
-| **Mean Ingestion Tokens** | 2,294 tok | 2,338 tok | **955 tok** | **๐”ป -58.4% vs Baseline ($p = 0$)** |
-| **Enterprise Schemas (>800 lines)** | 7,270 tok | 7,309 tok | **3,557 tok** | **๐”ป -51.1% Token Diet** |
-| **Context Index Docs (>2,000 lines)**| 2,453 tok | 2,530 tok | **272 tok** | **๐”ป -88.9% Token Diet** |
+| **Mean Ingestion Tokens** | 2,294 tok | 2,338 tok | **955 tok** | **🔻 -58.4% vs Baseline ($p = 0$)** |
+| **Enterprise Schemas (>800 lines)** | 7,270 tok | 7,309 tok | **3,557 tok** | **🔻 -51.1% Token Diet** |
+| **Context Index Docs (>2,000 lines)**| 2,453 tok | 2,530 tok | **272 tok** | **🔻 -88.9% Token Diet** |
 
 <div align="center">
 
-๐‘ **[ ๐”ฌ Explore the Standalone Verification Suite & Raw Telemetry (Apex-eval) โ’ ](https://github.com/AlmxndBL/Apex-eval)**  
+👉 **[ 🔬 Explore the Standalone Verification Suite & Raw Telemetry (Apex-eval) → ](https://github.com/AlmxndBL/Apex-eval)**  
 *(Includes full $N=50$ test suites across 10 repos, runner CLI, raw JSON telemetry, and paired $t$-test statistical proofs)*
 
 </div>
 
 ---
 
-## ๐งฐ 4. Consolidated 4 Core Skills (Layer 2 Knowledge Engine)
+## 🧩 4. Consolidated 4 Core Skills (Layer 2 Knowledge Engine)
 
-1. ๐จ **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
-2. ๐—๏ธ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. ๐งช **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
-4. ๐งญ **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Selective Token Diet (reduces context overhead by 70-90%).
+1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
+2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
+3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
+4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** High-Precision TypeScript Compiler AST Extraction (`ts.createSourceFile`), Selective Token Diet (reduces context overhead by 58-90% with zero syntax hallucinations).
 
 ---
 
-## ๐–ผ๏ธ 5. Enterprise UI/UX Design Standards
+## 🖼️ 5. Enterprise UI/UX Design Standards
 
 ![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
 
@@ -112,7 +124,7 @@ Apex enforces **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, M
 
 ---
 
-## ๐ 6. Twin-Engine Synergy: Apex & Nexus
+## 🌌 6. Twin-Engine Synergy: Apex & Nexus
 
 Apex operates **100% Standalone (Zero Dependencies)**, but seamlessly pairs with **[Nexus](https://github.com/AlmxndBL/nexus)** for persistent cross-project memory:
 
@@ -121,9 +133,8 @@ Apex operates **100% Standalone (Zero Dependencies)**, but seamlessly pairs with
 
 ---
 
-## ๐’– Acknowledgements & Inspirations
+## 💖 Acknowledgements & Inspirations
 
-* **๐งโ€โ๏ธ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** โ€” Strict TypeScript principles & contract typing
-* **๐ฏ [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** โ€” Pragmatic software engineering and trade-off evaluation
-* **๐ง  [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** โ€” Agent behavioral safeguards and anti-overengineering philosophy
-
+* **🧙‍♂️ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** — Strict TypeScript principles & contract typing
+* **🎯 [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** — Pragmatic software engineering and trade-off evaluation
+* **🧠 [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** — Agent behavioral safeguards and anti-overengineering philosophy
