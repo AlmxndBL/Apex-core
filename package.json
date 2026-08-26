@@ -20,5 +20,8 @@
     "apex"
   ],
   "author": "StxrFxll",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gpt-tokenizer": "^4.0.0"
+  }
 }

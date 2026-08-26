@@ -1,25 +1,38 @@
 /**
- * Tokenizer & Cost Calculation Engine (Zero-Dependency)
+ * Industry-Standard BPE Tokenizer & Cost Calculation Engine
+ * 
+ * Uses exact cl100k_base / o200k_base Byte-Pair Encoding (BPE) via gpt-tokenizer.
  */
 
-export const PRICING = {
-  INPUT_PER_M: 3.00,   // $3.00 per 1M input tokens (Claude 3.5 Sonnet / GPT-4o standard tier)
-  OUTPUT_PER_M: 15.00, // $15.00 per 1M output tokens
-};
+import { encode } from 'gpt-tokenizer';
 
 /**
- * Standard BPE Token Estimation for Code (~3.85 characters per token in TS/Vue/Prisma)
+ * Counts exact BPE tokens using OpenAI cl100k_base / Claude BPE tokenizer
  */
-export function estimateTokens(text) {
+export function countExactTokens(text) {
   if (!text) return 0;
-  return Math.ceil(text.length / 3.85);
+  try {
+    return encode(text).length;
+  } catch {
+    // Fallback: ~3.85 characters per token
+    return Math.max(1, Math.ceil(text.length / 3.85));
+  }
 }
 
 /**
- * Calculate USD cost for given token counts
+ * Alias for backwards compatibility
  */
-export function calculateCostUSD(inputTokens, outputTokens) {
-  const inputCost = (inputTokens / 1_000_000) * PRICING.INPUT_PER_M;
-  const outputCost = (outputTokens / 1_000_000) * PRICING.OUTPUT_PER_M;
-  return inputCost + outputCost;
+export function estimateTokens(text) {
+  return countExactTokens(text);
+}
+
+/**
+ * Calculates API Cost in USD based on standard Claude 3.5 Sonnet / GPT-4o pricing:
+ * - Input:  $3.00 per 1,000,000 tokens
+ * - Output: $15.00 per 1,000,000 tokens
+ */
+export function calculateCostUSD(inputTokens, outputTokens = 0) {
+  const inputCost = (inputTokens / 1_000_000) * 3.00;
+  const outputCost = (outputTokens / 1_000_000) * 15.00;
+  return Number((inputCost + outputCost).toFixed(6));
 }

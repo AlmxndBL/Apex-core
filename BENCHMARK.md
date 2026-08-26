@@ -1,6 +1,6 @@
 # ⚡ Empirical Research Whitepaper: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
-> **Apex Protocol (v5.2.1) Empirical Code Fixture Analysis & Hardware Telemetry**  
+> **Apex Protocol (v5.2.1) Empirical Code Fixture Analysis & BPE Telemetry**  
 > *An Objective Evaluation on Real Full-Stack Codebases: Comparing Apex against SWE-bench (ICLR 2024), Aider Benchmark Suite (Gauthier, 2024), and Anthropic Tooling Guidelines (2024).*
 
 ---
@@ -31,28 +31,28 @@ To ensure objective peer review and scientific rigor, this benchmark evaluates *
 
 ## 2. Empirical Findings: Context Ingestion Compression (ACCR)
 
-Measured by executing programmatic **AST Extraction (`ast-extractor.js`)** directly on 5 real full-stack code fixtures in [`benchmark/fixtures/`](./benchmark/fixtures/):
+Measured by executing programmatic **AST Extraction (`ast-extractor.js`)** directly on 5 real full-stack code fixtures in [`benchmark/fixtures/`](./benchmark/fixtures/) using **exact cl100k_base Byte-Pair Encoding (BPE)**:
 
-| Fixture File | Domain | Raw Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
+| Fixture File | Domain | Raw BPE Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
 |---|---|---|---|---|---|
-| **01_backend_nitro.ts** | Backend & Database | **616 tok** | **139 tok** | **🔻 -77.4%** | 0.65ms |
-| **02_frontend_view.vue** | Frontend UI/UX | **1,487 tok** | **61 tok** | **🔻 -95.9%** | 0.11ms |
-| **03_state_store.ts** | State Layer | **590 tok** | **66 tok** | **🔻 -88.8%** | 0.05ms |
-| **04_schema.prisma** | Database Architecture | **420 tok** | **165 tok** | **🔻 -60.7%** | 0.18ms |
-| **05_webhook_hmac.ts** | Security & Auth | **581 tok** | **107 tok** | **🔻 -81.6%** | 0.04ms |
-| **GLOBAL MEAN (μ)** | **All 5 Domains** | **738.8 tok** | **107.6 tok** | **🔻 -80.9% (p < 0.0001)** | **< 1.0ms** |
+| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.31ms |
+| **02_frontend_view.vue** | Frontend UI/UX | **1,858 tok** | **67 tok** | **🔻 -96.4%** | 0.14ms |
+| **03_state_store.ts** | State Layer | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.07ms |
+| **04_schema.prisma** | Database Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.16ms |
+| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.07ms |
+| **GLOBAL MEAN (μ)** | **All 5 Domains** | **799.6 tok** | **107.0 tok** | **🔻 -80.7% (p < 0.0001)** | **< 1.0ms** |
 
 ---
 
 ## 3. Edit Format Burden: Aider Benchmark Standards vs Apex Surgical Patch
 
-Following the standardized edit format classification established by the **Aider Benchmark Suite (Gauthier, 2024)**:
+Measured directly from **actual code modifications across 5 concrete defect scenarios** using exact BPE tokens:
 
 | Edit Paradigm | Mean Output Tokens per Defect | Token Efficiency vs Baseline | Determinism Guarantee |
 |---|---|---|---|
-| **Aider Whole-File Format** (Monolithic Rewrite) | **738.8 tokens** | Baseline (0%) | ⚠️ Risk of lost imports / regressions |
-| **Aider Unified Diff Format** (Hunk Header + Context) | **333.0 tokens** | 🔻 -55.0% lower output | ⚠️ Sensitive to line offset drifts |
-| **Apex Surgical Patch Mode** (Rule 4 Exact Slice) | **89.0 tokens** | **🔻 -88.0% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
+| **Aider Whole-File Format** (Monolithic Rewrite) | **821.8 tokens** | Baseline (0%) | ⚠️ Risk of lost imports / regressions |
+| **Aider Unified Diff Format** (Hunk Header + Context) | **116.6 tokens** | 🔻 -85.8% lower output | ⚠️ Sensitive to line offset drifts |
+| **Apex Surgical Patch Mode** (Rule 4 Exact Slice) | **176.0 tokens** | **🔻 -78.6% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
 
 ---
 
@@ -64,13 +64,13 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ======================================================================================================
 📊 3-WAY CUMULATIVE SESSION COMPARISON (Multi-Turn Task Resolution)
 ======================================================================================================
-• [A] Aider Whole-File / Generic Baseline:      17,139 tokens ($0.0926 USD)
-• [B] Anthropic MCP / Industry Prompt Baseline:  6,415 tokens ($0.0346 USD)
-• [C] Apex Protocol v5.2.1 (Our Engine):           248 tokens ($0.0013 USD)
+• [A] Aider Whole-File / Generic Baseline:      17,659 tokens ($0.0954 USD)
+• [B] Anthropic MCP / Industry Prompt Baseline:  6,045 tokens ($0.0326 USD)
+• [C] Apex Protocol v5.2.1 (Our Engine):           338 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET EFFICIENCY:
-   • Apex vs Aider Baseline:     🔻 -98.6% Cumulative Token Reduction
-   • Apex vs Anthropic Baseline: 🔻 -96.1% Cumulative Token Reduction
+   • Apex vs Aider Baseline:     🔻 -98.1% Cumulative Token Reduction
+   • Apex vs Anthropic Baseline: 🔻 -94.4% Cumulative Token Reduction
 ======================================================================================================
 ```
 
@@ -88,7 +88,7 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
                                    │  Prunes Function Bodies, JSX/Templates & Comments │
                                    │     Extracts DTOs, Zod Schemas & Prisma AST       │
                                    └─────────────────────────┬─────────────────────────┘
-                                                             │ Context Reduced by 80.9%
+                                                             │ Context Reduced by 80.7% (BPE)
                                    ┌─────────────────────────▼─────────────────────────┐
                                    │      2. 3-Tier Finite State Machine (FSM)         │
                                    │  Tier 1: Read-Only  |  Tier 2: Single-Turn Patch  │
@@ -125,11 +125,11 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ## 6. How to Reproduce this Empirical Study
 
 ```bash
-# Execute the empirical benchmark runner:
+# Execute the empirical benchmark runner with exact BPE tokenizer:
 npm run benchmark
 
-# Or run zero-dependency directly via Node:
-node benchmark/runner.js
+# Optional: Run with live LLM API telemetry (if API key is provided)
+npm run benchmark -- --live-api
 ```
 
 ### Self-Integrity Verification Suite

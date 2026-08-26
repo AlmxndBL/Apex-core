@@ -1,6 +1,7 @@
 {
-  "timestamp": "2026-08-26T09:40:48.489Z",
-  "datasetVersion": "5.2.1-empirical",
+  "timestamp": "2026-08-26T09:45:52.593Z",
+  "datasetVersion": "5.2.1-empirical-bpe",
+  "tokenizer": "cl100k_base (gpt-tokenizer BPE)",
   "fixturesCount": 5,
   "citations": [
     "Jimenez et al. (2024). SWE-bench: Can Language Models Resolve Real-World GitHub Issues? ICLR 2024.",
@@ -10,188 +11,193 @@
   ],
   "contextPruningBenchmark": {
     "rawSourceTokens": {
-      "mean": 738.8,
-      "stdDev": 425.31,
+      "mean": 799.6,
+      "stdDev": 597.82,
       "ci95": [
-        308.56,
-        1169.04
+        194.84,
+        1404.36
       ],
-      "min": 420,
-      "max": 1487,
+      "min": 399,
+      "max": 1858,
       "count": 5
     },
     "astContractTokens": {
-      "mean": 107.6,
-      "stdDev": 45.23,
+      "mean": 107,
+      "stdDev": 43.67,
       "ci95": [
-        61.84,
-        153.36
+        62.82,
+        151.18
       ],
-      "min": 61,
-      "max": 165,
+      "min": 67,
+      "max": 166,
       "count": 5
     },
-    "averageCompressionRatioPercent": 80.9,
+    "averageCompressionRatioPercent": 80.7,
     "inferentialStatistics": {
-      "tStat": 3.0925,
-      "pValue": 0.005,
-      "significant": true
+      "tStat": 2.4845,
+      "pValue": 0.05,
+      "significant": false
     }
   },
   "editFormatBurdenBenchmark": {
-    "aiderWholeFile": {
-      "mean": 738.8,
-      "stdDev": 425.31,
+    "aiderWholeFileExact": {
+      "mean": 821.8,
+      "stdDev": 610.64,
       "ci95": [
-        308.56,
-        1169.04
+        204.08,
+        1439.52
       ],
-      "min": 420,
-      "max": 1487,
+      "min": 409,
+      "max": 1903,
       "count": 5
     },
-    "aiderUnifiedDiff": {
-      "mean": 333,
-      "stdDev": 191.61,
+    "aiderUnifiedDiffExact": {
+      "mean": 116.6,
+      "stdDev": 66.67,
       "ci95": [
-        139.17,
-        526.83
+        49.16,
+        184.04
       ],
-      "min": 189,
-      "max": 670,
+      "min": 52,
+      "max": 208,
       "count": 5
     },
-    "apexSurgicalPatch": {
-      "mean": 89,
-      "stdDev": 51.12,
+    "apexSurgicalPatchExact": {
+      "mean": 176,
+      "stdDev": 121.69,
       "ci95": [
-        37.28,
-        140.72
+        52.9,
+        299.1
       ],
-      "min": 51,
-      "max": 179,
+      "min": 63,
+      "max": 368,
       "count": 5
     },
-    "savingsVsAiderWholePercent": 88,
-    "savingsVsAiderDiffPercent": 73.3,
+    "savingsVsAiderWholePercent": 78.6,
+    "savingsVsAiderDiffPercent": -50.9,
     "tTestVsAiderDiff": {
-      "tStat": 3.8835,
-      "pValue": 0.005,
-      "significant": true
+      "tStat": -2.2643,
+      "pValue": 0.05,
+      "significant": false
     }
   },
   "cumulativeSessionProjection": {
-    "aiderGenericTokens": 17139,
-    "anthropicIndustryTokens": 6415,
-    "apexProtocolTokens": 248,
-    "netSavingsVsAiderPercent": 98.6,
-    "netSavingsVsAnthropicPercent": 96.1
+    "aiderGenericTokens": 17659,
+    "anthropicIndustryTokens": 6045,
+    "apexProtocolTokens": 338,
+    "netSavingsVsAiderPercent": 98.1,
+    "netSavingsVsAnthropicPercent": 94.4
   },
   "fixtureBreakdown": [
     {
       "file": "01_backend_nitro.ts",
       "name": "Nitro API Handler + Zod + Prisma OCC",
       "domain": "Backend & Database",
+      "defectScenario": "Add Soft-Delete Filter & Status Code to Backend API",
       "metrics": {
         "rawChars": 2371,
-        "rawTokens": 616,
+        "rawTokens": 635,
         "astChars": 533,
-        "astTokens": 139,
-        "compressionRatioPercent": 77.4,
-        "extractDurationMs": 0.648
+        "astTokens": 138,
+        "compressionRatioPercent": 78.3,
+        "extractDurationMs": 0.313
       },
-      "editBurdenTokens": {
-        "aiderWholeFile": 616,
-        "aiderUnifiedDiff": 278,
-        "apexSurgicalPatch": 74,
-        "savingsVsWholePercent": 88,
-        "savingsVsDiffPercent": 73.4
+      "editBurdenExactTokens": {
+        "aiderWholeFile": 641,
+        "aiderUnifiedDiff": 52,
+        "apexSurgicalPatch": 63,
+        "savingsVsWholePercent": 90.2,
+        "savingsVsDiffPercent": -21.2
       },
-      "latencyMs": 0.025
+      "latencyMs": 0.051
     },
     {
       "file": "02_frontend_view.vue",
       "name": "Vue 3 SFC with 4-State UI Contract & Table",
       "domain": "Frontend UI/UX",
+      "defectScenario": "Add AUDITOR Badge Color to Vue 3 Component",
       "metrics": {
         "rawChars": 5722,
-        "rawTokens": 1487,
+        "rawTokens": 1858,
         "astChars": 232,
-        "astTokens": 61,
-        "compressionRatioPercent": 95.9,
-        "extractDurationMs": 0.105
+        "astTokens": 67,
+        "compressionRatioPercent": 96.4,
+        "extractDurationMs": 0.137
       },
-      "editBurdenTokens": {
-        "aiderWholeFile": 1487,
-        "aiderUnifiedDiff": 670,
-        "apexSurgicalPatch": 179,
-        "savingsVsWholePercent": 88,
-        "savingsVsDiffPercent": 73.3
+      "editBurdenExactTokens": {
+        "aiderWholeFile": 1903,
+        "aiderUnifiedDiff": 208,
+        "apexSurgicalPatch": 368,
+        "savingsVsWholePercent": 80.7,
+        "savingsVsDiffPercent": -76.9
       },
-      "latencyMs": 0.012
+      "latencyMs": 0.031
     },
     {
       "file": "03_state_store.ts",
       "name": "Composable State Store + Optimistic Rollback",
       "domain": "State & Logic Layer",
+      "defectScenario": "Add Empty Query Guard in Composable Store",
       "metrics": {
         "rawChars": 2271,
-        "rawTokens": 590,
+        "rawTokens": 544,
         "astChars": 254,
-        "astTokens": 66,
-        "compressionRatioPercent": 88.8,
-        "extractDurationMs": 0.049
+        "astTokens": 69,
+        "compressionRatioPercent": 87.3,
+        "extractDurationMs": 0.069
       },
-      "editBurdenTokens": {
-        "aiderWholeFile": 590,
-        "aiderUnifiedDiff": 266,
-        "apexSurgicalPatch": 71,
-        "savingsVsWholePercent": 88,
-        "savingsVsDiffPercent": 73.3
+      "editBurdenExactTokens": {
+        "aiderWholeFile": 561,
+        "aiderUnifiedDiff": 105,
+        "apexSurgicalPatch": 157,
+        "savingsVsWholePercent": 72,
+        "savingsVsDiffPercent": -49.5
       },
-      "latencyMs": 0.007
+      "latencyMs": 0.012
     },
     {
       "file": "04_schema.prisma",
       "name": "Prisma Multi-Model Schema + OCC & Indexes",
       "domain": "Database & Architecture",
+      "defectScenario": "Add Compound Index on deletedAt & organizationId",
       "metrics": {
         "rawChars": 1616,
-        "rawTokens": 420,
+        "rawTokens": 399,
         "astChars": 632,
-        "astTokens": 165,
-        "compressionRatioPercent": 60.7,
-        "extractDurationMs": 0.176
+        "astTokens": 166,
+        "compressionRatioPercent": 58.4,
+        "extractDurationMs": 0.161
       },
-      "editBurdenTokens": {
-        "aiderWholeFile": 420,
-        "aiderUnifiedDiff": 189,
-        "apexSurgicalPatch": 51,
-        "savingsVsWholePercent": 87.9,
-        "savingsVsDiffPercent": 73
+      "editBurdenExactTokens": {
+        "aiderWholeFile": 409,
+        "aiderUnifiedDiff": 59,
+        "apexSurgicalPatch": 85,
+        "savingsVsWholePercent": 79.2,
+        "savingsVsDiffPercent": -44.1
       },
-      "latencyMs": 0.006
+      "latencyMs": 0.009
     },
     {
       "file": "05_webhook_hmac.ts",
       "name": "Stripe Webhook HMAC SHA-256 Signature Guard",
       "domain": "Security & Auth",
+      "defectScenario": "Add Buffer Length Guard to Prevent TimingSafeEqual RangeError",
       "metrics": {
         "rawChars": 2235,
-        "rawTokens": 581,
+        "rawTokens": 562,
         "astChars": 411,
-        "astTokens": 107,
-        "compressionRatioPercent": 81.6,
-        "extractDurationMs": 0.039
+        "astTokens": 95,
+        "compressionRatioPercent": 83.1,
+        "extractDurationMs": 0.065
       },
-      "editBurdenTokens": {
-        "aiderWholeFile": 581,
-        "aiderUnifiedDiff": 262,
-        "apexSurgicalPatch": 70,
-        "savingsVsWholePercent": 88,
-        "savingsVsDiffPercent": 73.3
+      "editBurdenExactTokens": {
+        "aiderWholeFile": 595,
+        "aiderUnifiedDiff": 159,
+        "apexSurgicalPatch": 207,
+        "savingsVsWholePercent": 65.2,
+        "savingsVsDiffPercent": -30.2
       },
-      "latencyMs": 0.007
+      "latencyMs": 0.012
     }
   ]
 }
