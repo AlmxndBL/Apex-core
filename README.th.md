@@ -9,13 +9,13 @@
 
 </div>
 
-[![Version](https://img.shields.io/badge/version-5.2.1-blue.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Reduction vs Industry](https://img.shields.io/badge/Token_Savings_vs_Industry-🔻_94.4%25-green.svg)](BENCHMARK.md)
-[![BPE Tokenizer](https://img.shields.io/badge/Tokenizer-cl100k__base-purple.svg)](BENCHMARK.md)
-[![Verification Speed](https://img.shields.io/badge/AST_Diet_Latency-<1ms-orange.svg)](BENCHMARK.md)
-[![Supported Tools](https://img.shields.io/badge/Agents-Cursor%20%7C%20Claude%20Code%20%7C%20Antigravity%20%7C%20Windsurf-818CF8.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Statistical Significance](https://img.shields.io/badge/t--test-p_<_0.0001-purple.svg)](BENCHMARK.md)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+<div align="center">
+
+[![Version](https://img.shields.io/badge/version-5.2.1-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](BENCHMARK.md)
+[![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
+
+</div>
 
 ---
 
