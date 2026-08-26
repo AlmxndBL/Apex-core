@@ -155,7 +155,7 @@ Apex-core 5 decouples probabilistic code generation from deterministic state val
 npm run benchmark
 ```
 
-> **Live-agent validation (planned):** end-to-end agent-run telemetry (turn counts, success rates) requires a controlled multi-protocol experiment — see `benchmark/EXPERIMENT_PROTOCOL.md`. Until that study is run, session-level figures remain labeled as modeled projections.
+> **Live-agent validation (planned):** end-to-end agent-run telemetry (turn counts, success rates) requires a controlled multi-protocol experiment — tracked as future work in the Nexus Research Vault (`protocol-live-agent-validation`). Until that study is run, session-level figures remain labeled as modeled projections.
 
 ### Framework Self-Integrity Verification
 ```bash

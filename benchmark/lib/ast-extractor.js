@@ -14,7 +14,7 @@
  *   blocks are not modeled
  * - Non-TS script blocks in .vue files yield JS-level signatures only
  * For compiler-grade extraction, integrate ts-morph / @vue/compiler-sfc
- * (tracked as future work — see benchmark/EXPERIMENT_PROTOCOL.md).
+ * (tracked as future research in Nexus Research Vault: protocol-live-agent-validation).
  */
 
 export function extractAstSkeleton(filename, content) {

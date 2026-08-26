@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26T12:04:40.345Z",
+  "timestamp": "2026-08-26T12:17:49.998Z",
   "datasetVersion": "Apex-core 5",
   "tokenizer": "cl100k_base (gpt-tokenizer BPE)",
   "fixturesCount": 13,
@@ -125,7 +125,7 @@
         "astChars": 533,
         "astTokens": 138,
         "compressionRatioPercent": 78.3,
-        "extractDurationMs": 0.568
+        "extractDurationMs": 0.546
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 641,
@@ -134,7 +134,7 @@
         "savingsVsWholePercent": 90.2,
         "savingsVsDiffPercent": -21.2
       },
-      "latencyMs": 0.07
+      "latencyMs": 0.054
     },
     {
       "file": "02_frontend_view.vue",
@@ -147,7 +147,7 @@
         "astChars": 232,
         "astTokens": 67,
         "compressionRatioPercent": 96.4,
-        "extractDurationMs": 0.257
+        "extractDurationMs": 0.308
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 1903,
@@ -156,7 +156,7 @@
         "savingsVsWholePercent": 80.7,
         "savingsVsDiffPercent": -76.9
       },
-      "latencyMs": 0.018
+      "latencyMs": 0.032
     },
     {
       "file": "03_state_store.ts",
@@ -169,7 +169,7 @@
         "astChars": 386,
         "astTokens": 96,
         "compressionRatioPercent": 82.4,
-        "extractDurationMs": 0.056
+        "extractDurationMs": 0.072
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 561,
@@ -191,7 +191,7 @@
         "astChars": 632,
         "astTokens": 166,
         "compressionRatioPercent": 58.4,
-        "extractDurationMs": 0.171
+        "extractDurationMs": 0.153
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 409,
@@ -213,7 +213,7 @@
         "astChars": 411,
         "astTokens": 95,
         "compressionRatioPercent": 83.1,
-        "extractDurationMs": 0.1
+        "extractDurationMs": 0.048
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 595,
@@ -222,7 +222,7 @@
         "savingsVsWholePercent": 65.2,
         "savingsVsDiffPercent": -30.2
       },
-      "latencyMs": 0.011
+      "latencyMs": 0.012
     },
     {
       "file": "06_nitro_order_status_handler.ts",
@@ -235,9 +235,9 @@
         "astChars": 87,
         "astTokens": 19,
         "compressionRatioPercent": 94.4,
-        "extractDurationMs": 0.04
+        "extractDurationMs": 0.036
       },
-      "latencyMs": 0.006
+      "latencyMs": 0.005
     },
     {
       "file": "07_rbac_permission_guard.ts",
@@ -250,9 +250,9 @@
         "astChars": 463,
         "astTokens": 100,
         "compressionRatioPercent": 66,
-        "extractDurationMs": 0.047
+        "extractDurationMs": 0.036
       },
-      "latencyMs": 0.036
+      "latencyMs": 0.027
     },
     {
       "file": "08_use_paginated_query.ts",
@@ -265,9 +265,9 @@
         "astChars": 470,
         "astTokens": 110,
         "compressionRatioPercent": 75.4,
-        "extractDurationMs": 0.048
+        "extractDurationMs": 0.061
       },
-      "latencyMs": 0.01
+      "latencyMs": 0.008
     },
     {
       "file": "09_payment_provider_service.ts",
@@ -280,9 +280,9 @@
         "astChars": 552,
         "astTokens": 126,
         "compressionRatioPercent": 66.2,
-        "extractDurationMs": 0.034
+        "extractDurationMs": 0.051
       },
-      "latencyMs": 0.005
+      "latencyMs": 0.009
     },
     {
       "file": "10_admin_audit_table.vue",
@@ -295,9 +295,9 @@
         "astChars": 312,
         "astTokens": 80,
         "compressionRatioPercent": 82.9,
-        "extractDurationMs": 0.032
+        "extractDurationMs": 0.057
       },
-      "latencyMs": 0.007
+      "latencyMs": 0.011
     },
     {
       "file": "11_use_form_validation.ts",
@@ -310,9 +310,9 @@
         "astChars": 354,
         "astTokens": 80,
         "compressionRatioPercent": 79.6,
-        "extractDurationMs": 0.034
+        "extractDurationMs": 0.061
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.009
     },
     {
       "file": "12_analytics_schema.prisma",
@@ -325,9 +325,9 @@
         "astChars": 387,
         "astTokens": 94,
         "compressionRatioPercent": 57.7,
-        "extractDurationMs": 0.057
+        "extractDurationMs": 0.081
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.005
     },
     {
       "file": "13_bootstrap_config.ts",
@@ -340,9 +340,9 @@
         "astChars": 168,
         "astTokens": 37,
         "compressionRatioPercent": 87.5,
-        "extractDurationMs": 0.027
+        "extractDurationMs": 0.051
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.007
     }
   ]
 }

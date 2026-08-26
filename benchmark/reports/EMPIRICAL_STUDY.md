@@ -1,7 +1,7 @@
 # ⚡ Empirical Research Study: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
 > **Objective Evaluation on Real Code Fixtures across 5 Full-Stack Domains**  
-> Evaluated at: `2026-08-26T12:04:40.345Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
+> Evaluated at: `2026-08-26T12:17:49.998Z` | Framework Version: `Apex-core 5` | Tokenizer: `cl100k_base (gpt-tokenizer BPE)`
 
 ---
 
@@ -31,19 +31,19 @@ Measured by executing programmatic AST extraction directly on real source code f
 
 | Fixture File | Domain | Raw BPE Tokens | AST Skeleton Tokens | Compression Ratio | Extraction Latency |
 |---|---|---|---|---|---|
-| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.568ms |
-| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.257ms |
-| **03_state_store.ts** | State & Logic Layer | **544 tok** | **96 tok** | **🔻 -82.4%** | 0.056ms |
-| **04_schema.prisma** | Database & Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.171ms |
-| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.1ms |
-| **06_nitro_order_status_handler.ts** | Backend & Database | **340 tok** | **19 tok** | **🔻 -94.4%** | 0.04ms |
-| **07_rbac_permission_guard.ts** | Security & Auth | **294 tok** | **100 tok** | **🔻 -66%** | 0.047ms |
-| **08_use_paginated_query.ts** | State & Logic Layer | **447 tok** | **110 tok** | **🔻 -75.4%** | 0.048ms |
-| **09_payment_provider_service.ts** | Service Layer | **373 tok** | **126 tok** | **🔻 -66.2%** | 0.034ms |
-| **10_admin_audit_table.vue** | Frontend UI/UX | **467 tok** | **80 tok** | **🔻 -82.9%** | 0.032ms |
-| **11_use_form_validation.ts** | State & Logic Layer | **393 tok** | **80 tok** | **🔻 -79.6%** | 0.034ms |
-| **12_analytics_schema.prisma** | Database & Architecture | **222 tok** | **94 tok** | **🔻 -57.7%** | 0.057ms |
-| **13_bootstrap_config.ts** | Config & Bootstrap | **295 tok** | **37 tok** | **🔻 -87.5%** | 0.027ms |
+| **01_backend_nitro.ts** | Backend & Database | **635 tok** | **138 tok** | **🔻 -78.3%** | 0.546ms |
+| **02_frontend_view.vue** | Frontend UI/UX | **1858 tok** | **67 tok** | **🔻 -96.4%** | 0.308ms |
+| **03_state_store.ts** | State & Logic Layer | **544 tok** | **96 tok** | **🔻 -82.4%** | 0.072ms |
+| **04_schema.prisma** | Database & Architecture | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.153ms |
+| **05_webhook_hmac.ts** | Security & Auth | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.048ms |
+| **06_nitro_order_status_handler.ts** | Backend & Database | **340 tok** | **19 tok** | **🔻 -94.4%** | 0.036ms |
+| **07_rbac_permission_guard.ts** | Security & Auth | **294 tok** | **100 tok** | **🔻 -66%** | 0.036ms |
+| **08_use_paginated_query.ts** | State & Logic Layer | **447 tok** | **110 tok** | **🔻 -75.4%** | 0.061ms |
+| **09_payment_provider_service.ts** | Service Layer | **373 tok** | **126 tok** | **🔻 -66.2%** | 0.051ms |
+| **10_admin_audit_table.vue** | Frontend UI/UX | **467 tok** | **80 tok** | **🔻 -82.9%** | 0.057ms |
+| **11_use_form_validation.ts** | State & Logic Layer | **393 tok** | **80 tok** | **🔻 -79.6%** | 0.061ms |
+| **12_analytics_schema.prisma** | Database & Architecture | **222 tok** | **94 tok** | **🔻 -57.7%** | 0.081ms |
+| **13_bootstrap_config.ts** | Config & Bootstrap | **295 tok** | **37 tok** | **🔻 -87.5%** | 0.051ms |
 | **GLOBAL MEAN (μ)** | **All 5 Domains** | **525.31 tok** | **92.92 tok** | **🔻 -77.6% (p = 0.0031)** | **< 1.0ms** |
 
 > **Statistical disclosure:** n = 13 fixtures for the compression arm (paired t-test, df = 12); output-burden arm uses the 5 defect-paired subset. The compression result is statistically significant at α = 0.05 (p = 0.0031).
