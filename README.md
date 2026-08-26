@@ -1,7 +1,7 @@
 # ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> สถาปัตยกรรม Deterministic Control Plane สำหรับควบคุมคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4, Next.js 15, Better Auth, Prisma และ Full-Stack Architecture ลดการใช้ Token สะสมลง **94.4%** เมื่อเทียบกับแนวทางปฏิบัติทั่วไปในอุตสาหกรรม
+> สถาปัตยกรรม Deterministic Control Plane สำหรับควบคุมคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture ลดการใช้ Token สะสมลง **94.4%** เมื่อเทียบกับมาตรฐานอุตสาหกรรม
 
 [![Version](https://img.shields.io/badge/version-5.2.1-blue.svg)](https://github.com/AlmxndBL/Apex-core)
 [![Token Reduction vs Industry](https://img.shields.io/badge/Token_Savings_vs_Industry-🔻_94.4%25-green.svg)](BENCHMARK.md)
@@ -13,22 +13,175 @@
 
 ---
 
-## ⚡ เริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
+## 1. 🎯 สรุปความสามารถและจุดเด่น (Overview & Core Highlights)
 
-ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณ:
+Apex-core 5 ไม่ใช่แค่ชุด System Prompt ทั่วไป แต่เป็น **สถาปัตยกรรมระบบควบคุม (Deterministic Control Plane)** ที่ถูกออกแบบมาเพื่อแก้ไขจุดบกพร่องหลัก 3 ประการของ AI Coding Agents ในปัจจุบัน ได้แก่: **อาการหลอนโค้ด (Hallucinations)**, **การวนลูปแก้โค้ดซ้ำซาก (Runaway Multi-Turn Loops)**, และ **การเผาผลาญ Token โดยไม่จำเป็น (Context Inefficiency)**
 
-* **Cursor IDE:** วางเป็น `.cursorrules` หรือ `AGENTS.md`
-* **Claude Code:** วางเป็น `CLAUDE.md` หรือ `AGENTS.md`
-* **Windsurf / Trae:** วางเป็น `AGENTS.md`
-* **Google Antigravity:** เชื่อมต่อเป็น Global Plugin ใน Config
-
-> 💡 **Deterministic Auto-Detection:** `AGENTS.md` จะตรวจสอบ `package.json` ของโปรเจกต์โดยอัตโนมัติ เพื่อแมปไวยากรณ์และคำสั่ง TypeCheck ที่ถูกต้องทันที ไม่ว่าโปรเจกต์ของคุณจะเป็น **Nuxt 4 (Vue 3)**, **Next.js 15 (React 19)** หรือ **Python / Go Backend**
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 🛡️ 3 เสาหลักทางวิศวกรรมของ Apex-core 5 (Core Engineering Moats)                                        │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Deterministic Control Plane (Finite State Machine):                                                 │
+│    ควบคุมพฤติกรรม AI ด้วย 3-Tier Intent Lock แบ่งแยกคำสั่ง อ่าน, แก้ไข, และ คำสั่งทำลายล้างอย่างเด็ดขาด   │
+│    ป้องกันไม่ให้ AI แก้ไขโค้ดโดยไม่ได้รับอนุญาต และตัดวงจรการวนลูปซ้ำเมื่อแก้ไม่ผ่าน                   │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 2. AST Codebase Cartography (Token Diet Engine):                                                       │
+│    สกัดเฉพาะ Interface, DTOs, Zod Schemas, และ Type Contracts ก่อนส่งเข้า LLM ตัดส่วน Implementation    │
+│    และ Template ทิ้ง ทำให้ลดขนาด Context Window ลงทันที 80.7% (วัดด้วย cl100k_base BPE Tokenizer)      │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 3. In-RAM Closed-Loop Verifier (<1.0ms):                                                               │
+│    ตรวจสอบความถูกต้องของไวยากรณ์และ Type Graph ทันทีในหน่วยความจำ (RAM) ผ่าน Compiler API              │
+│    รับประกันว่าโค้ดที่ส่งมอบต้องมีผลการตรวจสอบเป็นศูนย์ Error เสมอ (No Evidence = Not Done)            │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 🔬 การประเมินผลเชิงประจักษ์และแหล่งข้อมูลอ้างอิง (Empirical Evaluation & References)
+## 2. ⚡ วิธีเริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
 
-การประเมินประสิทธิภาพของ **Apex-core 5** ดำเนินการผ่านการวัดผลเชิงประจักษ์ (Empirical Telemetry) บนชุดโค้ดจริง 5 โดเมนของระบบ Full-Stack ใน [`benchmark/fixtures/`](./benchmark/fixtures/) โดยประมวลผลผ่าน Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) และการจับเวลาประมวลผลระดับ Hardware Sub-millisecond เพื่อเปรียบเทียบกับรูปแบบการทำงานของ Agent ที่ได้รับการยอมรับในระดับสากล:
+ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณเพื่อเปิดใช้งาน Protocol ทันที:
+
+```bash
+# สำหรับ Cursor IDE
+cp AGENTS.md .cursorrules
+
+# สำหรับ Claude Code CLI
+cp AGENTS.md CLAUDE.md
+
+# สำหรับ Windsurf / Trae / Google Antigravity
+# วางเป็น AGENTS.md ที่ Root หรือเชื่อมต่อเป็น Workspace Rule
+```
+
+### 🧭 ระบบตรวจจับ Stack อัตโนมัติ (Deterministic Stack Matrix)
+`AGENTS.md` จะอ่าน `package.json` ของโปรเจกต์เพื่อแมปสถาปัตยกรรมและคำสั่งตรวจสอบ Type ที่ถูกต้องโดยอัตโนมัติ:
+
+| สแตกที่ตรวจพบ | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
+|---|---|---|---|---|
+| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
+| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
+| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+
+---
+
+## 3. 🏛️ เจาะลึกสถาปัตยกรรมระบบ (Deep Architecture & Skills)
+
+สถาปัตยกรรมของ Apex-core 5 ถูกจัดโครงสร้างแบบ **2 ระดับ (The Two-Layer Model)** ที่ผสานการทำงานระหว่างกฎเหล็กระดับ Core Directives และคลังความรู้เชิงลึก:
+
+```text
+                                  ┌────────────────────────────────────────────────────────┐
+                                  │                  USER / TASK INPUT                     │
+                                  └──────────────────────────┬─────────────────────────────┘
+                                                             │
+                                   ┌─────────────────────────▼─────────────────────────┐
+                                   │       1. AST Cartographer (Token Diet Engine)     │
+                                   │  Prunes Function Bodies, JSX/Templates & Comments │
+                                   │     Extracts DTOs, Zod Schemas & Prisma AST       │
+                                   └─────────────────────────┬─────────────────────────┘
+                                                             │ Context Ingestion Reduced by 80.7%
+                                   ┌─────────────────────────▼─────────────────────────┐
+                                   │      2. 3-Tier Finite State Machine (FSM)         │
+                                   │  Tier 1: Read-Only  |  Tier 2: Single-Turn Patch  │
+                                   │        Tier 3: Guarded Blast-Radius Gate          │
+                                   └─────────────────────────┬─────────────────────────┘
+                                                             │
+                                            ┌────────────────┴────────────────┐
+                                            ▼                                 ▼
+                                  [ Patch Mode ]                    [ Synthesis Mode ]
+                             Surgical AST Line Diff              3-File Architecture Standard
+                             (Rule 4 Exact Slice)                (Container + Presenter + Logic)
+                                            │                                 │
+                                            └────────────────┬────────────────┘
+                                                             │
+                                   ┌─────────────────────────▼─────────────────────────┐
+                                   │     3. In-RAM Closed-Loop Verifier (<1.0ms)       │
+                                   │     `vue-tsc --noEmit` / `tsc --noEmit` in RAM    │
+                                   └─────────────────────────┬─────────────────────────┘
+                                                             │
+                                            ┌────────────────┴────────────────┐
+                                            ▼ [PASS: 0 Errors]                ▼ [FAIL: 1st Strike]
+                                  ┌───────────────────┐             ┌───────────────────┐
+                                  │ Emit Evidence Log │             │ Targeted Retry    │
+                                  │ Task Complete     │             └─────────┬─────────┘
+                                  └───────────────────┘                       │ [FAIL: 2nd Strike]
+                                                                    ┌─────────▼─────────┐
+                                                                    │ 2-Strike Freeze   │
+                                                                    │ Halt Token Burn   │
+                                                                    └───────────────────┘
+```
+
+---
+
+### 3.1 ระบบ Finite State Machine 3 ระดับ (3-Tier Intent Lock)
+ควบคุมระดับการทำงานของ Agent ตามเจตนาของผู้ใช้ เพื่อป้องกันการแก้โค้ดเกินขอบเขต:
+1. **Tier 1 (Read-Only Investigation):** ถูกเรียกใช้เมื่อมีคำสั่ง "explain", "investigate", "audit", "ทำไม" $\to$ **ล็อกสถานะเป็นอ่านอย่างเดียว 100% ห้ามแก้ไขโค้ดเด็ดขาด**
+2. **Tier 2 (Actionable Single-Turn Flow):** ถูกเรียกใช้เมื่อมีคำสั่ง "fix", "แก้", "สร้าง", "refactor" $\to$ **ดำเนินการ วินิจฉัย $\to$ แก้ไข $\to$ ตรวจสอบ TypeCheck ให้เสร็จสิ้นใน 1 Turn เดียว**
+3. **Tier 3 (Guarded Blast-Radius Gate):** ถูกเรียกใช้เมื่อมีคำสั่งกระทบโครงสร้างฐานข้อมูล (Drop Column/Table), ลบ Migration, หรือเปลี่ยนระบบ Auth $\to$ **ต้องสรุปผลกระทบและหยุดรอการอนุมัติจากผู้ใช้ก่อนแตะต้องโค้ดเสมอ**
+
+---
+
+### 3.2 สถาปัตยกรรม Frontend มาตรฐาน 3 ไฟล์ และ สัญญา UI 4 สถานะ
+Apex-core 5 บังคับใช้ **3-File Architecture** เพื่อแยก Logic, Presenter, และ Contract ออกจากกันอย่างเด็ดขาด:
+
+```text
+features/<domain>/
+├── composables/ (or hooks/)
+│   └── use<Feature>.ts          # Pure Logic: การ Fetch ข้อมูล, Mutation, Cache, Zod Validation
+├── components/
+│   ├── <Feature>List.vue (.tsx) # Pure Presentation (Dumb UI): รับ Props แสดงผล และส่ง Emits
+│   ├── <Feature>Form.vue (.tsx) # Form UI และ Client-Side Validation
+│   └── <Feature>Skeleton.vue    # Loading Skeleton จำลองมิติเรขาคณิตของ Layout
+├── types/
+│   └── <feature>.contract.ts    # Zod Schemas, TypeScript Interfaces, และ DTO Definitions
+└── index.vue (or Page.tsx)       # Smart Container: รวม Composable เข้ากับ Presenters
+```
+
+* **Mandatory 4-State UI Contract:** ทุกหน้าจอที่แสดงข้อมูลต้องรองรับ 4 สถานะอย่างสมบูรณ์:
+  1. **Loading State:** Skeleton Loader ตามขนาดจริง (ห้ามใช้ Spinner หมุนกลางจอแบบไร้มิติ)
+  2. **Empty State:** กล่องขอบประ (Dashed Container) + Icon + คำอธิบาย + ปุ่ม Action CTA
+  3. **Error State:** การ์ดสีคอนทราสต์ชัดเจน + ข้อความแจ้งเตือน + ปุ่ม **Retry** สำหรับโหลดซ้ำ
+  4. **Data State:** ตาราง Enterprise Table หรือ Card List ที่รองรับ Mobile และ Desktop
+
+---
+
+### 3.3 สถาปัตยกรรม Backend Pipeline 4 ขั้นตอน และ OCC Concurrency
+* **4-Step Pipeline:** `Validate (Zod Schema)` $\longrightarrow$ `Authorize (Session & RBAC)` $\longrightarrow$ `Service Layer Execution` $\longrightarrow$ `Structured JSON Response`
+* **Optimistic Concurrency Control (OCC):** เพิ่ม `version Int @default(0)` บน Entity สำคัญ (เช่น ยอดเงิน, คลังสินค้า) เพื่อป้องกันสภาวะ Lost Updates
+* **N+1 Prevention:** บังคับใช้ explicit `select` หรือ bounded `include` ห้าม Query Database ภายใน Loop
+
+---
+
+### 3.4 ระบบตัดวงจรเมื่อเกิดข้อผิดพลาด (2-Strike Circuit Breaker)
+เมื่อ Agent ทำการแก้ไขโค้ดแล้วผล TypeCheck ไม่ผ่าน:
+* **Strike 1:** อนุญาตให้วิเคราะห์ Error และแก้ไขเฉพาะจุดซ้ำได้อีก 1 ครั้ง
+* **Strike 2 (Freeze):** หากยังไม่ผ่านเป็นครั้งที่ 2 **ระบบจะสั่ง Freeze State ทันที** หยุดการวนลูปเผาผลาญ Token และออกรายงาน Failure Report พร้อมทางเลือกในการซ่อมแซมให้ผู้ใช้ตัดสินใจ
+
+---
+
+### 3.5 ชุด 4 เสาหลักสกิลความรู้เชิงลึก (Consolidated Skills)
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 🧰 CONSOLIDATED PRODUCTION SKILLS (Layer 2 Knowledge Engine)                                           │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 1. 🎨 skills/frontend:                                                                                 │
+│    สถาปัตยกรรม 3-File Feature Module, 4-State UI Contract, Tailwind CSS, และ 3-Tier Surface Elevation  │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 2. 🗄️ skills/backend-data:                                                                             │
+│    Strict TypeScript Mastery (Zero Any), 4-Step API Pipeline, Prisma ORM, Better Auth, RBAC, และ OCC   │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 3. 🧪 skills/quality-verify:                                                                           │
+│    In-RAM Fast TypeCheck (1-3s), Vitest Sandbox Runner, และ 2-Strike Loop-Breaker Engine               │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 4. 🧭 skills/cartography:                                                                              │
+│    AST Codebase Skeleton Mapping และ Selective Token Diet (ลด Context Overhead ลง 70-90%)              │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. 🔬 การประเมินผลเชิงประจักษ์และแหล่งข้อมูลอ้างอิง (Empirical Benchmark & References)
+
+การประเมินประสิทธิภาพของ **Apex-core 5** ดำเนินการผ่านการวัดผลเชิงประจักษ์ (Empirical Telemetry) บนชุดโค้ดจริง 5 โดเมนของระบบ Full-Stack ใน [`benchmark/fixtures/`](./benchmark/fixtures/) โดยใช้ Byte-Pair Encoding (`cl100k_base` BPE Tokenizer) และการจับเวลาประมวลผลระดับ Hardware Sub-millisecond เพื่อเปรียบเทียบกับรูปแบบการทำงานของ Agent ที่ได้รับการยอมรับ:
 
 ```text
 ======================================================================================================================
@@ -49,7 +202,7 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 [ 3. แบบจำลองการสะสม Token ตลอดการทำงานแบบต่อเนื่อง (Multi-Turn Session Accumulation) ]
   • [A] Unconstrained Baseline [1, 2]:          17,659 tokens (เฉลี่ย 3.62 Turns ตามสถิติ SWE-bench)
   • [B] Anthropic Industry Baseline [2, 3]:      6,045 tokens (เฉลี่ย 2.38 Turns ตาม Anthropic Best Practice)
-  • [C] Apex-core 5:                               338 tokens (เฉลี่ย 1.04 Turns ด้วย In-RAM Verifier) ──> 🔻 ประหยัดกว่า 94.4%
+  • [C] Apex-core 5 (Our Engine):                  338 tokens (เฉลี่ย 1.04 Turns ด้วย In-RAM Verifier) ──> 🔻 -94.4%
 ======================================================================================================================
 ⭐ สรุปผล: การใช้ AST Cartography ร่วมกับ Closed-Loop Verifier ช่วยลด Token สะสมลง 94.4% และยุติการวนลูปซ้ำ
 ======================================================================================================================
@@ -57,7 +210,7 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 
 ### ตารางเปรียบเทียบเชิงสถาปัตยกรรม (Comparative Architecture Matrix)
 
-| มิติการทำงาน | [A] Generic Unconstrained Prompt [1] | [B] Industry Guideline (Aider / Anthropic) [2, 3] | [C] Apex-core 5 (Deterministic Control Plane) |
+| มิติการทำงาน | [A] Generic Unconstrained Prompt | [B] Industry Guideline (Aider / Anthropic) | [C] Apex-core 5 (Deterministic Control Plane) |
 |---|---|---|---|
 | **การอ่าน Context** | โหลดไฟล์เต็ม (799.6 tok) | โหลดไฟล์เต็มเพื่อวิเคราะห์ | **AST Codebase Cartography:** สกัดเฉพาะ Type/Interface (107.0 tok, ลดลง 80.7%) |
 | **การควบคุมสิทธิ์คำสั่ง** | Open-loop ไม่มี Guard | ปฏิบัติตามคำสั่งตาม Prompt | **3-Tier Finite State Machine:** บังคับ Read-Only, Patch, และ Guarded Gate |
@@ -78,34 +231,7 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 
 ---
 
-## 🏛️ สถาปัตยกรรมระบบและ 4 เสาหลักสกิล (System Architecture & Consolidated Skills)
-
-### 1. สถาปัตยกรรม 2 ระดับ (The Two-Layer Model)
-
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 🟢 Layer 1: Core Directives (`AGENTS.md` — ~150 บรรทัด)                     │
-│    • Single Drop-in: ไฟล์เดียวได้ทั้ง 5 กฎเหล็ก + Stack Matrix + Safety Gates│
-│    • เหมาะสำหรับ: โปรเจกต์ทั่วไปที่ต้องการ Setup ไวใน 5 วินาที และประหยัด Context│
-│    • รองรับ: Cursor, Claude Code, Windsurf, Antigravity ทุกค่าย             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 🟣 Layer 2: Deep Knowledge Engine (`rules/` + `skills/` + `templates/`)      │
-│    • Full Repository: 6 เสาหลักความปลอดภัย, ฐานข้อมูล Prisma OCC, และ UI Tokens │
-│    • เหมาะสำหรับ: โปรเจกต์ Enterprise, Monorepo ขนาดใหญ่, และ Multi-Agent    │
-│    • รองรับ: ระบบ Agent ที่มี File Search & On-Demand Retrieval              │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 2. ชุด 4 เสาหลักสกิล (Consolidated Skills in v5.0)
-
-1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
-2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
-4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Selective Token Diet (ลด Context Overhead 70-90%).
-
----
-
-## 🖼️ มาตรฐานงาน UI/UX ระดับ Enterprise (Live Showcase)
+## 5. 🖼️ มาตรฐานงาน UI/UX ระดับ Enterprise (Live Showcase)
 
 ![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
 
@@ -113,7 +239,7 @@ Apex บังคับใช้ **Ultra-Compact Modern SaaS Density**, 3-Tier S
 
 ---
 
-## 🌌 Twin-Engine Synergy: Apex & Nexus
+## 6. 🌌 Twin-Engine Synergy: Apex & Nexus
 
 Apex ถูกออกแบบให้ทำงานแบบ **100% Standalone (Zero-Dependency)** แต่สามารถเชื่อมต่อกับ **[Nexus](https://github.com/AlmxndBL/nexus)** เพื่อปลดล็อกระบบบันทึกความจำระยะยาวข้ามโปรเจกต์ (Long-Term Memory Vault):
 
