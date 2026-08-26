@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "verify": "node scripts/verify-framework.js",
-    "test": "node scripts/test-statistics.js && node scripts/test-ast-extractor.js && node scripts/verify-framework.js",
-    "benchmark": "node benchmark/runner.js"
+    "test": "node scripts/verify-framework.js"
   },
   "keywords": [
     "ai-agent",

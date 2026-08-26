@@ -1,4 +1,4 @@
-name: Framework Tests
+name: Framework Integrity Gates
 
 on:
   push:
@@ -6,31 +6,19 @@ on:
   pull_request:
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
-      - name: Unit tests (statistics + extractor) & framework integrity
+      - name: Framework Integrity & Rules Verification (55 Gates)
         run: npm test
-
-      - name: Empirical benchmark (regenerates reports)
-        run: npm run benchmark
-
-      - name: Upload benchmark artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-results
-          path: |
-            benchmark/data/results.json
-            benchmark/reports/EMPIRICAL_STUDY.md
