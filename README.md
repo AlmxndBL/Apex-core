@@ -1,50 +1,60 @@
-# ⚡ Apex 5.0 — The Deterministic AI Agent Operating Protocol
+# ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> ปลดล็อกความเร็วในการพัฒนา ควบคุมคุณภาพระดับ Production และประหยัด Token ได้มากกว่ามาตรฐานอุตสาหกรรม (Cursor/Claude Top Rules) ถึง **83.3%** ด้วยสถาปัตยกรรม Deterministic Control Plane
+> ปลดล็อกความเร็วในการพัฒนา ควบคุมคุณภาพระดับ Production และประหยัด Token ได้มากกว่ามาตรฐานอุตสาหกรรม (Aider / Anthropic Industry Standards) ถึง **94.4%** ด้วยสถาปัตยกรรม Deterministic Control Plane
 
 [![Version](https://img.shields.io/badge/version-5.2.1-blue.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Reduction vs Industry](https://img.shields.io/badge/Token_Savings_vs_Industry-🔻_83.3%25-green.svg)](BENCHMARK.md)
-[![Verification Speed](https://img.shields.io/badge/Feedback_Speed-⚡_11.8x_Faster-orange.svg)](BENCHMARK.md)
+[![Token Reduction vs Industry](https://img.shields.io/badge/Token_Savings_vs_Industry-🔻_94.4%25-green.svg)](BENCHMARK.md)
+[![BPE Tokenizer](https://img.shields.io/badge/Tokenizer-cl100k__base-purple.svg)](BENCHMARK.md)
+[![Verification Speed](https://img.shields.io/badge/AST_Diet_Latency-<1ms-orange.svg)](BENCHMARK.md)
 [![Supported Tools](https://img.shields.io/badge/Agents-Cursor%20%7C%20Claude%20Code%20%7C%20Antigravity%20%7C%20Windsurf-818CF8.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Statistical Significance](https://img.shields.io/badge/t--test-p_<_0.0001-purple.svg)](benchmark/reports/STATISTICAL_REPORT.md)
+[![Statistical Significance](https://img.shields.io/badge/t--test-p_<_0.0001-purple.svg)](benchmark/reports/EMPIRICAL_STUDY.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## 🏆 ผลการทดสอบเปรียบเทียบ 3 ฝ่าย (3-Way Empirical Benchmark)
+## 🏆 ผลการทดสอบเปรียบเทียบเชิงประจักษ์กับมาตรฐานสากล (Empirical Benchmark)
 
-Apex ผ่านการทดสอบเปรียบเทียบเชิงสถิติ ($N=50$ Trials ใน 5 โดเมน Full-Stack) ประชันระหว่าง **[A] Generic Prompts**, **[B] Industry Accepted Standard (Cursor Directory / Official Claude Guidelines)**, และ **[C] Apex Operating Protocol v5.0**:
+Apex-core 5 ได้รับการประเมินเทียบกับ **2 มาตรฐานการวัดผล AI Agent ระดับสากล** บนชุดโค้ดจริง 5 โดเมน Full-Stack ([`benchmark/fixtures/`](./benchmark/fixtures/)) ด้วย Tokenizer มาตรฐาน `cl100k_base` BPE:
 
 ```text
 ======================================================================================================================
-📊 3-WAY EMPIRICAL BENCHMARK SHOWDOWN (N=50 Trials across 5 Full-Stack Domains)
+📊 EMPIRICAL BENCHMARK SHOWDOWN (Real Code Fixtures across 5 Full-Stack Domains)
 ======================================================================================================================
 Baseline Pricing: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard Frontier Tier)
 
-[ 1. Cumulative Session Token Accumulation ]
-  • [A] Generic Unconstrained Prompt:    23,163.68 ± 5,581.39 tokens ($0.1251 USD)
-  • [B] Industry Accepted Skill (Cursor): 9,001.32 ± 2,498.68 tokens ($0.0486 USD)
-  • [C] Apex Protocol v5.0 (Our Engine):  1,503.76 ± 439.24 tokens   ($0.0081 USD) ──> 🔻 -83.3% Saved vs Industry!
+[ 1. Context Ingestion Diet (AST Cartography) ]
+  • โค้ดไฟล์เต็ม (Raw Codebase Mean):        799.6 ± 597.82 BPE tokens
+  • AST Skeleton (Apex-core 5 Mean):        107.0 ± 43.67 BPE tokens  ──> 🔻 -80.7% Context Diet (p < 0.0001)
+  • RAM Execution Latency:                   < 0.35ms (Sub-millisecond high-speed extraction)
 
-[ 2. Turns to Resolution (Agent Roundtrips) ]
-  • [A] Generic Unconstrained Prompt:    3.62 turns (avg)
-  • [B] Industry Accepted Skill (Cursor): 2.38 turns (avg)
-  • [C] Apex Protocol v5.0 (Our Engine):  1.04 turns (avg) ──────────────────────────> ⚡ 2.3x Fewer Turns vs Industry
+[ 2. Real Defect Edit Output Burden (Aider Benchmark Standard) ]
+  • [A] Aider Whole-File Format (Rewrite):   821.8 BPE tokens (Base 0%)
+  • [B] Aider Unified Diff Format (Hunk):    116.6 BPE tokens (🔻 -85.8%)
+  • [C] Apex-core 5 Surgical Patch Mode:     176.0 BPE tokens (🔻 -78.6% vs Whole File Rewrite)
 
-[ 3. Verification Feedback Loop Latency ]
-  • [A] Generic Unconstrained Prompt:    30.28s (Full Disk Build)
-  • [B] Industry Accepted Skill (Cursor): 21.75s (Partial Build / Lint)
-  • [C] Apex Protocol v5.0 (Our Engine):   1.85s (In-RAM `vue-tsc` / `vitest`) ──────> ⚡ 11.8x Faster vs Industry
-
-[ 4. Inferential Statistical Significance (Apex vs Industry Standard) ]
-  • Paired Student's t-test:             t = 22.124, p < 0.0001 (Extremely Significant rejecting H₀)
+[ 3. Cumulative Multi-Turn Session Projection ]
+  • [A] Aider Whole-File Baseline:           17,659 tokens ($0.0954 USD)
+  • [B] Anthropic Industry Baseline:          6,045 tokens ($0.0326 USD)
+  • [C] Apex-core 5 (Our Engine):               338 tokens ($0.0018 USD) ──> 🔻 -94.4% Saved vs Anthropic!
 ======================================================================================================================
-⭐ สรุป: Apex ประหยัด Token มากกว่ามาตรฐานอุตสาหกรรม 83.3% และฟีดแบ็กเร็วกว่า 11.8 เท่า
+⭐ สรุป: Apex-core 5 ลดการกิน Token สะสมลง 94.4% และตัดวงจรการลองผิดลองถูกแบบ Multi-Turn ได้อย่างเด็ดขาด
 ======================================================================================================================
 ```
-> 📊 **อ่านรายงานการทดลองและตารางสถิติฉบับเต็มได้ที่:** [`BENCHMARK.md`](./BENCHMARK.md) & [`benchmark/reports/STATISTICAL_REPORT.md`](./benchmark/reports/STATISTICAL_REPORT.md)  
-> 🧪 **รันการทดสอบด้วยตัวเอง:** `npm run benchmark`
+
+---
+
+## 🏛️ แหล่งข้อมูลอ้างอิงมาตรฐานสากล (Academic & Industry Citations)
+
+การวัดผลทั้งหมดอ้างอิงจากระเบียบวิธีวิจัยและสถิติที่ได้รับการยอมรับระดับโลก:
+
+* **[1] SWE-bench (ICLR 2024):** Jimenez et al., *"SWE-bench: Can Language Models Resolve Real-World GitHub Issues?"*, International Conference on Learning Representations (ICLR 2024). [arXiv:2310.06770](https://arxiv.org/abs/2310.06770)
+* **[2] Aider Benchmark Suite:** Paul Gauthier (2024), *"Aider: AI Pair Programming in Your Terminal - Benchmark Suite & Edit Formats"*, [Official Documentation](https://aider.chat/docs/benchmarks.html)
+* **[3] Anthropic Agent Architecture:** Anthropic AI Research (2024), *"Building Effective Agents: Architectural Patterns and Tool Design"*, [Anthropic Research](https://www.anthropic.com/research/building-effective-agents)
+* **[4] TypeScript Compiler Architecture:** Microsoft Engineering Team (2024), *"TypeScript Compiler Architecture & Language Service API"*, [Microsoft Wiki](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview)
+
+> 📊 **อ่านรายงานการทดลองและตารางสถิติฉบับเต็มได้ที่:** [`BENCHMARK.md`](./BENCHMARK.md) & [`benchmark/reports/EMPIRICAL_STUDY.md`](./benchmark/reports/EMPIRICAL_STUDY.md)  
+> 🧪 **รันการทดสอบด้วยตัวเองบนเครื่องคุณ:** `npm run benchmark`
 
 ---
 
@@ -53,16 +63,17 @@ Baseline Pricing: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 ```
 [ A: Generic Prompt ]        Prompt ภาษาพูดยาวเหยียด ──> AI สับสน ──> ติดลูปแก้บั๊ก ──> Token บวม O(N²)
 
-[ B: Industry Standard ]     Prompt มี Guideline (Cursor) ──> โหลดไฟล์เต็ม ──> ลดรอบแก้ลงได้บ้าง แต่ยังช้า
+[ B: Industry Standard ]     Prompt มี Guideline (Cursor/Anthropic) ──> โหลดไฟล์เต็ม ──> ลดรอบแก้ลงได้บ้าง แต่ยังช้า
 
-[ C: Apex Protocol v5.0 ]    3-Tier Intent Lock ──> AST Token Diet ──> In-RAM Fast Verify ──> จบใน 1 Turn
+[ C: Apex-core 5 ]           3-Tier Intent Lock ──> AST Token Diet ──> In-RAM Fast Verify ──> จบใน 1 Turn
 ```
 
-| มิติการทำงาน | [A] Generic Unconstrained Prompt | [B] Industry Standard (Cursor / Claude Rules) | [C] Apex Protocol (v5.0 Control Plane) |
+| มิติการทำงาน | [A] Generic Unconstrained Prompt | [B] Industry Standard (Aider / Anthropic Guidelines) | [C] Apex-core 5 (Deterministic Control Plane) |
 |---|---|---|---|
-| **การอ่าน Context** | โหลดไฟล์ดิบ 1,000+ บรรทัด | Prompt แนะนำ Clean Code แต่ยังโหลดไฟล์จริง | **AST Codebase Cartography:** สกัดเฉพาะ Interface & Signatures (ลด Context 74%) |
+| **การอ่าน Context** | โหลดไฟล์ดิบ 1,000+ บรรทัด | โหลดไฟล์ดิบทั้งไฟล์เพื่อวิเคราะห์ | **AST Codebase Cartography:** สกัดเฉพาะ Interface & Signatures (ลด Context 80.7%) |
 | **การควบคุมคำสั่ง** | Open-loop ไม่มี Guard | ทำตาม Prompt ไม่มี Hard Gate | **3-Tier Finite State Machine:** ล็อก Read-Only, Patch, และ Guarded Gate |
-| **การตรวจสอบโค้ด** | รัน `npm run build` เต็ม (~30s) | รัน Linting หรือ Full Build (~22s) | **In-RAM V8 Verification:** `vue-tsc --noEmit` (1.85s เร็วกว่า 11.8 เท่า) |
+| **การส่งโค้ดกลับ** | เขียนใหม่ทั้งไฟล์ (821.8 tok) | Unified Diff Hunk (116.6 tok) | **Surgical Line Patch:** แทนที่เฉพาะบรรทัดที่พัง (176.0 tok ล็อก Line Coordinates เป๊ะ) |
+| **การตรวจสอบโค้ด** | รัน `npm run build` เต็ม (~30s) | รัน Linting หรือ Full Build (~22s) | **In-RAM V8 Verification:** `vue-tsc --noEmit` (<1s เร็วกว่า 10+ เท่า) |
 | **การตัดวงจรเมื่อพัง** | วนลูปแก้เรื่อยๆ จน Token หมด | ไม่มี (ต้องให้คนกด Stop เอง) | **2-Strike Circuit Breaker:** Freeze State ทันทีเมื่อแก้ไม่ผ่าน 2 ครั้งติด |
 | **ความสมบูรณ์ของ UI** | เจนเฉพาะ Happy Path | แนะนำให้เขียน Error State | **Mandatory 4-State UI Contract:** Skeleton, Empty CTA, Error Retry, Data Table |
 
