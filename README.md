@@ -11,7 +11,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.2.1-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Version](https://img.shields.io/badge/version-5.2.2-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
 [![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 

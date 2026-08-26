@@ -5,6 +5,16 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.2] - 2026-08-26 — Lean Storefront & Dedicated Benchmark Encapsulation 🚀
+
+### Changed
+- **Documentation Restructuring (Lean Storefront):** Streamlined `README.md` and `README.th.md` into high-impact storefront documentation (~120 lines, 90-second read) with visual AST payload comparisons and minimal centered badge strips.
+- **Dedicated Benchmark Encapsulation (`benchmark/README.md`):** Moved full academic empirical research whitepaper into `benchmark/README.md` and `benchmark/reports/` for strict domain encapsulation.
+- **Standalone Benchmark HTML Reports:** Added dedicated HTML editions in `benchmark/reports/BENCHMARK.html` (EN) and `benchmark/reports/BENCHMARK.th.html` (TH) with MathJax $\mathcal{O}(N^2)$ math equations, full statistical tables, and 6 academic literature citations.
+- **Repository Cleanliness:** Removed redundant legacy simulation scripts, duplicate CJS files, and unused artifacts.
+
+---
+
 ## [5.2.1] - 2026-08-26 — Empirical 3-Way Benchmark & Telemetry Engine 📊
 
 ### Added
