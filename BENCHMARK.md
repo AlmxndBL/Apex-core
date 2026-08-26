@@ -1,13 +1,13 @@
 # ⚡ Empirical Research Whitepaper: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
-> **Apex Protocol (v5.2.1) Empirical Code Fixture Analysis & BPE Telemetry**  
-> *An Objective Evaluation on Real Full-Stack Codebases: Comparing Apex against SWE-bench (ICLR 2024), Aider Benchmark Suite (Gauthier, 2024), and Anthropic Tooling Guidelines (2024).*
+> **Apex-core 5 Empirical Code Fixture Analysis & BPE Telemetry**  
+> *An Objective Evaluation on Real Full-Stack Codebases: Comparing Apex-core 5 against SWE-bench (ICLR 2024), Aider Benchmark Suite (Gauthier, 2024), and Anthropic Tooling Guidelines (2024).*
 
 ---
 
 ## 1. Internationally Recognized Baselines & Academic Citations
 
-To ensure objective peer review and scientific rigor, this benchmark evaluates **Apex Protocol (v5.2.1)** directly against established, peer-recognized standards in AI software engineering:
+To ensure objective peer review and scientific rigor, this benchmark evaluates **Apex-core 5** directly against established, peer-recognized standards in AI software engineering:
 
 ```text
 [1] Jimenez, C. E., Yang, J., Wettig, A., Yao, S., Pei, K., Press, O., & Narasimhan, K. (2024). 
@@ -44,7 +44,7 @@ Measured by executing programmatic **AST Extraction (`ast-extractor.js`)** direc
 
 ---
 
-## 3. Edit Format Burden: Aider Benchmark Standards vs Apex Surgical Patch
+## 3. Edit Format Burden: Aider Benchmark Standards vs Apex-core 5 Surgical Patch
 
 Measured directly from **actual code modifications across 5 concrete defect scenarios** using exact BPE tokens:
 
@@ -52,7 +52,7 @@ Measured directly from **actual code modifications across 5 concrete defect scen
 |---|---|---|---|
 | **Aider Whole-File Format** (Monolithic Rewrite) | **821.8 tokens** | Baseline (0%) | ⚠️ Risk of lost imports / regressions |
 | **Aider Unified Diff Format** (Hunk Header + Context) | **116.6 tokens** | 🔻 -85.8% lower output | ⚠️ Sensitive to line offset drifts |
-| **Apex Surgical Patch Mode** (Rule 4 Exact Slice) | **176.0 tokens** | **🔻 -78.6% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
+| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **176.0 tokens** | **🔻 -78.6% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
 
 ---
 
@@ -66,11 +66,11 @@ $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum
 ======================================================================================================
 • [A] Aider Whole-File / Generic Baseline:      17,659 tokens ($0.0954 USD)
 • [B] Anthropic MCP / Industry Prompt Baseline:  6,045 tokens ($0.0326 USD)
-• [C] Apex Protocol v5.2.1 (Our Engine):           338 tokens ($0.0018 USD)
+• [C] Apex-core 5 (Our Engine):                    338 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET EFFICIENCY:
-   • Apex vs Aider Baseline:     🔻 -98.1% Cumulative Token Reduction
-   • Apex vs Anthropic Baseline: 🔻 -94.4% Cumulative Token Reduction
+   • Apex-core 5 vs Aider Baseline:     🔻 -98.1% Cumulative Token Reduction
+   • Apex-core 5 vs Anthropic Baseline: 🔻 -94.4% Cumulative Token Reduction
 ======================================================================================================
 ```
 

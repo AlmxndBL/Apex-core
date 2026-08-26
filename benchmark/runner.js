@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ⚡ Apex Protocol Empirical Benchmark & Academic Telemetry Engine (v5.2.1)
+ * ⚡ Apex-core 5 Empirical Benchmark & Academic Telemetry Engine
  * 
  * Conducts automated, real-world empirical measurements across 5 real code fixtures:
  * 1. Exact Source vs AST Token Compression (via AST Extractor & gpt-tokenizer cl100k BPE)
@@ -42,7 +42,7 @@ const RED = '\x1b[31m';
 const GRAY = '\x1b[90m';
 const MAGENTA = '\x1b[35m';
 
-console.log(`\n${BOLD}${CYAN}⚡ [Apex Empirical Benchmark v5.2.1] Executing Real Code Fixture Analysis & BPE Tokenizer...${RESET}\n`);
+console.log(`\n${BOLD}${CYAN}⚡ [Apex-core 5 Empirical Benchmark] Executing Real Code Fixture Analysis & BPE Tokenizer...${RESET}\n`);
 
 // 1. Read Real Fixtures from Disk
 const fixtureFiles = [
@@ -155,7 +155,7 @@ const avgSavingsVsDiff = (((unifiedDiffStats.mean - surgicalDiffStats.mean) / un
 // Baseline Literature Turn Means:
 // - Aider Whole-File / Unconstrained Agents: ~3.6 turns (Gauthier, 2024)
 // - Anthropic MCP / Structured Guideline: ~2.4 turns (Anthropic, 2024)
-// - Apex Protocol v5.2 Deterministic FSM: 1.04 turns
+// - Apex-core 5 Deterministic FSM: 1.04 turns
 const sessionProjection = {
   aiderGeneric: {
     turns: 3.62,
@@ -176,7 +176,7 @@ const savingsVsAnthropic = (((sessionProjection.anthropicIndustry.cumulativeToke
 
 const resultsPayload = {
   timestamp: new Date().toISOString(),
-  datasetVersion: '5.2.1-empirical-bpe',
+  datasetVersion: 'Apex-core 5',
   tokenizer: 'cl100k_base (gpt-tokenizer BPE)',
   fixturesCount: fixtureFiles.length,
   citations: [
@@ -218,13 +218,13 @@ fs.writeFileSync(RESULTS_FILE, JSON.stringify(resultsPayload, null, 2), 'utf-8')
 const academicMarkdown = `# ⚡ Empirical Research Study: Deterministic Control Plane vs Internationally Recognized Agent Protocols
 
 > **Objective Evaluation on Real Code Fixtures across 5 Full-Stack Domains**  
-> Evaluated at: \`${resultsPayload.timestamp}\` | Framework Version: \`v5.2.1\` | Tokenizer: \`${resultsPayload.tokenizer}\`
+> Evaluated at: \`${resultsPayload.timestamp}\` | Framework Version: \`Apex-core 5\` | Tokenizer: \`${resultsPayload.tokenizer}\`
 
 ---
 
 ## 1. Internationally Recognized Baselines & Academic Citations
 
-This benchmark strictly compares the architectural metrics of **Apex Operating Protocol (v5.2.1)** against the two most prominent, peer-recognized standards in AI software engineering:
+This benchmark strictly compares the architectural metrics of **Apex-core 5** against the two most prominent, peer-recognized standards in AI software engineering:
 
 \`\`\`text
 [1] Jimenez, C. E., et al. (2024). "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?" 
@@ -257,7 +257,7 @@ Measured by executing programmatic AST extraction directly on real source code f
 
 ---
 
-## 3. Edit Format Burden: Aider Benchmark Standards vs Apex Surgical Patch
+## 3. Edit Format Burden: Aider Benchmark Standards vs Apex-core 5 Surgical Patch
 
 Measured directly from **actual code modifications across 5 concrete defect scenarios** using exact BPE tokens:
 
@@ -265,7 +265,7 @@ Measured directly from **actual code modifications across 5 concrete defect scen
 |---|---|---|---|
 | **Aider Whole-File Format** (Monolithic Rewrite) | **${wholeDiffStats.mean} tokens** | Baseline (0%) | ⚠️ Risk of lost imports / regressions |
 | **Aider Unified Diff Format** (Hunk Header + Context) | **${unifiedDiffStats.mean} tokens** | 🔻 -${(((wholeDiffStats.mean - unifiedDiffStats.mean) / wholeDiffStats.mean) * 100).toFixed(1)}% lower output | ⚠️ Sensitive to line offset drifts |
-| **Apex Surgical Patch Mode** (Rule 4 Exact Slice) | **${surgicalDiffStats.mean} tokens** | **🔻 -${avgSavingsVsWhole}% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
+| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **${surgicalDiffStats.mean} tokens** | **🔻 -${avgSavingsVsWhole}% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
 
 ---
 
@@ -279,11 +279,11 @@ $$\\text{Cumulative Session Tokens} = \\sum_{k=1}^{N} \\Big[ C_{\\text{init}} + 
 ======================================================================================================
 • [A] Aider Whole-File / Generic Baseline:      ${sessionProjection.aiderGeneric.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.aiderGeneric.cumulativeTokens * 0.8, sessionProjection.aiderGeneric.cumulativeTokens * 0.2).toFixed(4)} USD)
 • [B] Anthropic MCP / Industry Prompt Baseline: ${sessionProjection.anthropicIndustry.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.anthropicIndustry.cumulativeTokens * 0.8, sessionProjection.anthropicIndustry.cumulativeTokens * 0.2).toFixed(4)} USD)
-• [C] Apex Protocol v5.2.1 (Our Engine):          ${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.apexProtocol.cumulativeTokens * 0.8, sessionProjection.apexProtocol.cumulativeTokens * 0.2).toFixed(4)} USD)
+• [C] Apex-core 5 (Our Engine):                 ${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.apexProtocol.cumulativeTokens * 0.8, sessionProjection.apexProtocol.cumulativeTokens * 0.2).toFixed(4)} USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET EFFICIENCY:
-   • Apex vs Aider Baseline:     🔻 -${savingsVsAider}% Cumulative Token Reduction
-   • Apex vs Anthropic Baseline: 🔻 -${savingsVsAnthropic}% Cumulative Token Reduction
+   • Apex-core 5 vs Aider Baseline:     🔻 -${savingsVsAider}% Cumulative Token Reduction
+   • Apex-core 5 vs Anthropic Baseline: 🔻 -${savingsVsAnthropic}% Cumulative Token Reduction
 ======================================================================================================
 \`\`\`
 
@@ -291,7 +291,7 @@ $$\\text{Cumulative Session Tokens} = \\sum_{k=1}^{N} \\Big[ C_{\\text{init}} + 
 
 ## 5. Summary Conclusion
 
-By replacing open-loop whole-file prompting with **AST Codebase Cartography** and **In-RAM Closed-Loop Verification**, Apex achieves:
+By replacing open-loop whole-file prompting with **AST Codebase Cartography** and **In-RAM Closed-Loop Verification**, Apex-core 5 achieves:
 1. **${avgCompression}% reduction in context window ingestion footprint** (measured via exact BPE tokenization)
 2. **${avgSavingsVsWhole}% reduction in output edit token burden** compared to whole-file rewrites (measured from real defect patches)
 3. **${savingsVsAnthropic}% cumulative session token savings** over multi-turn agent iterations.
@@ -305,12 +305,12 @@ console.log(`${BOLD}${CYAN}📊 REAL CODE FIXTURE EMPIRICAL ANALYSIS (Exact BPE 
 console.log(`${BOLD}======================================================================================================${RESET}`);
 console.log(`• Raw Codebase Tokens (Mean):        ${RED}${rawTokenStats.mean} ± ${rawTokenStats.stdDev} BPE tok${RESET}`);
 console.log(`• AST Skeleton Tokens (Mean):        ${GREEN}${astTokenStats.mean} ± ${astTokenStats.stdDev} BPE tok${RESET} ${BOLD}(🔻 -${avgCompression}% Context Diet, p < 0.0001)${RESET}`);
-console.log(`• Real Defect Edit Burden: Whole File: ${RED}${wholeDiffStats.mean} tok${RESET} | Diff: ${YELLOW}${unifiedDiffStats.mean} tok${RESET} | Apex Surgical: ${GREEN}${surgicalDiffStats.mean} tok${RESET} ${BOLD}(🔻 -${avgSavingsVsWhole}%)${RESET}`);
+console.log(`• Real Defect Edit Burden: Whole File: ${RED}${wholeDiffStats.mean} tok${RESET} | Diff: ${YELLOW}${unifiedDiffStats.mean} tok${RESET} | Apex-core 5 Surgical: ${GREEN}${surgicalDiffStats.mean} tok${RESET} ${BOLD}(🔻 -${avgSavingsVsWhole}%)${RESET}`);
 console.log(`------------------------------------------------------------------------------------------------------`);
 console.log(`• Cumulative Multi-Turn Projection (Grounded on SWE-bench / Aider Distributions):`);
 console.log(`  - [A] Aider Whole-File Baseline:   ${RED}${sessionProjection.aiderGeneric.cumulativeTokens.toLocaleString()} tokens${RESET}`);
 console.log(`  - [B] Anthropic Industry Baseline: ${YELLOW}${sessionProjection.anthropicIndustry.cumulativeTokens.toLocaleString()} tokens${RESET}`);
-console.log(`  - [C] Apex Protocol v5.2.1:        ${GREEN}${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens${RESET} ${BOLD}(🔻 -${savingsVsAnthropic}% vs Anthropic)${RESET}`);
+console.log(`  - [C] Apex-core 5:                 ${GREEN}${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens${RESET} ${BOLD}(🔻 -${savingsVsAnthropic}% vs Anthropic)${RESET}`);
 console.log(`${BOLD}======================================================================================================${RESET}`);
 console.log(`${BOLD}${GREEN}✔ Verified citations against: ICLR 2024 (SWE-bench) & Aider Benchmark Protocol${RESET}`);
 console.log(`${BOLD}${GREEN}✔ Raw telemetry persisted to:  benchmark/data/results.json${RESET}`);
