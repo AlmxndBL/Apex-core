@@ -1,128 +1,129 @@
-# ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
+﻿# โก Apex-core 5 โ€” The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — ผ่านการพิสูจน์เชิงประจักษ์ว่าช่วยลดภาระ Token ขาเข้าได้เฉลี่ย **58.4% (และลดได้สูงสุดถึง 88.9% บนระบบขนาดใหญ่)** ($p = 0.000000$) จากการทดสอบบนชุดงานจริง 50 งาน
+> เธชเธ–เธฒเธเธฑเธ•เธขเธเธฃเธฃเธกเธฃเธฐเธเธเธเธงเธเธเธธเธกเน€เธเธดเธเธงเธดเธจเธงเธเธฃเธฃเธก (Deterministic Control Plane) เธชเธณเธซเธฃเธฑเธเธเธณเธเธฑเธเธเธธเธ“เธ เธฒเธเธเธฒเธฃเธเธฑเธ’เธเธฒเธเธญเธเธ•เนเนเธงเธฃเนเธเธญเธ AI Coding Agents เธฃเธญเธเธฃเธฑเธ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, เนเธฅเธฐ Full-Stack Architecture โ€” เธเนเธฒเธเธเธฒเธฃเธเธดเธชเธนเธเธเนเน€เธเธดเธเธเธฃเธฐเธเธฑเธเธฉเนเธงเนเธฒเธเนเธงเธขเธฅเธ”เธ เธฒเธฃเธฐ Token เธเธฒเน€เธเนเธฒเนเธ”เนเน€เธเธฅเธตเนเธข **58.4% (เนเธฅเธฐเธฅเธ”เนเธ”เนเธชเธนเธเธชเธธเธ”เธ–เธถเธ 88.9% เธเธเธฃเธฐเธเธเธเธเธฒเธ”เนเธซเธเน)** (*p* = 4.87 × 10⁻¹¹) เธเธฒเธเธเธฒเธฃเธ—เธ”เธชเธญเธเธเธเธเธธเธ”เธเธฒเธเธเธฃเธดเธ 50 เธเธฒเธ
 
 <div align="center">
 
-**[ 🇬🇧 English ](README.md) · [ 🇹🇭 ภาษาไทย ](README.th.md)**
+**[ ๐ฌ๐ง English ](README.md) ยท [ ๐น๐ญ เธ เธฒเธฉเธฒเนเธ—เธข ](README.th.md)**
 
 </div>
 
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-5.4.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-๐”ป_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
 
 ---
 
-## 🎯 1. จุดบอดที่ไม่มีใครบอกคุณ: การรั่วไหลของ Token (Stateless Token Bleed)
+## ๐ฏ 1. เธเธธเธ”เธเธญเธ”เธ—เธตเนเนเธกเนเธกเธตเนเธเธฃเธเธญเธเธเธธเธ“: เธเธฒเธฃเธฃเธฑเนเธงเนเธซเธฅเธเธญเธ Token (Stateless Token Bleed)
 
-โปรแกรมเมอร์ส่วนใหญ่คิดว่าการแก้บั๊ก 5 บรรทัดจ่ายค่า Token แค่ 5 บรรทัดนั้น แต่ในความเป็นจริง **LLM API (OpenAI, Anthropic) ทำงานแบบ Stateless REST** ทุกรอบที่คุยจึงต้องส่งประวัติเก่าและไฟล์ดิบ 2,000 บรรทัดซ้ำเข้าไปใหม่ ทำให้เกิดการสะสม Token แบบยกกำลัง $\mathcal{O}(N^2)$
+เนเธเธฃเนเธเธฃเธกเน€เธกเธญเธฃเนเธชเนเธงเธเนเธซเธเนเธเธดเธ”เธงเนเธฒเธเธฒเธฃเนเธเนเธเธฑเนเธ 5 เธเธฃเธฃเธ—เธฑเธ”เธเนเธฒเธขเธเนเธฒ Token เนเธเน 5 เธเธฃเธฃเธ—เธฑเธ”เธเธฑเนเธ เนเธ•เนเนเธเธเธงเธฒเธกเน€เธเนเธเธเธฃเธดเธ **LLM API (OpenAI, Anthropic) เธ—เธณเธเธฒเธเนเธเธ Stateless REST** เธ—เธธเธเธฃเธญเธเธ—เธตเนเธเธธเธขเธเธถเธเธ•เนเธญเธเธชเนเธเธเธฃเธฐเธงเธฑเธ•เธดเน€เธเนเธฒเนเธฅเธฐเนเธเธฅเนเธ”เธดเธ 2,000 เธเธฃเธฃเธ—เธฑเธ”เธเนเธณเน€เธเนเธฒเนเธเนเธซเธกเน เธ—เธณเนเธซเนเน€เธเธดเธ”เธเธฒเธฃเธชเธฐเธชเธก Token เนเธเธเธขเธเธเธณเธฅเธฑเธ $\mathcal{O}(N^2)$
 
 ```text
-┌──────────────────────────────────────────────────┐      ┌──────────────────────────────────────────────────┐
-│ ❌ ระบบทั่วไป (โหลดไฟล์เต็ม: 1,858 BPE tok)      │      │ ✅ APEX-CORE 5 AST DIET (สกัด Interface: 67 tok) │
-├──────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────┤
-│ <template>                                       │      │ // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            │
-│   <div class="min-h-screen bg-zinc-950 p-6">     │ ───> │ export interface UserTableRow {                  │
-│     <!-- 80+ บรรทัด HTML markup & SVG icons -->   │      │   id: string; email: string; role: Role;         │
-│     <table class="w-full border border-zinc-800">│      │ }                                                │
-│   </div>                                         │      │ export interface Props { users: UserTableRow[] } │
-│ </template>                                      │      │ export function useUserManagement(): StateStore; │
-│ <script setup lang="ts">                         │      │                                                  │
-│   // 60 บรรทัดของเนื้อในฟังก์ชัน                 │      │                                                  │
-│ </script>                                        │      │                                                  │
-└──────────────────────────────────────────────────┘      └──────────────────────────────────────────────────┘
-                 🔻 ลดขนาด Context ลง 96.4% (<0.14ms V8 In-RAM Extraction)
+โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”      โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”
+โ” โ เธฃเธฐเธเธเธ—เธฑเนเธงเนเธ (เนเธซเธฅเธ”เนเธเธฅเนเน€เธ•เนเธก: 1,858 BPE tok)      โ”      โ” โ… APEX-CORE 5 AST DIET (เธชเธเธฑเธ” Interface: 67 tok) โ”
+โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”ค      โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”ค
+โ” <template>                                       โ”      โ” // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            โ”
+โ”   <div class="min-h-screen bg-zinc-950 p-6">     โ” โ”€โ”€โ”€> โ” export interface UserTableRow {                  โ”
+โ”     <!-- 80+ เธเธฃเธฃเธ—เธฑเธ” HTML markup & SVG icons -->   โ”      โ”   id: string; email: string; role: Role;         โ”
+โ”     <table class="w-full border border-zinc-800">โ”      โ” }                                                โ”
+โ”   </div>                                         โ”      โ” export interface Props { users: UserTableRow[] } โ”
+โ” </template>                                      โ”      โ” export function useUserManagement(): StateStore; โ”
+โ” <script setup lang="ts">                         โ”      โ”                                                  โ”
+โ”   // 60 เธเธฃเธฃเธ—เธฑเธ”เธเธญเธเน€เธเธทเนเธญเนเธเธเธฑเธเธเนเธเธฑเธ                 โ”      โ”                                                  โ”
+โ” </script>                                        โ”      โ”                                                  โ”
+โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”      โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”
+                 ๐”ป เธฅเธ”เธเธเธฒเธ” Context เธฅเธ 96.4% (<0.14ms V8 In-RAM Extraction)
 ```
 
-Apex-core 5 เปลี่ยนการสั่งงานแบบคำขอร้อง (`.cursorrules`) ให้กลายเป็น **Deterministic Control Plane**:
-1. **AST Codebase Cartography:** กรองเนื้อในฟังก์ชันทิ้ง ส่งเฉพาะ Type Interface เข้าโมเดล (**-77.6% Context Diet**, p = 0.0031)
-2. **In-RAM Closed-Loop Verifier:** รัน `vue-tsc` / `tsc` ใน RAM ทันที (< 1s) ตั้งเป้าจบงานในรอบเดียว ($N \to 1.04$ รอบ — เป้าหมายเชิงดีไซน์)
-3. **2-Strike Circuit Breaker:** ตัดวงจร Freeze ทันทีเมื่อแก้ไม่ผ่าน 2 ครั้งติด หยุดการเผาผลาญ Token โดยเปล่าประโยชน์
+Apex-core 5 เน€เธเธฅเธตเนเธขเธเธเธฒเธฃเธชเธฑเนเธเธเธฒเธเนเธเธเธเธณเธเธญเธฃเนเธญเธ (`.cursorrules`) เนเธซเนเธเธฅเธฒเธขเน€เธเนเธ **Deterministic Control Plane**:
+1. **AST Codebase Cartography:** เธเธฃเธญเธเน€เธเธทเนเธญเนเธเธเธฑเธเธเนเธเธฑเธเธ—เธดเนเธ เธชเนเธเน€เธเธเธฒเธฐ Type Interface เน€เธเนเธฒเนเธกเน€เธ”เธฅ (**-77.6% Context Diet**, p = 0.0031)
+2. **In-RAM Closed-Loop Verifier:** เธฃเธฑเธ `vue-tsc` / `tsc` เนเธ RAM เธ—เธฑเธเธ—เธต (< 1s) เธ•เธฑเนเธเน€เธเนเธฒเธเธเธเธฒเธเนเธเธฃเธญเธเน€เธ”เธตเธขเธง ($N \to 1.04$ เธฃเธญเธ โ€” เน€เธเนเธฒเธซเธกเธฒเธขเน€เธเธดเธเธ”เธตเนเธเธเน)
+3. **2-Strike Circuit Breaker:** เธ•เธฑเธ”เธงเธเธเธฃ Freeze เธ—เธฑเธเธ—เธตเน€เธกเธทเนเธญเนเธเนเนเธกเนเธเนเธฒเธ 2 เธเธฃเธฑเนเธเธ•เธดเธ” เธซเธขเธธเธ”เธเธฒเธฃเน€เธเธฒเธเธฅเธฒเธ Token เนเธ”เธขเน€เธเธฅเนเธฒเธเธฃเธฐเนเธขเธเธเน
 
 ---
 
-## ⚡ 2. วิธีเริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)
+## โก 2. เธงเธดเธเธตเน€เธฃเธดเนเธกเนเธเนเธเธฒเธเนเธ 5 เธงเธดเธเธฒเธ—เธต (Single Drop-in Setup)
 
-ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์คุณ:
+เธเนเธญเธเธเธตเนเนเธเธฅเน [`AGENTS.md`](./AGENTS.md) เนเธเธงเธฒเธเธ—เธตเน Root Directory เธเธญเธเนเธเธฃเน€เธเธเธ•เนเธเธธเธ“:
 
 ```bash
-# สำหรับ Cursor IDE
+# เธชเธณเธซเธฃเธฑเธ Cursor IDE
 cp AGENTS.md .cursorrules
 
-# สำหรับ Claude Code CLI
+# เธชเธณเธซเธฃเธฑเธ Claude Code CLI
 cp AGENTS.md CLAUDE.md
 
-# สำหรับ Windsurf / Trae / Google Antigravity
-# วางเป็น AGENTS.md ที่ Root หรือเชื่อมต่อเป็น Workspace Rule
+# เธชเธณเธซเธฃเธฑเธ Windsurf / Trae / Google Antigravity
+# เธงเธฒเธเน€เธเนเธ AGENTS.md เธ—เธตเน Root เธซเธฃเธทเธญเน€เธเธทเนเธญเธกเธ•เนเธญเน€เธเนเธ Workspace Rule
 ```
 
-### 🧭 ระบบตรวจจับ Stack อัตโนมัติ (Deterministic Stack Matrix)
-`AGENTS.md` จะอ่าน `package.json` ของโปรเจกต์เพื่อแมปสถาปัตยกรรมและคำสั่งตรวจสอบ Type ที่ถูกต้องโดยอัตโนมัติ:
+### ๐งญ เธฃเธฐเธเธเธ•เธฃเธงเธเธเธฑเธ Stack เธญเธฑเธ•เนเธเธกเธฑเธ•เธด (Deterministic Stack Matrix)
+`AGENTS.md` เธเธฐเธญเนเธฒเธ `package.json` เธเธญเธเนเธเธฃเน€เธเธเธ•เนเน€เธเธทเนเธญเนเธกเธเธชเธ–เธฒเธเธฑเธ•เธขเธเธฃเธฃเธกเนเธฅเธฐเธเธณเธชเธฑเนเธเธ•เธฃเธงเธเธชเธญเธ Type เธ—เธตเนเธ–เธนเธเธ•เนเธญเธเนเธ”เธขเธญเธฑเธ•เนเธเธกเธฑเธ•เธด:
 
-| สแตกที่ตรวจพบ | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
+| เธชเนเธ•เธเธ—เธตเนเธ•เธฃเธงเธเธเธ | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
 |---|---|---|---|---|
-| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
-| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
-| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+| ๐’ **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
+| โก **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
+| ๐ **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
 
 ---
 
-## 📊 3. การประเมินและหลักฐานเชิงประจักษ์ (Empirical Evidence)
+## ๐“ 3. เธเธฒเธฃเธเธฃเธฐเน€เธกเธดเธเนเธฅเธฐเธซเธฅเธฑเธเธเธฒเธเน€เธเธดเธเธเธฃเธฐเธเธฑเธเธฉเน (Empirical Evidence)
  
-Apex-core ผ่านการพิสูจน์และตรวจสอบอย่างเป็นอิสระผ่านชุดทดสอบมาตรฐานวิจัย **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** บน **$N = 50$ งานพัฒนาจริง** จาก 10 โค้ดเบสบน GitHub (รวม 150 Trajectories รันสดบน Frontier API):
+Apex-core เธเนเธฒเธเธเธฒเธฃเธเธดเธชเธนเธเธเนเนเธฅเธฐเธ•เธฃเธงเธเธชเธญเธเธญเธขเนเธฒเธเน€เธเนเธเธญเธดเธชเธฃเธฐเธเนเธฒเธเธเธธเธ”เธ—เธ”เธชเธญเธเธกเธฒเธ•เธฃเธเธฒเธเธงเธดเธเธฑเธข **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** เธเธ **$N = 50$ เธเธฒเธเธเธฑเธ’เธเธฒเธเธฃเธดเธ** เธเธฒเธ 10 เนเธเนเธ”เน€เธเธชเธเธ GitHub (เธฃเธงเธก 150 Trajectories เธฃเธฑเธเธชเธ”เธเธ Frontier API):
  
-| ตัวชี้วัด | Arm A (โมเดลทั่วไป/เขียนทับเต็มไฟล์) | Arm B (มาตรฐาน Search/Replace Diff) | Arm C (Apex-core Engine) | นัยสำคัญทางสถิติ |
+| เธ•เธฑเธงเธเธตเนเธงเธฑเธ” | Arm A (เนเธกเน€เธ”เธฅเธ—เธฑเนเธงเนเธ/เน€เธเธตเธขเธเธ—เธฑเธเน€เธ•เนเธกเนเธเธฅเน) | Arm B (เธกเธฒเธ•เธฃเธเธฒเธ Search/Replace Diff) | Arm C (Apex-core Engine) | เธเธฑเธขเธชเธณเธเธฑเธเธ—เธฒเธเธชเธ–เธดเธ•เธด |
 |---|---|---|---|---|
-| **ความแม่นยำ Pass@1** | **100% (50/50)** | **100% (50/50)** | **100% (50/50)** | แก้โค้ดผ่าน Unit Test 100% |
-| **การกู้คืน Pass@5** | **100%** | **100%** | **100%** | ปิดงานได้ในรอบแรกทั้งหมด |
-| **จำนวนรอบเฉลี่ย** | **1.00 รอบ** | **1.00 รอบ** | **1.00 รอบ** | จบงานในรอบเดียวสมบูรณ์ |
-| **ค่าเฉลี่ย Token ขาเข้า** | 2,294 tok | 2,338 tok | **955 tok** | **🔻 ประหยัดลง -58.4% ($p = 0$)** |
-| **Schema ใหญ่ (>800 บรรทัด)** | 7,270 tok | 7,309 tok | **3,557 tok** | **🔻 ลด Token ลง -51.1%** |
-| **เอกสาร Context (>2,000 บรรทัด)**| 2,453 tok | 2,530 tok | **272 tok** | **🔻 ลด Token ลง -88.9%** |
+| **เธเธงเธฒเธกเนเธกเนเธเธขเธณ Pass@1** | **100% (50/50)** | **100% (50/50)** | **100% (50/50)** | เนเธเนเนเธเนเธ”เธเนเธฒเธ Unit Test 100% |
+| **เธเธฒเธฃเธเธนเนเธเธทเธ Pass@5** | **100%** | **100%** | **100%** | เธเธดเธ”เธเธฒเธเนเธ”เนเนเธเธฃเธญเธเนเธฃเธเธ—เธฑเนเธเธซเธกเธ” |
+| **เธเธณเธเธงเธเธฃเธญเธเน€เธเธฅเธตเนเธข** | **1.00 เธฃเธญเธ** | **1.00 เธฃเธญเธ** | **1.00 เธฃเธญเธ** | เธเธเธเธฒเธเนเธเธฃเธญเธเน€เธ”เธตเธขเธงเธชเธกเธเธนเธฃเธ“เน |
+| **เธเนเธฒเน€เธเธฅเธตเนเธข Token เธเธฒเน€เธเนเธฒ** | 2,294 tok | 2,338 tok | **955 tok** | **๐”ป เธเธฃเธฐเธซเธขเธฑเธ”เธฅเธ -58.4% ($p = 0$)** |
+| **Schema เนเธซเธเน (>800 เธเธฃเธฃเธ—เธฑเธ”)** | 7,270 tok | 7,309 tok | **3,557 tok** | **๐”ป เธฅเธ” Token เธฅเธ -51.1%** |
+| **เน€เธญเธเธชเธฒเธฃ Context (>2,000 เธเธฃเธฃเธ—เธฑเธ”)**| 2,453 tok | 2,530 tok | **272 tok** | **๐”ป เธฅเธ” Token เธฅเธ -88.9%** |
  
 <div align="center">
  
-👉 **[ 🔬 ดูโค้ดชุดทดสอบและไฟล์ Telemetry ละเอียดทั้งหมด (Apex-eval) → ](https://github.com/AlmxndBL/Apex-eval)**  
-*(รวมชุดทดสอบ 50 ข้อจาก 10 โปรเจกต์, ตัวรันเนอร์อัตโนมัติ, ข้อมูล Telemetry ดิบ, และสมการพิสูจน์ Paired t-Test)*
+๐‘ **[ ๐”ฌ เธ”เธนเนเธเนเธ”เธเธธเธ”เธ—เธ”เธชเธญเธเนเธฅเธฐเนเธเธฅเน Telemetry เธฅเธฐเน€เธญเธตเธขเธ”เธ—เธฑเนเธเธซเธกเธ” (Apex-eval) โ’ ](https://github.com/AlmxndBL/Apex-eval)**  
+*(เธฃเธงเธกเธเธธเธ”เธ—เธ”เธชเธญเธ 50 เธเนเธญเธเธฒเธ 10 เนเธเธฃเน€เธเธเธ•เน, เธ•เธฑเธงเธฃเธฑเธเน€เธเธญเธฃเนเธญเธฑเธ•เนเธเธกเธฑเธ•เธด, เธเนเธญเธกเธนเธฅ Telemetry เธ”เธดเธ, เนเธฅเธฐเธชเธกเธเธฒเธฃเธเธดเธชเธนเธเธเน Paired t-Test)*
  
 </div>
 
 ---
 
-## 🧰 4. ชุด 4 เสาหลักสกิลความรู้เชิงลึก (Consolidated Skills)
+## ๐งฐ 4. เธเธธเธ” 4 เน€เธชเธฒเธซเธฅเธฑเธเธชเธเธดเธฅเธเธงเธฒเธกเธฃเธนเนเน€เธเธดเธเธฅเธถเธ (Consolidated Skills)
 
-1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
-2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
-4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Selective Token Diet (ลด Context Overhead 70-90%).
+1. ๐จ **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
+2. ๐—๏ธ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
+3. ๐งช **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
+4. ๐งญ **[`skills/cartography`](./skills/cartography/SKILL.md):** AST Codebase Skeleton Mapping, Selective Token Diet (เธฅเธ” Context Overhead 70-90%).
 
 ---
 
-## 🖼️ 5. มาตรฐานงาน UI/UX ระดับ Enterprise
+## ๐–ผ๏ธ 5. เธกเธฒเธ•เธฃเธเธฒเธเธเธฒเธ UI/UX เธฃเธฐเธ”เธฑเธ Enterprise
 
 ![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
 
-Apex บังคับใช้ **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, Magic UI Theme Toggler, Interactive Sort/Filter Data Tables, และ Crisp SVG Lucide Icons (Strict Zero Emojis) ทั้งใน **Vue 3 / Nuxt 4** และ **React 19 / Next.js 15** โค้ดตัวอย่างอยู่ที่ [`templates/ui/`](./templates/ui/).
+Apex เธเธฑเธเธเธฑเธเนเธเน **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, Magic UI Theme Toggler, Interactive Sort/Filter Data Tables, เนเธฅเธฐ Crisp SVG Lucide Icons (Strict Zero Emojis) เธ—เธฑเนเธเนเธ **Vue 3 / Nuxt 4** เนเธฅเธฐ **React 19 / Next.js 15** เนเธเนเธ”เธ•เธฑเธงเธญเธขเนเธฒเธเธญเธขเธนเนเธ—เธตเน [`templates/ui/`](./templates/ui/).
 
 ---
 
-## 🌌 6. Twin-Engine Synergy: Apex & Nexus
+## ๐ 6. Twin-Engine Synergy: Apex & Nexus
 
-Apex ออกแบบให้ทำงานแบบ **100% Standalone (Zero Dependencies)** แต่สามารถเชื่อมต่อกับ **[Nexus](https://github.com/AlmxndBL/nexus)** เพื่อปลดล็อกความจำระยะยาว:
+Apex เธญเธญเธเนเธเธเนเธซเนเธ—เธณเธเธฒเธเนเธเธ **100% Standalone (Zero Dependencies)** เนเธ•เนเธชเธฒเธกเธฒเธฃเธ–เน€เธเธทเนเธญเธกเธ•เนเธญเธเธฑเธ **[Nexus](https://github.com/AlmxndBL/nexus)** เน€เธเธทเนเธญเธเธฅเธ”เธฅเนเธญเธเธเธงเธฒเธกเธเธณเธฃเธฐเธขเธฐเธขเธฒเธง:
 
-* **Apex:** กฎเกณฑ์และวินัยการเขียนโค้ด (HOW to build, verify, and enforce safety)
-* **Nexus:** คลังความจำและบทเรียนข้ามโปรเจกต์ (WHAT we know, decided, and learned)
+* **Apex:** เธเธเน€เธเธ“เธ‘เนเนเธฅเธฐเธงเธดเธเธฑเธขเธเธฒเธฃเน€เธเธตเธขเธเนเธเนเธ” (HOW to build, verify, and enforce safety)
+* **Nexus:** เธเธฅเธฑเธเธเธงเธฒเธกเธเธณเนเธฅเธฐเธเธ—เน€เธฃเธตเธขเธเธเนเธฒเธกเนเธเธฃเน€เธเธเธ•เน (WHAT we know, decided, and learned)
 
 ---
 
-## 💖 Acknowledgements & Inspirations
+## ๐’– Acknowledgements & Inspirations
 
-* **🧙‍♂️ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** — Strict TypeScript principles & contract typing
-* **🎯 [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** — Pragmatic software engineering and trade-off evaluation
-* **🧠 [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** — Agent behavioral safeguards and anti-overengineering philosophy
+* **๐งโ€โ๏ธ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** โ€” Strict TypeScript principles & contract typing
+* **๐ฏ [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** โ€” Pragmatic software engineering and trade-off evaluation
+* **๐ง  [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** โ€” Agent behavioral safeguards and anti-overengineering philosophy
+
