@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Empirical Research Whitepaper: Deterministic Control Plane vs Internationally Recognized Agent Protocols (Apex-core 5)</title>
+  <title>รายงานผลการประเมินประสิทธิภาพเชิงประจักษ์: สถาปัตยกรรม Deterministic Control Plane สำหรับ AI Coding Agents (Apex-core 5)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
@@ -21,7 +21,7 @@
       --primary-glow: rgba(59, 130, 246, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.12);
-      --font-sans: 'Inter', -apple-system, sans-serif;
+      --font-sans: 'Sarabun', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -52,7 +52,7 @@
       margin-bottom: 32px;
       border-bottom: 1px solid var(--border);
     }
-    .nav-bar a {
+    .lang-links a {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 13.5px;
@@ -63,10 +63,14 @@
       border: 1px solid var(--border);
       transition: all 0.2s;
     }
-    .nav-bar a:hover {
+    .lang-links a.active {
       background: var(--primary-glow);
       color: #60a5fa;
       border-color: #3b82f6;
+    }
+    .lang-links a:hover:not(.active) {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
     }
 
     .category {
@@ -80,7 +84,7 @@
     }
 
     h1.title {
-      font-size: 26px;
+      font-size: 25px;
       font-weight: 800;
       line-height: 1.4;
       margin-bottom: 12px;
@@ -221,39 +225,39 @@
   <!-- Nav -->
   <div class="nav-bar">
     <div style="font-weight: 700; font-size: 14px; color: #3b82f6; font-family: var(--font-mono);">APEX-CORE 5 BENCHMARK REPORT</div>
-    <div style="display:flex; gap:10px;">
-      <a href="BENCHMARK.html" style="background:var(--primary-glow); color:#60a5fa; border-color:#3b82f6;">🇬🇧 English</a>
-      <a href="BENCHMARK.th.html">🇹🇭 ภาษาไทย</a>
+    <div class="lang-links">
+      <a href="BENCHMARK.html">🇬🇧 English</a>
+      <a href="BENCHMARK.th.html" class="active">🇹🇭 ภาษาไทย</a>
     </div>
   </div>
 
-  <div class="category">Empirical Research Whitepaper</div>
-  <h1 class="title">Deterministic Control Plane vs Internationally Recognized Agent Protocols</h1>
+  <div class="category">รายงานวิจัยและประเมินประสิทธิภาพเชิงประจักษ์ (Empirical Research Whitepaper)</div>
+  <h1 class="title">การประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม Deterministic Control Plane เทียบกับโปรโตคอลมาตรฐานสากล (Apex-core 5)</h1>
   <div class="subtitle">An Empirical Evaluation of Token Economy, AST Interface Pruning, and In-RAM Verification for AI Coding Agents</div>
 
   <div class="abstract-box">
-    <div class="abstract-title">Executive Abstract</div>
+    <div class="abstract-title">บทคัดย่อ (Abstract)</div>
     <div class="abstract-body">
-      This paper presents an empirical evaluation of <strong>Apex-core 5</strong>, a deterministic control plane for AI coding agents. Through rigorous testing on 5 production-grade full-stack fixtures using exact Byte-Pair Encoding (<code>cl100k_base</code>), we demonstrate that <em>AST Codebase Cartography</em> achieves an <strong>80.7% context ingestion reduction</strong> (\(p < 0.0001\)) in &lt;0.35ms hardware time. Combining interface pruning with <em>In-RAM Closed-Loop Verification</em> bounds multi-turn debugging loops to an average of 1.04 turns, driving a <strong>94.4% cumulative session token reduction</strong> compared to Anthropic industry baselines, saving over <strong>$49,420 USD annually</strong> for a 100-engineer enterprise.
+      รายงานวิจัยนี้นำเสนอผลการประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม <strong>Apex-core 5</strong> บนชุดรหัสต้นฉบับจริง 5 โดเมน Full-Stack ด้วยตัวนับโทเค็น <code>cl100k_base</code> BPE ผลการทดสอบยืนยันว่ากลไก <em>AST Codebase Cartography</em> ช่วยลดขนาด Context Window ขาเข้าลง <strong>80.7%</strong> (\(p < 0.0001\)) โดยใช้เวลาประมวลผลบน RAM ต่ำกว่า 0.35ms และเมื่อผสานกับ <em>In-RAM Closed-Loop Verifier</em> ช่วยลดรอบการทำงานเฉลี่ยลงเหลือ 1.04 รอบ ส่งผลให้การสะสมโทเค็นรวมตลอดกระบวนการทำงาน Multi-Turn ลดลง <strong>94.4%</strong> เมื่อเทียบกับแนวทางปฏิบัติทั่วไปของ Anthropic และประหยัดค่าใช้จ่าย API ได้ถึง <strong>$49,420 USD ต่อปี</strong> สำหรับองค์กรขนาด 100 คน
     </div>
   </div>
 
   <!-- Section 1 -->
-  <h2>1. Empirical Findings & Telemetry</h2>
+  <h2>1. ผลการทดสอบเปรียบเทียบเชิงประจักษ์ (Empirical Findings)</h2>
   
-  <h3>1.1 Ingestion Context Compression (AST Context Compression Ratio - ACCR)</h3>
-  <p>Evaluated via <code>ast-extractor.js</code> by pruning function/class implementation bodies, JSX layout markup, and CSS utility styling:</p>
+  <h3>1.1 การลดขนาด Context Window ขาเข้า (AST Context Compression Ratio - ACCR)</h3>
+  <p>วัดผลผ่าน <code>ast-extractor.js</code> โดยสกัดเฉพาะ Type Interface และ DTOs ตัดส่วนเนื้อในฟังก์ชัน, HTML, และ CSS ออก:</p>
 
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Fixture File</th>
-          <th>Domain & Architectural Scope</th>
-          <th>Raw Codebase</th>
-          <th>AST Skeleton</th>
-          <th>Compression Ratio</th>
-          <th>In-RAM Latency</th>
+          <th>ไฟล์ชุดทดสอบ (Fixture)</th>
+          <th>โดเมนของระบบ (Domain)</th>
+          <th>ขนาดโค้ดเต็ม (Raw BPE)</th>
+          <th>ขนาด AST Skeleton</th>
+          <th>อัตราการประหยัด</th>
+          <th>เวลาประมวลผลบน RAM</th>
         </tr>
       </thead>
       <tbody>
@@ -299,7 +303,7 @@
         </tr>
         <tr class="highlight">
           <td><strong>GLOBAL MEAN (μ)</strong></td>
-          <td><strong>Average Across All 5 Domains</strong></td>
+          <td><strong>เฉลี่ยรวมทุกโดเมนระบบ</strong></td>
           <td><strong>799.6 tok</strong></td>
           <td><strong>107.0 tok</strong></td>
           <td>🔻 -80.7% (p &lt; 0.0001)</td>
@@ -309,49 +313,49 @@
     </table>
   </div>
 
-  <h3>1.2 Output Edit Burden Analysis (Aider Benchmark Standard)</h3>
-  <p>Measured across 5 real defect scenarios in <code>benchmark/fixtures/defects.js</code>:</p>
+  <h3>1.2 ภาระของ Output Token ในการแก้ไขข้อบกพร่อง (Aider Benchmark Standard)</h3>
+  <p>วัดจากกรณีศึกษาข้อบกพร่องจริง 5 รูปแบบใน <code>benchmark/fixtures/defects.js</code>:</p>
 
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Edit Paradigm</th>
+          <th>รูปแบบการแก้ไขโค้ด (Edit Paradigm)</th>
           <th>Mean Output Tokens</th>
-          <th>vs Whole-File Baseline</th>
-          <th>Safety & Execution Guarantee</th>
+          <th>ประสิทธิภาพเทียบกับ Whole-File</th>
+          <th>การรับประกันความปลอดภัย (Safety)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Aider Whole-File Format</strong> (Monolithic Rewrite)</td>
+          <td><strong>Aider Whole-File Format</strong> (เขียนทับทั้งไฟล์)</td>
           <td>821.8 tokens</td>
-          <td>Baseline (0.0%)</td>
-          <td>⚠️ High risk of lost imports & regressions</td>
+          <td>เกณฑ์อ้างอิงฐาน (0.0%)</td>
+          <td>⚠️ เสี่ยงสูญหายของ Imports และ Logic เดิม</td>
         </tr>
         <tr>
-          <td><strong>Aider Unified Diff Format</strong> (Hunk Header)</td>
+          <td><strong>Aider Unified Diff Format</strong> (Git Hunk Diff)</td>
           <td>116.6 tokens</td>
           <td style="color:#34d399;">🔻 -85.8%</td>
-          <td>⚠️ Sensitive to line offset drift & patch reject</td>
+          <td>⚠️ เปราะบางต่อ Line Offset Drift Patch ไม่เข้า</td>
         </tr>
         <tr class="highlight">
-          <td><strong>Apex-core 5 Surgical Patch</strong> (Rule 4 Exact Slice)</td>
+          <td><strong>Apex-core 5 Surgical Patch Mode</strong> (ล็อกพิกัดบรรทัด)</td>
           <td>176.0 tokens</td>
           <td>🔻 -78.6% (p &lt; 0.0001)</td>
-          <td>✅ Coordinate lock + In-RAM TypeCheck</td>
+          <td>✅ กำหนดพิกัดบรรทัดแม่นยำ + ตรวจ TypeCheck ทันที</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h3>1.3 Cumulative Multi-Turn Session Projection (\(\mathcal{O}(N^2)\))</h3>
+  <h3>1.3 แบบจำลองการสะสม Token ตลอดการทำงาน Multi-Turn (\(\mathcal{O}(N^2)\))</h3>
   <div class="formula-card">
     $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum_{j=1}^{k-1} (\Delta I_j + \Delta O_j) + \Delta O_k \Big] \in \mathbf{\Theta(N^2)}$$
   </div>
 
   <pre><code>======================================================================================================
-📊 3-WAY CUMULATIVE MULTI-TURN SESSION COMPARISON (Grounded on Real Fixtures)
+📊 สรุปการเปรียบเทียบโทเค็นสะสมตลอดการทำงานแบบต่อเนื่อง (Multi-Turn Session Telemetry)
 ======================================================================================================
 Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens
 
@@ -359,13 +363,13 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens
 • [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 6,045 tokens ($0.0326 USD)
 • [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         338 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
-⭐ NET SESSION EFFICIENCY:
-   • Apex-core 5 vs Aider Baseline:      🔻 -98.1% Cumulative Token Reduction ($0.0936 saved/task)
-   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.4% Cumulative Token Reduction ($0.0308 saved/task)
+⭐ ผลลัพธ์ความคุ้มค่าสุทธิ:
+   • Apex-core 5 เทียบกับ Aider Baseline:      🔻 ประหยัดลง -98.1% ($0.0936 ประหยัดต่อ Task)
+   • Apex-core 5 เทียบกับ Anthropic Baseline:  🔻 ประหยัดลง -94.4% ($0.0308 ประหยัดต่อ Task)
 ======================================================================================================</code></pre>
 
   <!-- Section 2 -->
-  <h2>2. Academic & Industry References</h2>
+  <h2>2. เอกสารอ้างอิงมาตรฐานสากล (References)</h2>
   <ol class="ref-list">
     <li>
       <strong>SWE-bench (ICLR 2024):</strong> Jimenez, C. E., Yang, J., Wettig, A., Yao, S., Pei, K., Press, O., & Narasimhan, K. (2024). 
@@ -399,11 +403,11 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens
   </ol>
 
   <!-- Section 3 -->
-  <h2>3. Reproducibility</h2>
-  <pre><code># Execute the empirical benchmark runner with exact BPE tokenizer:
+  <h2>3. การตรวจสอบผลซ้ำ (Reproducibility)</h2>
+  <pre><code># สั่งรัน Benchmark พร้อมตัวนับ BPE Tokenizer:
 npm run benchmark
 
-# Verify 100% Framework Integrity:
+# ตรวจสอบความสมบูรณ์ของระบบ 51 ด่าน:
 npm run verify</code></pre>
 
   <footer>
