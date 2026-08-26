@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex-core 5 — สถาปัตยกรรมระบบควบคุมสำหรับ AI Coding Agents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card: #11131a;
+      --card-border: #1e2230;
+      --border: #262b3d;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.12);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.12);
+      --font-sans: 'Sarabun', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 48px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    /* Top Nav / Lang Switcher */
+    .lang-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lang-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .lang-links a.active {
+      background: var(--primary-glow);
+      color: #60a5fa;
+      border-color: #3b82f6;
+    }
+    .lang-links a:hover:not(.active) {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    /* Header */
+    h1.title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: 15.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.65;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+    }
+    .badge.green { background: var(--success-glow); border-color: rgba(16,185,129,0.3); color: #34d399; }
+    .badge.blue { background: var(--primary-glow); border-color: rgba(59,130,246,0.3); color: #60a5fa; }
+
+    /* Headings */
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    p { margin-bottom: 16px; color: #cbd5e1; }
+
+    /* Code Blocks */
+    pre {
+      background: #06070a;
+      border: 1px solid #1e2230;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin: 18px 0;
+    }
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #93c5fd;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+    }
+    th {
+      background: #181c28;
+      color: #e2e8f0;
+      padding: 12px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #94a3b8;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr.highlight {
+      background: var(--success-glow);
+    }
+    tr.highlight td {
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    /* CTA Card */
+    .cta-card {
+      background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(16,185,129,0.05) 100%);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      margin: 32px 0;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: #1d4ed8; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+      padding-top: 24px;
+      font-size: 13px;
+      color: #64748b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Top Bar -->
+  <div class="lang-nav">
+    <div style="font-weight: 700; font-size: 14px; color: #3b82f6; font-family: var(--font-mono);">APEX-CORE 5.2.1</div>
+    <div class="lang-links">
+      <a href="README.html">🇬🇧 English</a>
+      <a href="README.th.html" class="active">🇹🇭 ภาษาไทย</a>
+      <a href="BENCHMARK.html" style="background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.4); color: #93c5fd;">🔬 Research Whitepaper</a>
+    </div>
+  </div>
+
+  <h1 class="title">⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol</h1>
+  <div class="subtitle">
+    สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture ลดการใช้ Token สะสมลง <strong>94.4%</strong>
+  </div>
+
+  <div class="badges">
+    <span class="badge blue">v5.2.1</span>
+    <span class="badge green">🔻 -94.4% Token Reduction</span>
+    <span class="badge">cl100k_base BPE</span>
+    <span class="badge">In-RAM < 1ms Latency</span>
+    <span class="badge">p < 0.0001</span>
+    <span class="badge">MIT License</span>
+  </div>
+
+  <!-- Section 1 -->
+  <h2>🎯 1. จุดบอดที่ไม่มีใครบอกคุณ: การรั่วไหลของ Token (Stateless Token Bleed)</h2>
+  <p>
+    โปรแกรมเมอร์ส่วนใหญ่คิดว่าการแก้บั๊ก 5 บรรทัดจ่ายค่า Token แค่ 5 บรรทัดนั้น แต่ในความเป็นจริง <strong>LLM API (OpenAI, Anthropic) ทำงานแบบ Stateless REST</strong> ทุกรอบที่คุยจึงต้องส่งประวัติเก่าและไฟล์ดิบ 2,000 บรรทัดซ้ำเข้าไปใหม่ ทำให้เกิดการสะสม Token แบบยกกำลัง (\(\mathcal{O}(N^2)\))
+  </p>
+
+  <pre><code>┌──────────────────────────────────────────────────┐      ┌──────────────────────────────────────────────────┐
+│ ❌ ระบบทั่วไป (โหลดไฟล์เต็ม: 1,858 BPE tok)      │      │ ✅ APEX-CORE 5 AST DIET (สกัด Interface: 67 tok) │
+├──────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────┤
+│ &lt;template&gt;                                       │      │ // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            │
+│   &lt;div class="min-h-screen bg-zinc-950 p-6"&gt;     │ ───&gt; │ export interface UserTableRow {                  │
+│     &lt;!-- 80+ บรรทัด HTML markup & SVG icons --&gt;   │      │   id: string; email: string; role: Role;         │
+│     &lt;table class="w-full border border-zinc-800"&gt;│      │ }                                                │
+│   &lt;/div&gt;                                         │      │ export interface Props { users: UserTableRow[] } │
+│ &lt;/template&gt;                                      │      │ export function useUserManagement(): StateStore; │
+│ &lt;script setup lang="ts"&gt;                         │      │                                                  │
+│   // 60 บรรทัดของเนื้อในฟังก์ชัน                 │      │                                                  │
+│ &lt;/script&gt;                                        │      │                                                  │
+└──────────────────────────────────────────────────┘      └──────────────────────────────────────────────────┘
+                 🔻 ลดขนาด Context ลง 96.4% (&lt;0.14ms V8 In-RAM Extraction)</code></pre>
+
+  <p>Apex-core 5 เปลี่ยนการสั่งงานแบบคำขอร้อง (<code>.cursorrules</code>) ให้กลายเป็น <strong>Deterministic Control Plane</strong>:</p>
+  <ul style="padding-left: 20px; margin-bottom: 20px; color: #94a3b8; font-size: 14px;">
+    <li><strong>AST Codebase Cartography:</strong> กรองเนื้อในฟังก์ชันทิ้ง ส่งเฉพาะ Type Interface เข้าโมเดล (<strong>-80.7% Context Diet</strong>)</li>
+    <li><strong>In-RAM Closed-Loop Verifier:</strong> รัน <code>vue-tsc</code> / <code>tsc</code> ใน RAM ทันที (&lt; 1s) จบงานในรอบเดียว (\(N \to 1.04\) รอบ)</li>
+    <li><strong>2-Strike Circuit Breaker:</strong> ตัดวงจร Freeze ทันทีเมื่อแก้ไม่ผ่าน 2 ครั้งติด หยุดการเผาผลาญ Token โดยเปล่าประโยชน์</li>
+  </ul>
+
+  <!-- Section 2 -->
+  <h2>⚡ 2. วิธีเริ่มใช้งานใน 5 วินาที (Single Drop-in Setup)</h2>
+  <p>ก๊อปปี้ไฟล์ <code>AGENTS.md</code> ไปวางที่ Root Directory ของโปรเจกต์คุณ:</p>
+
+  <pre><code># สำหรับ Cursor IDE
+cp AGENTS.md .cursorrules
+
+# สำหรับ Claude Code CLI
+cp AGENTS.md CLAUDE.md
+
+# สำหรับ Windsurf / Trae / Google Antigravity
+# วางเป็น AGENTS.md ที่ Root หรือเชื่อมต่อเป็น Workspace Rule</code></pre>
+
+  <p><strong>ระบบตรวจจับ Stack อัตโนมัติ (Deterministic Stack Matrix):</strong> <code>AGENTS.md</code> จะอ่าน <code>package.json</code> ของโปรเจกต์เพื่อแมปสถาปัตยกรรมอัตโนมัติ:</p>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>สแตกที่ตรวจพบ</th>
+          <th>Logic Layer</th>
+          <th>Presenter Layer</th>
+          <th>API Endpoints</th>
+          <th>Fast In-RAM TypeCheck</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>💚 <strong>Nuxt 4 (Vue 3 + Nitro)</strong></td>
+          <td><code>composables/use&lt;Feature&gt;.ts</code></td>
+          <td><code>&lt;Feature&gt;List.vue</code></td>
+          <td><code>server/api/v1/*.ts</code></td>
+          <td><code>pnpm vue-tsc --noEmit</code></td>
+        </tr>
+        <tr>
+          <td>⚡ <strong>Next.js 15 (React 19)</strong></td>
+          <td><code>hooks/use&lt;Feature&gt;.ts</code></td>
+          <td><code>&lt;Feature&gt;List.tsx</code></td>
+          <td><code>app/api/v1/*/route.ts</code></td>
+          <td><code>pnpm tsc --noEmit</code></td>
+        </tr>
+        <tr>
+          <td>🐍 <strong>Polyglot / Backend</strong></td>
+          <td><code>services/&lt;feature&gt;_service</code></td>
+          <td>Native Views</td>
+          <td>Framework Handlers</td>
+          <td><code>pytest -q</code> / <code>go test</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 3 -->
+  <h2>📊 3. สรุปผลการประเมินเชิงประจักษ์ (Benchmark Summary)</h2>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ตัวชี้วัด</th>
+          <th>รูปแบบเดิม (Aider / ทั่วไป)</th>
+          <th>แนวทางปฏิบัติ Anthropic</th>
+          <th>Apex-core 5 Control Plane</th>
+          <th>ผลลัพธ์ที่ได้</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Context Ingestion</strong></td>
+          <td>799.6 BPE tok (ไฟล์เต็ม)</td>
+          <td>799.6 BPE tok</td>
+          <td><strong>107.0 BPE tok (AST)</strong></td>
+          <td style="color:#34d399; font-weight:600;">🔻 ลดขนาดลง 80.7%</td>
+        </tr>
+        <tr>
+          <td><strong>ภาระ Output โค้ดที่แก้</strong></td>
+          <td>821.8 tok (เขียนทับทั้งไฟล์)</td>
+          <td>116.6 tok (Unified Diff)</td>
+          <td><strong>176.0 tok (Surgical Patch)</strong></td>
+          <td style="color:#34d399; font-weight:600;">🔻 ลดลง 78.6% เทียบกับเขียนทับ</td>
+        </tr>
+        <tr>
+          <td><strong>จำนวนรอบเฉลี่ย</strong></td>
+          <td>3.62 รอบ (SWE-bench)</td>
+          <td>2.38 รอบ</td>
+          <td><strong>1.04 รอบ (In-RAM)</strong></td>
+          <td style="color:#60a5fa; font-weight:600;">จบงานในรอบเดียว</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>Token สะสมรวมทั้งงาน</strong></td>
+          <td>17,659 tokens ($0.0954)</td>
+          <td>6,045 tokens ($0.0326)</td>
+          <td><strong>338 tokens ($0.0018)</strong></td>
+          <td>🔻 ประหยัดลง 94.4%</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>ต้นทุนระดับองค์กร (100 devs)</strong></td>
+          <td>$50,371 USD / ปี</td>
+          <td>$17,212 USD / ปี</td>
+          <td><strong>$950 USD / ปี</strong></td>
+          <td>💰 ประหยัดเงิน +$49,420 / ปี</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cta-card">
+    <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;">ต้องการดูสมการคณิตศาสตร์และตัวเลขสถิติ 5 โดเมนฉบับเต็ม?</h3>
+    <p style="font-size: 13.5px; color: #94a3b8; margin-bottom: 0;">อ่านสมุดปกขาวงานวิจัยฉบับสมบูรณ์ พร้อม 6 เอกสารอ้างอิงมาตรฐานสากล</p>
+    <a href="BENCHMARK.html" class="cta-btn">🔬 เปิดสมุดปกขาวงานวิจัย (BENCHMARK.html) →</a>
+  </div>
+
+  <!-- Section 4 -->
+  <h2>🧰 4. ชุด 4 เสาหลักสกิลความรู้เชิงลึก</h2>
+  <ul style="padding-left: 20px; font-size: 14px; color: #94a3b8; line-height: 1.8;">
+    <li>🎨 <strong>skills/frontend:</strong> 3-File Feature Module Architecture, Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern Surface Elevation</li>
+    <li>🗄️ <strong>skills/backend-data:</strong> Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth</li>
+    <li>🧪 <strong>skills/quality-verify:</strong> In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker</li>
+    <li>🧭 <strong>skills/cartography:</strong> AST Codebase Skeleton Mapping, Selective Token Diet (ลด Context Overhead 70-90%)</li>
+  </ul>
+
+  <footer>
+    Apex-core 5 — Distributed under MIT License. Crafted for disciplined AI engineering.
+  </footer>
+</div>
+
+</body>
+</html>
