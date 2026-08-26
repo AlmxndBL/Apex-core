@@ -1,7 +1,7 @@
 # ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — โปรเจกต์การประหยัด Token สะสมได้ราว **94.0%** (ตัวเลขจากโมเดลคาดการณ์ — ดูสมมติฐานใน benchmark) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปในอุตสาหกรรม
+> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — ผ่านการพิสูจน์เชิงประจักษ์ว่าช่วยลดภาระ Token ขาเข้าได้เฉลี่ย **58.4% (และลดได้สูงสุดถึง 88.9% บนระบบขนาดใหญ่)** ($p = 0.000000$) จากการทดสอบบนชุดงานจริง 50 งาน
 
 <div align="center">
 
@@ -12,7 +12,7 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-5.3.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.0%25_modeled-10b981.svg)](benchmark/README.md)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
