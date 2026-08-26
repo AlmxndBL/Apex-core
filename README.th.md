@@ -5,7 +5,7 @@
 
 <div align="center">
 
-**[ 🇬🇧 English ](README.md) · [ 🇹🇭 ภาษาไทย ](README.th.md) | [ 🔬 รายงานผลการทดสอบ (HTML) ](BENCHMARK.th.html)**
+**[ 🇬🇧 English ](README.md) · [ 🇹🇭 ภาษาไทย ](README.th.md)**
 
 </div>
 
