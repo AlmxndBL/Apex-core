@@ -12,7 +12,7 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-5.2.1-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](BENCHMARK.md)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
@@ -87,7 +87,7 @@ cp AGENTS.md CLAUDE.md
 
 <div align="center">
 
-👉 **[ 🔬 อ่านสมุดปกขาวงานวิจัยฉบับสมบูรณ์ (BENCHMARK.md) → ](BENCHMARK.md)**  
+👉 **[ 🔬 อ่านสมุดปกขาวงานวิจัยฉบับสมบูรณ์ (benchmark/README.md) → ](benchmark/README.md)**  
 *(มีสมการคณิตศาสตร์ $\mathcal{O}(N^2)$, ตารางสถิติ 5 โดเมนละเอียด, และ 6 เอกสารอ้างอิงสากล)*
 
 </div>

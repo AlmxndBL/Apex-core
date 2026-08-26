@@ -12,7 +12,7 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-5.2.1-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](BENCHMARK.md)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
@@ -87,7 +87,7 @@ Evaluated across 5 production-grade full-stack fixtures using exact Byte-Pair En
 
 <div align="center">
 
-👉 **[ 🔬 Read the Complete Empirical Research Whitepaper (BENCHMARK.md) → ](BENCHMARK.md)**  
+👉 **[ 🔬 Read the Complete Empirical Research Whitepaper (benchmark/README.md) → ](benchmark/README.md)**  
 *(Includes $\mathcal{O}(N^2)$ mathematical proofs, 5-domain telemetry data, and 6 academic literature citations)*
 
 </div>
