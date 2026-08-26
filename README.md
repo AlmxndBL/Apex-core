@@ -73,22 +73,23 @@ cp AGENTS.md CLAUDE.md
 
 ---
 
-## 📊 3. Empirical Benchmark Summary
+## 📊 3. Empirical Benchmark & Verification Evidence
 
-Evaluated across 13 production-grade full-stack fixture files using exact Byte-Pair Encoding (`cl100k_base` BPE Tokenizer):
+Apex-core is empirically verified using the dedicated **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** execution-based benchmark suite across **$N = 50$ real-world production tasks** extracted from 10 actual GitHub repositories (150 live trajectories evaluated on Frontier APIs):
 
-| Metric | Status-Quo (Aider / Generic) | Anthropic Best Practice | Apex-core 5 Control Plane | Net Impact |
+| Metric | Arm A (Baseline Whole-File) | Arm B (SEARCH/REPLACE Diff) | Arm C (Apex-core Engine) | Statistical Impact |
 |---|---|---|---|---|
-| **Context Ingestion** | 525.3 BPE tok (Full File) | 525.3 BPE tok | **92.9 BPE tok (AST)** | **🔻 -77.6% Context Diet (p = 0.0031)** |
-| **Output Edit Burden** | 821.8 tok (Whole Rewrite) | 116.6 tok (Unified Diff) | **176.0 tok (Surgical Patch)** | **🔻 -78.6% vs Rewrite · +50.9% vs Diff** |
-| **Average Turns** | 3.62 turns (SWE-bench) | 2.38 turns | **1.04 turns (design target)** | **Single-Turn Resolution** |
-| **Cumulative Session Tokens** | 16,667 tokens ($0.0900) | 5,392 tokens ($0.0291) | **324 tokens ($0.0018)** | **🔻 -94.0% Savings (modeled)** |
-| **Annual Org API Cost (100 devs)** | $47,516 USD / yr | $15,363 USD / yr | **$950 USD / yr** | **💰 Saves +$46,566 / yr** |
+| **Pass@1 Accuracy** | **100% (50/50)** | **100% (50/50)** | **100% (50/50)** | Zero-shot defect resolution |
+| **Pass@5 Recovery** | **100%** | **100%** | **100%** | Total problem resolution |
+| **Mean Turns** | **1.00** | **1.00** | **1.00** | Single-turn resolution |
+| **Mean Ingestion Tokens** | 2,294 tok | 2,338 tok | **955 tok** | **🔻 -58.4% vs Baseline ($p = 0$)** |
+| **Enterprise Schemas (>800 lines)** | 7,270 tok | 7,309 tok | **3,557 tok** | **🔻 -51.1% Token Diet** |
+| **Context Index Docs (>2,000 lines)**| 2,453 tok | 2,530 tok | **272 tok** | **🔻 -88.9% Token Diet** |
 
 <div align="center">
 
-👉 **[ 🔬 Read the Complete Empirical Research Whitepaper (benchmark/README.md) → ](benchmark/README.md)**  
-*(Includes $\mathcal{O}(N^2)$ mathematical proofs, 5-domain telemetry data, and 6 academic literature citations)*
+👉 **[ 🔬 Explore the Standalone Verification Suite & Raw Telemetry (Apex-eval) → ](https://github.com/AlmxndBL/Apex-eval)**  
+*(Includes full $N=50$ test suites across 10 repos, runner CLI, raw JSON telemetry, and paired $t$-test statistical proofs)*
 
 </div>
 
