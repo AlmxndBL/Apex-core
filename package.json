@@ -1,12 +1,12 @@
 {
   "name": "@apex/core",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "Apex — Lean AI Agent Operating Protocol & Rules Engine",
   "private": true,
   "type": "module",
   "scripts": {
     "verify": "node scripts/verify-framework.js",
-    "test": "node scripts/verify-framework.js",
+    "test": "node scripts/test-statistics.js && node scripts/verify-framework.js",
     "benchmark": "node benchmark/runner.js",
     "scan": "node scripts/scan-context.js",
     "install:apex": "node scripts/install-apex.js",

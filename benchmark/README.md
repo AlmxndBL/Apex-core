@@ -20,7 +20,9 @@ Evaluated via the **AST Cartographer (`ast-extractor.js`)**, which extracts inte
 | **03_state_store.ts** | State & Logic (Composable + Optimistic Rollback) | **544 tok** | **69 tok** | **🔻 -87.3%** | 0.07ms |
 | **04_schema.prisma** | Database Architecture (Prisma Schema + Indexes) | **399 tok** | **166 tok** | **🔻 -58.4%** | 0.16ms |
 | **05_webhook_hmac.ts** | Security & Cryptography (Stripe HMAC SHA-256 Guard) | **562 tok** | **95 tok** | **🔻 -83.1%** | 0.07ms |
-| **GLOBAL MEAN (μ)** | **Average Across All 5 Full-Stack Domains** | **799.6 ± 597.8 tok** | **107.0 ± 43.7 tok** | **🔻 -80.7% (p < 0.0001)** | **< 0.35ms** |
+| **GLOBAL MEAN (μ)** | **Average Across All 5 Full-Stack Domains** | **799.6 ± 597.8 tok** | **107.0 ± 43.7 tok** | **🔻 -80.7% (p = 0.068, n.s., n = 5)** | **< 0.35ms** |
+
+> **Statistical disclosure:** paired t-test with df = 4; the compression direction is consistent across all fixtures but not statistically significant at α = 0.05 due to the small fixture count.
 
 ---
 
@@ -32,7 +34,9 @@ Measured across 5 concrete defect scenarios in [`benchmark/fixtures/defects.js`]
 |---|---|---|---|
 | **Aider Whole-File Format** (Monolithic Rewrite) | **821.8 tokens** | Baseline (0.0%) | ⚠️ High risk of lost imports & silent regressions |
 | **Aider Unified Diff Format** (Hunk Header `@@ -l,c +l,c @@`) | **116.6 tokens** | 🔻 -85.8% lower output | ⚠️ Sensitive to line offset drift & patch failure |
-| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **176.0 tokens** | **🔻 -78.6% lower output** ($p < 0.0001$) | ✅ Character/Line coordinate lock + In-RAM TypeCheck |
+| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **176.0 tokens** | **🔻 -78.6% vs Whole-File** ($p = 0.046$) · **+50.9% vs Unified Diff** ($p = 0.086$, n.s.) | ✅ Character/Line coordinate lock + In-RAM TypeCheck |
+
+> **Honest trade-off:** versus Aider's Unified Diff format, the Surgical Patch averages **+50.9% MORE output tokens** (not significant at n = 5). Its value is deterministic line-locked application and closed-loop verification — not raw token cost.
 
 ---
 
@@ -42,6 +46,8 @@ Because commercial LLM inference endpoints are stateless REST APIs, unconstraine
 
 $$\text{Cumulative Session Tokens} = \sum_{k=1}^{N} \Big[ C_{\text{init}} + \sum_{j=1}^{k-1} (\Delta I_j + \Delta O_j) + \Delta O_k \Big] \in \mathbf{\Theta(N^2)}$$
 
+> **Modeling disclosure:** the comparison below is an **assumption-driven linear projection**, not an end-to-end measurement. Turn counts follow published baselines for [A]/[B]; N = 1.04 for [C] is a protocol design target pending live-agent validation. Overhead constants (4500 / 2800 / 1100 tokens per extra turn) are documented estimates — see `PROJECTION_ASSUMPTIONS` in `benchmark/runner.js`.
+
 ```text
 ======================================================================================================
 📊 3-WAY CUMULATIVE MULTI-TURN SESSION COMPARISON (Grounded on Real Fixture Trajectories)
@@ -50,11 +56,11 @@ Pricing Baseline: $3.00 / 1M Input Tokens · $15.00 / 1M Output Tokens (Standard
 
 • [A] Aider Whole-File / Generic Baseline (N = 3.62 turns):   17,659 tokens ($0.0954 USD)
 • [B] Anthropic MCP / Industry Prompt Baseline (N = 2.38 turns): 6,045 tokens ($0.0326 USD)
-• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns):         338 tokens ($0.0018 USD)
+• [C] Apex-core 5 Deterministic Engine (N = 1.04 turns — design target):         338 tokens ($0.0018 USD)
 ------------------------------------------------------------------------------------------------------
 ⭐ NET SESSION EFFICIENCY:
    • Apex-core 5 vs Aider Baseline:      🔻 -98.1% Cumulative Token Reduction ($0.0936 saved/task)
-   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.4% Cumulative Token Reduction ($0.0308 saved/task)
+   • Apex-core 5 vs Anthropic Baseline:  🔻 -94.4% Cumulative Token Reduction ($0.0308 saved/task, modeled projection)
 ======================================================================================================
 ```
 
@@ -107,7 +113,7 @@ Apex-core 5 decouples probabilistic code generation from deterministic state val
 ```
 
 1. **AST Codebase Cartography:** Filters out implementation bloat and extracts strict semantic type graphs ($<0.35\text{ms}$ execution latency), preventing context window saturation.
-2. **In-RAM Closed-Loop Verification:** Executes lockfile-aware in-memory type compilation (`vue-tsc --noEmit` / `tsc --noEmit`) in $<1.0\text{s}$, driving single-turn resolution ($N \to 1.04$) and eliminating quadratic multi-turn accumulation.
+2. **In-RAM Closed-Loop Verification:** Executes lockfile-aware in-memory type compilation (`vue-tsc --noEmit` / `tsc --noEmit`) in $<1.0\text{s}$ (project-scale dependent), targeting single-turn resolution ($N \to 1.04$ design target, pending live-agent validation).
 3. **Cumulative 2-Strike Circuit Breaker:** Implements the classic *Circuit Breaker Pattern* [5] to instantly freeze execution upon 2 consecutive verification failures, terminating unconstrained trial-and-error loops.
 
 ---

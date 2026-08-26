@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26T10:42:09.275Z",
+  "timestamp": "2026-08-26T11:38:45.728Z",
   "datasetVersion": "Apex-core 5",
   "tokenizer": "cl100k_base (gpt-tokenizer BPE)",
   "fixturesCount": 5,
@@ -9,13 +9,20 @@
     "Anthropic (2024). Building Effective Agents: Architectural Patterns and Tool Design.",
     "Microsoft TypeScript Engineering Team (2024). TypeScript Compiler Architecture & Language Service API."
   ],
+  "statisticsMethodology": {
+    "test": "paired two-tailed Student's t-test",
+    "pValueComputation": "regularized incomplete beta function I_x(df/2, 1/2) — exact for given df",
+    "confidenceInterval": "two-sided t critical value solved per sample df (bisection on t distribution)",
+    "significanceAlpha": 0.05,
+    "caveat": "n = 5 fixtures per arm — study is underpowered; treat inferential flags as indicative"
+  },
   "contextPruningBenchmark": {
     "rawSourceTokens": {
       "mean": 799.6,
       "stdDev": 597.82,
       "ci95": [
-        194.84,
-        1404.36
+        57.3,
+        1541.9
       ],
       "min": 399,
       "max": 1858,
@@ -25,8 +32,8 @@
       "mean": 107,
       "stdDev": 43.67,
       "ci95": [
-        62.82,
-        151.18
+        52.77,
+        161.23
       ],
       "min": 67,
       "max": 166,
@@ -35,7 +42,7 @@
     "averageCompressionRatioPercent": 80.7,
     "inferentialStatistics": {
       "tStat": 2.4845,
-      "pValue": 0.05,
+      "pValue": 0.067882,
       "significant": false
     }
   },
@@ -44,8 +51,8 @@
       "mean": 821.8,
       "stdDev": 610.64,
       "ci95": [
-        204.08,
-        1439.52
+        63.59,
+        1580.01
       ],
       "min": 409,
       "max": 1903,
@@ -55,8 +62,8 @@
       "mean": 116.6,
       "stdDev": 66.67,
       "ci95": [
-        49.16,
-        184.04
+        33.82,
+        199.38
       ],
       "min": 52,
       "max": 208,
@@ -66,8 +73,8 @@
       "mean": 176,
       "stdDev": 121.69,
       "ci95": [
-        52.9,
-        299.1
+        24.9,
+        327.1
       ],
       "min": 63,
       "max": 368,
@@ -77,11 +84,29 @@
     "savingsVsAiderDiffPercent": -50.9,
     "tTestVsAiderDiff": {
       "tStat": -2.2643,
-      "pValue": 0.05,
+      "pValue": 0.086265,
       "significant": false
     }
   },
   "cumulativeSessionProjection": {
+    "projectionModel": {
+      "modelType": "linear projection (assumption-driven; not an end-to-end agent measurement)",
+      "turnCounts": {
+        "aiderGeneric": 3.62,
+        "anthropicIndustry": 2.38,
+        "apexProtocol": 1.04
+      },
+      "turnCountSources": {
+        "aiderGeneric": "Literature baseline (Gauthier, 2024 — Aider edit-format benchmark distributions)",
+        "anthropicIndustry": "Literature baseline (Anthropic, 2024 — structured agent guidance)",
+        "apexProtocol": "Protocol design target — pending live-agent validation"
+      },
+      "perExtraTurnOverheadTokens": {
+        "aiderGeneric": 4500,
+        "anthropicIndustry": 2800,
+        "apexProtocol": 1100
+      }
+    },
     "aiderGenericTokens": 17659,
     "anthropicIndustryTokens": 6045,
     "apexProtocolTokens": 338,
@@ -100,7 +125,7 @@
         "astChars": 533,
         "astTokens": 138,
         "compressionRatioPercent": 78.3,
-        "extractDurationMs": 0.302
+        "extractDurationMs": 0.405
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 641,
@@ -109,7 +134,7 @@
         "savingsVsWholePercent": 90.2,
         "savingsVsDiffPercent": -21.2
       },
-      "latencyMs": 0.048
+      "latencyMs": 0.051
     },
     {
       "file": "02_frontend_view.vue",
@@ -122,7 +147,7 @@
         "astChars": 232,
         "astTokens": 67,
         "compressionRatioPercent": 96.4,
-        "extractDurationMs": 0.115
+        "extractDurationMs": 0.083
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 1903,
@@ -131,7 +156,7 @@
         "savingsVsWholePercent": 80.7,
         "savingsVsDiffPercent": -76.9
       },
-      "latencyMs": 0.021
+      "latencyMs": 0.019
     },
     {
       "file": "03_state_store.ts",
@@ -144,7 +169,7 @@
         "astChars": 254,
         "astTokens": 69,
         "compressionRatioPercent": 87.3,
-        "extractDurationMs": 0.059
+        "extractDurationMs": 0.056
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 561,
@@ -166,7 +191,7 @@
         "astChars": 632,
         "astTokens": 166,
         "compressionRatioPercent": 58.4,
-        "extractDurationMs": 0.149
+        "extractDurationMs": 0.136
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 409,
@@ -175,7 +200,7 @@
         "savingsVsWholePercent": 79.2,
         "savingsVsDiffPercent": -44.1
       },
-      "latencyMs": 0.009
+      "latencyMs": 0.051
     },
     {
       "file": "05_webhook_hmac.ts",
@@ -188,7 +213,7 @@
         "astChars": 411,
         "astTokens": 95,
         "compressionRatioPercent": 83.1,
-        "extractDurationMs": 0.038
+        "extractDurationMs": 0.041
       },
       "editBurdenExactTokens": {
         "aiderWholeFile": 595,
@@ -197,7 +222,7 @@
         "savingsVsWholePercent": 65.2,
         "savingsVsDiffPercent": -30.2
       },
-      "latencyMs": 0.017
+      "latencyMs": 0.011
     }
   ]
 }

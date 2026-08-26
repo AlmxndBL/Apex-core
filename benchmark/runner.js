@@ -7,8 +7,10 @@
  * 1. Exact Source vs AST Token Compression (via AST Extractor & gpt-tokenizer cl100k BPE)
  * 2. Exact Edit Format Burden: Aider Whole-File vs Aider Unified Diff vs Apex Surgical Patch
  *    (Calculated directly from real concrete defect diff strings)
- * 3. Real In-RAM Compilation & Verification Latency (via process.hrtime.bigint())
- * 4. Multi-Turn Quadratic Context Accumulation Modeling & Optional Live API (--live-api)
+ * 3. Extraction / Line-Scan Latency (process.hrtime.bigint()) — does NOT measure vue-tsc/tsc;
+ *    typecheck runs separately via the quality-verify protocol.
+ * 4. Multi-Turn Session Token Projection — assumption-driven LINEAR model with documented
+ *    turn-count & overhead assumptions (NOT an end-to-end agent measurement).
  * 5. Academic & Industry Baseline Citations (Aider, Anthropic MCP, SWE-bench ICLR 2024)
  */
 
@@ -97,12 +99,14 @@ for (let i = 0; i < fixtureFiles.length; i++) {
   });
   const surgicalPatchTokens = countExactTokens(surgicalPatchPayload);
 
-  // Measure Real In-RAM Compilation / AST Traversal Latency
-  const { duration: parseLatency } = await measureExecutionTime(() => {
+  // Baseline line-scan latency proxy (string pipeline only).
+  // NOTE: This does NOT measure vue-tsc / tsc compilation latency. Typecheck verification
+  // belongs to the quality-verify protocol and is intentionally out of scope here.
+  const { duration: scanLatency } = await measureExecutionTime(() => {
     return rawContent.split('\n').filter((l) => l.trim().length > 0);
   });
 
-  realLatencies.push(parseLatency.milliseconds);
+  realLatencies.push(scanLatency.milliseconds);
 
   benchmarkData.push({
     file: item.file,
@@ -124,7 +128,7 @@ for (let i = 0; i < fixtureFiles.length; i++) {
       savingsVsWholePercent: Number((((wholeFileTokens - surgicalPatchTokens) / wholeFileTokens) * 100).toFixed(1)),
       savingsVsDiffPercent: Number((((unifiedDiffTokens - surgicalPatchTokens) / unifiedDiffTokens) * 100).toFixed(1)),
     },
-    latencyMs: parseLatency.milliseconds,
+    latencyMs: scanLatency.milliseconds,
   });
 
   aggregatedRawTokens.push(rawTokens);
@@ -150,24 +154,66 @@ const tTestVsDiff = pairedTTest(aggregatedDiffSizes.unifiedDiff, aggregatedDiffS
 
 const avgSavingsVsWhole = (((wholeDiffStats.mean - surgicalDiffStats.mean) / wholeDiffStats.mean) * 100).toFixed(1);
 const avgSavingsVsDiff = (((unifiedDiffStats.mean - surgicalDiffStats.mean) / unifiedDiffStats.mean) * 100).toFixed(1);
+const surgicalVsDiffMorePercent = Math.abs(Number(avgSavingsVsDiff)).toFixed(1);
 
-// Multi-Turn Cumulative Session Projection (Grounded on SWE-bench & Aider Literature Distributions)
-// Baseline Literature Turn Means:
-// - Aider Whole-File / Unconstrained Agents: ~3.6 turns (Gauthier, 2024)
-// - Anthropic MCP / Structured Guideline: ~2.4 turns (Anthropic, 2024)
-// - Apex-core 5 Deterministic FSM: 1.04 turns
+// ─────────────────────────────────────────────────────────────────────────────
+// SESSION PROJECTION MODEL — ASSUMPTION-DRIVEN LINEAR PROJECTION
+//
+// IMPORTANT DISCLOSURE: The figures below are a MODELED PROJECTION, not an
+// end-to-end agent measurement. Inputs:
+//   1. Turn counts [A]/[B]: literature baselines (Gauthier 2024, Anthropic 2024).
+//      The Apex turn count (1.04) is a protocol DESIGN TARGET — it has NOT yet
+//      been validated by recorded live-agent runs.
+//   2. Overhead constants: estimated non-code payload per ADDITIONAL turn
+//      (system prompt + tool schemas + reasoning residue).
+//   3. Measured means from this benchmark's fixtures (the directly measured part).
+// Replacing assumption (1) with live-agent telemetry is tracked future work.
+// ─────────────────────────────────────────────────────────────────────────────
+const PROJECTION_ASSUMPTIONS = {
+  modelType: 'linear projection (assumption-driven; not an end-to-end agent measurement)',
+  turnCounts: { aiderGeneric: 3.62, anthropicIndustry: 2.38, apexProtocol: 1.04 },
+  turnCountSources: {
+    aiderGeneric: 'Literature baseline (Gauthier, 2024 — Aider edit-format benchmark distributions)',
+    anthropicIndustry: 'Literature baseline (Anthropic, 2024 — structured agent guidance)',
+    apexProtocol: 'Protocol design target — pending live-agent validation',
+  },
+  perExtraTurnOverheadTokens: { aiderGeneric: 4500, anthropicIndustry: 2800, apexProtocol: 1100 },
+};
+
+function formatP(p) {
+  if (typeof p !== 'number' || Number.isNaN(p)) return 'p = n/a';
+  if (!Number.isFinite(p)) return 'p < 0.0001';
+  if (p < 0.0001) return 'p < 0.0001';
+  return `p = ${p.toFixed(4).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')}`;
+}
+
+const TURNS = PROJECTION_ASSUMPTIONS.turnCounts;
+const OVERHEAD = PROJECTION_ASSUMPTIONS.perExtraTurnOverheadTokens;
+
 const sessionProjection = {
   aiderGeneric: {
-    turns: 3.62,
-    cumulativeTokens: Math.round(rawTokenStats.mean * 3.62 + wholeDiffStats.mean * 3.62 + 4500 * 2.62),
+    turns: TURNS.aiderGeneric,
+    cumulativeTokens: Math.round(
+      rawTokenStats.mean * TURNS.aiderGeneric +
+      wholeDiffStats.mean * TURNS.aiderGeneric +
+      OVERHEAD.aiderGeneric * (TURNS.aiderGeneric - 1)
+    ),
   },
   anthropicIndustry: {
-    turns: 2.38,
-    cumulativeTokens: Math.round(rawTokenStats.mean * 2.38 + unifiedDiffStats.mean * 2.38 + 2800 * 1.38),
+    turns: TURNS.anthropicIndustry,
+    cumulativeTokens: Math.round(
+      rawTokenStats.mean * TURNS.anthropicIndustry +
+      unifiedDiffStats.mean * TURNS.anthropicIndustry +
+      OVERHEAD.anthropicIndustry * (TURNS.anthropicIndustry - 1)
+    ),
   },
   apexProtocol: {
-    turns: 1.04,
-    cumulativeTokens: Math.round(astTokenStats.mean * 1.04 + surgicalDiffStats.mean * 1.04 + 1100 * 0.04),
+    turns: TURNS.apexProtocol,
+    cumulativeTokens: Math.round(
+      astTokenStats.mean * TURNS.apexProtocol +
+      surgicalDiffStats.mean * TURNS.apexProtocol +
+      OVERHEAD.apexProtocol * (TURNS.apexProtocol - 1)
+    ),
   },
 };
 
@@ -185,6 +231,13 @@ const resultsPayload = {
     'Anthropic (2024). Building Effective Agents: Architectural Patterns and Tool Design.',
     'Microsoft TypeScript Engineering Team (2024). TypeScript Compiler Architecture & Language Service API.'
   ],
+  statisticsMethodology: {
+    test: "paired two-tailed Student's t-test",
+    pValueComputation: 'regularized incomplete beta function I_x(df/2, 1/2) — exact for given df',
+    confidenceInterval: 'two-sided t critical value solved per sample df (bisection on t distribution)',
+    significanceAlpha: 0.05,
+    caveat: 'n = 5 fixtures per arm — study is underpowered; treat inferential flags as indicative',
+  },
   contextPruningBenchmark: {
     rawSourceTokens: rawTokenStats,
     astContractTokens: astTokenStats,
@@ -200,6 +253,7 @@ const resultsPayload = {
     tTestVsAiderDiff: tTestVsDiff,
   },
   cumulativeSessionProjection: {
+    projectionModel: PROJECTION_ASSUMPTIONS,
     aiderGenericTokens: sessionProjection.aiderGeneric.cumulativeTokens,
     anthropicIndustryTokens: sessionProjection.anthropicIndustry.cumulativeTokens,
     apexProtocolTokens: sessionProjection.apexProtocol.cumulativeTokens,
@@ -253,7 +307,9 @@ Measured by executing programmatic AST extraction directly on real source code f
 | **03_state_store.ts** | State Layer | **${benchmarkData[2].metrics.rawTokens} tok** | **${benchmarkData[2].metrics.astTokens} tok** | **🔻 -${benchmarkData[2].metrics.compressionRatioPercent}%** | ${benchmarkData[2].metrics.extractDurationMs}ms |
 | **04_schema.prisma** | Database Architecture | **${benchmarkData[3].metrics.rawTokens} tok** | **${benchmarkData[3].metrics.astTokens} tok** | **🔻 -${benchmarkData[3].metrics.compressionRatioPercent}%** | ${benchmarkData[3].metrics.extractDurationMs}ms |
 | **05_webhook_hmac.ts** | Security & Auth | **${benchmarkData[4].metrics.rawTokens} tok** | **${benchmarkData[4].metrics.astTokens} tok** | **🔻 -${benchmarkData[4].metrics.compressionRatioPercent}%** | ${benchmarkData[4].metrics.extractDurationMs}ms |
-| **GLOBAL MEAN (μ)** | **All 5 Domains** | **${rawTokenStats.mean} tok** | **${astTokenStats.mean} tok** | **🔻 -${avgCompression}% (p < 0.0001)** | **< 1.0ms** |
+| **GLOBAL MEAN (μ)** | **All 5 Domains** | **${rawTokenStats.mean} tok** | **${astTokenStats.mean} tok** | **🔻 -${avgCompression}% (${formatP(tTestCompression.pValue)})** | **< 1.0ms** |
+
+> **Statistical disclosure:** n = 5 fixtures per arm (paired t-test, df = 4). With this sample size the compression result is ${tTestCompression.significant ? 'statistically significant' : '**not statistically significant**'} at α = 0.05 (${formatP(tTestCompression.pValue)}). The direction of reduction is consistent across all five fixtures, but inferential strength requires a larger fixture set.
 
 ---
 
@@ -265,18 +321,25 @@ Measured directly from **actual code modifications across 5 concrete defect scen
 |---|---|---|---|
 | **Aider Whole-File Format** (Monolithic Rewrite) | **${wholeDiffStats.mean} tokens** | Baseline (0%) | ⚠️ Risk of lost imports / regressions |
 | **Aider Unified Diff Format** (Hunk Header + Context) | **${unifiedDiffStats.mean} tokens** | 🔻 -${(((wholeDiffStats.mean - unifiedDiffStats.mean) / wholeDiffStats.mean) * 100).toFixed(1)}% lower output | ⚠️ Sensitive to line offset drifts |
-| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **${surgicalDiffStats.mean} tokens** | **🔻 -${avgSavingsVsWhole}% lower output** ($p < 0.0001$) | ✅ Exact character/line lock with In-RAM check |
+| **Apex-core 5 Surgical Patch Mode** (Rule 4 Exact Slice) | **${surgicalDiffStats.mean} tokens** | **🔻 -${avgSavingsVsWhole}% vs Whole-File** (${formatP(tTestVsWhole.pValue)}) · **+${surgicalVsDiffMorePercent}% vs Unified Diff** (${formatP(tTestVsDiff.pValue)}) | ✅ Exact character/line lock with In-RAM check |
+
+> **Honest trade-off:** against Aider's Unified Diff format, the Surgical Patch averages **+${surgicalVsDiffMorePercent}% MORE output tokens** (${formatP(tTestVsDiff.pValue)}, not significant at n = 5). Its engineering value is deterministic line-locked application plus closed-loop verification — not raw token cost. Prefer Unified Diff when raw output cost dominates.
 
 ---
 
-## 4. Multi-Turn Quadratic Context Accumulation Comparison
+## 4. Multi-Turn Session Token Projection (Modeled)
 
 $$\\text{Cumulative Session Tokens} = \\sum_{k=1}^{N} \\Big[ C_{\\text{init}} + \\sum_{j=1}^{k-1} (\\Delta I_j + \\Delta O_j) + \\Delta O_k \\Big]$$
+
+> **Modeling disclosure:** the comparison below is an **assumption-driven linear projection**, not an end-to-end measurement. Turn counts follow published baselines for [A]/[B]; N = 1.04 for [C] is a protocol design target pending live-agent validation. Overhead constants (4500 / 2800 / 1100 tokens per extra turn) are documented estimates — see \`PROJECTION_ASSUMPTIONS\` in \`benchmark/runner.js\`.
 
 \`\`\`text
 ======================================================================================================
 📊 3-WAY CUMULATIVE SESSION COMPARISON (Multi-Turn Task Resolution)
 ======================================================================================================
+⚙ MODEL    : Assumption-driven linear projection (see modeling disclosure above)
+⚙ TURNS    : [A]=3.62 · [B]=2.38 · [C]=1.04 (design target, pending live-agent validation)
+⚙ OVERHEAD : per-extra-turn payload estimates [A]=4500 · [B]=2800 · [C]=1100 tok
 • [A] Aider Whole-File / Generic Baseline:      ${sessionProjection.aiderGeneric.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.aiderGeneric.cumulativeTokens * 0.8, sessionProjection.aiderGeneric.cumulativeTokens * 0.2).toFixed(4)} USD)
 • [B] Anthropic MCP / Industry Prompt Baseline: ${sessionProjection.anthropicIndustry.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.anthropicIndustry.cumulativeTokens * 0.8, sessionProjection.anthropicIndustry.cumulativeTokens * 0.2).toFixed(4)} USD)
 • [C] Apex-core 5 (Our Engine):                 ${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens ($${calculateCostUSD(sessionProjection.apexProtocol.cumulativeTokens * 0.8, sessionProjection.apexProtocol.cumulativeTokens * 0.2).toFixed(4)} USD)
@@ -294,7 +357,7 @@ $$\\text{Cumulative Session Tokens} = \\sum_{k=1}^{N} \\Big[ C_{\\text{init}} + 
 By replacing open-loop whole-file prompting with **AST Codebase Cartography** and **In-RAM Closed-Loop Verification**, Apex-core 5 achieves:
 1. **${avgCompression}% reduction in context window ingestion footprint** (measured via exact BPE tokenization)
 2. **${avgSavingsVsWhole}% reduction in output edit token burden** compared to whole-file rewrites (measured from real defect patches)
-3. **${savingsVsAnthropic}% cumulative session token savings** over multi-turn agent iterations.
+3. **${savingsVsAnthropic}% projected cumulative session token savings** over multi-turn agent iterations (assumption-driven linear model — validate with live-agent telemetry before citing as measured fact).
 `;
 
 fs.writeFileSync(REPORT_FILE, academicMarkdown, 'utf-8');
@@ -304,13 +367,13 @@ console.log(`${BOLD}============================================================
 console.log(`${BOLD}${CYAN}📊 REAL CODE FIXTURE EMPIRICAL ANALYSIS (Exact BPE cl100k_base Tokenizer)${RESET}`);
 console.log(`${BOLD}======================================================================================================${RESET}`);
 console.log(`• Raw Codebase Tokens (Mean):        ${RED}${rawTokenStats.mean} ± ${rawTokenStats.stdDev} BPE tok${RESET}`);
-console.log(`• AST Skeleton Tokens (Mean):        ${GREEN}${astTokenStats.mean} ± ${astTokenStats.stdDev} BPE tok${RESET} ${BOLD}(🔻 -${avgCompression}% Context Diet, p < 0.0001)${RESET}`);
-console.log(`• Real Defect Edit Burden: Whole File: ${RED}${wholeDiffStats.mean} tok${RESET} | Diff: ${YELLOW}${unifiedDiffStats.mean} tok${RESET} | Apex-core 5 Surgical: ${GREEN}${surgicalDiffStats.mean} tok${RESET} ${BOLD}(🔻 -${avgSavingsVsWhole}%)${RESET}`);
+console.log(`• AST Skeleton Tokens (Mean):        ${GREEN}${astTokenStats.mean} ± ${astTokenStats.stdDev} BPE tok${RESET} ${BOLD}(🔻 -${avgCompression}% Context Diet, ${formatP(tTestCompression.pValue)})${RESET}`);
+console.log(`• Real Defect Edit Burden: Whole File: ${RED}${wholeDiffStats.mean} tok${RESET} | Diff: ${YELLOW}${unifiedDiffStats.mean} tok${RESET} | Apex-core 5 Surgical: ${GREEN}${surgicalDiffStats.mean} tok${RESET} ${BOLD}(🔻 -${avgSavingsVsWhole}% vs Whole | +${surgicalVsDiffMorePercent}% vs Diff, ${formatP(tTestVsDiff.pValue)})${RESET}`);
 console.log(`------------------------------------------------------------------------------------------------------`);
-console.log(`• Cumulative Multi-Turn Projection (Grounded on SWE-bench / Aider Distributions):`);
+console.log(`• Cumulative Multi-Turn Projection (Assumption-driven Linear Model — see PROJECTION_ASSUMPTIONS):`);
 console.log(`  - [A] Aider Whole-File Baseline:   ${RED}${sessionProjection.aiderGeneric.cumulativeTokens.toLocaleString()} tokens${RESET}`);
 console.log(`  - [B] Anthropic Industry Baseline: ${YELLOW}${sessionProjection.anthropicIndustry.cumulativeTokens.toLocaleString()} tokens${RESET}`);
-console.log(`  - [C] Apex-core 5:                 ${GREEN}${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens${RESET} ${BOLD}(🔻 -${savingsVsAnthropic}% vs Anthropic)${RESET}`);
+console.log(`  - [C] Apex-core 5:                 ${GREEN}${sessionProjection.apexProtocol.cumulativeTokens.toLocaleString()} tokens${RESET} ${BOLD}(🔻 -${savingsVsAnthropic}% vs Anthropic, modeled)${RESET}`);
 console.log(`${BOLD}======================================================================================================${RESET}`);
 console.log(`${BOLD}${GREEN}✔ Verified citations against: ICLR 2024 (SWE-bench) & Aider Benchmark Protocol${RESET}`);
 console.log(`${BOLD}${GREEN}✔ Raw telemetry persisted to:  benchmark/data/results.json${RESET}`);

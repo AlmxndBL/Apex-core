@@ -5,6 +5,18 @@ All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine w
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.3] - 2026-08-26 — Statistical Integrity & Honest Reporting 🧪
+
+### Fixed
+- **Exact t-Distribution Statistics (`benchmark/lib/statistics.js`):** Replaced hardcoded p-value lookup thresholds with exact Student's t p-values computed via the regularized incomplete beta function `I_x(df/2, 1/2)`, and replaced the fixed CI critical value (2.262) with per-df bisection-derived critical values (n = 5 now correctly uses t* = 2.77645). All CI95 intervals widen accordingly.
+- **No More Fabricated Significance (`benchmark/runner.js`):** Reports, terminal output, and `results.json` now render the actually-computed p-value instead of a static `p < 0.0001` string. With the current 5-fixture dataset the compression comparison honestly reports as **not statistically significant** at α = 0.05 (p = 0.068); the Surgical-Patch-vs-Whole-File comparison is significant (p = 0.046).
+- **Projection Honesty:** The multi-turn session comparison (-94.4%) is now explicitly labeled an assumption-driven linear projection. Turn counts (incl. the 1.04 design target) and overhead constants (4500 / 2800 / 1100 tokens) are documented in `PROJECTION_ASSUMPTIONS` inside `runner.js` and serialized into `results.json`.
+- **Honest Trade-off Disclosure:** Benchmark reports now state plainly that the Surgical Patch costs ~50.9% more output tokens than Aider's Unified Diff format (its value is deterministic apply + closed-loop verification, not raw token cost).
+- **Latency Labeling:** The measured metric is documented as a line-scan proxy; vue-tsc/tsc typecheck is explicitly out-of-scope for this benchmark (it belongs to the quality-verify protocol).
+
+### Added
+- **Unit Tests (`scripts/test-statistics.js`):** Validates incomplete-beta p-values and bisection critical values against published t-table references (df = 1…10000), CI width scaling, and paired t-test edge cases. Wired into `npm test` ahead of the framework integrity suite.
+
 ## [5.2.2] - 2026-08-26 — Lean Storefront & Dedicated Benchmark Encapsulation 🚀
 
 ### Changed

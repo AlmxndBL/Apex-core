@@ -1,7 +1,7 @@
 # ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
 
 > **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> A deterministic control plane engineered for autonomous AI coding agents across Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, and full-stack ecosystems. Reduces cumulative multi-turn token consumption by **94.4%** compared to standard industry practices.
+> A deterministic control plane engineered for autonomous AI coding agents across Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, and full-stack ecosystems. Projects up to **94.4% modeled cumulative multi-turn token savings** versus standard industry practices (assumptions documented in the benchmark).
 
 <div align="center">
 
@@ -11,8 +11,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.2.2-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25-10b981.svg)](benchmark/README.md)
+[![Version](https://img.shields.io/badge/version-5.2.3-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_94.4%25_modeled-10b981.svg)](benchmark/README.md)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
 </div>
@@ -42,7 +42,7 @@ Most developers assume fixing a 5-line bug only costs tokens for those 5 lines. 
 
 Apex-core 5 replaces probabilistic soft prompts (`.cursorrules`) with a **Deterministic Control Plane**:
 1. **AST Codebase Cartography:** Prunes implementation bodies, passing pure type contracts (**-80.7% Context Diet**).
-2. **In-RAM Closed-Loop Verifier:** Runs `vue-tsc` / `tsc` in RAM in $<1\text{s}$, driving single-turn resolution ($N \to 1.04$).
+2. **In-RAM Closed-Loop Verifier:** Runs `vue-tsc` / `tsc` in RAM in $<1\text{s}$, targeting single-turn resolution ($N \to 1.04$ design target).
 3. **2-Strike Circuit Breaker:** Hard-freezes execution on the 2nd failure, permanently eliminating infinite loops.
 
 ---
@@ -80,9 +80,9 @@ Evaluated across 5 production-grade full-stack fixtures using exact Byte-Pair En
 | Metric | Status-Quo (Aider / Generic) | Anthropic Best Practice | Apex-core 5 Control Plane | Net Impact |
 |---|---|---|---|---|
 | **Context Ingestion** | 799.6 BPE tok (Full File) | 799.6 BPE tok | **107.0 BPE tok (AST)** | **🔻 -80.7% Context Diet** |
-| **Output Edit Burden** | 821.8 tok (Whole Rewrite) | 116.6 tok (Unified Diff) | **176.0 tok (Surgical Patch)** | **🔻 -78.6% vs Rewrite** |
-| **Average Turns** | 3.62 turns (SWE-bench) | 2.38 turns | **1.04 turns (In-RAM)** | **Single-Turn Resolution** |
-| **Cumulative Session Tokens** | 17,659 tokens ($0.0954) | 6,045 tokens ($0.0326) | **338 tokens ($0.0018)** | **🔻 -94.4% Savings** |
+| **Output Edit Burden** | 821.8 tok (Whole Rewrite) | 116.6 tok (Unified Diff) | **176.0 tok (Surgical Patch)** | **🔻 -78.6% vs Rewrite · +50.9% vs Diff** |
+| **Average Turns** | 3.62 turns (SWE-bench) | 2.38 turns | **1.04 turns (design target)** | **Single-Turn Resolution** |
+| **Cumulative Session Tokens** | 17,659 tokens ($0.0954) | 6,045 tokens ($0.0326) | **338 tokens ($0.0018)** | **🔻 -94.4% Savings (modeled)** |
 | **Annual Org API Cost (100 devs)** | $50,371 USD / yr | $17,212 USD / yr | **$950 USD / yr** | **💰 Saves +$49,420 / yr** |
 
 <div align="center">

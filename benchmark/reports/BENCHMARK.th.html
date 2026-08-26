@@ -224,7 +224,7 @@
 <div class="container">
   <!-- Nav -->
   <div class="nav-bar">
-    <div style="font-weight: 700; font-size: 14px; color: #3b82f6; font-family: var(--font-mono);">APEX-CORE 5.2.2 BENCHMARK REPORT</div>
+    <div style="font-weight: 700; font-size: 14px; color: #3b82f6; font-family: var(--font-mono);">APEX-CORE 5.2.3 BENCHMARK REPORT</div>
     <div class="lang-links">
       <a href="BENCHMARK.html">🇬🇧 English</a>
       <a href="BENCHMARK.th.html" class="active">🇹🇭 ภาษาไทย</a>
@@ -238,7 +238,7 @@
   <div class="abstract-box">
     <div class="abstract-title">บทคัดย่อ (Abstract)</div>
     <div class="abstract-body">
-      รายงานวิจัยนี้นำเสนอผลการประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม <strong>Apex-core 5</strong> บนชุดรหัสต้นฉบับจริง 5 โดเมน Full-Stack ด้วยตัวนับโทเค็น <code>cl100k_base</code> BPE ผลการทดสอบยืนยันว่ากลไก <em>AST Codebase Cartography</em> ช่วยลดขนาด Context Window ขาเข้าลง <strong>80.7%</strong> (\(p < 0.0001\)) โดยใช้เวลาประมวลผลบน RAM ต่ำกว่า 0.35ms และเมื่อผสานกับ <em>In-RAM Closed-Loop Verifier</em> ช่วยลดรอบการทำงานเฉลี่ยลงเหลือ 1.04 รอบ ส่งผลให้การสะสมโทเค็นรวมตลอดกระบวนการทำงาน Multi-Turn ลดลง <strong>94.4%</strong> เมื่อเทียบกับแนวทางปฏิบัติทั่วไปของ Anthropic และประหยัดค่าใช้จ่าย API ได้ถึง <strong>$49,420 USD ต่อปี</strong> สำหรับองค์กรขนาด 100 คน
+      รายงานวิจัยนี้นำเสนอผลการประเมินประสิทธิภาพเชิงประจักษ์ของสถาปัตยกรรม <strong>Apex-core 5</strong> บนชุดรหัสต้นฉบับจริง 5 โดเมน Full-Stack ด้วยตัวนับโทเค็น <code>cl100k_base</code> BPE ผลการทดสอบพบว่ากลไก <em>AST Codebase Cartography</em> ช่วยลดขนาด Context Window ขาเข้าลง <strong>80.7%</strong> (\(p = 0.068\) — ทิศทางสอดคล้องกันทุก fixture แต่ยังไม่มีนัยสำคัญที่ α = 0.05 เมื่อ n = 5) โดยใช้เวลาประมวลผลบน RAM ต่ำกว่า 0.35ms และเมื่อผสานกับ <em>In-RAM Closed-Loop Verifier</em> ตั้งเป้าลดรอบการทำงานเหลือ 1.04 รอบ (เป้าหมายเชิงดีไซน์) ส่งผลให้การสะสมโทเค็นรวมตลอดกระบวนการทำงาน Multi-Turn ลดลงตามโมเดลคาดการณ์ที่ <strong>94.4%</strong> (assumption-driven linear model) เมื่อเทียบกับแนวทางปฏิบัติทั่วไปของ Anthropic พร้อมการประหยัดค่าใช้จ่าย API เชิงโมเดลที่ <strong>$49,420 USD ต่อปี</strong> สำหรับองค์กรขนาด 100 คน
     </div>
   </div>
 
