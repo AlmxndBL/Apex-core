@@ -3,13 +3,13 @@ name: frontend
 description: Enterprise UI/UX, Component Architecture, Tailwind CSS, Responsive Design, and Aesthetic Polish for Vue 3 / Nuxt 4 and React / Next.js
 ---
 
-# Enterprise Frontend & UI/UX Skill (v5.0)
+# Enterprise Frontend & UI/UX Skill (v5.4.0)
 
-> Production-grade frontend architecture for Nuxt 4 (Vue 3) and React (Next.js 15), focusing on clean component boundaries, 3-File Feature Architecture, 4-State UI resilience, and modern aesthetic polish.
+> Practical frontend architecture for Nuxt 4 (Vue 3) and React (Next.js 15), focusing on clean boundaries, resilient async states, and usable visual polish without unnecessary layers.
 
 ---
 
-## 1. Feature Module Architecture (Strict 3-File Standard)
+## 1. Feature Module Architecture (Use when complexity warrants separation)
 
 Avoid spaghetti monolithic components where template, data fetching, state, and formatting live in one file. Enforce the **Feature Module Pattern**:
 
@@ -41,9 +41,9 @@ features/<domain>/
 
 ---
 
-## 2. Mandatory 4-State UI Contract
+## 2. Four-State UI Contract (For asynchronous data views)
 
-Every data-driven UI feature view MUST implement all 4 fundamental UI states:
+Asynchronous data views SHOULD implement the relevant loading, empty, error, and ready states. A static or trivial view does not need a wrapper component:
 
 ### 💚 Nuxt 4 / Vue 3 Pattern
 ```vue
@@ -290,7 +290,7 @@ export function FeatureList({ items, onEdit }: { items: Item[]; onEdit: (id: str
 
 ## 6. Apex Enterprise UI Component Registry & Template Directory
 
-Before creating or refactoring frontend components, **ALWAYS** check and adopt pre-built production components from [`Apex-core/templates/ui/`](../../templates/ui/):
+Before creating or refactoring non-trivial frontend components, check applicable pre-built components from [`Apex-core/templates/ui/`](../../templates/ui/) and adopt them only when they fit the project:
 
 ### 📁 Blueprint & Template Inventory
 

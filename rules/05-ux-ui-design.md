@@ -2,25 +2,25 @@
 
 > **Priority 5:** Frontend development standards, component architecture, responsive design, and UI presets.
 > Divided into **2 main parts:**
-> 1. **Universal Foundation (Non-negotiable rules for all web projects)**
+> 1. **Universal Foundation (Baseline guidance for web projects)**
 > 2. **Contextual UI Archetype Presets (Specific presets tailored to project types)**
 
 ---
 
 # 🌐 PART 1: Universal Frontend Foundation
 
-Every project must adhere to the following architectural, performance, and mathematical design standards:
+Use the following standards when they fit the project. Do not add layers, responsive variants, or visual systems solely to satisfy this document:
 
-## 🏗️ 1. Component Architecture & Layering Rules
+## 🏗️ 1. Component Architecture & Layering Rules (When the UI has meaningful complexity)
 Strictly organize components into **4 distinct layers**:
 1. `layouts/`: **App Frames** (Sidebar, Navbar, Header Shell, App Shell).
 2. `pages/` or `views/`: **Route Entry Components** (views tied directly to URLs).
 3. `features/` or `components/<domain>/`: **Feature Domain Modules** (e.g. `features/cart/`, `features/analytics/`).
 4. `components/ui/`: **Atomic / Dumb Components** with zero business logic (Button, Modal, Input, Badge, Toolbar).
 
-### 🚫 Strict Component Red-Lines
+### 🚫 Component Guardrails
 - ❌ **No Monolithic Components:** Never create single UI files exceeding **200–250 lines**. Decompose into focused sub-components.
-- ❌ **No Ad-Hoc Component Reinvention:** Always check and adopt pre-built production components from [`templates/ui/`](../templates/ui/) (`vue/` or `react/`) and [`templates/blueprints/`](../templates/blueprints/) before creating custom tables, shells, or 4-state wrappers.
+- ❌ **No Ad-Hoc Component Reinvention:** Check applicable templates before creating custom tables, shells, or state wrappers; use them only when they fit the project.
 - ❌ **No Hardcoded Mobile-Only Shells:** Never restrict app shell layouts with fixed widths (`max-w-sm`, `max-w-md`) without responsive desktop expansion classes (`lg:max-w-6xl` or `w-full`).
 - ❌ **No Prop Drilling > 2 Levels:** For state shared across > 2 levels, use global state stores (Pinia / Zustand), context, or compound component slots.
 - ❌ **No Direct API Calls in UI Layer:** Never invoke HTTP APIs directly inside atomic UI components. Always delegate through composables, hooks, or service layers.
@@ -196,9 +196,9 @@ Select the archetype preset matching the project domain:
 
 # 🛡️ PART 3: UI Quality Gates & Anti-Generic Standards
 
-## 🔄 9. Mandatory 4-State UI Contract
-Every data-driven UI feature view MUST implement all 4 states explicitly:
-1. **Loading State:** Enforce skeleton loaders matching actual layout geometry. Never display a bare full-screen spinner.
+## 🔄 9. Four-State UI Contract (When Applicable)
+Asynchronous, user-facing data views SHOULD implement the relevant states explicitly. Static or trivial views do not need a state wrapper:
+1. **Loading State:** Prefer skeleton loaders matching actual layout geometry for asynchronous views. Avoid a bare full-screen spinner when a useful layout can be shown.
 2. **Empty State:** Distinct dashed container + icon + friendly explanation + primary call-to-action button.
 3. **Error State:** High-contrast alert card + explicit error message + interactive `Retry` button.
 4. **Data State:** Fully rendered data presentation with responsive desktop table / mobile card adaptability.

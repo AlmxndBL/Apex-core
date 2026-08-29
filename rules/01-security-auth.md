@@ -1,6 +1,6 @@
 # 01. Security & Authentication Standards
 
-> **Priority 1 (Must Follow):** Highest security rules for the system. Security always takes precedence.
+> **Priority 1 (Apply when the project handles protected data or exposed endpoints):** Security takes precedence over convenience, but controls must match the actual threat model.
 
 ---
 
@@ -11,11 +11,10 @@
 
 ---
 
-## 2. Authentication & Authorization (Better Auth & RBAC Standards)
-- **Primary Authentication Engine (Better Auth):**
-  - Standardize on **Better Auth (`better-auth`)** as the default authentication framework for both **Nuxt 4** (`@better-auth/vue`) and **Next.js 15** (React App Router).
-  - Use `@better-auth/prisma-adapter` with PostgreSQL to ensure `Session`, `User`, `Account`, and `Verification` schemas are natively managed and 100% type-safe via Prisma ORM.
-  - Use official Better Auth plugins (`organization` for multi-tenancy/teams, `twoFactor`/`passkey` for high security, `admin`/`impersonation` for debugging) rather than building custom auth logic.
+## 2. Authentication & Authorization (Use when authentication exists)
+- **Authentication choice:** Use the project's existing provider when one exists. Better Auth is a supported default for new Nuxt/Next applications, not a mandatory dependency for every project.
+  - Add the Prisma adapter only when the project uses Prisma and PostgreSQL.
+  - Add organization, MFA, passkey, admin, or impersonation plugins only when the threat model and product requirements justify them.
 - **Token Storage & Dual Auth Extraction:** 
   - Web browser auth tokens must be stored in `HttpOnly`, `Secure`, `SameSite=Lax/Strict` cookies to mitigate XSS risks.
   - Server auth middleware should implement a **Dual Auth Handler** (extract from `HttpOnly` cookies first, falling back to `Authorization: Bearer <token>` headers) so single endpoints support web, mobile, and external APIs seamlessly.
@@ -66,12 +65,12 @@ Enforce the following security headers on all HTTP responses:
 
 ---
 
-## 6. Rate Limiting (Distributed & Memory Layering)
-Enforce rate limiting on all public endpoints:
+## 6. Rate Limiting (Use for exposed or abuse-sensitive endpoints)
+Enforce rate limiting on public or abuse-sensitive endpoints when the application is reachable by untrusted clients:
 - **Auth Endpoints (Login/Register/Reset-Password):** 5–10 requests / minute / IP
 - **General APIs:** 100–200 requests / minute / IP
 - **File Uploads:** 10 requests / minute / IP
-- **Distributed Storage Requirement:** For multi-instance or serverless deployments, use Redis (Upstash, Valkey, Redis Cluster) to back rate-limit counters.
+- **Distributed Storage Requirement:** For multi-instance or serverless deployments, use shared storage for counters; a single-instance internal tool may use a bounded in-memory limiter or none when exposure is controlled.
 - Return standard headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` with `429 Too Many Requests` when exceeded.
 
 ---

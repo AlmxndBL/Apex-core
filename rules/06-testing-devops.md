@@ -18,7 +18,7 @@
 ---
 
 ## 💻 2. Local-First Development & Deployment Standards
-- **Local Dev First (Default Workflow):** Prioritize local native execution using **`pnpm`** (`pnpm dev`, `pnpm test`, `pnpm build`) paired with local PostgreSQL for maximum velocity.
+- **Local Dev First (Default Workflow):** Prioritize local native execution using the repository's detected package manager (`npm`, `pnpm`, `yarn`, or `bun`) and its existing test/build scripts. Use local PostgreSQL only when the project requires it.
 - **Docker Policy (On-Demand Only):** **Never create Dockerfiles or docker-compose files unprompted. Use Docker strictly when explicitly requested by the user.**
   - When Docker is requested: Use multi-stage builds, non-root user execution, and pinned base images (`node:20-alpine`).
 

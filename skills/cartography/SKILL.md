@@ -35,6 +35,6 @@ description: AST Codebase Skeleton Mapping, Selective Token Diet, and Project Ex
   const skeleton = extractAstSkeleton('service.ts', fullCode);
   ```
 * **Capabilities:**
-  - **TypeScript & JavaScript (`.ts`, `.tsx`, `.js`, `.jsx`):** Parses full TypeScript AST via `ts.createSourceFile`. Prunes all function/method bodies while preserving 100% of signatures, interfaces, type aliases, generics (`<T>`), async/export flags, and arrow functions with destructuring.
+  - **TypeScript & JavaScript (`.ts`, `.tsx`, `.js`, `.jsx`):** Parses top-level declarations with the TypeScript compiler API and prunes implementation bodies. It is a compact contract view, not a complete semantic model; inspect source when control flow, imports, or inferred types matter.
   - **Vue SFC (`.vue`):** Automatically extracts and parses `<script lang="ts">` / `<script setup>` contracts.
-  - **Prisma Schema (`.prisma`):** Preserves complete relation mappings (`@relation`), field modifiers (`@id`, `@unique`, `@default`), and model block attributes (`@@index`, `@@unique`, `@@id`, `@@map`).
+  - **Prisma Schema (`.prisma`):** Uses a lightweight line-based contract extraction that retains common fields and attributes. Inspect the schema directly when parsing edge cases or relation syntax matters.

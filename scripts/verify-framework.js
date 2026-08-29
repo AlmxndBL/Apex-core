@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Apex Framework Verification Suite (v5.0)
+ * Apex Framework Verification Suite (version follows package.json)
  * Validates integrity, metadata, YAML frontmatter, presets, and cross-references
  * across Rules, Skills, Templates, and Configuration.
  */
@@ -13,6 +13,9 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
+const packageJsonPath = path.join(ROOT_DIR, 'package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+const frameworkVersion = packageJson.version;
 
 const REQUIRED_RULES = [
   '01-security-auth.md',
@@ -64,7 +67,7 @@ function assert(condition, message) {
   }
 }
 
-console.log('\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite v5.0] Starting Framework Integrity Check...\x1b[0m\n');
+console.log(`\n\x1b[1m\x1b[36m⚡ [Apex Verification Suite v${frameworkVersion}] Starting Framework Integrity Check...\x1b[0m\n`);
 
 // 1. Root Files Check
 console.log('\x1b[1m1. Root Files & Manifests\x1b[0m');
@@ -79,8 +82,7 @@ for (const file of REQUIRED_ROOT_FILES) {
 console.log('\n\x1b[1m2. Version Synchronization\x1b[0m');
 try {
   const pluginJson = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'plugin.json'), 'utf-8'));
-  const packageJson = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf-8'));
-  assert(pluginJson.version === packageJson.version, `Version match: plugin.json (${pluginJson.version}) === package.json (${packageJson.version})`);
+  assert(pluginJson.version === frameworkVersion, `Version match: plugin.json (${pluginJson.version}) === package.json (${frameworkVersion})`);
   assert(Boolean(pluginJson.name) && Boolean(pluginJson.description), 'plugin.json has valid name and description');
 } catch (err) {
   assert(false, `Failed to parse plugin.json or package.json: ${err.message}`);
@@ -120,8 +122,8 @@ for (const skillName of REQUIRED_SKILLS) {
 console.log('\n\x1b[1m5. Unified Protocol & Architecture Blueprint Verification\x1b[0m');
 const unifiedAgentsContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
 assert(unifiedAgentsContent.includes('Deterministic Stack Detection & Mapping Matrix'), 'AGENTS.md contains Stack Detection & Mapping Matrix');
-assert(unifiedAgentsContent.includes('Feature Module Pattern'), 'AGENTS.md contains 3-File Feature Module Architecture');
-assert(unifiedAgentsContent.includes('Mandatory 4-State UI Contract'), 'AGENTS.md contains Mandatory 4-State UI Contract');
+assert(unifiedAgentsContent.includes('Feature Module Pattern'), 'AGENTS.md contains Feature Module Separation');
+assert(unifiedAgentsContent.includes('Four-State UI Contract (When Applicable)'), 'AGENTS.md contains applicable Four-State UI Contract');
 assert(unifiedAgentsContent.includes('Standard 4-Step Handler Pipeline'), 'AGENTS.md contains Standard 4-Step Backend API Pipeline');
 
 // 6. Templates & Blueprints
@@ -164,6 +166,31 @@ for (const file of fs.readdirSync(scriptsDir)) {
   const source = fs.readFileSync(path.join(scriptsDir, file), 'utf-8');
   for (const req of source.matchAll(/require\(['"]\.\/([^'"]+)['"]\)/g)) {
     assert(fs.existsSync(path.join(scriptsDir, req[1])), `scripts/${file} proxy target ${req[1]} exists`);
+  }
+}
+
+// 10. Documentation Consistency (small, high-signal checks only)
+console.log('\n\x1b[1m10. Documentation Consistency\x1b[0m');
+const readme = fs.readFileSync(path.join(ROOT_DIR, 'README.md'), 'utf-8');
+const readmeThai = fs.readFileSync(path.join(ROOT_DIR, 'README.th.md'), 'utf-8');
+const agents = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
+const frontendSkill = fs.readFileSync(path.join(ROOT_DIR, 'skills', 'frontend', 'SKILL.md'), 'utf-8');
+assert(agents.includes(`v${frameworkVersion}`), `AGENTS.md version matches package.json (${frameworkVersion})`);
+assert(readme.includes(frameworkVersion) && readmeThai.includes(frameworkVersion), `README files mention current version (${frameworkVersion})`);
+assert(frontendSkill.includes(`v${frameworkVersion}`), `Frontend skill version matches package.json (${frameworkVersion})`);
+assert(!readme.includes('npm run benchmark') && !readmeThai.includes('npm run benchmark'), 'README files do not advertise removed benchmark scripts');
+assert(!readme.includes('100% accurate') && !readmeThai.includes('แม่นยำ 100%'), 'README files avoid absolute extractor accuracy claims');
+assert(!readme.includes('Deterministic Control Plane') && !readmeThai.includes('Deterministic Control Plane'), 'README files avoid unsupported deterministic-enforcement claims');
+assert(readme.includes('Full Apex Setup') && readmeThai.includes('ติดตั้ง Apex แบบเต็ม'), 'README files document lightweight and full installation modes');
+assert(agents.includes('Optional Nexus MCP Workflow'), 'AGENTS.md documents optional Nexus MCP workflow');
+
+// 11. Local Markdown Link Check
+console.log('\n\x1b[1m11. Local Documentation Links\x1b[0m');
+for (const file of ['README.md', 'README.th.md', 'AGENTS.md', 'AI-Context-Index.md']) {
+  const content = fs.readFileSync(path.join(ROOT_DIR, file), 'utf-8');
+  for (const match of content.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {
+    const target = path.resolve(ROOT_DIR, match[1]);
+    assert(fs.existsSync(target), `${file} local link ${match[1]} resolves`);
   }
 }
 

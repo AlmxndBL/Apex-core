@@ -8,7 +8,7 @@
 ## 📌 1. Project Overview
 - **Project Name:** Apex-core
 - **Description:** Lean AI Agent Operating Protocol & Disciplined Engineering Engine
-- **Core Tech Stack:** Strict TypeScript, Node.js, Prisma ORM, PostgreSQL, Nuxt 4 (Vue 3) / Next.js 15 (React 19), Tailwind CSS
+- **Supported Stack Examples:** Strict TypeScript, Node.js, Prisma ORM, PostgreSQL, Nuxt 4 (Vue 3), Next.js 15 (React 19), and Tailwind CSS. These are presets, not mandatory dependencies.
 - **Environment Status:** Active Protocol
 
 ---
@@ -17,7 +17,7 @@
 
 ```text
 .
-├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.0)
+├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.4.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── README.md                  # Master Documentation & Single Drop-in Guide
 ├── package.json               # Engine Configuration & Scripts
@@ -40,11 +40,11 @@
 ---
 
 ## 🗄️ 3. Core Capabilities & Domains
-- **Security & Auth:** Better Auth, RBAC, Dual-Token Rotation, CORS, Rate Limiting
+- **Security & Auth:** Threat-model-driven authentication, RBAC, CORS, and rate limiting; Better Auth and dual-token rotation are optional patterns.
 - **Code Quality:** Strict TypeScript (no any), Zod validation, JSDoc/TSDoc, Container-Presenter pattern
 - **Architecture:** Modular Monolith, Domain-Driven Granular Routing, Spec-Driven Development (SDD)
-- **Database:** Prisma ORM, PostgreSQL, OCC Concurrency Control, Zero DB Pollution Seeding
-- **Frontend UI/UX:** 3-File Feature Architecture, Mandatory 4-State UI Contract, Dual Responsive Tables
+- **Database:** Relational database patterns, optional Prisma/PostgreSQL, OCC for contested state, and safe seeding when a database exists.
+- **Frontend UI/UX:** Feature Module Separation when useful, applicable async states, and optional responsive table patterns
 - **Verification:** Sub-second In-Memory TypeCheck, Vitest, 2-Strike Loop-Breaker
 
 ---

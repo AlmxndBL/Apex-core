@@ -1,7 +1,7 @@
-# ⚡ Apex-core 5 — The Deterministic AI Agent Operating Protocol
+# ⚡ Apex-core 5 — ชุดคำแนะนำและตัวตรวจสอบสำหรับ AI Coding
 
-> **The Disciplined Senior Engineering Engine & Token Economy Control Plane for AI Coding Agents**  
-> สถาปัตยกรรมระบบควบคุมเชิงวิศวกรรม (Deterministic Control Plane) สำหรับกำกับคุณภาพการพัฒนาซอฟต์แวร์ของ AI Coding Agents รองรับ Nuxt 4 (Vue 3), Next.js 15 (React 19), Better Auth, Prisma ORM, และ Full-Stack Architecture — ผ่านการพิสูจน์เชิงประจักษ์ว่าช่วยลดภาระ Token ขาเข้าได้เฉลี่ย **58.4% (และลดได้สูงสุดถึง 88.9% บนระบบขนาดใหญ่)** (*p* = 4.87 × 10⁻¹¹) จากการทดสอบบนชุดงานจริง 50 งาน
+> **ชุดคำแนะนำและตัวตรวจสอบแบบ lean สำหรับ AI coding agents**
+> Apex-core รวม rules, skills, templates และตัวตรวจความครบถ้วนของ repository สำหรับ Nuxt 4, Next.js และโปรเจกต์เขียนโค้ดอื่น ๆ ผล benchmark เป็นหลักฐานจากการทดสอบภายนอกในอดีต ไม่ใช่การรับประกันผลกับทุกโปรเจกต์หรือทุกโมเดล
 
 <div align="center">
 
@@ -37,28 +37,28 @@
 │   // 60 บรรทัดของเนื้อในฟังก์ชัน                 │      │                                                  │
 │ </script>                                        │      │                                                  │
 └──────────────────────────────────────────────────┘      └──────────────────────────────────────────────────┘
-                 🔻 ลดขนาด Context ลง 96.4% (<0.14ms V8 In-RAM Extraction)
+                  🔻 ตัวอย่างการลด Context เชิงภาพประกอบ (ดู benchmark ภายนอก)
 ```
 
-Apex-core 5 เปลี่ยนการสั่งงานแบบคำขอร้อง (`.cursorrules`) ให้กลายเป็น **Deterministic Control Plane**:
-1. **AST Codebase Cartography:** กรองเนื้อในฟังก์ชันทิ้ง ส่งเฉพาะ Type Interface เข้าโมเดล (**-77.6% Context Diet**, p = 0.0031)
-2. **In-RAM Closed-Loop Verifier:** รัน `vue-tsc` / `tsc` ใน RAM ทันที (< 1s) ตั้งเป้าจบงานในรอบเดียว ($N \to 1.04$ รอบ — เป้าหมายเชิงดีไซน์)
-3. **2-Strike Circuit Breaker:** ตัดวงจร Freeze ทันทีเมื่อแก้ไม่ผ่าน 2 ครั้งติด หยุดการเผาผลาญ Token โดยเปล่าประโยชน์
+Apex-core 5 เป็น protocol แบบมีโครงสร้างสำหรับงานเขียนโค้ดด้วย AI:
+1. **AST Codebase Cartography:** สร้างมุมมอง contract แบบกระชับเมื่อไม่จำเป็นต้องอ่าน implementation ทั้งหมด
+2. **Targeted Verification:** แนะนำให้ใช้ typecheck และ test ที่เร็วและน่าเชื่อถือที่สุดของโปรเจกต์เป้าหมาย
+3. **Failure Guardrails:** หยุดการ retry อัตโนมัติหลัง verification ล้มเหลวซ้ำ และรายงานหลักฐานเพื่อใช้ตัดสินใจรอบถัดไป
 
 ---
 
 ## ⚡ 2. วิธีเริ่มใช้งาน (Setup & Installation 3 รูปแบบ)
 
-### รูปแบบที่ 1: Global Agent Plugin (แนะนำสำหรับ Dev ที่ทำหลายโปรเจกต์)
-Clone `Apex-core` ลงเครื่องครั้งเดียว แล้วเชื่อมต่อเป็น Global Skill / Workspace ใน AI Coding Agent (Antigravity, Cursor, Claude Desktop, Windsurf):
+### รูปแบบที่ 1: เก็บ Source ไว้ใช้อ้างอิงร่วมกัน
+เก็บ `Apex-core` ไว้ตำแหน่งเดียวเพื่อใช้อ้างอิง หรือเชื่อมต่อเป็น global instruction/skill ใน agent ที่รองรับ:
 ```bash
 git clone https://github.com/AlmxndBL/Apex-core.git ~/.agents/Apex-core
 cd ~/.agents/Apex-core && npm install
 ```
-*AI Agent จะอ่านและบังคับใช้กฎ `AGENTS.md`, กฎ 6 เสาหลัก, และ Skills โดยอัตโนมัติในทุกโปรเจกต์โดยไม่ต้องแก้ไขหรือเพิ่มไฟล์ใน Repository ของงาน*
+*ให้เชื่อมต่อไฟล์ตามวิธีของ AI agent ที่เลือกใช้ Apex-core ไม่สามารถบังคับพฤติกรรมใน agent ทุกชนิดโดยอัตโนมัติ และไม่แก้ไข repository เป้าหมายเอง*
 
-### รูปแบบที่ 2: ติดตั้งเฉพาะโปรเจกต์ (Single Project / Team Drop-in)
-ก๊อปปี้ไฟล์ [`AGENTS.md`](./AGENTS.md) ไปวางที่ Root Directory ของโปรเจกต์:
+### รูปแบบที่ 2: ติดตั้งแบบ Lightweight
+ก๊อปปี้เฉพาะ [`AGENTS.md`](./AGENTS.md) ไปวางที่ root ของโปรเจกต์ วิธีนี้ได้ workflow หลัก แต่ยังไม่มี rules, skills และ templates ที่ลิงก์ไว้:
 ```bash
 # สำหรับ Cursor IDE
 cp AGENTS.md .cursorrules
@@ -70,24 +70,27 @@ cp AGENTS.md CLAUDE.md
 # วางเป็น AGENTS.md ที่ Root Directory
 ```
 
-> **Zero Runtime Overhead:** โปรเจกต์ของ User **ไม่ต้องติดตั้ง Apex Dependency ใดๆ** โปรเจกต์จะใช้ `package.json` และ lockfile เดิมของตัวเอง โดย AI จะรัน In-RAM TypeCheck ผ่าน `pnpm vue-tsc --noEmit` หรือ `pnpm tsc --noEmit` ของโปรเจกต์นั้นโดยตรง
+> **ไม่เพิ่ม runtime dependency ในโปรเจกต์เป้าหมาย:** Apex-core เป็นชุดเอกสารและตัวตรวจสอบ โปรเจกต์เป้าหมายยังใช้ dependency, lockfile และ package manager เดิมของตัวเอง โดย agent ควรรันคำสั่ง typecheck/test ที่ตรงกับโปรเจกต์นั้น
+
+### รูปแบบที่ 3: ติดตั้ง Apex แบบเต็ม
+คัดลอก `AGENTS.md` พร้อม `rules/`, `skills/` และ `templates/` ไปด้วยเมื่อ agent ต้องใช้คลังภายในครบชุด สำหรับ Codex ให้ติดตั้ง Nexus แยกเป็น MCP server หากต้องการ memory, project brief และ session checkpoint
 
 ---
 
 ### 🧭 ระบบตรวจจับ Stack อัตโนมัติ (Deterministic Stack Matrix)
-`AGENTS.md` จะอ่าน `package.json` ของโปรเจกต์เพื่อแมปสถาปัตยกรรมและคำสั่งตรวจสอบ Type ที่ถูกต้องโดยอัตโนมัติ:
+`AGENTS.md` ใช้ `package.json`, lockfile และโครงสร้างเดิมเป็นข้อมูลช่วยเลือกแนวทางเริ่มต้น ไม่ได้แทนที่ convention ที่ดีของโปรเจกต์:
 
 | สแตกที่ตรวจพบ | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
 |---|---|---|---|---|
-| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `pnpm vue-tsc --noEmit` |
-| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `pnpm tsc --noEmit` |
+| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `vue-tsc --noEmit` ตาม package manager |
+| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `tsc --noEmit` ตาม package manager |
 | 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
 
 ---
 
-## 📊 3. การประเมินและหลักฐานเชิงประจักษ์ (Empirical Evidence)
+## 📊 3. หลักฐานจาก Benchmark ภายนอกในอดีต
  
-Apex-core ผ่านการพิสูจน์และตรวจสอบอย่างเป็นอิสระผ่านชุดทดสอบมาตรฐานวิจัย **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** บน **$N = 50$ งานพัฒนาจริง** จาก 10 โค้ดเบสบน GitHub (รวม 150 Trajectories รันสดบน Frontier API):
+การศึกษาโดย **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** รายงานผลดังต่อไปนี้จากงานจำนวน **$N = 50$ งาน** ผลลัพธ์เป็นข้อมูลเฉพาะของการศึกษานั้น ไม่ใช่การรับประกัน และชุดทดสอบไม่ได้อยู่ใน repository นี้:
  
 | ตัวชี้วัด | Arm A (โมเดลทั่วไป/เขียนทับเต็มไฟล์) | Arm B (มาตรฐาน Search/Replace Diff) | Arm C (Apex-core Engine) | นัยสำคัญทางสถิติ |
 |---|---|---|---|---|
@@ -109,10 +112,10 @@ Apex-core ผ่านการพิสูจน์และตรวจสอ�
 
 ## 🧩 4. ชุด 4 เสาหลักสกิลความรู้เชิงลึก (Consolidated Skills)
 
-1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** 3-File Feature Module Architecture (`use<Feature>`, `<Feature>List`, `<feature>.contract`), Mandatory 4-State UI (Skeleton, Empty, Error, Data), Modern 3-Tier Surface Elevation.
+1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** การแยก Feature Module เมื่อความซับซ้อนเหมาะสม, สถานะ async ที่จำเป็น และแนวทาง visual ที่ใช้งานได้จริง
 2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
 3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
-4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** High-Precision TypeScript Compiler AST Extraction (`ts.createSourceFile`), Selective Token Diet (ลด Context Overhead 58-90% แม่นยำ 100% ไม่หลอน Syntax).
+4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** การสกัด contract ด้วย TypeScript Compiler API และลด context อย่างเลือกเฉพาะส่วน พร้อมระบุข้อจำกัดเรื่อง inferred types, imports และ schema edge cases
 
 ---
 
@@ -120,13 +123,13 @@ Apex-core ผ่านการพิสูจน์และตรวจสอ�
 
 ![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
 
-Apex บังคับใช้ **Ultra-Compact Modern SaaS Density**, 3-Tier Surface Elevation, Magic UI Theme Toggler, Interactive Sort/Filter Data Tables, และ Crisp SVG Lucide Icons (Strict Zero Emojis) ครอบคลุมทั้ง **Vue 3 / Nuxt 4** และ **React 19 / Next.js 15** สามารถดูชุด Starter ได้ที่ [`templates/ui/`](./templates/ui/)
+Apex มี UI starter และแนวทางสำหรับ **Vue 3 / Nuxt 4** และ **React 19 / Next.js 15** ให้เลือกใช้เฉพาะส่วนที่เหมาะกับผลิตภัณฑ์ ไม่ใช่ dependency หรือข้อบังคับด้าน visual สำหรับทุกโปรเจกต์ ดูชุด Starter ได้ที่ [`templates/ui/`](./templates/ui/)
 
 ---
 
 ## 🌌 6. ทำงานคู่ขนานอย่างไร้รอยต่อ (Apex & Nexus)
 
-Apex ทำงานได้ **100% แบบ Standalone (ไม่ต้องติดตั้งอะไรเพิ่ม)** และสามารถเชื่อมต่อคู่ขนานกับ **[Nexus](https://github.com/AlmxndBL/nexus)** เพื่อดึงความทรงจำข้ามโปรเจกต์:
+Apex ใช้งานแบบ standalone ได้โดยไม่เพิ่ม runtime dependency ในโปรเจกต์เป้าหมาย และสามารถเชื่อมต่อกับ **[Nexus](https://github.com/AlmxndBL/nexus)** เพื่อเก็บความทรงจำข้ามโปรเจกต์ได้ โดย workflow คือ โหลด state/brief ที่เกี่ยวข้อง → ทำงานตาม Apex → verify → บันทึก session กลับ Nexus:
 
 * **Apex:** มาตรฐานวิศวกรรม, การควบคุม Execution, และการตรวจสอบความถูกต้อง (ทำอย่างไรให้โค้ดมีคุณภาพและปลอดภัย)
 * **Nexus:** คลังความรู้ Dynamic Knowledge Vault, Session Memory, และ Decision Graph (เรารู้อะไร ตัดสินใจอะไร และได้บทเรียนอะไร)

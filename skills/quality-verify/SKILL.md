@@ -34,6 +34,6 @@ description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Str
 
 Enforce strict failure recovery when errors occur:
 1. **Strike 1 (Surgical Fix):** Analyze the root cause and execute one targeted fix.
-2. **Strike 2 (Freeze State & Failure Report):** If verification fails a second time (cumulative per task, regardless of error change), **immediately STOP and freeze the working tree**. DO NOT blind-rollback or destroy partial progress. The strike counter resets ONLY when a new task begins or when the user replies to a Freeze Report with explicit direction — self-initiated retries never reset it.
+2. **Strike 2 (Pause automatic retries & Failure Report):** If verification fails a second time, stop automatic retries and report the root cause, logs, and repair options. Do not claim that the working tree is frozen; the user may explicitly direct the next attempt. The strike counter resets ONLY when a new task begins or when the user replies with explicit direction.
 3. **Report & Await Guidance:** Present a structured Failure Report (1. Root Cause, 2. Raw Error Logs, 3. Proposed Targeted Fix Options) and request user guidance. Never loop blindly.
 

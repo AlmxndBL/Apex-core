@@ -5,7 +5,7 @@
 ---
 
 ## 🗄️ 1. Tools & ORM
-- Use **Prisma** or **Drizzle** with PostgreSQL for 100% static type safety.
+- Use the project's existing database access layer. Prisma or Drizzle with PostgreSQL are supported defaults for new relational applications, not mandatory dependencies.
 - **Never modify database tables directly:** All schema changes must go through versioned migrations (`prisma migrate dev`).
 - **Migration Safety:**
   - **Never drop columns, tables, or rename columns without explicit user approval.**
@@ -19,7 +19,7 @@
 - **Column Names:** `camelCase` in Prisma schema, mapped to `snake_case` in SQL via `@map` (e.g. `createdAt DateTime @map("created_at")`).
 - **Foreign Keys:** `fk_{table}_{ref_table}`.
 - **Indexes:** `idx_{table}_{columns}` (place indexes on frequently filtered, joined, or ordered columns).
-- **Timestamps:** Every table must include `created_at` and `updated_at`.
+- **Timestamps:** Persisted business entities should include creation/update timestamps when they support auditing, sorting, or synchronization; lookup tables do not need them automatically.
 
 ---
 
@@ -40,7 +40,7 @@
        });
        if (updated.count === 0) throw new Error("CONCURRENCY_CONFLICT: Record modified by another process. Please retry.");
        ```
-- **🚪 Automated Tenant Scoping (Prisma Client Extension):**
+- **🚪 Automated Tenant Scoping (Only for multi-tenant systems):**
   - Enforce tenant isolation automatically via Prisma extensions rather than manual `where: { tenantId }` clauses:
     ```typescript
     export const getTenantPrisma = (tenantId: string) =>

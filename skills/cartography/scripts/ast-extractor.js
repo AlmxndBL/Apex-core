@@ -2,7 +2,7 @@ import ts from 'typescript';
 
 /**
  * AST Skeleton Extraction Engine for Apex-core Protocol
- * Uses TypeScript Compiler API for 100% accurate contract extraction and body pruning.
+ * Uses TypeScript Compiler API for compact top-level contract extraction and body pruning.
  */
 export function extractAstSkeleton(filename, content) {
   if (!content) return '';
@@ -123,7 +123,7 @@ function extractTypeScriptContracts(tsContent, filename = 'source.ts') {
             const isAsync = fn.modifiers?.some(m => m.kind === ts.SyntaxKind.AsyncKeyword);
             const params = fn.parameters.map(p => p.getText(sf)).join(', ');
             const ret = fn.type ? ': ' + fn.type.getText(sf) : '';
-            return `${dName}: ${isAsync ? 'async ' : ''}(${params})${ret} => any`;
+            return `${dName}: ${isAsync ? 'async ' : ''}(${params})${ret} => unknown`;
           } else {
             return dName;
           }
@@ -136,7 +136,7 @@ function extractTypeScriptContracts(tsContent, filename = 'source.ts') {
       if (ts.isExportAssignment(st)) {
         const expr = st.expression.getText(sf);
         if (expr.includes('defineEventHandler')) {
-          contracts.push('export default defineEventHandler(handler: (event: any) => Promise<any>);');
+          contracts.push('export default defineEventHandler(handler: (event: unknown) => Promise<unknown>);');
         } else {
           contracts.push(`export default ${expr.split('(')[0] || 'defaultExport'};`);
         }
@@ -154,4 +154,3 @@ function extractTypeScriptContracts(tsContent, filename = 'source.ts') {
     return `// [AST Extraction Fallback: ${err.message}]`;
   }
 }
-

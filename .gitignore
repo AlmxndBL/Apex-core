@@ -17,22 +17,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Environment & Secrets
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-*.cert
-
-# AI Agent Local Brain & Scratch
-.system_generated/
-.gemini/
-.antigravity/
-brain/
-scratch/
-tmp/
-
 # ==========================================
 # 🛡️ Git Shield: Secrets & Environment
 # ==========================================
@@ -64,8 +48,6 @@ tmp/
 # ==========================================
 # 📦 Build Artifacts & Dependencies
 # ==========================================
-node_modules/
-.pnpm-store/
 .output/
 .nuxt/
 .next/

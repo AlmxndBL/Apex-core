@@ -120,7 +120,7 @@ When designing new systems from scratch:
    - Pagination, search debouncing (300ms), and filtering.
    - Confirmation dialogs and soft deletes.
    - Toast feedback and submit button loading locks.
-   - Backend RBAC enforcement on all endpoints.
+   - Backend RBAC enforcement on every protected endpoint.
    - Transaction locks and unique constraints.
    - `created_at`, `updated_at`, and audit tracking.
 
