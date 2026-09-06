@@ -182,7 +182,7 @@ assert(frontendSkill.includes(`v${frameworkVersion}`), `Frontend skill version m
 assert(!readme.includes('npm run benchmark') && !readmeThai.includes('npm run benchmark'), 'README files do not advertise removed benchmark scripts');
 assert(!readme.includes('100% accurate') && !readmeThai.includes('แม่นยำ 100%'), 'README files avoid absolute extractor accuracy claims');
 assert(!readme.includes('Deterministic Control Plane') && !readmeThai.includes('Deterministic Control Plane'), 'README files avoid unsupported deterministic-enforcement claims');
-assert(readme.includes('Full Apex Setup') && readmeThai.includes('ติดตั้ง Apex แบบเต็ม'), 'README files document lightweight and full installation modes');
+assert(readme.includes('Mode 2: Vendor') && readmeThai.includes('รูปแบบที่ 2: Vendor') && readme.includes('Mode 1: Point') && readmeThai.includes('รูปแบบที่ 1: Point'), 'README files document Point and Vendor installation modes');
 assert(agents.includes('Optional Nexus MCP Workflow'), 'AGENTS.md documents optional Nexus MCP workflow');
 
 // 11. Local Markdown Link Check

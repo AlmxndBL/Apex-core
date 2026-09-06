@@ -47,33 +47,30 @@ Apex-core 5 เป็น protocol แบบมีโครงสร้างส�
 
 ---
 
-## ⚡ 2. วิธีเริ่มใช้งาน (Setup & Installation 3 รูปแบบ)
+## ⚡ 2. วิธีเริ่มใช้งาน (Setup & Installation 2 รูปแบบ)
 
-### รูปแบบที่ 1: เก็บ Source ไว้ใช้อ้างอิงร่วมกัน
-เก็บ `Apex-core` ไว้ตำแหน่งเดียวเพื่อใช้อ้างอิง หรือเชื่อมต่อเป็น global instruction/skill ใน agent ที่รองรับ:
+เลือกด้วยคำถามเดียว: **โปรเจกต์ต้องพกเอกสาร Apex ไปกับตัวเองหรือไม่?** ไม่ต้อง → Point ต้อง → Vendor
+
+### รูปแบบที่ 1: Point (ค่าเริ่มต้นที่แนะนำ)
+เก็บ `Apex-core` ไว้ตำแหน่งเดียวแล้วเชื่อมต่อเป็น global instruction/skill ใน agent ที่รองรับ — checkout เดียวใช้ได้ทุกโปรเจกต์ และอัปเดตกฎครั้งเดียวมีผลทันทีทุกที่:
 ```bash
 git clone https://github.com/AlmxndBL/Apex-core.git ~/.agents/Apex-core
 cd ~/.agents/Apex-core && npm install
 ```
 *ให้เชื่อมต่อไฟล์ตามวิธีของ AI agent ที่เลือกใช้ Apex-core ไม่สามารถบังคับพฤติกรรมใน agent ทุกชนิดโดยอัตโนมัติ และไม่แก้ไข repository เป้าหมายเอง*
 
-### รูปแบบที่ 2: ติดตั้งแบบ Lightweight
-ก๊อปปี้เฉพาะ [`AGENTS.md`](./AGENTS.md) ไปวางที่ root ของโปรเจกต์ วิธีนี้ได้ workflow หลัก แต่ยังไม่มี rules, skills และ templates ที่ลิงก์ไว้:
-```bash
-# สำหรับ Cursor IDE
-cp AGENTS.md .cursorrules
+### รูปแบบที่ 2: Vendor
+คัดลอกเอกสาร Apex ลงในโปรเจกต์เป้าหมายเมื่อโปรเจกต์ต้อง self-contained (pin เวอร์ชันกฎสำหรับ CI หรือทีมที่เข้าไม่ถึง repo กลาง):
 
-# สำหรับ Claude Code CLI
-cp AGENTS.md CLAUDE.md
-
-# สำหรับ Windsurf / Trae / Google Antigravity
-# วางเป็น AGENTS.md ที่ Root Directory
-```
+- **เฉพาะ workflow หลัก:** ก๊อปปี้ [`AGENTS.md`](./AGENTS.md) ไปวางที่ root ของโปรเจกต์ — ได้ workflow หลักแต่ยังไม่มี rules, skills และ templates ที่ลิงก์ไว้:
+  ```bash
+  cp AGENTS.md .cursorrules   # สำหรับ Cursor IDE
+  cp AGENTS.md CLAUDE.md      # สำหรับ Claude Code CLI
+  # Windsurf / Trae / Google Antigravity: วางเป็น AGENTS.md ที่ Root Directory
+  ```
+- **คลังครบชุด:** คัดลอก `rules/`, `skills/` และ `templates/` เพิ่มด้วยเมื่อ agent ต้องใช้คลังภายในครบชุด สำหรับ Codex ให้ติดตั้ง Nexus แยกเป็น MCP server หากต้องการ memory, project brief และ session checkpoint
 
 > **ไม่เพิ่ม runtime dependency ในโปรเจกต์เป้าหมาย:** Apex-core เป็นชุดเอกสารและตัวตรวจสอบ โปรเจกต์เป้าหมายยังใช้ dependency, lockfile และ package manager เดิมของตัวเอง โดย agent ควรรันคำสั่ง typecheck/test ที่ตรงกับโปรเจกต์นั้น
-
-### รูปแบบที่ 3: ติดตั้ง Apex แบบเต็ม
-คัดลอก `AGENTS.md` พร้อม `rules/`, `skills/` และ `templates/` ไปด้วยเมื่อ agent ต้องใช้คลังภายในครบชุด สำหรับ Codex ให้ติดตั้ง Nexus แยกเป็น MCP server หากต้องการ memory, project brief และ session checkpoint
 
 ---
 

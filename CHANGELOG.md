@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Setup Simplified to 2 Modes (`README.md`, `README.th.md` §2):** Collapsed the previous Options A/B/C into two modes with a single selection question — "does the project need to carry the Apex docs inside itself?" — **Point** (default: one shared checkout with global agent registration) and **Vendor** (copy into the project, workflow-only or complete library). No behavioral rules changed.
+
+## [5.5.0] - 2026-09-06 — Panel Audit, Entry-Point Skill & Single-Sourcing Pass 🧭
+
 ### Added
 - **Apex Entry Point Skill (`skills/apex-core`):** Dispatching skill for skill-loading agents (Codex / ZCode) that reads `AGENTS.md` and loads only task-relevant rules and skills; registered in the verification suite and the master lookup table.
 - **Panel Audit Fixes (2026-09-06):** Cross-file consistency pass covering security, architecture, frontend, verification, and distribution layers.

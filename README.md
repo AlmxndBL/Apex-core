@@ -47,33 +47,30 @@ Apex-core 5 provides a structured protocol for AI coding work:
 
 ---
 
-## ⚡ 2. Setup & Installation (3 Flexible Modes)
+## ⚡ 2. Setup & Installation (2 Modes)
 
-### Option A: Reusable Source Checkout
-Keep `Apex-core` in one location for reference or for agents that support global instruction/skill registration:
+Pick with one question: **does the project need to carry the Apex docs inside itself?** No → Point. Yes → Vendor.
+
+### Mode 1: Point (Default)
+Keep `Apex-core` in one location and register it with agents that support global instruction/skill registration. One checkout serves every project, and rule updates apply everywhere at once:
 ```bash
 git clone https://github.com/AlmxndBL/Apex-core.git ~/.agents/Apex-core
 cd ~/.agents/Apex-core && npm install
 ```
 *Connect the files according to the selected agent's instructions. Apex-core does not automatically enforce behavior in every agent, and it does not modify target repositories by itself.*
 
-### Option B: Lightweight Project Setup
-Copy only [`AGENTS.md`](./AGENTS.md) into the target project root. This provides the core workflow, but not the linked rules, skills, or templates:
-```bash
-# For Cursor IDE
-cp AGENTS.md .cursorrules
+### Mode 2: Vendor
+Copy the Apex docs into the target project when it must be self-contained (pinned rules for CI, or teams without access to a central checkout):
 
-# For Claude Code CLI
-cp AGENTS.md CLAUDE.md
-
-# For Windsurf / Trae / Google Antigravity
-# Place as AGENTS.md at repository root
-```
+- **Workflow only:** copy [`AGENTS.md`](./AGENTS.md) to the project root — core workflow without the linked rules, skills, or templates:
+  ```bash
+  cp AGENTS.md .cursorrules   # Cursor IDE
+  cp AGENTS.md CLAUDE.md      # Claude Code CLI
+  # Windsurf / Trae / Google Antigravity: place as AGENTS.md at repository root
+  ```
+- **Complete library:** also copy `rules/`, `skills/`, and `templates/` when the agent must access the full local library. For Codex, install Nexus separately as an MCP server if memory, project briefs, and session checkpoints are needed.
 
 > **No target-project runtime dependency:** Apex-core is a documentation and verification package. Target projects keep their own dependencies, lockfile, and package manager; agents should run the matching local typecheck/test commands.
-
-### Option C: Full Apex Setup
-Copy `AGENTS.md` together with `rules/`, `skills/`, and `templates/` when the agent must access the complete local library. For Codex, install Nexus separately as an MCP server if memory, project briefs, and session checkpoints are needed.
 
 ---
 
