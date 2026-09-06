@@ -27,7 +27,7 @@
 ## 4. Naming Conventions & Organization
 - **Variables & Functions:** `camelCase` (e.g., `getUserById`, `calculateTotal`)
 - **Components & Classes:** `PascalCase` (e.g., `UserProfile.vue`, `AuthModal.tsx`)
-- **Files & Directories:** `kebab-case` (e.g., `user-profile.ts`, `auth-service/`)
+- **Files & Directories:** `kebab-case` (e.g., `user-profile.ts`, `auth-service/`). **Exemption:** framework component files (`PascalCase`, e.g. `UserProfile.vue`, `AuthModal.tsx`) and composables/hooks (`camelCase`, `use<Feature>.ts`) follow the framework conventions below.
 - **Constants & Enums:** `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`, `DEFAULT_PAGE_SIZE`)
 - **Types & Interfaces:** `PascalCase` (e.g., `UserCreateInput`, `ApiResponse<T>`)
 - **Booleans:** Prefix with `is`, `has`, `can`, `should` (e.g., `isActive`, `hasPermission`)
@@ -38,6 +38,7 @@
   - Route views / Pages act strictly as **Containers**: call domain composables/hooks and pass state down via props.
   - Presentational components (`components/<domain>/`) must be **Dumb UI**: receive typed props, emit user actions, and contain zero direct HTTP/API calls.
   - Domain business logic, caching, and state machines belong strictly in **Composables/Hooks (`composables/use<Domain>.ts`)** or **Services (`server/services/<domain>.service.ts`)**.
+  - **Layout Precedence:** For features with multiple components and contracts, prefer the Feature Module layout (`features/<domain>/`) defined in `AGENTS.md` §3A / `skills/frontend` §1; the flat `components/<domain>/` + `composables/` split above is fine for small features.
 - **Import Ordering:** 1) Node built-ins, 2) External dependencies, 3) Internal/Shared modules, 4) Relative paths (separated by empty lines).
 - **Dead Code:** Remove unused code immediately. Do not keep dead code commented out.
 
@@ -79,12 +80,12 @@
   - Never guess non-existent CSS or Tailwind classes (e.g. `w-13`, `w-5.5`).
   - All coordinate calculations, translations, and aspect ratios must use verified formulas and scale values.
 - **Investigative / Audit Safe Mode:** 
-  - When asked to "explain", "investigate", or "audit", operate strictly in Read-Only mode (`view_file`, `grep_search`, `find_by_name`, `list_dir`).
+  - When asked to "explain", "investigate", or "audit", operate strictly in Read-Only mode (read-only inspection tools: search/grep, file listing, bounded file reads).
   - **Never use write/edit tools or execute database migrations without explicit user approval.**
 - **Atomic Refactoring & Zero Legacy Clutter:**
   - When migrating route paths or restructuring folders, remove legacy files within the same step. Never leave obsolete duplicates behind.
 - **Tool Transparency & Anti-Hidden Scripting:**
-  - Modify project files using native tools (`replace_file_content`, `write_to_file`) with explicit paths and diffs.
+  - Modify project files using the host agent's native file-edit tools with explicit paths and diffs.
   - Never execute unmonitored batch scripts in `/scratch/` to silently modify project source files.
 - **Idempotent DB Migrations & Seeding:** Schema modifications and seed scripts must be safe and idempotent to prevent database pollution during verification.
 
@@ -102,7 +103,7 @@
 - **Hydration Mismatch Prevention:** Avoid rendering environment-dependent values (`window`, `localStorage`, `Date.now()`, `Math.random()`) during initial SSR passes.
 
 ### C. PostCSS & CSS File Structure
-- **@import Precedence:** External font `@import url(...);` directives must reside at the very first line of CSS files before `@tailwind base;` to prevent PostCSS parser warnings.
+- **@import Precedence:** External font `@import url(...);` directives must be the very first lines of CSS files — before `@tailwind base;` (Tailwind v3) or before `@import "tailwindcss";` (Tailwind v4) — to prevent PostCSS parser warnings.
 
 ### D. Typed Auth Function Returns
 - Composable / Hook `login()` methods must return typed user profiles (`UserProfile | null`) rather than a bare boolean `true` to ensure downstream routing has immediate access to user roles.

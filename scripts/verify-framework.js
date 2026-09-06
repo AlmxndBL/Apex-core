@@ -27,6 +27,7 @@ const REQUIRED_RULES = [
 ];
 
 const REQUIRED_SKILLS = [
+  'apex-core',
   'frontend',
   'backend-data',
   'quality-verify',
@@ -102,8 +103,8 @@ for (const ruleFile of REQUIRED_RULES) {
   assert(content.startsWith('# '), `Rule rules/${ruleFile} has valid H1 title`);
 }
 
-// 4. Skills Verification (4 Consolidated Skills)
-console.log('\n\x1b[1m4. Consolidated Skills (4 Core Pillars)\x1b[0m');
+// 4. Skills Verification (Entry Point + 4 Domain Skills)
+console.log('\n\x1b[1m4. Skills (Entry Point + 4 Domain Pillars)\x1b[0m');
 for (const skillName of REQUIRED_SKILLS) {
   const skillDir = path.join(ROOT_DIR, 'skills', skillName);
   const skillFile = path.join(skillDir, 'SKILL.md');

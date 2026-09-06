@@ -3,7 +3,7 @@ name: frontend
 description: Enterprise UI/UX, Component Architecture, Tailwind CSS, Responsive Design, and Aesthetic Polish for Vue 3 / Nuxt 4 and React / Next.js
 ---
 
-# Enterprise Frontend & UI/UX Skill (v5.4.0)
+# Enterprise Frontend & UI/UX Skill (v5.5.0)
 
 > Practical frontend architecture for Nuxt 4 (Vue 3) and React (Next.js 15), focusing on clean boundaries, resilient async states, and usable visual polish without unnecessary layers.
 
@@ -297,7 +297,6 @@ Before creating or refactoring non-trivial frontend components, check applicable
 ```text
 Apex-core/templates/ui/
 ├── admin-ui-tokens.ts          # Standardized classes, table presets, and getCatalogItemToneClass()
-├── demo-layout.html            # Standalone visual prototype & showcase
 ├── vue/                        # Vue 3 / Nuxt 4 Production Components
 │   ├── AdminLayoutShell.vue    # Full admin shell (Sidebar + Navbar + Command header)
 │   ├── AppAdminSidebar.vue     # Responsive collapsible sidebar with mobile drawer
@@ -310,7 +309,9 @@ Apex-core/templates/ui/
 │   └── useToast.ts             # Composable for tri-tier toast alerts
 └── react/                      # React 19 / Next.js 15 Equivalent Components
     ├── AdminLayoutShell.tsx
+    ├── AppAdminSidebar.tsx
     ├── AppAdminDataTable.tsx
+    ├── AppDataTableToolbar.tsx
     ├── App4StateContainer.tsx
     ├── AppFloatingBulkBar.tsx
     ├── AppKpiCard.tsx
@@ -319,8 +320,10 @@ Apex-core/templates/ui/
     └── useToast.ts
 ```
 
+> **Template Dependencies:** `animate-in`/`fade-in`/`slide-in-from-*` classes in the toast/bulk-bar templates require the `tailwindcss-animate` plugin; `AnimatedThemeToggler.tsx` imports `next-themes`; and `admin-ui-tokens.ts` expects Nuxt UI theme variables.
+
 ### 🚀 Adoption Workflow (Synthesis Mode)
 1. **Container Integration:** Wrap all asynchronous data views with `App4StateContainer` (`:status="pending ? 'loading' : error ? 'error' : !data?.length ? 'empty' : 'ready'"`).
 2. **Data Listings:** Prefer `AppAdminDataTable` or match its dual responsive structure (`hidden md:block` table + `md:hidden` touch card list).
-3. **Design Tokens:** Import `adminDashboardCardClass`, `adminTableUi`, and `getCatalogItemToneClass` from `admin-ui-tokens.ts` for uniform visual hierarchy across all admin features.
+3. **Design Tokens:** Import `adminDashboardCardClass`, `adminTableUi`, and `getCatalogItemToneClass` from `admin-ui-tokens.ts` for uniform visual hierarchy across all admin features. These are **Nuxt UI semantic tokens** — in a plain Tailwind / Next.js project they resolve to nothing; use the zinc literal equivalents from §3A instead.
 

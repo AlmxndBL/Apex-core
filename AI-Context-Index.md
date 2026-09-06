@@ -17,7 +17,7 @@
 
 ```text
 .
-├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.4.0)
+├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.5.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── README.md                  # Master Documentation & Single Drop-in Guide
 ├── package.json               # Engine Configuration & Scripts
@@ -29,7 +29,8 @@
 │   ├── 04-database-design.md
 │   ├── 05-ux-ui-design.md
 │   └── 06-testing-devops.md
-├── skills/                    # 4 Consolidated Skills
+├── skills/                    # 5 Skills (1 Entry Point + 4 Domain Pillars)
+│   ├── apex-core/             # Entry Point: dispatches to AGENTS.md + relevant rules/skills
 │   ├── backend-data/
 │   ├── cartography/
 │   ├── frontend/
@@ -45,13 +46,13 @@
 - **Architecture:** Modular Monolith, Domain-Driven Granular Routing, Spec-Driven Development (SDD)
 - **Database:** Relational database patterns, optional Prisma/PostgreSQL, OCC for contested state, and safe seeding when a database exists.
 - **Frontend UI/UX:** Feature Module Separation when useful, applicable async states, and optional responsive table patterns
-- **Verification:** Sub-second In-Memory TypeCheck, Vitest, 2-Strike Loop-Breaker
+- **Verification:** Fast targeted typechecks and behavior tests, adaptive completion checks, and a two-strike loop breaker for consecutive unexpected verification failures
 
 ---
 
 ## 🚨 4. Project-Specific Red Lines
 1. **3-Tier Dynamic Intent:** Tier 1 (Read-Only) vs Tier 2 (Actionable: diagnose+fix in 1 turn) vs Tier 3 (Guarded Destructive: halt for approve).
-2. **Dual Execution Modes:** Patch Mode (surgical diffs for bug fixes) vs Synthesis Mode (holistic 3-file modules for new features & UI).
-3. **Fast In-Memory Checks:** Run `tsc --noEmit` or `vue-tsc --noEmit` (1–3s). Never run full production builds for minor single-file edits.
+2. **Dual Execution Modes:** Patch Mode (surgical diffs for bug fixes) vs Synthesis Mode (holistic feature modules — only the files the feature needs — for new features & UI).
+3. **Fast In-Memory Checks:** Run `tsc --noEmit` or `vue-tsc --noEmit` via the detected package manager. Never run full production builds for minor single-file edits.
 4. **Mandatory Evidence:** Always provide actual terminal verification output before claiming completion.
 

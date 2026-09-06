@@ -14,7 +14,7 @@
 
 ## 📊 2. Architecture Diagram Rules
 - **Never generate visual diagrams (such as Mermaid) unprompted.**
-- Always confirm with the user first: *"Would you like an Architecture Diagram to review the system layout before writing code?"*
+- Offer a diagram only when a design decision is material to the task (apply §11 "Ask Only Material Questions" — no routine "would you like a diagram?" prompts).
 - Generate concise, readable diagrams only after user approval.
 
 ---
@@ -71,6 +71,13 @@
   - `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`
   - `429 Too Many Requests`, `500 Internal Server Error`
 
+### API Access Classification and Projection Gate
+- Maintain a route-level access decision for every API handler: `public`, `authenticated`, or `role-restricted`. Administrative, finance, scanner, manifest, export, and audit endpoints are role-restricted unless a documented threat model says otherwise.
+- Implement authorization in shared server helpers/middleware and call them from handlers; client router middleware is navigation UX only and is never an API security boundary.
+- For user-owned resources, use scoped database queries that include the verified owner/tenant predicate. Do not fetch by an externally supplied ID and compare later after sensitive fields are already loaded.
+- Define a response contract for every client-facing endpoint. ORM `include` is bounded and deliberate; raw database records and object-spread serialization are prohibited for externally reachable responses.
+- Public list/search endpoints have a fixed maximum page size, pagination, stable ordering, query validation, and rate limiting appropriate to exposure. Never treat a short query or predictable reference code as authorization.
+
 ---
 
 ## 🛡️ 5. Request Validation (Zod)
@@ -86,6 +93,7 @@
 - Cache idempotency keys and responses for 24 hours to return cached results on duplicate submissions.
 - **Timeouts:** Enforce a maximum timeout of **30 seconds** on all API requests.
 - **Client Retries:** Use exponential backoff (1s $\rightarrow$ 2s $\rightarrow$ 4s) up to 3 times strictly on idempotent requests or 5xx/network failures (never retry 4xx errors).
+- **State Transitions:** Model high-impact mutations as an allowed transition table. Enforce the current state in the update predicate/transaction and write an actor-backed audit record atomically with the state change.
 
 ---
 
@@ -106,6 +114,7 @@
 
 ## 🎯 9. Safe Refactoring & Blast Radius Analysis
 - **Blast Radius Analysis:** Before modifying shared types, altering API contracts, or changing database schemas, scan consumer caller graphs (`grep_search` / call hierarchy) to audit all impacted surfaces.
+- **Behavior & Consumer Trace:** For a behavior change, identify the affected user path and direct callers/consumers before selecting verification. An edited file is a starting point, never the complete test scope.
 - **The "Smallest Safe Correction" Standard:** When addressing architectural debt, propose the smallest viable, backward-compatible fix rather than unprompted full rewrites.
 - **Traceability:** Label architecture claims explicitly as `[Direct]` (verified in code) vs `[Inferred]` (deduced).
 
@@ -126,6 +135,9 @@ When designing new systems from scratch:
 
 ---
 
-## 📑 11. Spec-Driven Development (SDD) & Contract-First Gate
+## 📑 11. Task Specification, SDD & Contract-First Gate
+- **Use a Compact Task Spec When It Earns Its Cost:** For unclear, high-risk, multi-session, or 4+-file behavior changes, capture the outcome, in/out of scope, 2–5 observable acceptance criteria, relevant failure or edge behavior, and unresolved decisions that materially affect the solution. A small, clear task can proceed without a separate spec.
+- **Ask Only Material Questions:** Resolve from the request, repository, and existing decisions first. Ask the user only when an unanswered question would change the outcome, scope, safety, or acceptance criteria.
+- **Persist Feature Context Deliberately:** When work must survive a session, keep the feature spec in the project's existing task/spec documentation. Keep `AI-Context-Index.md` for stable project architecture and conventions, not per-feature detail.
 - **Declare Schema First:** Define Zod schemas and infer TypeScript types (`z.infer<...>`) in dedicated contract files before implementing UI or handlers.
 - **Freeze Contract:** Use contracts as the single source of truth across both client and server layers.

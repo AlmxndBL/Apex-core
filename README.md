@@ -11,7 +11,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.4.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Version](https://img.shields.io/badge/version-5.5.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
 [![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
@@ -114,7 +114,7 @@ An external **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** study reporte
 
 1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** Feature Module Separation when complexity warrants it, applicable async UI states, and practical visual guidance.
 2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
+3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** Fast targeted typechecks and behavior tests, risk-based completion checks, and a two-strike loop breaker for consecutive unexpected verification failures.
 4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** TypeScript Compiler API contract extraction and selective context reduction, with explicit limits for inferred types, imports, and schema edge cases.
 
 ---

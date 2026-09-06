@@ -37,22 +37,26 @@
 └── public/                    # Static Assets (Images, Icons)
 ```
 
-#### 🔵 Preset B: React (Next.js / Vite SPA)
+#### 🔵 Preset B: React (Next.js App Router / Vite SPA)
 ```text
 .
 ├── AGENTS.md                  # Master Agent Rules
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── rules/                     # 6 Domain Engineering Standards
-├── src/                       # React Application Source
+├── app/                       # Next.js App Router (Server Components by default)
+│   ├── api/v1/                # Route Handlers (route.ts)
+│   └── ...                    # Root Layout & Route Pages
+├── src/
 │   ├── layouts/               # App Shell Layouts (RootLayout.tsx, AdminLayout.tsx)
-│   ├── pages/                 # Page View Components per Route
 │   ├── features/              # Feature Domain Modules (components, hooks, types)
 │   ├── components/ui/         # Shared Atomic Components (Shadcn UI / Radix)
 │   ├── store/                 # Global Client State Stores (Zustand)
-│   └── routes/                # Router Configuration & Outlets
+│   └── routes/                # Vite SPA only: Router Configuration & Outlets
 ├── prisma/                    # Database Schema & Migrations
 └── public/                    # Static Assets
 ```
+
+> **Vite SPA note:** Replace `app/` with `src/pages/` for page views; keep `src/features/`, `src/components/ui/`, and `src/routes/` as shown.
 
 ---
 

@@ -7,6 +7,24 @@ Benchmark tooling and telemetry referenced in older entries lived in the separat
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] - 2026-09-06 — Panel Audit, Entry-Point Skill & Single-Sourcing Pass 🧭
+
+## [Unreleased]
+
+### Added
+- **Apex Entry Point Skill (`skills/apex-core`):** Dispatching skill for skill-loading agents (Codex / ZCode) that reads `AGENTS.md` and loads only task-relevant rules and skills; registered in the verification suite and the master lookup table.
+- **Panel Audit Fixes (2026-09-06):** Cross-file consistency pass covering security, architecture, frontend, verification, and distribution layers.
+
+### Fixed
+- **Webhook Blueprint Honesty (`templates/blueprints/idempotent-webhook-receiver-with-hmac-signature.md`):** Corrected the HMAC claim (authenticity, not replay prevention), replaced the synchronous handler's "Background Queue" claim, added error handling for malformed JSON and processing failures, replaced the collision-prone `userId:timestamp` idempotency key with provider event ID + `@unique` guidance, and replaced the placeholder test with a real signature-rejection fixture.
+- **React Toast Container (`templates/ui/react/AppToastContainer.tsx`):** Fixed a build-breaking JSX className and wired the previously unused `typeStyles` variable.
+- **Stale Claims (`AI-Context-Index.md`):** Updated the skill count and directory blueprint for `skills/apex-core/`, removed the outdated "(1–3s)" typecheck timing, and corrected the Synthesis Mode "3-file modules" wording.
+- **Contradiction Sweep:** kebab-case file rule now exempts framework component/composable naming (`rules/02`); architecture diagrams are offered only for material decisions (`rules/03`); Better Auth wording aligned with `rules/01` as a supported default, not mandatory (`skills/backend-data`); seed dispatcher gate unified on `development`/`test` only (`templates/blueprints/rbac-multi-role.md`); Tailwind v4 `@import` precedence documented (`rules/02`); template Preset B now matches the Next.js App Router preset (`templates/AI-Context-Index.md`).
+
+### Changed
+- **Single-Sourcing Pass:** Duplicated norms now live in one canonical file with pointers elsewhere — two-strike/evidence semantics (`skills/quality-verify`), database concurrency/OCC (`rules/04` §3), API security gate (`rules/03` §4), Four-State UI contract (`rules/05` §9). Host-specific tool names replaced with capability nouns.
+- **UI Template Inventory (`skills/frontend/SKILL.md` §6):** Removed the nonexistent `demo-layout.html`, added the missing React components, and documented template dependencies (`tailwindcss-animate`, `next-themes`, Nuxt UI token requirement).
+
 ## [5.4.0] - 2026-08-26 — Standalone Empirical Verification Suite & Grounded Claims 🔬
 
 ### Added

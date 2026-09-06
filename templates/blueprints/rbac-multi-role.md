@@ -48,15 +48,16 @@ import { seedDev } from './seeds/dev.seed'
 const prisma = new PrismaClient()
 
 async function main() {
-  const isProduction = process.env.APP_ENV === 'production' || process.env.NODE_ENV === 'production'
+  const env = process.env.APP_ENV || process.env.NODE_ENV || 'development'
 
-  console.log(`🌱 Seeding database (Production: ${isProduction})`)
+  console.log(`🌱 Seeding database (Environment: ${env})`)
   
   // 1. รัน Master Seed เสมอ (Roles, Permissions)
   await seedProd(prisma)
 
-  // 2. รัน Dev Seed เฉพาะเมื่อไม่ใช่ Production
-  if (!isProduction) {
+  // 2. รัน Dev Seed เฉพาะ Development / Test — ห้ามใส่ test account ใน staging
+  //    (canonical gate: rules/04-database-design.md §4)
+  if (env === 'development' || env === 'test') {
     await seedDev(prisma)
   }
 }

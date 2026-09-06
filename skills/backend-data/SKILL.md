@@ -3,7 +3,7 @@ name: backend-data
 description: Strict TypeScript Mastery, PostgreSQL & Prisma ORM Architecture, API Design, Security, and Transaction Optimization
 ---
 
-# Backend, Data Architecture & Strict TypeScript Skill (v5.4.0)
+# Backend, Data Architecture & Strict TypeScript Skill (v5.5.0)
 
 > Production engineering standards for backend systems, PostgreSQL, Prisma ORM, RESTful APIs, and strict TypeScript without `any`.
 
@@ -120,22 +120,14 @@ export interface RoomResponse {
 
 ## 4. Database & Prisma ORM Optimization Rules
 
-- **Prevent N+1 Queries:** Always use explicit `select` or bounded `include`. Never query related collections inside nested loops.
-- **Index Strategy:** Place `@@index` on all Foreign Keys, `tenantId`, `status`, and sorting columns (`createdAt`).
-- **Optimistic Concurrency Control (OCC):** Add `version Int @default(0)` on volatile balance/stock models:
-  ```typescript
-  const updated = await prisma.wallet.updateMany({
-    where: { id: walletId, version: currentVersion },
-    data: { balance: newBalance, version: { increment: 1 } },
-  });
-  if (updated.count === 0) throw new Error("CONCURRENCY_CONFLICT: Please retry");
-  ```
-- **Soft Deletes:** Standardize on `deletedAt DateTime?` and filter queries with `where: { deletedAt: null }`.
+- **Query Performance & Concurrency (canonical text):** Follow `rules/04-database-design.md` §3 — prevent N+1 with explicit `select`/bounded `include`, wrap multi-table mutations in `prisma.$transaction()` with a 5-second timeout, and use atomic increments plus the OCC `version`-column conditional-update pattern for contested balances/stock (do not re-implement it differently here).
+- **Index Strategy:** Place `@@index` on frequently filtered, joined, or ordered columns (e.g. foreign keys, `tenantId`, `status`, `createdAt`) — not blanket-indexing.
+- **Soft Deletes:** Standardize on `deletedAt DateTime?` and filter queries with `where: { deletedAt: null }`. Ensure unique constraints account for soft-deleted rows.
 
 ---
 
 ## 5. Security & Better Auth Integration
 
-- **Standard Auth Stack:** Use **Better Auth (`better-auth`)** with `@better-auth/prisma-adapter`.
+- **Supported Auth Default:** When the project needs authentication, **Better Auth (`better-auth`)** with `@better-auth/prisma-adapter` is a supported default — not a mandatory dependency for every project (see `rules/01-security-auth.md`).
 - **RBAC Enforcement:** Never trust client-sent role claims. Validate session permissions on every backend mutation.
 - **Sanitized Client Errors:** Catch errors in middleware/services and return clean JSON envelopes. Never expose raw SQL errors, stack traces, or schema definitions to the client.

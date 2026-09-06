@@ -1,4 +1,4 @@
-# Apex: Master AI Agent Operating Protocol (v5.4.0)
+# Apex: Master AI Agent Operating Protocol (v5.5.0)
 
 > **The Disciplined Senior Engineering Engine for AI Coding Agents**  
 > Practical Full-Stack Guidance · Nuxt 4 (Vue 3) & React (Next.js 15) · Optional Better Auth · Prisma · PostgreSQL · Tailwind CSS
@@ -16,15 +16,16 @@
    - **Tier 1 (Read-Only Investigation):** Triggered by "explain", "investigate", "why", "audit", "review", "เช็คให้หน่อย", "ทำไม" (*without actionable verbs*). **STRICTLY READ-ONLY**. Diagnose root cause, analyze code, and summarize findings. DO NOT modify any code.
    - **Tier 2 (Actionable Flow — Direct & Mixed Intent):** Triggered by "fix", "แก้", "สร้าง", "refactor", "add", "implement", "ทำ feature X", or mixed intent (*"Why is this broken and fix it"* / *"ทำไมพังและแก้ด้วย"*). **Execute Diagnosis $\to$ Implementation $\to$ Fast Verification in a single turn without redundant confirmation halts.** (For changes spanning 4+ files, provide an executive plan first).
    - **Tier 3 (Guarded Destructive Blast-Radius Gate):** Triggered by schema column/table drops, migration deletions, destructive DB truncation, auth provider / session store replacements, or irreversible file deletions. **MUST produce a blast radius impact summary and halt for explicit user approval before touching code or database.**
+   - **Task Clarity & Acceptance Gate:** Before an unclear, high-risk, multi-session, or 4+-file behavior change, state a compact task spec: outcome, in/out of scope, 2–5 observable acceptance criteria, and only unresolved decisions that materially change the solution. Do not create a separate document for a small, clear task.
 
 2. **[RULE 2] Fast Targeted In-Memory Verification & Polyglot Fallback:**
    - Run in-RAM type checks and targeted tests using the target repository's package manager (`npm`, `pnpm`, `yarn`, or `bun`).
    - **Polyglot / Non-TS Repos:** Use project-appropriate fast check (e.g., Python `pytest -q` / `mypy`, Go `go test` / `go vet`, Plain JS `node --check`).
+   - Select verification by changed behavior and risk, not only by edited files. For shared code or contracts, include direct affected callers/consumers and a justified failure path.
    - **NEVER** run a full production build for a minor single-file edit unless the user asks for it or the change affects build configuration.
 
 3. **[RULE 3] Mandatory Evidence Delivery (No Evidence = Not Done):**
-   - Never claim a task is complete without providing actual terminal output verification logs.
-   - Required Delivery Format: `[Files Changed] -> [Verification Command] -> [Terminal Result: 0 errors]`
+   - Never claim a task is complete without providing actual terminal output verification logs, delivered in the format defined in `skills/quality-verify/SKILL.md` and using its contextual evidence vocabulary (it never replaces required command output before declaring completion). For high-risk changes, relevant authorization, state, idempotency, or response-projection checks must be **Verified** whenever a safe test or runtime seam exists. Otherwise report the delivery as not fully verified rather than treating the critical behavior as passed.
 
 4. **[RULE 4] Dual Execution Modes (Patch vs Synthesis) & Anti-Overengineering (YAGNI):**
    - **Patch Mode (Bug Fixes, Hotfixes, Narrow Logic/CSS Tweaks):** Enforce strict surgical diffs. Modify ONLY lines directly causing the defect. Strictly zero drive-by refactoring of unrelated files.
@@ -67,11 +68,7 @@ features/<domain>/
 ```
 
 ### B. Four-State UI Contract (When Applicable)
-Asynchronous, user-facing data views SHOULD explicitly implement:
-1. **Loading State:** Skeleton loader matching actual layout geometry (never a bare full-screen spinner).
-2. **Empty State:** Distinct dashed container + icon + friendly explanation + primary CTA button.
-3. **Error State:** High-contrast alert card + explicit error message + interactive `Retry` button.
-4. **Data State:** Fully rendered data presentation with responsive desktop table / mobile card adaptability.
+Canonical definition: [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) §9. Asynchronous, user-facing data views SHOULD implement the relevant **Loading** (skeleton matching layout geometry), **Empty** (dashed container + CTA), **Error** (alert card + `Retry`), and **Data** (responsive table/card) states. Static or trivial views do not need a state wrapper.
 
 ### C. 3-Tier Surface Elevation & Aesthetic Tokens
 - **Canvas:** `bg-zinc-50 dark:bg-zinc-950`
@@ -85,6 +82,12 @@ Asynchronous, user-facing data views SHOULD explicitly implement:
 
 ### A. Standard 4-Step Handler Pipeline
 `Validate` $\longrightarrow$ `Authorize when protected` $\longrightarrow$ `Service Layer when useful` $\longrightarrow$ `Structured Response`
+
+### Security Enforcement Gates (When handling money, PII, credentials, tickets, or exposed APIs)
+
+- **Server authority is mandatory:** Client route guards and hidden UI controls are never authorization. Every non-public API route must call a shared server-side session guard; restricted mutations must also enforce role and record ownership/tenant scope.
+- **Financial and identity mutations:** Derive the actor from the verified server session, validate an allowed state transition, be idempotent/OCC-safe when contested, and record immutable before/after audit metadata.
+- **Full normative text** (route classification, scoped queries, safe response projection): [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) §4 "API Access Classification and Projection Gate".
 
 ### Scope Gate
 
@@ -101,9 +104,7 @@ Asynchronous, user-facing data views SHOULD explicitly implement:
 - Record an ADR with `nexus_record_decision` only for a durable architectural decision. Never invent memory when a Nexus tool is unavailable.
 
 ### B. Database Safety & Concurrency Rules
-- **Prevent N+1:** Always use explicit `select` or bounded `include`. Never query related models inside loops.
-- **Optimistic Concurrency Control (OCC):** Add `version Int @default(0)` on stock/wallet balances to prevent lost updates.
-- **Transactions:** Wrap multi-table state mutations in `prisma.$transaction()` with a 5-second timeout.
+Canonical text: [`rules/04-database-design.md`](./rules/04-database-design.md) §3 — prevent N+1 with explicit `select`/bounded `include`, wrap multi-table mutations in `prisma.$transaction()` with a 5-second timeout, and use atomic increments plus the OCC `version`-column pattern for contested balances/stock.
 
 ---
 
@@ -119,9 +120,9 @@ Asynchronous, user-facing data views SHOULD explicitly implement:
                                                                                                      [PAUSE] 2-Strike Report
 ```
 
-- **Fast Track (1–3 files):** Proceed directly to S3 (Execution) and S4 (Verification).
-- **Heavy Track (4+ files / Schema / Auth):** Proceed to S2 (Plan) with blast radius summary before execution.
-- **2-Strike Loop Breaker:** If 2 consecutive verification runs fail, stop automatic retries and present a structured Failure Report (Root Cause, Error Logs, and Actionable Repair Options). Do not claim that the working tree is frozen or roll back blindly; await explicit direction. **Strike counter resets ONLY when (a) a new task begins, or (b) the user replies with explicit direction.**
+- **Fast Track (1–3 low-risk files):** Proceed directly to S3 (Execution) and S4 (Verification).
+- **Heavy Track & Risk Override:** Changes spanning 4+ files require an S2 plan with blast radius summary. Also enter S2 and strengthen behavior verification for shared contracts, auth/RBAC, money, PII, durable state, schema/database work, concurrency, or a cross-layer user journey—even when fewer files change. This override does not weaken Tier 3 approval gates.
+- **2-Strike Loop Breaker:** Follow the expected-red definition and strike-reset semantics in `skills/quality-verify/SKILL.md`. If 2 consecutive **unexpected** verification runs fail, stop automatic retries and present a structured Failure Report (Root Cause, Error Logs, and Actionable Repair Options). Do not claim that the working tree is frozen or roll back blindly; await explicit direction.
 
 ---
 
@@ -136,5 +137,6 @@ Asynchronous, user-facing data views SHOULD explicitly implement:
 | **Database & Prisma** | [`rules/04-database-design.md`](./rules/04-database-design.md) | [`skills/backend-data`](./skills/backend-data/SKILL.md) | N/A |
 | **Testing & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) | [`templates/gitignore-production.md`](./templates/gitignore-production.md) |
 | **Codebase Mapping** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) | [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) |
+| **Protocol Entry Point** | N/A | [`skills/apex-core`](./skills/apex-core/SKILL.md) | [`AGENTS.md`](./AGENTS.md) (this file) |
 
 

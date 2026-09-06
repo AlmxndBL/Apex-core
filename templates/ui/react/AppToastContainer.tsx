@@ -23,7 +23,7 @@ export function AppToastContainer() {
         return (
           <div
             key={t.id}
-            className={pointer-events-auto p-4 rounded-2xl shadow-xl border flex items-start gap-3 transition-all backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200 }
+            className={`pointer-events-auto p-4 rounded-2xl shadow-xl border flex items-start gap-3 transition-all backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200 ${typeStyles}`}
           >
             <div className="flex-1 min-w-0 pt-0.5">
               <p className="text-xs font-bold text-slate-900 leading-snug">{t.title}</p>

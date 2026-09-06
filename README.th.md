@@ -11,7 +11,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-5.4.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
+[![Version](https://img.shields.io/badge/version-5.5.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
 [![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
 [![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
 
@@ -114,7 +114,7 @@ cp AGENTS.md CLAUDE.md
 
 1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** การแยก Feature Module เมื่อความซับซ้อนเหมาะสม, สถานะ async ที่จำเป็น และแนวทาง visual ที่ใช้งานได้จริง
 2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** In-RAM Fast TypeCheck (1-3s), Vitest Runner, Cumulative 2-Strike Failure Circuit Breaker.
+3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** typecheck และ behavior test แบบ fast targeted, completion check ตามความเสี่ยง และ two-strike loop breaker สำหรับ verification ที่ผิดคาดติดต่อกัน.
 4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** การสกัด contract ด้วย TypeScript Compiler API และลด context อย่างเลือกเฉพาะส่วน พร้อมระบุข้อจำกัดเรื่อง inferred types, imports และ schema edge cases
 
 ---
