@@ -51,30 +51,14 @@ Use `package.json`, lockfiles, and the existing project structure as heuristics 
 
 ---
 
-## 3. Frontend Architecture (Feature Separation & Applicable UI States)
+## 3. Frontend Architecture (Delegated to `skills/frontend`)
 
-### A. Feature Module Pattern (Separation of Concerns)
-```text
-features/<domain>/
-├── composables/ (or hooks/)
-│   └── use<Feature>.ts          # Pure Logic: API fetch, mutations, caching, Zod validation
-├── components/
-│   ├── <Feature>List.vue (.tsx) # Pure Presentation (Dumb UI): receives props, emits actions
-│   ├── <Feature>Form.vue (.tsx) # Form UI & client validation
-│   └── <Feature>Skeleton.vue    # Loading Skeleton matching layout geometry
-├── types/
-│   └── <feature>.contract.ts    # Zod schemas, contract types, and DTO definitions
-└── index.vue (or Page.tsx)       # Smart Container: glue only (calls composable -> passes to presenters)
-```
+When working on user-facing web applications (Nuxt 4 / Vue 3 or Next.js 15 / React 19), frontend component structures and visual tokens are governed by [`skills/frontend/SKILL.md`](./skills/frontend/SKILL.md):
 
-### B. Four-State UI Contract (When Applicable)
-Canonical definition: [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) §9. Asynchronous, user-facing data views SHOULD implement the relevant **Loading** (skeleton matching layout geometry), **Empty** (dashed container + CTA), **Error** (alert card + `Retry`), and **Data** (responsive table/card) states. Static or trivial views do not need a state wrapper.
+- **Feature Module Pattern:** Separate concerns into Container (`index.vue` / `page.tsx`), Logic Composable/Hook (`use<Feature>`), and Presentational Components (`<Feature>List`, `<Feature>Form`). Avoid monolithic multi-hundred-line components. Canonical directory spec: [`skills/frontend/SKILL.md`](./skills/frontend/SKILL.md) §1.
+- **Four-State UI Contract (When Applicable):** Asynchronous, user-facing primary data views SHOULD implement relevant **Loading** (skeleton matching layout geometry), **Empty** (dashed container + CTA), **Error** (alert card + `Retry`), and **Data** states. Trivial, static, modal, or internal utility views do not require a state wrapper. Canonical spec: [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) §9 and [`skills/frontend/SKILL.md`](./skills/frontend/SKILL.md) §2.
+- **Surface Elevation & Aesthetic Tokens:** Standardized Tailwind surface elevations and interaction tokens are defined in [`skills/frontend/SKILL.md`](./skills/frontend/SKILL.md) §3 and pre-built components in [`templates/ui/`](./templates/ui/).
 
-### C. 3-Tier Surface Elevation & Aesthetic Tokens
-- **Canvas:** `bg-zinc-50 dark:bg-zinc-950`
-- **Card / Surface:** `bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm rounded-xl`
-- **Elevated Popover / Modal:** `bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-800`
-- **Interactions:** Buttons have `hover:bg-*`, `active:scale-[0.98]`, and `transition duration-150`.
 
 ---
 
@@ -98,10 +82,10 @@ Canonical definition: [`rules/05-ux-ui-design.md`](./rules/05-ux-ui-design.md) �
 ### Optional Nexus MCP Workflow
 
 - Nexus is an optional memory layer; Apex remains usable when Nexus is unavailable.
-- For a non-trivial task or a project switch, use `nexus_get_state` and `nexus_get_project_brief` when those MCP tools are available.
+- For a non-trivial task or a project switch, use `nexus_get_state` and `nexus_get_project_brief` with the canonical `projectId` when those MCP tools are available.
 - Search Nexus with `nexus_search_knowledge` only for relevant prior patterns, decisions, or failures; do not load the whole vault.
-- After completed or paused work, use `nexus_save_session` with changed files and real verification evidence when available.
-- Record an ADR with `nexus_record_decision` only for a durable architectural decision. Never invent memory when a Nexus tool is unavailable.
+- After completed or paused work, use `nexus_save_session` with repository-relative changed files and a bounded, redacted verification summary when available. Set shared focus only when explicitly intended.
+- Record an ADR with `nexus_record_decision` and its canonical `projectId` only for a durable architectural decision. Never invent memory when a Nexus tool is unavailable.
 
 ### B. Database Safety & Concurrency Rules
 Canonical text: [`rules/04-database-design.md`](./rules/04-database-design.md) §3 — prevent N+1 with explicit `select`/bounded `include`, wrap multi-table mutations in `prisma.$transaction()` with a 5-second timeout, and use atomic increments plus the OCC `version`-column pattern for contested balances/stock.
@@ -138,5 +122,4 @@ Canonical text: [`rules/04-database-design.md`](./rules/04-database-design.md) �
 | **Testing & DevOps** | [`rules/06-testing-devops.md`](./rules/06-testing-devops.md) | [`skills/quality-verify`](./skills/quality-verify/SKILL.md) | [`templates/gitignore-production.md`](./templates/gitignore-production.md) |
 | **Codebase Mapping** | [`rules/03-system-architecture.md`](./rules/03-system-architecture.md) | [`skills/cartography`](./skills/cartography/SKILL.md) | [`templates/AI-Context-Index.md`](./templates/AI-Context-Index.md) |
 | **Protocol Entry Point** | N/A | [`skills/apex-core`](./skills/apex-core/SKILL.md) | [`AGENTS.md`](./AGENTS.md) (this file) |
-
 

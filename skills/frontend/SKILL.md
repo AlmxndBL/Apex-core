@@ -45,6 +45,10 @@ features/<domain>/
 
 Asynchronous data views SHOULD implement the relevant loading, empty, error, and ready states. A static or trivial view does not need a wrapper component:
 
+### 🎯 Scope & Anti-Overengineering Exemption Gate
+- **Mandatory for:** Primary asynchronous user-facing data views (tables, metric dashboards, list feeds, async card grids).
+- **Strictly exempt:** Modals, dialogs, form sub-components, static headers, and internal utility tools. Do NOT generate redundant skeleton components or empty wrappers for simple static inputs or dialog boxes.
+
 ### 💚 Nuxt 4 / Vue 3 Pattern
 ```vue
 <template>

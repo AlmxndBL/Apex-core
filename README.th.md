@@ -6,6 +6,23 @@ Current release: `apex-core@5.5.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 
+Apex คือข้อกำหนดและโปรโตคอลการทำงาน (Operating Protocol & Rule Specification) แบบ local สำหรับ AI coding agent เพื่อวางกรอบการทำงานวิศวกรรมที่รัดกุม ตั้งแต่การล็อกเจตนาของงาน (Intent Locking: ตรวจสอบแบบ read-only vs. การแก้เฉพาะจุดแบบ surgical patch vs. การดำเนินการที่มีความเสี่ยงสูงแบบ guarded gate), การตรวจยืนยันผลในหน่วยความจำที่รวดเร็ว (Fast Targeted In-RAM Verification) ไปจนถึงการส่งมอบหลักฐานจริง (Mandatory Evidence Delivery) เมื่อสำรวจ แก้ไข และทดสอบโค้ดใน repository ซอฟต์แวร์จริง
+
+## Apex คืออะไร (What Apex is)
+
+Apex คือโปรโตคอลวิศวกรรมที่กำกับดูแลวิธีที่ AI coding agent ปฏิสัมพันธ์กับ codebase:
+- **โปรโตคอลการทำงานที่มีระเบียบวินัย (Disciplined Execution Protocol):** แบ่ง tier เจตนาชัดเจน (งานสืบค้น/ตรวจสอบเป็น read-only, งานแก้บั๊กแบบผ่าตัดเฉพาะจุด, งานสร้าง feature ตามสถาปัตยกรรม และ gate ขออนุมัติก่อนทำลายล้างหรือลบข้อมูล) ป้องกันไม่ให้ agent ทำเกินขอบเขต
+- **การแก้ไขโค้ดเฉพาะจุดที่จำเป็น (Surgical Code Modifications):** บังคับใช้ diff ที่แคบที่สุดตรงจุดบกพร่อง ห้าม refactor โค้ดหรือแก้สไตล์ไฟล์อื่นโดยไม่จำเป็น
+- **เครื่องมือตรวจยืนยันและระบบตัดวงจร (Verification Engine & Circuit Breaker):** แนะนำการตรวจ typecheck และ test ที่ตรงจุดตาม stack ของโปรเจกต์ และหยุดลูปการ retry แบบเดาสุ่มทันทีที่ verification ล้มเหลวติดต่อกัน 2 ครั้ง
+- **การส่งมอบงานด้วยหลักฐานเชิงประจักษ์ (Evidence-First Delivery):** กำหนดให้ agent รายงานผลลัพธ์ของคำสั่ง terminal และบันทึกการรัน test จริง แทนการอ้างความมั่นใจลอยๆ
+
+## Apex ไม่ใช่อะไร (What Apex is not)
+
+- **ไม่ใช่ runtime dependency หรือ framework ของแอปพลิเคชัน:** ไม่มีการติดตั้ง Apex เป็น dependency ในโค้ดโปรดักชันของแอป โปรเจกต์เป้าหมายยังคงใช้ `package.json`, lockfile และไลบรารีของตัวเองอย่างสมบูรณ์
+- **ไม่ใช่ CLI อัตโนมัติหรือ background daemon ที่แอบแก้โค้ดเอง:** Apex ไม่ได้แก้ไฟล์ด้วยตัวเอง แต่เป็นชุดคู่มือและกฎที่ส่งมอบให้ AI coding agent (เช่น Antigravity, Cursor, Claude Code, Windsurf) นำไปปฏิบัติตาม
+- **ไม่ใช่สิ่งที่จะมาแทนที่ Git, unit tests หรือการทำ code review ของมนุษย์:** Convention เดิมของทีมและคำสั่งของวิศวกรมนุษย์มีความสำคัญสูงสุดเสมอ
+- **ไม่ได้บังคับใช้ร่วมกับ Nexus:** Apex ทำงานแบบ standalone ได้อย่างสมบูรณ์โดยไม่ต้องมี Nexus โดย Nexus เป็นเพียง memory companion เสริม (optional) เท่านั้น
+
 ## Production-safe change ไม่ใช่แค่โค้ดที่ดูเหมือนใช้ได้
 
 Apex เหมาะกับจังหวะที่ patch ของ agent ต้องอยู่รอดใน repository จริง: แก้ให้แคบตาม convention ของโปรเจกต์ ตรวจ failure path ที่สำคัญ และทิ้งหลักฐานแทนการบอกว่า “น่าจะเสร็จแล้ว”
@@ -44,12 +61,6 @@ AI เขียนโค้ดได้เร็ว แต่ก็อาจต�
 - งานแก้ทำ diagnose → surgical change → targeted verification
 - งาน destructive ต้องสรุป blast radius และขออนุมัติ
 - verification fail แบบไม่คาดคิด 2 ครั้ง จะหยุด retry อัตโนมัติและรายงาน root cause
-
-## Apex ไม่ใช่อะไร
-
-- ไม่ใช่ production framework, runtime dependency, AI model หรือสิ่งที่แทน Git/tests/code review
-- ไม่ใช่คำสั่งที่แก้ทุก repository ให้อัตโนมัติ
-- ไม่ได้บังคับให้ใช้ Nexus — ใช้ Apex แบบ standalone ได้
 
 ## เริ่มใช้งาน
 
@@ -116,16 +127,13 @@ terminal result และ behavior ที่ยังตรวจยืนยั
 
 Convention ที่มีอยู่ใน repository มาก่อนเสมอ หากยังไม่มี Apex มีค่าเริ่มต้นตาม stack เช่น `vue-tsc --noEmit`, `tsc --noEmit`, `pytest -q` หรือ `go test`
 
-## ความน่าเชื่อถือที่ตรวจดูได้
+## หลักฐานและข้อจำกัด (Evidence and limitations)
 
-Apex ไม่ขอให้เชื่อคำประกาศว่า “ทำเสร็จแล้ว” แต่ให้ agent ทิ้งร่องรอยที่ตรวจเองได้:
+Apex ยึดหลักการความโปร่งใสและปฏิเสธคำอวดอ้างที่ไม่มีหลักฐานเชิงประจักษ์ สามารถตรวจสอบทะเบียนหลักฐานและผลการตรวจสอบทั้งหมดได้ที่ [`EVIDENCE.md`](./EVIDENCE.md)
 
-- outcome ที่ร้องขอและไฟล์ที่เปลี่ยนจริง;
-- caller หรือ consumer ที่พิจารณาเมื่อแก้ shared surface;
-- risk-specific check ที่เลือกสำหรับ auth, data, contract หรือ user-visible state; และ
-- command กับผลลัพธ์ที่ยืนยัน behavior หลังแก้
-
-หลักฐานนี้อยู่ใน repository ของคุณเอง จึงมีประโยชน์กว่าค่า success rate ทั่วไป [Apex-eval](https://github.com/AlmxndBL/Apex-eval) มีไว้สำหรับผู้ที่ต้องการดู evaluation harness, protocol และ telemetry ที่เก็บแยกต่างหาก โดยผลลัพธ์เป็นหลักฐานตามบริบท ไม่ใช่คำรับประกันสำหรับทุก model หรือทุก codebase
+- **ความสมบูรณ์ของ Repository และ Protocol (`Verified`):** การรัน `npm test` (ผ่าน `scripts/verify-framework.js`) เป็นการตรวจความสมบูรณ์ของโครงสร้าง repository, manifest, ความสอดคล้องของกฎ และลิงก์ภายใน (ผ่าน 98/98 checks) ซึ่ง **พิสูจน์เฉพาะ integrity ของ protocol ในตัว Apex-core เท่านั้น** ไม่ใช่การวัดหรือรับประกันความสามารถทั่วไปของ coding agent ในการแก้ปัญหาซอฟต์แวร์ในงานจริง
+- **ตัวเลข Benchmark ในอดีต (`Historical / Unverified`):** เอกสารและชุดทดสอบในอดีตบน [Apex-eval](https://github.com/AlmxndBL/Apex-eval) เคยอ้างอิงตัวเลขเช่น **ประหยัด token -58.4%**, **100% Pass@1**, **Mean Turns = 1.00** หรือการประเมิน **150 live trajectories** บนชุดงาน $N = 50$ งาน จากการตรวจสอบอย่างละเอียดใน [`EVIDENCE.md`](./EVIDENCE.md) พบว่าข้อมูลดิบในไฟล์ผลลัพธ์ (`live-agent-results.json`) ถูกสร้างขึ้นจากระบบจำลอง (Mock Runner: `isMock: true` บน `mock-engine`) ซึ่งใช้วิธีนำเฉลยที่เตรียมไว้มาใส่ลงใน workspace ดังนั้น ตัวเลขเหล่านี้เป็น **Historical artifacts จาก mock execution** ไม่ใช่ข้อเท็จจริงเชิงประจักษ์ (empirical fact) และไม่ใช่ผลจากการรัน live agent บนโมเดลภายนอกในสถานการณ์จริง
+- **หลักฐานเชิงปฏิบัติบน Codebase ของคุณ:** ประสิทธิผลจริงขึ้นอยู่กับโมเดล, ขนาดของบริบท, convention ของ codebase และการตรวจทานของนักพัฒนา หลักฐานที่แท้จริงคือร่องรอยการตรวจสอบในโปรเจกต์ของคุณเอง (terminal output, targeted test results และ failure-path checks)
 
 ## คำถามที่พบบ่อย
 
@@ -155,8 +163,8 @@ Apex เปลี่ยนความ “รอบคอบ” ให้เป�
 
 ### หลังแก้โค้ดแล้ว ควรได้รับหลักฐานอะไร?
 
-สำหรับ change ที่ไม่ trivial: files และ consumers ที่ได้รับผล, verification command, terminal result และ risk/failure-path check ที่เกี่ยวข้อง หาก critical behavior ใดทดสอบอย่างปลอดภัยไม่ได้ Apex ต้องระบุข้อจำกัดนั้นแทนการอ้างว่า verified
+สำหรับ change ที่ไม่ trivial: files และ consumers ที่ได้รับผล, verification command, terminal result และ risk/failure-path check ที่เกี่ยวข้อง หาก critical behavior ใดทดสอบอย่างปลอดภัยไม่ได้ Apex ต้องระบุข้อจำกัดนั้นแทนการอ้างว่า verified โดยสามารถดูมาตรฐานการจัดประเภทหลักฐานได้ใน [`EVIDENCE.md`](./EVIDENCE.md)
 
 ### มีหลักฐาน benchmark หรือไม่?
 
-มี [Apex-eval](https://github.com/AlmxndBL/Apex-eval) รวม evaluation harness, protocols และ historical artifacts ไว้แล้ว แต่ให้มอง metric ที่เผยแพร่เป็นผลเฉพาะ experiment นั้น ส่วนหลักฐานเชิงปฏิบัติคือ verification evidence ที่เกิดกับ repository ของคุณเอง
+ชุดทดสอบในอดีตและ evaluation harness ถูกแยกเก็บไว้ใน [Apex-eval](https://github.com/AlmxndBL/Apex-eval) โดยตามที่ระบุไว้ใน [`EVIDENCE.md`](./EVIDENCE.md) ตัวเลข benchmark เช่น ประหยัด token -58.4% หรือ 100% Pass@1 เป็นผลที่ได้จาก mock harness (`isMock: true`) ไม่ใช่การทดสอบ live agent จึงจัดอยู่ในสถานะ Unverified/Historical ส่วนการทดสอบเดียวที่ verified ใน repo นี้คือ `npm test` (framework integrity) สำหรับการใช้งานจริง หลักฐานเชิงปฏิบัติคือ terminal verification evidence ที่รันจริงบน codebase ของคุณเอง

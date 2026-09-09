@@ -6,6 +6,23 @@ Current release: `apex-core@5.5.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 
+Apex is a disciplined, local operating protocol and rule specification for AI coding agents. It provides structured operational guardrails—intent locking (read-only investigation vs. surgical patching vs. guarded destructive operations), targeted in-RAM verification, and mandatory evidence delivery—to guide coding agents when inspecting, modifying, and testing code in existing software repositories.
+
+## What Apex is
+
+Apex is an engineering protocol that governs how an AI coding agent approaches a codebase:
+- **Disciplined Execution Protocol:** Defines clear intent tiers (read-only audits, surgical bug fixes, synthesis builds, and guarded destructive blast-radius gates) so the agent never oversteps the user's intent.
+- **Surgical Code Modifications:** Enforces minimal, targeted diffs and prevents drive-by refactoring of unrelated files or unnecessary dependencies.
+- **Verification Engine & Circuit Breaker:** Recommends fast, stack-aware targeted checks (such as in-RAM typechecks and localized tests) and halts runaway retry loops after two consecutive unexpected failures.
+- **Evidence-First Delivery:** Requires the agent to provide concrete verification command outputs and test logs rather than unsupported confidence claims.
+
+## What Apex is not
+
+- **Not a production framework or runtime dependency:** Apex is never imported or deployed in your application runtime. Your project retains its own dependencies, package manager, and lockfile.
+- **Not an autonomous daemon or CLI that edits code independently:** Apex does not execute code edits on its own; it instructs existing AI coding assistants (such as Antigravity, Cursor, Claude Code, Windsurf) how to act.
+- **Not a replacement for Git, unit tests, or peer code review:** Existing repository conventions and human engineering judgment always take precedence.
+- **Not dependent on Nexus:** Apex functions 100% standalone without external memory or MCP servers. Nexus is strictly an optional companion.
+
 ## Production-safe changes, not plausible code
 
 Apex is for the moment when an agent's patch must survive contact with a real repository. It keeps the change focused, follows the project's conventions, checks the failure paths that matter, and leaves evidence instead of a confident claim.
@@ -44,12 +61,6 @@ Understand → inspect conventions → make the smallest useful change → verif
 - Fixes follow diagnose → surgical implementation → targeted verification.
 - Destructive work needs an explicit blast-radius approval.
 - Two unexpected verification failures stop automatic retries and require a useful failure report.
-
-## What Apex is not
-
-- Not a production framework, runtime dependency, AI model, or replacement for Git/tests/code review.
-- Not a command that edits repositories automatically.
-- Not dependent on Nexus. Apex works standalone.
 
 ## Start
 
@@ -116,16 +127,13 @@ Never save source code, `.env` contents, credentials, tokens, or raw terminal tr
 
 Existing repository conventions always win. When a project has no convention, Apex supplies stack-aware defaults such as `vue-tsc --noEmit`, `tsc --noEmit`, `pytest -q`, or `go test`.
 
-## Trust is observable
+## Evidence and limitations
 
-Apex does not ask you to trust a confidence statement. It asks the agent to leave a trail you can inspect:
+Apex operates under an epistemic doctrine of empirical evidence over confident assertions. Consult [`EVIDENCE.md`](./EVIDENCE.md) for the complete, auditable Evidence Register and claim audits.
 
-- the requested outcome and the files actually changed;
-- direct callers or consumers considered when a shared surface changes;
-- the risk-specific checks selected for auth, data, contracts, or user-visible state; and
-- the command and result that verified the completed behavior.
-
-That evidence belongs to your repository and is more useful than a generic success rate. [Apex-eval](https://github.com/AlmxndBL/Apex-eval) is available for readers who want to inspect the separate evaluation harness, protocols, and stored telemetry; its results are contextual evidence, not a promise for every model or codebase.
+- **Internal Framework Integrity (`Verified`):** Running `npm test` executes the local verification script (`scripts/verify-framework.js`), which validates repository structure, schema manifests, rule consistency, and document links (98/98 checks passing). This validates **protocol packaging integrity only**; it does not measure or guarantee coding agent performance on external software tasks.
+- **Historical Benchmark Metrics (`Historical / Unverified`):** Prior documentation and evaluation releases in [Apex-eval](https://github.com/AlmxndBL/Apex-eval) cited figures such as **-58.4% token reduction**, **100% Pass@1 accuracy**, **Mean Turns = 1.00**, or **150 live trajectories** across $N = 50$ tasks. As audited in [`EVIDENCE.md`](./EVIDENCE.md), the saved benchmark artifact (`live-agent-results.json`) was generated by a deterministic mock test runner (`isMock: true` with `mock-engine`) that injected pre-baked human patches. These figures are **historical artifacts of mock execution**, not empirical facts or verified live agent benchmarks across arbitrary codebases.
+- **Operational Proof on Your Codebase:** Real-world agent accuracy and token economy depend on the target codebase, the underlying model, prompt context, and developer review. The true measure of completion is the observable verification trail—exact command outputs, passed tests, and failure-path checks—produced directly within your repository.
 
 ## FAQ
 
@@ -155,8 +163,8 @@ No. Existing repository conventions win. Apex helps an agent choose and run the 
 
 ### What should I expect as evidence after a change?
 
-For a non-trivial change: affected files and consumers, the verification command, its terminal result, and the relevant risk or failure-path check. If a critical behavior cannot be exercised safely, Apex requires that limitation to be stated rather than called verified.
+For a non-trivial change: affected files and consumers, the verification command, its terminal result, and the relevant risk or failure-path check. If a critical behavior cannot be exercised safely, Apex requires that limitation to be stated rather than called verified. Consult [`EVIDENCE.md`](./EVIDENCE.md) for the complete evidence classification standard.
 
 ### Is there benchmark evidence?
 
-Yes. [Apex-eval](https://github.com/AlmxndBL/Apex-eval) contains the evaluation harness, protocols, and historical artifacts. Treat its published metrics as experiment-specific; the verification evidence generated for your own repository is the operational proof.
+Historical benchmark artifacts and the experimental harness reside in the separate [Apex-eval](https://github.com/AlmxndBL/Apex-eval) repository. As documented in [`EVIDENCE.md`](./EVIDENCE.md), published figures such as -58.4% token reduction or 100% Pass@1 derive from mock harness trials (`isMock: true`) rather than live agent trials, and are classified as Unverified/Historical. The only verified test in this repository is `npm test` (framework integrity). Operational proof for your project is the terminal verification evidence generated on your own codebase.
