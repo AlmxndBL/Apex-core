@@ -1,6 +1,5 @@
 {
   "name": "apex-core",
   "version": "5.5.0",
-  "description": "Apex — Lean AI Agent Operating Protocol (v5.5.0) with 3-Tier Dynamic Intent, 2-Strike Freeze Gate, Dual Execution Modes, and Multi-Platform UI Engine"
+  "description": "Apex — production-safe, evidence-backed AI coding workflow (v5.5.0) for patching, building, reviewing, and releasing software changes"
 }
-

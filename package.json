@@ -1,7 +1,7 @@
 {
   "name": "@apex/core",
   "version": "5.5.0",
-  "description": "Apex — Lean AI Agent Operating Protocol & Rules Engine",
+  "description": "Apex — production-safe, evidence-backed AI coding workflow",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +10,12 @@
   },
   "keywords": [
     "ai-agent",
-    "framework",
-    "rules-engine",
-    "engineering-standards",
+    "coding-agent",
+    "code-review",
+    "engineering-workflow",
+    "verification",
+    "security",
+    "software-delivery",
     "apex"
   ],
   "author": "StxrFxll",

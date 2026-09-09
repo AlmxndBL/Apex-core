@@ -1,4 +1,4 @@
-# 📜 Apex-core Changelog
+# 📜 Apex Changelog
 
 All notable changes to the Apex AI Agent Behavioral Framework and Rules Engine will be documented in this file.
 
@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.5.0] - 2026-09-06 — Panel Audit, Entry-Point Skill & Single-Sourcing Pass 🧭
 
 ## [Unreleased]
+
+### Changed
+- **Public Naming:** Simplified the user-facing product name to **Apex** in the README and Codex plugin display metadata. The repository/package identifier remains `apex-core`, and the current release remains `5.5.0`.
+- **Adoption Storefront:** Repositioned Apex around production-safe, evidence-backed delivery; added discoverable Patch, Build, Review, and Release workflows plus a concise authorization-path example in both README languages. Updated package and Codex plugin metadata to communicate the same user outcome.
+- **Evidence Positioning:** Replaced benchmark-number marketing in the README with an inspectable per-change evidence model: scope, impacted consumers, risk-specific checks, and terminal verification. Apex-eval remains linked as contextual methodology and telemetry, without making universal performance claims.
+
+### Added
+- **Adoption FAQ (`README.md`, `README.th.md`):** Answered the main evaluation questions: what Apex is, how it differs from a generic cautious prompt, when its safeguards apply, its relationship to Nexus and team conventions, the evidence it leaves behind, and how to interpret Apex-eval.
+- **Usable First-Run Guidance (`README.md`, `README.th.md`):** Documented the boundary between installing the local integrity tooling and making Apex instructions available to an agent, added an agent-neutral first-task prompt, and clarified that Patch/Build/Review/Release are task-intent labels rather than unimplemented commands.
 
 ### Changed
 - **Setup Simplified to 2 Modes (`README.md`, `README.th.md` §2):** Collapsed the previous Options A/B/C into two modes with a single selection question — "does the project need to carry the Apex docs inside itself?" — **Point** (default: one shared checkout with global agent registration) and **Vendor** (copy into the project, workflow-only or complete library). No behavioral rules changed.

@@ -1,18 +1,18 @@
 {
   "name": "apex-core",
   "version": "5.5.0",
-  "description": "Apex-core engineering protocol, rules, and verification skills for software projects.",
+  "description": "Production-safe, evidence-backed workflows for AI code patches, builds, reviews, and releases.",
   "author": {
     "name": "Apex-core"
   },
   "skills": "./skills/",
   "interface": {
-    "displayName": "Apex Core",
-    "shortDescription": "Engineering rules and verification for software projects.",
-    "longDescription": "Use Apex-core for structured software engineering, focused rule loading, and evidence-based verification.",
-    "developerName": "Apex-core",
+    "displayName": "Apex",
+    "shortDescription": "Production-safe AI code changes with evidence.",
+    "longDescription": "Use Apex-core to scope a change, follow project conventions, apply risk-appropriate safeguards, and verify the result before reporting completion.",
+    "developerName": "Apex",
     "category": "Developer Tools",
     "capabilities": ["Skills"],
-    "defaultPrompt": "Apply Apex-core to review or implement this software task."
+    "defaultPrompt": "Apply Apex to deliver this software change safely and include verification evidence."
   }
 }

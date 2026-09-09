@@ -1,140 +1,162 @@
-# ⚡ Apex-core 5 — AI Coding Guidance & Verification Toolkit
+# ⚡ Apex — Production-safe AI Coding Workflow
 
-> **A lean engineering guidance and verification toolkit for AI coding agents**
-> Apex-core provides structured rules, skills, templates, and repository-integrity checks for Nuxt 4, Next.js, and other coding projects. External benchmark results are historical evidence, not a guarantee for every project or model.
+> **Apex helps coding agents understand the task, change only what matters, verify the result, and report evidence.**
 
-<div align="center">
+Current release: `apex-core@5.5.0`
 
-**[ 🇬🇧 English ](README.md) · [ 🇹🇭 ภาษาไทย ](README.th.md)**
+**[English](README.md) · [ภาษาไทย](README.th.md)**
 
-</div>
+## Production-safe changes, not plausible code
 
-<div align="center">
+Apex is for the moment when an agent's patch must survive contact with a real repository. It keeps the change focused, follows the project's conventions, checks the failure paths that matter, and leaves evidence instead of a confident claim.
 
-[![Version](https://img.shields.io/badge/version-5.5.0-3b82f6.svg)](https://github.com/AlmxndBL/Apex-core)
-[![Token Savings](https://img.shields.io/badge/Token_Savings-🔻_58.4%25_empirical-10b981.svg)](https://github.com/AlmxndBL/Apex-eval)
-[![License](https://img.shields.io/badge/license-MIT-8b5cf6.svg)](LICENSE)
+The following are workflow labels, not separate commands. Apex selects the appropriate path from the task's intent and risk.
 
-</div>
+| Workflow label | When to use it | What Apex insists on |
+|---|---|---|
+| **Patch** | A bug fix or narrow adjustment | Root cause, a surgical diff, and a targeted regression check |
+| **Build** | A new feature or cross-layer change | Explicit scope, project conventions, and the affected user path |
+| **Review** | You need findings without modifying code | Read-only evidence, impact, and actionable priority |
+| **Release** | Auth, money, database, PII, or shared contracts are involved | Risk-specific authorization, state, compatibility, and verification gates |
 
----
-
-## 🎯 1. The Invisible Problem: The Stateless Token Bleed
-
-Most developers assume fixing a 5-line bug only costs tokens for those 5 lines. In reality, **commercial LLM APIs (OpenAI, Anthropic) are stateless REST APIs**. Every turn re-transmits the entire conversation history and 2,000-line raw files, causing token consumption to compound quadratically ($\mathcal{O}(N^2)$).
+### A five-minute difference
 
 ```text
-┌──────────────────────────────────────────────────┐      ┌──────────────────────────────────────────────────┐
-│ ❌ STATUS-QUO (Raw Ingestion: 1,858 BPE tok)     │      │ ✅ APEX-CORE 5 AST DIET (Interface: 67 BPE tok)  │
-├──────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────┤
-│ <template>                                       │      │ // [AST SKELETON: Vue 3 / Nuxt 4 SFC]            │
-│   <div class="min-h-screen bg-zinc-950 p-6">     │ ───> │ export interface UserTableRow {                  │
-│     <!-- 80+ lines of HTML markup & SVG icons -->│      │   id: string; email: string; role: Role;         │
-│     <table class="w-full border border-zinc-800">│      │ }                                                │
-│   </div>                                         │      │ export interface Props { users: UserTableRow[] } │
-│ </template>                                      │      │ export function useUserManagement(): StateStore; │
-│ <script setup lang="ts">                         │      │                                                  │
-│   // 60 lines of internal function bodies        │      │                                                  │
-│ </script>                                        │      │                                                  │
-└──────────────────────────────────────────────────┘      └──────────────────────────────────────────────────┘
-                  🔻 Illustrative context reduction example (see external benchmark notes)
+Without a delivery protocol
+  "The endpoint works." → response is 200, but an unauthorized caller can still mutate another tenant's record.
+
+With Apex
+  Trace the consumer and mutation path → validate input → enforce server-side scope
+  → exercise the forbidden path → report the command and result.
 ```
 
-Apex-core 5 provides a structured protocol for AI coding work:
-1. **AST Codebase Cartography:** Produces compact contract-oriented views when implementation details are not needed.
-2. **Targeted Verification:** Encourages the fastest reliable typecheck and test commands available in the target project.
-3. **Failure Guardrails:** Pauses automatic retries after repeated verification failures and reports evidence for the next decision.
+The goal is not more ceremony. It is the smallest change that is **complete, safe for its context, and verifiable**.
 
----
+## What it solves
 
-## ⚡ 2. Setup & Installation (2 Modes)
+AI coding agents are fast but can misread intent, edit too broadly, retry blindly, or claim completion without proof. Apex provides a repeatable local workflow:
 
-Pick with one question: **does the project need to carry the Apex docs inside itself?** No → Point. Yes → Vendor.
+```text
+Understand → inspect conventions → make the smallest useful change → verify → report evidence
+```
 
-### Mode 1: Point (Default)
-Keep `Apex-core` in one location and register it with agents that support global instruction/skill registration. One checkout serves every project, and rule updates apply everywhere at once:
+- Reviews and audits remain read-only.
+- Fixes follow diagnose → surgical implementation → targeted verification.
+- Destructive work needs an explicit blast-radius approval.
+- Two unexpected verification failures stop automatic retries and require a useful failure report.
+
+## What Apex is not
+
+- Not a production framework, runtime dependency, AI model, or replacement for Git/tests/code review.
+- Not a command that edits repositories automatically.
+- Not dependent on Nexus. Apex works standalone.
+
+## Start
+
+### Mode 1: Point — recommended
+
+Keep one checkout and connect its instructions/skills to your coding agent.
+
 ```bash
 git clone https://github.com/AlmxndBL/Apex-core.git ~/.agents/Apex-core
 cd ~/.agents/Apex-core && npm install
 ```
-*Connect the files according to the selected agent's instructions. Apex-core does not automatically enforce behavior in every agent, and it does not modify target repositories by itself.*
 
-### Mode 2: Vendor
-Copy the Apex docs into the target project when it must be self-contained (pinned rules for CI, or teams without access to a central checkout):
+Use your coding agent's normal instruction or skill-registration mechanism to make this checkout available. `npm install` is only for running Apex's local integrity check; it does not modify a target project or activate Apex by itself.
 
-- **Workflow only:** copy [`AGENTS.md`](./AGENTS.md) to the project root — core workflow without the linked rules, skills, or templates:
-  ```bash
-  cp AGENTS.md .cursorrules   # Cursor IDE
-  cp AGENTS.md CLAUDE.md      # Claude Code CLI
-  # Windsurf / Trae / Google Antigravity: place as AGENTS.md at repository root
-  ```
-- **Complete library:** also copy `rules/`, `skills/`, and `templates/` when the agent must access the full local library. For Codex, install Nexus separately as an MCP server if memory, project briefs, and session checkpoints are needed.
+### Mode 2: Vendor — self-contained projects
 
-> **No target-project runtime dependency:** Apex-core is a documentation and verification package. Target projects keep their own dependencies, lockfile, and package manager; agents should run the matching local typecheck/test commands.
+Copy [`AGENTS.md`](./AGENTS.md) into a target repository when it needs pinned local instructions. Copy `rules/`, `skills/`, and `templates/` too when the agent needs the full library.
 
----
+```bash
+cp AGENTS.md CLAUDE.md
+```
 
-### 🧭 Automatic Stack Detection Matrix
-`AGENTS.md` uses `package.json`, lockfiles, and existing structure as heuristics for a suitable starting point. It does not replace healthy project conventions:
+The command above is for agents that read `CLAUDE.md`. For other agents, place `AGENTS.md` in the instruction location they support. Target projects retain their own dependencies, lockfile, and package manager. Apex only defines how agents inspect, change, and verify them.
 
-| Detected Stack | Logic Layer | Presenter Layer | API Endpoints | Fast In-RAM TypeCheck |
-|---|---|---|---|---|
-| 💚 **Nuxt 4 (Vue 3 + Nitro)** | `composables/use<Feature>.ts` | `<Feature>List.vue` | `server/api/v1/*.ts` | `vue-tsc --noEmit` via detected manager |
-| ⚡ **Next.js 15 (React 19)** | `hooks/use<Feature>.ts` | `<Feature>List.tsx` | `app/api/v1/*/route.ts` | `tsc --noEmit` via detected manager |
-| 🐍 **Polyglot / Backend** | `services/<feature>_service` | Native Views | Framework Handlers | `pytest -q` / `go test` |
+### First task prompt
 
----
+Once Apex's instructions are available to your agent, use a normal task request. For a clear first run, copy this prompt and replace the bracketed text:
 
-## 📊 3. External Historical Benchmark Evidence
+```text
+Use Apex for this task: [describe the bug, feature, or review].
 
-An external **[Apex-eval](https://github.com/AlmxndBL/Apex-eval)** study reported the following results across **$N = 50$ tasks**. These figures are study-specific and should not be treated as a guarantee or as a test shipped with this repository:
+Before changing code, inspect the relevant project conventions and affected flow.
+Make the smallest safe change, then report the files changed, verification command,
+terminal result, and any behavior that could not be verified.
+```
 
-| Metric | Arm A (Baseline Whole-File) | Arm B (SEARCH/REPLACE Diff) | Arm C (Apex-core Engine) | Statistical Impact |
-|---|---|---|---|---|
-| **Pass@1 Accuracy** | **100% (50/50)** | **100% (50/50)** | **100% (50/50)** | Zero-shot defect resolution |
-| **Pass@5 Recovery** | **100%** | **100%** | **100%** | Total problem resolution |
-| **Mean Turns** | **1.00** | **1.00** | **1.00** | Single-turn resolution |
-| **Mean Ingestion Tokens** | 2,294 tok | 2,338 tok | **955 tok** | **🔻 -58.4% vs Baseline ($p = 0$)** |
-| **Enterprise Schemas (>800 lines)** | 7,270 tok | 7,309 tok | **3,557 tok** | **🔻 -51.1% Token Diet** |
-| **Context Index Docs (>2,000 lines)**| 2,453 tok | 2,530 tok | **272 tok** | **🔻 -88.9% Token Diet** |
+## Apex + Nexus 4 (optional)
 
-<div align="center">
+**Apex tells an agent how to work. Nexus remembers what earlier work established.**
 
-👉 **[ 🔬 Explore the Standalone Verification Suite & Raw Telemetry (Apex-eval) → ](https://github.com/AlmxndBL/Apex-eval)**  
-*(Includes full $N=50$ test suites across 10 repos, runner CLI, raw JSON telemetry, and paired $t$-test statistical proofs)*
+| Question | Apex-core | Nexus 4 |
+|---|---|---|
+| How should this task run? | Intent, scope, safety, verification | — |
+| What was already decided? | — | Project brief, ADRs, reusable lessons |
+| What happens after work? | Verify and report evidence | Optional redacted session handoff |
+| Where is the data? | Local instructions/tools | Local-first Markdown vault; no cloud/source upload by default |
 
-</div>
+Use Nexus only when its local MCP tools are available and the task benefits from memory:
 
----
+```text
+1. nexus_get_project_brief({ projectId: "apex-core" })
+2. Follow Apex discovery → implementation → verification
+3. nexus_save_session({ project: "apex-core", filesChanged: ["relative/path.ts"] })
+```
 
-## 🧩 4. Consolidated 4 Core Skills (Layer 2 Knowledge Engine)
+Never save source code, `.env` contents, credentials, tokens, or raw terminal transcripts to Nexus. It is an optional local memory companion—not a source-code store.
 
-1. 🎨 **[`skills/frontend`](./skills/frontend/SKILL.md):** Feature Module Separation when complexity warrants it, applicable async UI states, and practical visual guidance.
-2. 🗄️ **[`skills/backend-data`](./skills/backend-data/SKILL.md):** Standard 4-Step API Pipeline, Strict TypeScript (Zero Any), Prisma ORM & OCC Concurrency Protection, Better Auth & RBAC.
-3. 🧪 **[`skills/quality-verify`](./skills/quality-verify/SKILL.md):** Fast targeted typechecks and behavior tests, risk-based completion checks, and a two-strike loop breaker for consecutive unexpected verification failures.
-4. 🧭 **[`skills/cartography`](./skills/cartography/SKILL.md):** TypeScript Compiler API contract extraction and selective context reduction, with explicit limits for inferred types, imports, and schema edge cases.
+## Inside Apex
 
----
+- [`AGENTS.md`](./AGENTS.md): operating contract and safety gates
+- [`rules/`](./rules): security, architecture, code quality, database, UI, and testing guidance
+- [`skills/`](./skills): frontend, backend-data, verification, and cartography
+- [`templates/`](./templates): reusable UI, blueprint, and context templates
 
-## 🖼️ 5. Enterprise UI/UX Design Standards
+Existing repository conventions always win. When a project has no convention, Apex supplies stack-aware defaults such as `vue-tsc --noEmit`, `tsc --noEmit`, `pytest -q`, or `go test`.
 
-![Apex Enterprise UI Showcase](./templates/ui/assets/apex-enterprise-dashboard-showcase.png)
+## Trust is observable
 
-Apex offers reusable UI starters and practical guidance for **Vue 3 / Nuxt 4** and **React 19 / Next.js 15**. Adopt only the templates that fit the product; they are not mandatory dependencies or universal visual requirements. Starters are available in [`templates/ui/`](./templates/ui/).
+Apex does not ask you to trust a confidence statement. It asks the agent to leave a trail you can inspect:
 
----
+- the requested outcome and the files actually changed;
+- direct callers or consumers considered when a shared surface changes;
+- the risk-specific checks selected for auth, data, contracts, or user-visible state; and
+- the command and result that verified the completed behavior.
 
-## 🌌 6. Twin-Engine Synergy: Apex & Nexus
+That evidence belongs to your repository and is more useful than a generic success rate. [Apex-eval](https://github.com/AlmxndBL/Apex-eval) is available for readers who want to inspect the separate evaluation harness, protocols, and stored telemetry; its results are contextual evidence, not a promise for every model or codebase.
 
-Apex can be used standalone without a target-project runtime dependency, and can optionally pair with **[Nexus](https://github.com/AlmxndBL/nexus)** for persistent cross-project memory. The practical workflow is: load relevant state/brief → work under Apex → verify → save a Nexus session checkpoint.
+## FAQ
 
-* **Apex:** Code Quality, Disciplined Execution, & Verification Protocol (HOW to build, verify, and enforce safety).
-* **Nexus:** Dynamic Knowledge Vault, Session Memory, & Decision Graph (WHAT we know, decided, and learned).
+### Is Apex a coding agent or a framework my application runs on?
 
----
+Neither. Apex is a local operating protocol for a coding agent: instructions, focused skills, templates, and integrity checks. It adds no runtime dependency to the application you are building.
 
-## 💖 Acknowledgements & Inspirations
+### Are Patch, Build, Review, and Release commands I have to install?
 
-* **🧙‍♂️ [Matt Pocock (Total TypeScript)](https://github.com/mattpocock/skills)** — Strict TypeScript principles & contract typing
-* **🎯 [The 9arm Way](https://github.com/jirayu-ct-dev/9arm-skills)** — Pragmatic software engineering and trade-off evaluation
-* **🧠 [Andrej Karpathy](https://github.com/multica-ai/andrej-karpathy-skills)** — Agent behavioral safeguards and anti-overengineering philosophy
+No. They are labels for how Apex interprets the work: a narrow fix, a feature, a read-only assessment, or a risk-sensitive delivery. Your agent follows the relevant path from the request; no extra command surface is required.
+
+### How is Apex different from a prompt that asks an agent to be careful?
+
+Apex turns care into an explicit workflow. It separates read-only investigation from implementation, scales planning and safeguards with risk, requires targeted verification, and stops blind retries after two unexpected failures.
+
+### Does Apex make every task slow or bureaucratic?
+
+No. Small, low-risk changes use the fast path: inspect the relevant convention, make the smallest useful change, and run the smallest check that observes it. Heavier planning is reserved for changes with a larger blast radius or risks such as auth, money, durable state, database work, or shared contracts.
+
+### Do I need Nexus to use Apex?
+
+No. Apex works by itself. Nexus is an optional local memory companion for project briefs, durable decisions, and session handoffs; it is not a source-code store.
+
+### Does Apex replace tests, code review, or my team's conventions?
+
+No. Existing repository conventions win. Apex helps an agent choose and run the project's relevant checks, produce useful review evidence, and avoid treating a successful happy path as proof that a change is safe.
+
+### What should I expect as evidence after a change?
+
+For a non-trivial change: affected files and consumers, the verification command, its terminal result, and the relevant risk or failure-path check. If a critical behavior cannot be exercised safely, Apex requires that limitation to be stated rather than called verified.
+
+### Is there benchmark evidence?
+
+Yes. [Apex-eval](https://github.com/AlmxndBL/Apex-eval) contains the evaluation harness, protocols, and historical artifacts. Treat its published metrics as experiment-specific; the verification evidence generated for your own repository is the operational proof.
