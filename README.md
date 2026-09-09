@@ -1,3 +1,4 @@
+![Apex — Production-safe AI code changes](./assets/social-preview.jpg)
 # ⚡ Apex — Production-safe AI Coding Workflow
 
 > **Apex helps coding agents understand the task, change only what matters, verify the result, and report evidence.**
