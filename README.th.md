@@ -1,3 +1,4 @@
+![Apex — Production-safe AI code changes](./assets/social-preview.jpg)
 # ⚡ Apex — Production-safe AI Coding Workflow
 
 > **Apex ช่วยให้ AI coding agent เข้าใจงาน แก้เฉพาะจุด ตรวจผลจริง และรายงานหลักฐาน**
