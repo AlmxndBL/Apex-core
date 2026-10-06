@@ -1,5 +1,11 @@
 # 01. Security & Authentication Standards
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Universal security baselines and server authority: [`core/principles.md`](../core/principles.md)
+> - Session guards, RBAC, and auth providers: [`adapters/backend-data.md`](../adapters/backend-data.md)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 1 (Apply when the project handles protected data or exposed endpoints):** Security takes precedence over convenience, but controls must match the actual threat model.
 
 ---

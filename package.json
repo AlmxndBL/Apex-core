@@ -1,6 +1,6 @@
 {
   "name": "@apex/core",
-  "version": "5.5.0",
+  "version": "6.0.0",
   "description": "Apex — production-safe, evidence-backed AI coding workflow",
   "private": true,
   "type": "module",

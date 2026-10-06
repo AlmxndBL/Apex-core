@@ -1,5 +1,12 @@
 # 02. Coding Standards & Conventions
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Fail-fast error handling and clean code conventions: [`core/principles.md`](../core/principles.md)
+> - TypeScript, Node.js, and Zod standards: [`adapters/backend-data.md`](../adapters/backend-data.md)
+> - Polyglot language idioms (Python, C#, Shell): [`adapters/polyglot-core.md`](../adapters/polyglot-core.md)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 2:** Production-ready code standards, TypeScript conventions, and async runtime rules.
 
 ---

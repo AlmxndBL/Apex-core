@@ -1,5 +1,11 @@
 # 04. Database Design & Operations Standards
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Prisma ORM, PostgreSQL, OCC, and 5s Transaction Timeout: [`adapters/backend-data.md`](../adapters/backend-data.md)
+> - Polyglot database layers (SQLAlchemy, EF Core): [`adapters/polyglot-core.md`](../adapters/polyglot-core.md)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 4:** Database architecture, relational modeling, data integrity, and safe seeding strategies.
 
 ---

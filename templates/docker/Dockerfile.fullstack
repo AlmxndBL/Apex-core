@@ -1,0 +1,62 @@
+# ==============================================================================
+# Apex v6.0 Production Multi-Stage Dockerfile (Nuxt 4 / Next.js 15 Full-Stack)
+# Standards: Multi-stage caching · Non-root user · Minimal attack surface
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Base Environment
+# ------------------------------------------------------------------------------
+FROM node:22-slim AS base
+WORKDIR /app
+ENV NODE_ENV=production
+ENV CI=true
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init \
+    && rm -rf /var/lib/apt/lists/*
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# ------------------------------------------------------------------------------
+# Stage 2: Dependencies Cache Layer
+# ------------------------------------------------------------------------------
+FROM base AS dependencies
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+
+# ------------------------------------------------------------------------------
+# Stage 3: Application Builder
+# ------------------------------------------------------------------------------
+FROM dependencies AS builder
+WORKDIR /app
+COPY . .
+# Run schema generation and build
+RUN npx prisma generate || true
+RUN pnpm build
+
+# ------------------------------------------------------------------------------
+# Stage 4: Production Runner (Lean & Secure)
+# ------------------------------------------------------------------------------
+FROM base AS runner
+WORKDIR /app
+
+# Security: Non-root execution
+RUN groupadd -g 10001 nodejs && useradd -u 10001 -g nodejs -s /bin/sh nodejs
+
+# Copy runtime assets only (Nuxt 4 / Nitro default shown)
+COPY --from=builder --chown=nodejs:nodejs /app/.output ./.output
+COPY --from=builder --chown=nodejs:nodejs /app/package.json ./package.json
+
+# Note for Next.js 15 App Router (output: "standalone"):
+# COPY --from=builder --chown=nodejs:nodejs /app/.next/standalone ./
+# COPY --from=builder --chown=nodejs:nodejs /app/.next/static ./.next/static
+# COPY --from=builder --chown=nodejs:nodejs /app/public ./public
+
+USER nodejs
+EXPOSE 3000
+ENV PORT=3000
+ENV HOST=0.0.0.0
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+# Nuxt 4 / Nitro entry point:
+CMD ["node", ".output/server/index.mjs"]
+# Next.js standalone entry point:
+# CMD ["node", "server.js"]

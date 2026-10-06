@@ -1,5 +1,12 @@
 # 06. Testing, DevOps & Observability Standards
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Git discipline and clean engineering commits: [`core/principles.md`](../core/principles.md)
+> - Fast in-memory verification engine: [`skills/quality-verify/SKILL.md`](../skills/quality-verify/SKILL.md)
+> - Dual-speed Docker & GitHub Actions CI: [`templates/docker/`](../templates/docker/) and [`templates/ci/`](../templates/ci/)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 6:** Automated testing standards, Docker infrastructure, CI/CD pipelines, and observability.
 
 ---

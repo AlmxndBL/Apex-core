@@ -3,7 +3,7 @@ name: quality-verify
 description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Strike Loop-Breaker, and Evidence Delivery
 ---
 
-# Quality Verification & Fast Test Engine Skill
+# Quality Verification & Fast Test Engine Skill (v6.0.0)
 
 > In-memory verification protocols (Universal Definition of Done) with fast targeted checks and automated loop-breaking safeguards.
 
@@ -21,12 +21,18 @@ description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Str
 
 ---
 
-## 2. Mandatory Evidence Delivery (No Evidence = Not Done)
+## 2. Mandatory Evidence Delivery & Strict Seam Taxonomy
 
 * Never mark a task as complete without attaching actual **Terminal Output Logs**.
+* **Strict Seam Taxonomy (4 Levels of Verification Truth):**
+  1. `[Verified: Test]`: Function-specific automated test suite ran and observed the exact changed logic.
+  2. `[Verified: Compiler]`: In-RAM typecheck passed (`tsc`, `vue-tsc`, `mypy`). Confirms type contract only; never claim logic is tested.
+  3. `[Syntax-Only]`: Script grammar/syntax check passed (`node --check`, `py_compile`, `bash -n`) for dynamic or untyped codebases.
+  4. `[Unverified: Visual]`: Visual UI, CSS styling, or copy edits. Never mask with fake commands. Provide responsive viewport coordinates for human visual review.
+* **Graceful Fallback Ladder:** Finish tasks at the highest verified seam genuinely present in the repository. Never stall, refuse completion, or inject unrequested test libraries into a repo without test tooling.
 * Required Delivery Format:
   ```text
-  [Files Changed] -> [Verification Command] -> [Terminal Result: 0 errors]
+  [Files Changed] -> [Seam: Level] -> [Verification Command] -> [Terminal Result: 0 errors]
   ```
 
 ## 3. Adaptive Post-Implementation Review

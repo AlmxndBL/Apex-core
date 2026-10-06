@@ -1,5 +1,10 @@
 # 05. UX/UI & Frontend Development Standards
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Feature Module Architecture, 4-State UI Contract, and Tailwind design tokens: [`adapters/web-fullstack.md`](../adapters/web-fullstack.md)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 5:** Frontend development standards, component architecture, responsive design, and UI presets.
 > Divided into **2 main parts:**
 > 1. **Universal Foundation (Baseline guidance for web projects)**

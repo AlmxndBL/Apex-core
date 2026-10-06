@@ -1,5 +1,12 @@
 # 03. System Architecture & API Standards
 
+> [!NOTE]
+> **Apex v6.0 Migration Notice:** Canonical rules have moved to the v6.0 modular kernel.
+> - Monolith-First, YAGNI, and Pragmatic OOP Rule of Three: [`core/principles.md`](../core/principles.md)
+> - 4-Step API Pipeline and REST standards: [`adapters/backend-data.md`](../adapters/backend-data.md)
+> - Web frontend component architecture: [`adapters/web-fullstack.md`](../adapters/web-fullstack.md)
+> This file is preserved for backward-compatibility with existing links and tooling.
+
 > **Priority 3:** System architecture, RESTful API design standards, and pragmatic engineering principles.
 
 ---

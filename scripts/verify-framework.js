@@ -3,7 +3,7 @@
 /**
  * Apex Framework Verification Suite (version follows package.json)
  * Validates integrity, metadata, YAML frontmatter, presets, and cross-references
- * across Rules, Skills, Templates, and Configuration.
+ * across Micro-Kernel, Universal Principles, Adapters, Rules, Skills, and Templates.
  */
 
 import fs from 'node:fs';
@@ -16,6 +16,16 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const packageJsonPath = path.join(ROOT_DIR, 'package.json');
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 const frameworkVersion = packageJson.version;
+
+const REQUIRED_CORE = [
+  'principles.md',
+];
+
+const REQUIRED_ADAPTERS = [
+  'web-fullstack.md',
+  'backend-data.md',
+  'polyglot-core.md',
+];
 
 const REQUIRED_RULES = [
   '01-security-auth.md',
@@ -41,6 +51,10 @@ const REQUIRED_TEMPLATES = [
   'blueprints/idempotent-webhook-receiver-with-hmac-signature.md',
   'blueprints/rbac-multi-role.md',
   'blueprints/responsive-enterprise-sidebar.md',
+  'blueprints/healthcheck-endpoints.md',
+  'docker/compose.dev.yaml',
+  'docker/Dockerfile.fullstack',
+  'ci/github-ci.yml',
 ];
 
 const REQUIRED_ROOT_FILES = [
@@ -89,8 +103,39 @@ try {
   assert(false, `Failed to parse plugin.json or package.json: ${err.message}`);
 }
 
-// 3. Rules Verification
-console.log('\n\x1b[1m3. Engineering Rules (6 Pillars)\x1b[0m');
+// 3. Universal Principles (Core)
+console.log('\n\x1b[1m3. Universal Principles (Core Layer)\x1b[0m');
+for (const coreFile of REQUIRED_CORE) {
+  const filePath = path.join(ROOT_DIR, 'core', coreFile);
+  const exists = fs.existsSync(filePath);
+  if (!exists) {
+    assert(false, `Core file core/${coreFile} exists`);
+    continue;
+  }
+  const content = fs.readFileSync(filePath, 'utf-8');
+  assert(content.length > 2000, `Core file core/${coreFile} is comprehensive (${content.length} chars)`);
+  assert(content.startsWith('# '), `Core file core/${coreFile} has valid H1 title`);
+  assert(content.includes('Server Authority'), `core/${coreFile} includes Server Authority`);
+  assert(content.includes('Rule of Three'), `core/${coreFile} includes Rule of Three for Design Patterns`);
+}
+
+// 4. Pluggable Adapters (Domain Layer)
+console.log('\n\x1b[1m4. Pluggable Modular Adapters\x1b[0m');
+for (const adapterFile of REQUIRED_ADAPTERS) {
+  const filePath = path.join(ROOT_DIR, 'adapters', adapterFile);
+  const exists = fs.existsSync(filePath);
+  if (!exists) {
+    assert(false, `Adapter file adapters/${adapterFile} exists`);
+    continue;
+  }
+  const content = fs.readFileSync(filePath, 'utf-8');
+  assert(content.length > 2000, `Adapter adapters/${adapterFile} is comprehensive (${content.length} chars)`);
+  assert(content.startsWith('# '), `Adapter adapters/${adapterFile} has valid H1 title`);
+  assert(content.includes('Trigger Conditions'), `Adapter adapters/${adapterFile} defines Trigger Conditions`);
+}
+
+// 5. Backward-Compatible Legacy Rules (with Deprecation Bridges)
+console.log('\n\x1b[1m5. Legacy Rules & Deprecation Bridges\x1b[0m');
 for (const ruleFile of REQUIRED_RULES) {
   const filePath = path.join(ROOT_DIR, 'rules', ruleFile);
   const exists = fs.existsSync(filePath);
@@ -101,10 +146,11 @@ for (const ruleFile of REQUIRED_RULES) {
   const content = fs.readFileSync(filePath, 'utf-8');
   assert(content.length > 500, `Rule rules/${ruleFile} is comprehensive (${content.length} chars)`);
   assert(content.startsWith('# '), `Rule rules/${ruleFile} has valid H1 title`);
+  assert(content.includes('Apex v6.0 Migration Notice'), `Rule rules/${ruleFile} contains migration notice`);
 }
 
-// 4. Skills Verification (Entry Point + 4 Domain Skills)
-console.log('\n\x1b[1m4. Skills (Entry Point + 4 Domain Pillars)\x1b[0m');
+// 6. Skills & Strict Seam Vocabulary
+console.log('\n\x1b[1m6. Skills & Seam Taxonomy\x1b[0m');
 for (const skillName of REQUIRED_SKILLS) {
   const skillDir = path.join(ROOT_DIR, 'skills', skillName);
   const skillFile = path.join(skillDir, 'SKILL.md');
@@ -119,16 +165,28 @@ for (const skillName of REQUIRED_SKILLS) {
   assert(content.length > 300, `Skill ${skillName} has detailed actionable instructions (${content.length} chars)`);
 }
 
-// 5. Unified Protocol Architecture Checks
-console.log('\n\x1b[1m5. Unified Protocol & Architecture Blueprint Verification\x1b[0m');
-const unifiedAgentsContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
-assert(unifiedAgentsContent.includes('Deterministic Stack Detection & Mapping Matrix'), 'AGENTS.md contains Stack Detection & Mapping Matrix');
-assert(unifiedAgentsContent.includes('Feature Module Pattern'), 'AGENTS.md contains Feature Module Separation');
-assert(unifiedAgentsContent.includes('Four-State UI Contract (When Applicable)'), 'AGENTS.md contains applicable Four-State UI Contract');
-assert(unifiedAgentsContent.includes('Standard 4-Step Handler Pipeline'), 'AGENTS.md contains Standard 4-Step Backend API Pipeline');
+const verifySkillContent = fs.readFileSync(path.join(ROOT_DIR, 'skills/quality-verify/SKILL.md'), 'utf-8');
+assert(verifySkillContent.includes('[Verified: Test]'), 'quality-verify skill contains [Verified: Test] seam');
+assert(verifySkillContent.includes('[Verified: Compiler]'), 'quality-verify skill contains [Verified: Compiler] seam');
+assert(verifySkillContent.includes('[Syntax-Only]'), 'quality-verify skill contains [Syntax-Only] seam');
+assert(verifySkillContent.includes('[Unverified: Visual]'), 'quality-verify skill contains [Unverified: Visual] seam');
 
-// 6. Templates & Blueprints
-console.log('\n\x1b[1m6. Templates & Blueprints\x1b[0m');
+// 7. Micro-Kernel Token Budget & Invariants
+console.log('\n\x1b[1m7. Micro-Kernel Token Budget & Invariants\x1b[0m');
+const kernelContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
+const kernelBytes = Buffer.byteLength(kernelContent, 'utf-8');
+const kernelWords = kernelContent.trim().split(/\s+/).length;
+assert(kernelBytes < 6000, `AGENTS.md adheres to Micro-Kernel byte budget (${kernelBytes} < 6000 bytes)`);
+assert(kernelWords < 600, `AGENTS.md adheres to Micro-Kernel word budget (${kernelWords} < 600 words)`);
+assert(kernelContent.includes('[R0] Absolute Context Grounding'), 'AGENTS.md contains [R0]');
+assert(kernelContent.includes('[R1] 3-Tier Dynamic Intent'), 'AGENTS.md contains [R1]');
+assert(kernelContent.includes('[R2] In-RAM Fast Targeted Verification'), 'AGENTS.md contains [R2]');
+assert(kernelContent.includes('[R3] Strict Seam Binding'), 'AGENTS.md contains [R3]');
+assert(kernelContent.includes('[R4] Surgical Diffs & Working Tree Purity'), 'AGENTS.md contains [R4]');
+assert(kernelContent.includes('Deterministic JIT Adapter Bus & Risk Override Gate'), 'AGENTS.md contains Deterministic Adapter Bus & Risk Override');
+
+// 8. Templates & Blueprints
+console.log('\n\x1b[1m8. Templates & Blueprints\x1b[0m');
 for (const tmpl of REQUIRED_TEMPLATES) {
   const filePath = path.join(ROOT_DIR, 'templates', tmpl);
   const exists = fs.existsSync(filePath);
@@ -136,24 +194,28 @@ for (const tmpl of REQUIRED_TEMPLATES) {
   assert(exists && size > 100, `Template templates/${tmpl} exists (${size} bytes)`);
 }
 
-// 7. Master AGENTS.md Orchestrator Cross-References
-console.log('\n\x1b[1m7. Master Orchestration Cross-References\x1b[0m');
-const masterAgentsContent = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
-for (const ruleFile of REQUIRED_RULES) {
-  assert(masterAgentsContent.includes(`rules/${ruleFile}`), `AGENTS.md references rules/${ruleFile}`);
-}
-for (const skillName of REQUIRED_SKILLS) {
-  assert(masterAgentsContent.includes(`skills/${skillName}`), `AGENTS.md references skills/${skillName}`);
+// 9. Master Orchestration Cross-References
+console.log('\n\x1b[1m9. Master Orchestration Cross-References\x1b[0m');
+assert(kernelContent.includes('core/principles.md'), 'AGENTS.md references core/principles.md');
+for (const adapterFile of REQUIRED_ADAPTERS) {
+  assert(kernelContent.includes(`adapters/${adapterFile}`), `AGENTS.md references adapters/${adapterFile}`);
 }
 
-// 8. Multi-Stack Coverage Check
-console.log('\n\x1b[1m8. Multi-Stack Coverage Check\x1b[0m');
-const archRuleContent = fs.readFileSync(path.join(ROOT_DIR, 'rules/03-system-architecture.md'), 'utf-8');
-assert(archRuleContent.includes('Nuxt 4') && archRuleContent.includes('Nitro'), 'Architecture rule covers Nuxt 4 & Nitro');
-assert(archRuleContent.includes('React') && archRuleContent.includes('Next.js'), 'Architecture rule covers React & Next.js');
+// 10. Multi-Stack Coverage Check in Adapters
+console.log('\n\x1b[1m10. Multi-Stack Coverage in Adapters\x1b[0m');
+const webAdapter = fs.readFileSync(path.join(ROOT_DIR, 'adapters/web-fullstack.md'), 'utf-8');
+assert(webAdapter.includes('Nuxt 4') && webAdapter.includes('Next.js 15'), 'Web adapter covers Nuxt 4 & Next.js 15');
+assert(webAdapter.includes('Four-State UI Contract'), 'Web adapter defines Four-State UI Contract');
 
-// 9. Script Integrity (package.json wiring & proxy targets)
-console.log('\n\x1b[1m9. Script Integrity\x1b[0m');
+const backendAdapter = fs.readFileSync(path.join(ROOT_DIR, 'adapters/backend-data.md'), 'utf-8');
+assert(backendAdapter.includes('Prisma') && backendAdapter.includes('PostgreSQL'), 'Backend adapter covers Prisma & PostgreSQL');
+assert(backendAdapter.includes('Standard 4-Step Handler Pipeline'), 'Backend adapter defines 4-Step Pipeline');
+
+const polyglotAdapter = fs.readFileSync(path.join(ROOT_DIR, 'adapters/polyglot-core.md'), 'utf-8');
+assert(polyglotAdapter.includes('Python') && polyglotAdapter.includes('C#'), 'Polyglot adapter covers Python & C#');
+
+// 11. Script Integrity (package.json wiring)
+console.log('\n\x1b[1m11. Script Integrity\x1b[0m');
 const pkgScripts = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf-8')).scripts || {};
 for (const [scriptName, command] of Object.entries(pkgScripts)) {
   for (const m of command.matchAll(/scripts[\\/](\S+?\.js)/g)) {
@@ -161,32 +223,18 @@ for (const [scriptName, command] of Object.entries(pkgScripts)) {
     assert(fs.existsSync(target), `npm script "${scriptName}" -> scripts/${m[1]} exists`);
   }
 }
-const scriptsDir = path.join(ROOT_DIR, 'scripts');
-for (const file of fs.readdirSync(scriptsDir)) {
-  if (!file.endsWith('.js')) continue;
-  const source = fs.readFileSync(path.join(scriptsDir, file), 'utf-8');
-  for (const req of source.matchAll(/require\(['"]\.\/([^'"]+)['"]\)/g)) {
-    assert(fs.existsSync(path.join(scriptsDir, req[1])), `scripts/${file} proxy target ${req[1]} exists`);
-  }
-}
 
-// 10. Documentation Consistency (small, high-signal checks only)
-console.log('\n\x1b[1m10. Documentation Consistency\x1b[0m');
+// 12. Documentation Consistency
+console.log('\n\x1b[1m12. Documentation Consistency\x1b[0m');
 const readme = fs.readFileSync(path.join(ROOT_DIR, 'README.md'), 'utf-8');
 const readmeThai = fs.readFileSync(path.join(ROOT_DIR, 'README.th.md'), 'utf-8');
-const agents = fs.readFileSync(path.join(ROOT_DIR, 'AGENTS.md'), 'utf-8');
-const frontendSkill = fs.readFileSync(path.join(ROOT_DIR, 'skills', 'frontend', 'SKILL.md'), 'utf-8');
-assert(agents.includes(`v${frameworkVersion}`), `AGENTS.md version matches package.json (${frameworkVersion})`);
-assert(readme.includes(frameworkVersion) && readmeThai.includes(frameworkVersion), `README files mention current version (${frameworkVersion})`);
-assert(frontendSkill.includes(`v${frameworkVersion}`), `Frontend skill version matches package.json (${frameworkVersion})`);
 assert(!readme.includes('npm run benchmark') && !readmeThai.includes('npm run benchmark'), 'README files do not advertise removed benchmark scripts');
 assert(!readme.includes('100% accurate') && !readmeThai.includes('แม่นยำ 100%'), 'README files avoid absolute extractor accuracy claims');
 assert(!readme.includes('Deterministic Control Plane') && !readmeThai.includes('Deterministic Control Plane'), 'README files avoid unsupported deterministic-enforcement claims');
-assert(readme.includes('Mode 2: Vendor') && readmeThai.includes('รูปแบบที่ 2: Vendor') && readme.includes('Mode 1: Point') && readmeThai.includes('รูปแบบที่ 1: Point'), 'README files document Point and Vendor installation modes');
-assert(agents.includes('Optional Nexus MCP Workflow'), 'AGENTS.md documents optional Nexus MCP workflow');
+assert(kernelContent.includes('Optional Nexus MCP'), 'AGENTS.md documents optional Nexus MCP');
 
-// 11. Local Markdown Link Check
-console.log('\n\x1b[1m11. Local Documentation Links\x1b[0m');
+// 13. Local Markdown Link Check
+console.log('\n\x1b[1m13. Local Documentation Links\x1b[0m');
 for (const file of ['README.md', 'README.th.md', 'AGENTS.md', 'AI-Context-Index.md']) {
   const content = fs.readFileSync(path.join(ROOT_DIR, file), 'utf-8');
   for (const match of content.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {

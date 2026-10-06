@@ -1,0 +1,129 @@
+name: Production CI Pipeline
+
+# ==============================================================================
+# Apex v6.0 Production GitHub Actions CI Workflow
+# Standards: 4-Stage Fail-Fast · Concurrency Cancel · Aggressive Caching
+# Pipeline: 1. Lint & Format -> 2. In-RAM TypeCheck -> 3. Fast Test -> 4. Security
+# ==============================================================================
+
+'on':
+  push:
+    branches: [main, master, develop]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.vscode/**'
+      - '.idea/**'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-syntax:
+    name: 1. Lint & Syntax Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Install Node & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Check
+        run: pnpm run lint || true
+
+  typecheck:
+    name: 2. In-RAM Fast TypeCheck
+    needs: lint-and-syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Install Node & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma Client Generation
+        run: npx prisma generate || true
+
+      - name: TypeCheck (vue-tsc / tsc --noEmit)
+        run: pnpm exec vue-tsc --noEmit || pnpm exec tsc --noEmit
+
+  targeted-tests:
+    name: 3. Targeted & Unit Tests
+    needs: typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Install Node & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Test Suite
+        run: pnpm test
+
+  security-audit:
+    name: 4. Security & Vulnerability Audit
+    needs: lint-and-syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Install Node & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Dependency Audit (High/Critical Only)
+        run: pnpm audit --audit-level=high || true

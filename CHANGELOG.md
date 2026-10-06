@@ -7,9 +7,29 @@ Benchmark tooling and telemetry referenced in older entries lived in the separat
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.5.0] - 2026-09-06 — Panel Audit, Entry-Point Skill & Single-Sourcing Pass 🧭
+## [6.0.0] - 2026-10-06 — The Micro-Kernel, Multi-Stack Adapters & Dual-Speed Infrastructure Release 🚀
 
-## [Unreleased]
+### Added
+- **Micro-Kernel Architecture (`AGENTS.md`):** Reduced root agent configuration by >65% (down to ~4.1 KB / ~510 tokens `[Modeled]`) with pure language-agnostic core invariants (R0–R4).
+- **Universal Engineering Principles (`core/principles.md`):** Consolidated server authority, universal security baselines, fail-fast error boundaries, clean git standards, and the Pragmatic OOP Rule of Three.
+- **JIT Pluggable Stack Adapters (`adapters/`):**
+  - `adapters/web-fullstack.md`: Nuxt 4 (Vue 3 / Nitro), Next.js 15 (React 19 / App Router), 4-State UI Contract, and Responsive Enterprise Data views.
+  - `adapters/backend-data.md`: Node.js, Prisma 7 driver adapters, PostgreSQL, OCC versioning, atomic increments, 5-second Tx timeout, and approved OOP design patterns (Strategy, Adapter, State, Facade).
+  - `adapters/polyglot-core.md`: Python 3.10+ (FastAPI, pytest, mypy, Pydantic), C# .NET 8+ (ASP.NET Core, EF Core), and POSIX Bash / PowerShell 7.
+- **Strict Seam Binding & Taxonomy (`skills/quality-verify`):** Standardized 4 verification truth levels (`[Verified: Test]`, `[Verified: Compiler]`, `[Syntax-Only]`, `[Unverified: Visual]`) with graceful fallback ladder to eliminate verification theater.
+- **Production DevOps & CI/CD Blueprints (`templates/`):**
+  - `templates/docker/compose.dev.yaml`: Local dev stack for PostgreSQL 17 and Redis 7 with container healthchecks.
+  - `templates/docker/Dockerfile.fullstack`: Production multi-stage build on Node 22 slim with non-root security.
+  - `templates/ci/github-ci.yml`: 4-stage fail-fast GitHub Actions workflow (Lint -> TypeCheck -> Fast Test -> Security).
+  - `templates/blueprints/healthcheck-endpoints.md`: Dual health probes (`/api/health/live` & `/api/health/ready`).
+
+### Changed
+- **Single Universal Adoption Mode:** Unified point vs vendor installation into a single global reference path or 1-file root drop-in (`AGENTS.md` 4.1 KB).
+- **C1 Risk-Override Adapter Gate:** Fast Track skips adapters for low-risk 1–3 files, but automatically requires `adapters/backend-data.md` for Auth, Money/PII, Schema, OCC, or Breaking APIs regardless of file count.
+- **Framework Verification Suite (`scripts/verify-framework.js`):** Synchronized to validate Micro-Kernel budgets (<6 KB), Universal Principles, Modular Adapters, and Seam Taxonomy tokens.
+
+### Deprecated
+- **Legacy Monolithic Rules (`rules/01-06.md`):** Added deprecation bridges pointing to `core/principles.md` and `adapters/` while preserving backward compatibility.
 
 ### Changed
 - **Public Naming:** Simplified the user-facing product name to **Apex** in the README and Codex plugin display metadata. The repository/package identifier remains `apex-core`, and the current release remains `5.5.0`.

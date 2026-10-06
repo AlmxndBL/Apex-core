@@ -17,25 +17,34 @@
 
 ```text
 .
-├── AGENTS.md                  # Master Unified AI Agent Operating Protocol (v5.5.0)
+├── AGENTS.md                  # Micro-Kernel Operating Protocol (v6.0.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── README.md                  # Master Documentation & Single Drop-in Guide
 ├── package.json               # Engine Configuration & Scripts
 ├── plugin.json                # Live Antigravity Plugin Metadata
-├── rules/                     # 6 Domain Engineering Standards
+├── core/                      # Universal Principles & Architecture Bounds
+│   └── principles.md          # Language-Agnostic Security, Error Handling, Git & OOP Rules
+├── adapters/                  # JIT Pluggable Modular Adapters
+│   ├── web-fullstack.md       # Nuxt 4, Next.js 15, Tailwind, 4-State UI
+│   ├── backend-data.md        # Node, Prisma 7, PostgreSQL, OCC, Concurrency
+│   └── polyglot-core.md       # Python (FastAPI/mypy), C# (.NET 8), Shell/CLI
+├── rules/                     # Legacy Rules (Preserved with v6.0 Deprecation Bridges)
 │   ├── 01-security-auth.md
 │   ├── 02-coding-standards.md
 │   ├── 03-system-architecture.md
 │   ├── 04-database-design.md
 │   ├── 05-ux-ui-design.md
 │   └── 06-testing-devops.md
-├── skills/                    # 5 Skills (1 Entry Point + 4 Domain Pillars)
-│   ├── apex-core/             # Entry Point: dispatches to AGENTS.md + relevant rules/skills
+├── skills/                    # Specialized Skills (Entry Point + Domain Pillars)
+│   ├── apex-core/             # Entry Point: Dispatches Micro-Kernel & JIT Adapters
 │   ├── backend-data/
 │   ├── cartography/
 │   ├── frontend/
-│   └── quality-verify/
-└── templates/                 # Production Starter Templates & Utilities
+│   └── quality-verify/        # Fast Verification Engine & Strict Seam Taxonomy
+└── templates/                 # Production Starter Templates, DevOps & Blueprints
+    ├── docker/                # compose.dev.yaml & Dockerfile.fullstack
+    ├── ci/                    # github-ci.yml (4-Stage Fail-Fast)
+    └── blueprints/            # Reference Blueprints & Dual Healthchecks
 ```
 
 ---
