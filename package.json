@@ -1,26 +1,26 @@
 {
-  "name": "@apex/core",
-  "version": "6.0.0",
-  "description": "Apex — production-safe, evidence-backed AI coding workflow",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "verify": "node scripts/verify-framework.js",
-    "test": "node scripts/verify-framework.js"
-  },
-  "keywords": [
-    "ai-agent",
-    "coding-agent",
-    "code-review",
-    "engineering-workflow",
-    "verification",
-    "security",
-    "software-delivery",
-    "apex"
-  ],
-  "author": "StxrFxll",
-  "license": "MIT",
-  "devDependencies": {
-    "typescript": "^5.7.3"
-  }
+    "name":  "@apex/core",
+    "version":  "6.1.0",
+    "description":  "Apex — production-safe, evidence-backed AI coding workflow",
+    "private":  true,
+    "type":  "module",
+    "scripts":  {
+                    "verify":  "node scripts/verify-framework.js",
+                    "test":  "node scripts/verify-framework.js"
+                },
+    "keywords":  [
+                     "ai-agent",
+                     "coding-agent",
+                     "code-review",
+                     "engineering-workflow",
+                     "verification",
+                     "security",
+                     "software-delivery",
+                     "apex"
+                 ],
+    "author":  "StxrFxll",
+    "license":  "MIT",
+    "devDependencies":  {
+                            "typescript":  "^5.7.3"
+                        }
 }

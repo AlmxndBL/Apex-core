@@ -65,6 +65,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<OrderRespon
 
 ### B. Database Safety & Migration Gates
 - **Tier 3 Destructive Gate:** Never drop columns, tables, or truncate databases without explicit blast radius assessment and explicit user approval.
+- **Pre-Flight Schema Grounding Check:** NEVER hallucinate database fields. You MUST use a tool to read the schema file (e.g., `schema.prisma` or `drizzle.schema.ts`) before writing database logic or specifications.
 - **Backward-Compatible Columns:** New columns added to existing production tables must be optional (`?`) or have `@default(...)` values.
 - **Prisma 7 Driver Adapter Rule:** In Prisma v7+, configure the driver adapter explicitly (`new PrismaClient({ adapter: new PrismaPg(pool) })`) inside a shared singleton (`server/utils/prisma.ts`).
 - **Index Placement Strategy:** Place `@@index` on frequently filtered foreign keys, `tenantId`, `status`, and sorting timestamps (`createdAt`). Avoid blanket unmeasured indexing.
@@ -133,5 +134,6 @@ Apply the **Rule of Three ($\ge 3$ concrete variants)** before adopting patterns
 ## ⚡ 4. Fast Targeted In-Memory Verification
 
 - **Fast TypeCheck Gate:** `pnpm tsc --noEmit` via detected package manager.
+- **Target Environment Sanity Check:** Before executing ANY tests or scripts that mutate state, you MUST verify the `.env` file. If external cloud environments or remote databases (e.g., Supabase, AWS) are detected, HALT and request explicit user confirmation to prevent accidental production mutations.
 - **Targeted Integration Tests:** Run single-file tests targeting modified API route handlers (e.g., `pnpm vitest run tests/server/orders.test.ts`).
 - **Never Run Full Production Build:** Do not execute `pnpm build` for isolated API or database service tweaks.

@@ -77,3 +77,21 @@ Regardless of framework, language, or environment, these non-negotiable security
   - `chore(<scope>): tooling, dependencies, or configuration`
 - **Delivery Purity Ratio (DPR = 1.0):** Every modified line must directly serve the user's explicit objective. Strictly zero drive-by refactoring of untouched files or accidental formatting churn.
 - **Zero Repository Pollution:** Never commit temporary scratch scripts (`scratch.js`, `dummy_test.ts`), raw logs, or IDE-specific cache directories.
+
+
+## 5. 🚀 New Project Bootstrapping (Docs-First Architecture)
+
+When initializing a new project under the Apex Protocol, agents must enforce a strictly "Docs-First" skeleton before writing any application code or executing framework setup commands.
+
+### A. The Master Router (`AGENTS.md`)
+- Place a single `AGENTS.md` file in the project root.
+- It must act ONLY as a router, pointing to `Apex-core/AGENTS.md` for core rules, and mapping local context to the `docs/` directory. Do not embed heavy business logic here.
+
+### B. The 3 Core Pillars (in `docs/`)
+Before writing application code, the following 3 specifications must be drafted, reviewed, and placed in the `docs/` directory:
+1. `docs/prd.md`: Product Requirements Document containing epic scope, features, and RBAC matrix. Use explicit state tags like `[Implemented]`, `[WIP]`, and `[Target]`.
+2. `docs/design_system.md`: The single source of truth for UX/UI and styling. Must bind UX theories directly to Code Tokens (e.g., Tailwind classes, UI library components) to prevent UI split-brain and hallucinated styling.
+3. `docs/verification_matrix.md`: The Quality Assurance gate. Contains exact terminal commands for fast in-RAM verification, testing boundaries, and baseline ratchet policies.
+
+### C. Execution Loop
+Once the skeleton is approved, agents will execute features by reading the Router (`AGENTS.md`), mapping requirements from the PRD, applying stylistic tokens from the Design System, and verifying against the Matrix before returning control to the user.
