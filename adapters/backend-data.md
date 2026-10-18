@@ -1,6 +1,6 @@
 # 🛡️ Modular Stack Adapter: Backend & Data Architecture (Node / Prisma / PostgreSQL)
 
-> **Apex v6.0 Adapter Module · Domain: Server API, Database ORM & Backend Security**  
+> **Apex v6.1.0 Adapter Module · Domain: Server API, Database ORM & Backend Security**
 > Covers Node.js runtimes, TypeScript server engines (Nitro, Express, Next Route Handlers), Prisma ORM, PostgreSQL, Server Session Guards, Concurrency Control, Idempotency, and Pragmatic OOP Patterns.
 
 ---
@@ -128,6 +128,16 @@ Apply the **Rule of Three ($\ge 3$ concrete variants)** before adopting patterns
      async execute(orderId: string, userId: string) { /* ... */ }
    }
    ```
+
+### G. SQL Injection & Dynamic Query Safety
+- Prefer Prisma/Drizzle query builders. Bind every data value in raw SQL; never concatenate user input into query text or pass it to `$queryRawUnsafe` / `$executeRawUnsafe`.
+- SQL identifiers and sort directions cannot be bound as values. Map client choices through a fixed allowlist to known columns/directions; never accept table or column names directly.
+- Preserve intentional `LIKE` search semantics; parameter binding prevents SQL syntax injection but does not remove wildcard behavior.
+
+### H. Personal Data Lifecycle
+- Collect and return only personal data required for the feature's stated purpose. Treat masking as a presentation safeguard, not a substitute for access control or minimization.
+- Before adding personal-data fields, identify project-approved retention and deletion rules and where they apply (including exports and derived records). Follow the project's process for access, correction, restriction, or deletion requests and legal holds; escalate unclear policy to the owner.
+- Keep personal data out of logs and error payloads. Review processors and external data transfers against the project's approved privacy requirements; escalate suspected exposure through its incident process.
 
 ---
 

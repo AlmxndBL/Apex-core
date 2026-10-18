@@ -3,7 +3,7 @@ name: backend-data
 description: Strict TypeScript Mastery, PostgreSQL & Prisma ORM Architecture, API Design, Security, and Transaction Optimization
 ---
 
-# Backend, Data Architecture & Strict TypeScript Skill (v6.0.0)
+# Backend, Data Architecture & Strict TypeScript Skill (v6.1.0)
 
 > Production engineering standards for backend systems, PostgreSQL, Prisma ORM, RESTful APIs, and strict TypeScript without `any`.
 

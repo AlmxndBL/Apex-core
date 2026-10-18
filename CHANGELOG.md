@@ -7,6 +7,13 @@ Benchmark tooling and telemetry referenced in older entries lived in the separat
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.0] - 2026-10-18 — Practical Security & Governance Updates
+
+### Changed
+- Added parameterized-query and dynamic-identifier safeguards for Prisma/Drizzle, SQLAlchemy, and EF Core guidance.
+- Added a concise project-scoped personal-data lifecycle baseline and corrected high-risk adapter routing for Python/.NET.
+- Made protocol change review proportional to risk and synchronized active version labels with package metadata.
+
 ## [6.0.0] - 2026-10-06 — The Micro-Kernel, Multi-Stack Adapters & Dual-Speed Infrastructure Release 🚀
 
 ### Added

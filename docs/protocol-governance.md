@@ -1,4 +1,4 @@
-# Apex Protocol Governance & Growth Gates
+# Apex Protocol Governance & Risk-Tiered Change Gates
 
 > **Version:** 1.0.0  
 > **Status:** Active Protocol Standard  
@@ -20,94 +20,32 @@ To maintain Apex-core as a lean, high-velocity engineering engine, **the bar for
 
 ---
 
-## 2. The 5 Growth Gates for Core Rules & Skills
+## 2. Risk-Proportionate Rule Changes
 
-No rule, constraint, or new skill may be added to `Apex-core/AGENTS.md`, `Apex-core/rules/`, or `Apex-core/skills/` without satisfying all **5 Growth Gates**:
+Apply these checks to changes in AGENTS.md, rules/, skills/, and adapters/. Choose the lightest process that addresses the change:
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       THE 5 APEX GROWTH GATES                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. Triplicate Empirical Failure  │ >= 3 Real-world failure incident logs    │
-├──────────────────────────────────┼──────────────────────────────────────────┤
-│ 2. Non-Redundancy & Subsumption  │ Proved not covered by existing Rules 0-4 │
-├──────────────────────────────────┼──────────────────────────────────────────┤
-│ 3. Minimal Intervention (YAGNI)  │ Lowest word count, highest signal        │
-├──────────────────────────────────┼──────────────────────────────────────────┤
-│ 4. Measurable Verification Seam  │ Verifiable via automated terminal check  │
-├──────────────────────────────────┼──────────────────────────────────────────┤
-│ 5. Zero Fast-Path Friction       │ Zero added halts or delay on 1-3 files   │
-└──────────────────────────────────┴──────────────────────────────────────────┘
-```
+- **Clarification or narrow domain fix:** State the concrete gap, check for duplication, make the smallest change, and run an available focused verification. No minimum incident count, RFC, or A/B trial is required.
+- **New mandatory rule or core invariant:** Provide at least one concrete failure or a specific security/safety requirement; explain why current guidance is insufficient; scope the rule to relevant stacks and avoid new fast-path friction. Keep the wording concise.
+- **Architecture change or intent redefinition:** Write a concise RFC with blast radius and migration impact. Evaluate representative tasks before adoption when the change could alter agent behavior. Use controlled A/B trials when making comparative performance or quality claims, not as a prerequisite for a focused security fix.
 
-### Gate 1: Triplicate Empirical Failure Mode ($\ge 3$ Real-World Incidents)
-* **Requirement:** The proposed rule must address a failure mode that has occurred and been documented in **at least 3 separate real-world tasks**.
-* **Evidence Standard:** Each incident must include:
-  1. The user prompt.
-  2. The agent's erroneous behavior or defective output.
-  3. Why the absence of the rule allowed the failure to occur.
-* **Disqualification:** Hypothetical edge cases, aesthetic preferences, or synthetic/toy failures are categorically rejected.
-
-### Gate 2: Non-Redundancy & Subsumption Analysis
-* **Requirement:** The proposer must demonstrate why existing rules cannot prevent the defect.
-* **Analysis Criteria:**
-  * Does Rule 0 (Grounding & Anti-Sycophancy) already cover this?
-  * Does Rule 1 (Intent Tiers & Scope Gates) already restrict this action?
-  * Does Rule 2 (Fast In-RAM Verification) or Rule 3 (Evidence Delivery) catch the error?
-  * Does Rule 4 (Patch vs Synthesis & YAGNI) prohibit this behavior?
-* **Disqualification:** If proper enforcement of an existing rule prevents the failure, the proposal must be rejected in favor of clarifying existing documentation.
-
-### Gate 3: Minimal Intervention (YAGNI & Token Budget)
-* **Requirement:** Protocol modifications must follow the principle of least intervention.
-* **Token Budget Limits:**
-  * An addition to `AGENTS.md` core must not exceed **150 words**.
-  * A domain rule addition in `rules/*.md` must not exceed **300 words**.
-* **Tone & Format:** Must follow BLUF (Bottom Line Up Front), imperative tone, with concrete good/bad code examples. Unsolicited explanatory theory is strictly banned.
-
-### Gate 4: Measurable Verification Seam
-* **Requirement:** The proposed rule must be testable through an objective verification seam.
-* **Criteria:**
-  * Can compliance be checked via a script, typecheck, test runner, AST parser, or deterministic regex?
-  * If a rule cannot be verified programmatically or through observable terminal logs, it cannot be a mandatory core rule (it may only be documented as an optional advisory guideline).
-
-### Gate 5: Zero Fast-Path Friction (1–3 File Protection)
-* **Requirement:** The rule must not degrade the turnaround speed of the Fast Track.
-* **Criteria:**
-  * Must NOT add mandatory human confirmation halts for low-risk 1–3 file tasks.
-  * Must NOT require heavy documentation (plans, RFCs, state summaries) for small surgical patches.
-  * Any rule that slows down single-fault bug fixing must be scoped strictly to Heavy Track or Tier 3 Destructive gates.
-
----
-
-## 3. Protocol Evolution Lifecycle (RFC Process)
+Mandatory rules should have an observable verification seam where practical. If a requirement depends on project policy or human judgment, state that limitation and keep the project-specific decision with the project owner. Do not create an automated check that searches for a keyword and treats it as proof of compliance.
+## 3. Protocol Evolution Lifecycle
 
 ```text
-[Incident Capture] ──> [RFC Proposal] ──> [Shadow Evaluation] ──> [Gate Review] ──> [Core Integration]
-   (3 Incidents)        (5 Gates Check)        (5 Tasks A/B)         (Approval)        (SemVer Bump)
+[Concrete Gap] -> [Risk-Tiered Review] -> [Focused Verification] -> [Integration]
+  (observed or      (RFC only for core/       (A/B only for        (SemVer when
+   safety need)      architecture changes)     comparative claims) applicable)
 ```
 
-1. **Stage 0: Incident Dossier**
-   * Record 3 incident logs meeting Gate 1 criteria into `docs/incidents/`.
-2. **Stage 1: RFC Proposal**
-   * Submit an RFC detailing the exact proposed diff to `AGENTS.md` or `rules/`.
-   * Complete the 5-Gate Self-Audit Checklist.
-3. **Stage 2: Shadow Evaluation (A/B Trial)**
-   * Run at least 5 benchmark tasks from the Case Study catalog using the proposed rule diff against the current protocol baseline.
-   * Verify that Diff Purity Ratio ($DPR$) improves or remains constant, and that no Fast Path latency regressions occur.
-4. **Stage 3: Integration & Versioning**
-   * Merged only after passing `node scripts/verify-framework.js` with 100% integrity.
-   * Protocol version incremented following Semantic Versioning:
-     * **Patch (x.x.Y):** Clarifications, typos, non-functional adjustments.
-     * **Minor (x.Y.0):** Non-breaking additions satisfying all 5 Growth Gates.
-     * **Major (Y.0.0):** Structural re-architecting or breaking intent redefinitions.
-5. **Stage 4: Continuous Pruning & Sunset Review**
-   * Every 6 months, all rules are audited. If frontier LLM capabilities natively solve a problem without guidance across 10 consecutive trials, the rule is scheduled for deprecation to keep the protocol lean.
+1. Record the concrete gap and classify it as a clarification, domain rule, or core/architecture change.
+2. Review overlap, blast radius, fast-path impact, and the smallest applicable verification. RFCs and representative task evaluations are for core or architecture changes, not routine edits.
+3. Run the framework integrity check for changes to protocol structure, manifests, or verifier assumptions. Use targeted A/B evaluation only for a deliberate comparison claim.
+4. Version protocol releases according to the project's release policy. Review rules periodically and remove guidance that no longer prevents a demonstrated risk.
 
 ---
-
 ## 4. Proposal-Only: Core Protocol Streamlining & Decoupling Candidates
 
-> **Notice:** The following section constitutes an **advisory proposal** for the Protocol Team Lead and Architecture Committee. In strict adherence to ownership boundaries, **no modifications to core files have been made**.
+> **Notice:** The following section is an **advisory proposal** for the Protocol Team Lead and Architecture Committee; the listed candidates remain proposals, not adopted changes.
 
 Based on an empirical audit of `AGENTS.md` (v5.5.0) and supporting rules, several elements represent potential sources of context bloat, framework bias, or unnecessary friction. We propose reviewing these candidates for future decoupling:
 
@@ -145,9 +83,9 @@ Based on an empirical audit of `AGENTS.md` (v5.5.0) and supporting rules, severa
 
 Before submitting any proposal to alter `Apex-core`, verify each item:
 
-- [ ] **Empirical Evidence:** Are there 3 documented failure incidents attached?
-- [ ] **Subsumption Check:** Have you proven that Rules 0, 1, 2, 3, and 4 cannot solve this?
-- [ ] **Token Budget:** Is the diff under 150 words (core) or 300 words (rules)?
-- [ ] **Verification Seam:** Does an automated test or command exist to verify this rule?
-- [ ] **Fast Path Safety:** Does this rule allow 1–3 file fixes to proceed with zero added halts?
+- [ ] **Concrete Gap:** Is the change tied to an observed failure, a specific safety requirement, or a concrete ambiguity?
+- [ ] **Subsumption:** Is the gap not already addressed, or would clarification be sufficient?
+- [ ] **Minimal Scope:** Is the change limited to the relevant rule or adapter?
+- [ ] **Verification:** Is there a proportionate seam, or is the human/policy dependency stated?
+- [ ] **Fast Path Safety:** Does the change avoid extra plans, confirmations, or delays for low-risk work?
 - [ ] **Tone Compliance:** Is the text written in BLUF, direct, non-sycophantic language?

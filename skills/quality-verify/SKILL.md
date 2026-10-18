@@ -3,7 +3,7 @@ name: quality-verify
 description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Strike Loop-Breaker, and Evidence Delivery
 ---
 
-# Quality Verification & Fast Test Engine Skill (v6.0.0)
+# Quality Verification & Fast Test Engine Skill (v6.1.0)
 
 > In-memory verification protocols (Universal Definition of Done) with fast targeted checks and automated loop-breaking safeguards.
 

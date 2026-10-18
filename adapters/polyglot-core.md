@@ -1,6 +1,6 @@
 # 🐍 Modular Stack Adapter: Polyglot Core (Python / C# .NET / CLI & Shell)
 
-> **Apex v6.0 Adapter Module · Domain: Non-Node Runtimes & Multi-Language Systems**  
+> **Apex v6.1.0 Adapter Module · Domain: Non-Node Runtimes & Multi-Language Systems**
 > Covers Python 3.10+ (FastAPI, pytest, mypy, Pydantic), C# / .NET 8+ (ASP.NET Core, EF Core, xUnit), and Cross-Platform Automation CLI / Shell.
 
 ---
@@ -77,6 +77,7 @@ async def create_order(
 
 #### D. Database & Migrations (SQLAlchemy 2.0 & Alembic)
 - Use modern 2.0 style queries: `select(Model).where(...)` (avoid legacy 1.x `session.query`).
+- Bind values in SQLAlchemy expressions or `text("... WHERE id = :id")` with a separate parameter mapping; never interpolate values into SQL strings. Allowlist dynamic identifiers and sort directions.
 - **Transactions:** Wrap multi-table operations inside `async with session.begin():` blocks.
 - **Migrations:** All schema alterations must go through versioned Alembic migrations (`alembic revision --autogenerate -m "..."`). Review generated migration scripts before applying.
 
@@ -128,6 +129,11 @@ public class OrdersController : ControllerBase
   }
   ```
 - **AsNoTracking:** Read-only queries must explicitly call `.AsNoTracking()` to avoid change tracking overhead.
+- Prefer LINQ or EF Core `FromSqlInterpolated` for raw SQL. If `FromSqlRaw` is necessary, bind values through separate `DbParameter` instances; never concatenate or interpolate untrusted input into SQL. Allowlist dynamic identifiers and sort directions.
+
+#### D. Personal Data Lifecycle
+- Collect only fields required by the feature's approved purpose. Apply project-defined retention and deletion rules to records, exports, and derived data; follow the request and legal-hold process when access, correction, restriction, or deletion is requested.
+- Do not log personal data or expose it in errors. Escalate unclear retention, processor/transfer requirements, or suspected exposure to the project owner/privacy contact.
 
 ---
 

@@ -3,7 +3,7 @@ name: cartography
 description: AST Codebase Skeleton Mapping, Selective Token Diet, and Project Exploration for Fast Onboarding
 ---
 
-# Codebase Cartography & Token Diet Skill (v6.0.0)
+# Codebase Cartography & Token Diet Skill (v6.1.0)
 
 > Fast codebase discovery using AST Skeleton Mapping and strict token diet controls to prevent context window bloat and hallucination.
 

@@ -1,5 +1,5 @@
 {
   "name": "apex-core",
-  "version": "6.0.0",
-  "description": "Apex — production-safe, evidence-backed AI coding workflow (v6.0.0) with Micro-Kernel and JIT Modular Adapters"
+  "version": "6.1.0",
+  "description": "Apex — production-safe, evidence-backed AI coding workflow (v6.1.0) with Micro-Kernel and JIT Modular Adapters"
 }

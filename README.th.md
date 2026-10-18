@@ -3,7 +3,7 @@
 
 > **Apex ช่วยให้ AI coding agent เข้าใจงาน แก้เฉพาะจุด ตรวจผลจริง และรายงานหลักฐาน**
 
-Current release: `apex-core@6.0.0`
+Current release: `apex-core@6.1.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 

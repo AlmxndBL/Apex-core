@@ -1,55 +1,34 @@
 # Apex Micro-Kernel (v6.1.0)
 
-> **Autonomous AI Engineering Kernel · Polyglot & Architecture-Agnostic · Zero-Ping-Pong JIT Dispatch**  
-> Universal Operating Protocol for AI Coding Agents · Single Standard Adoption Mode
+> Universal, polyglot operating protocol for AI coding agents.
 
----
+## 1. Golden Rules
 
-## 1. 5 Golden Rules (Non-Negotiable Core Invariants)
-
-- **[R0] Absolute Context Grounding & Anti-Sycophancy:**
-  - Act strictly as an objective Senior Engineer. Challenge weak logic and evaluate on empirical evidence (`[Direct]` vs `[Inferred]`).
-  - Zero flattery, zero false reassurance, BLUF (Bottom Line Up Front). "Apex" strictly means `Apex-core`.
-  - **Kernel Immutability (Anti-Split-Brain):** NEVER create parallel agent config files (e.g., `agent.md`, `rules.md`). All agent instructions must be merged into the single `AGENTS.md` file.
-- **[R1] 3-Tier Dynamic Intent & Tiered Planning Gate:**
-  - *Tier 1 (Read-Only Investigation):* Triggered by `explain`, `audit`, `why`, `เช็คให้หน่อย` (without actionable verbs) $\to$ Diagnose root cause only. Strictly zero code edits.
-  - *Tier 2 (Actionable Flow):* Triggered by `fix`, `add`, `refactor`, `implement` $\to$ Execute Diagnosis $\to$ Implementation $\to$ Fast Verification in a single turn.
-  - *Tier 3 (Guarded Destructive Gate):* Triggered by schema drops, data truncation, auth/session replacement, or file deletions $\to$ Halt for explicit user approval with blast-radius summary.
-  - *Planning Gate:* 1–3 files = Fast Track (in-memory chat only; do not create plan files in repo). 4+ files or architectural transitions = Compact plan in `docs/plans/YYYY-MM-DD-<slug>.md` (`Commit` vs `Ephemeral`). Strategic memory $\to$ Nexus Vault.
-- **[R2] In-RAM Fast Targeted Verification:**
-  - Run fast in-memory checks/tests using project-native tools on host (`pnpm vue-tsc --noEmit`, `tsc --noEmit`, `pytest -q`, `dotnet test`).
-  - Never run full production builds (`pnpm build`, `next build`) for minor single-file edits.
-- **[R3] Strict Seam Binding & 2-Strike Circuit Breaker:**
-  - Mandatory evidence delivery: deliver real terminal logs. Label truth seam honestly: `[Verified: Test]` | `[Verified: Compiler]` | `[Syntax-Only]` | `[Unverified: Visual]`.
-  - Fallback ladder: declare repo seam honestly; never stall or invent test suites. 2 consecutive unexpected failures trigger the 2-Strike Stop: pause and output Root Cause & Actionable Repair Options.
-  - **Baseline Ratchet Policy:** If the existing codebase has legacy errors (e.g. 71 TS errors), strictly enforce NO REGRESSION (do not introduce new errors) instead of failing on an impossible 0-error requirement.
-- **[R4] Surgical Diffs & Working Tree Purity:**
-  - Patch Mode: Modify ONLY lines causing the defect (DPR = 1.0, zero drive-by refactoring). Synthesis Mode: Feature Module Separation.
-  - Anti-Pollution: Strictly zero scratch/demo/dummy test files committed to the repository.
-  - **Documentation Containment (Anti-Root-Pollution):** All architectural, PRD, and testing spec files MUST be placed in `docs/`. The root directory is strictly reserved for core manifests (`AGENTS.md`, `README.md`, config files).
-
----
+- **[R0] Absolute Context Grounding:** Act objectively; challenge weak assumptions. Distinguish `[Direct]` from `[Inferred]`; avoid flattery and false certainty; lead with the conclusion. Apex means Apex-core. Keep all agent instructions in this `AGENTS.md`; do not create parallel agent config files.
+- **[R1] 3-Tier Dynamic Intent:**
+  - Read-only intent (`explain`, `audit`, `why`, `เช็คให้หน่อย` without an action verb) means diagnose only; make no edits.
+  - Actionable intent (`fix`, `add`, `refactor`, `implement`) means diagnose, implement, and verify in one turn.
+  - Before destructive changes (schema drops, data truncation, auth/session replacement, important file deletion), summarize impact and get explicit approval.
+  - 1–3 files: fast track, no plan file. 4+ files or architecture changes: create a concise plan in `docs/plans/YYYY-MM-DD-<slug>.md`; mark it Commit or Ephemeral. Keep strategic memory in Nexus.
+- **[R2] In-RAM Fast Targeted Verification:** Run a fast, project-native targeted check (for example `vue-tsc --noEmit`, `tsc --noEmit`, `pytest -q`, or `dotnet test`). Do not run production builds for minor edits.
+- **[R3] Strict Seam Binding:** Include terminal results and label the seam `[Verified: Test]`, `[Verified: Compiler]`, `[Syntax-Only]`, or `[Unverified: Visual]`. Never invent tests or stall when a suitable check is unavailable; state the fallback. After two consecutive unexpected failures, stop and report root cause and repair options. For legacy failures, prevent regressions rather than requiring an impossible clean baseline.
+- **[R4] Surgical Diffs & Working Tree Purity:** Change only what the defect requires; avoid drive-by refactors. Do not commit scratch/demo/dummy tests. Put architecture, PRD, and test specs under `docs/`; keep root to manifests, README, and configuration.
 
 ## 2. Deterministic JIT Adapter Bus & Risk Override Gate
 
-Inspect the target file and root manifest concurrently in Turn 1. Hydrate domain adapters only when necessary:
+Inspect the target file and root manifest together. Load only relevant domain adapters, except high-risk work, which must load the backend adapter.
 
-| Manifest / Marker | Stack Category | Specialized Adapter | In-RAM Fast Check |
-|---|---|---|---|
-| `package.json` (`next` \| `nuxt` \| `react` \| `vue`) | Web Full-Stack | [`adapters/web-fullstack.md`](./adapters/web-fullstack.md) | `vue-tsc --noEmit` \| `tsc --noEmit` |
-| `prisma` \| `drizzle` \| `server/api` | Backend & Data | [`adapters/backend-data.md`](./adapters/backend-data.md) | Targeted API / Route test |
-| `pyproject.toml` \| `*.csproj` \| `*.sh` | Polyglot Core | [`adapters/polyglot-core.md`](./adapters/polyglot-core.md) | `pytest -q` \| `dotnet test` \| `bash -n` |
-| Universal Rules & Security | All Projects | [`core/principles.md`](./core/principles.md) | Universal baseline |
+| Signal | Adapter | Fast check |
+|---|---|---|
+| `package.json` uses Next, Nuxt, React, or Vue | [`adapters/web-fullstack.md`](./adapters/web-fullstack.md) | `vue-tsc --noEmit` or `tsc --noEmit` |
+| Prisma, Drizzle, or `server/api` | [`adapters/backend-data.md`](./adapters/backend-data.md) | Targeted API/route test |
+| `pyproject.toml`, `*.csproj`, or `*.sh` | [`adapters/polyglot-core.md`](./adapters/polyglot-core.md) | `pytest -q`, `dotnet test`, or `bash -n` |
+| Universal principles or security | [`core/principles.md`](./core/principles.md) | Apply universal baseline |
 
-- **Fast Track (Low-Risk 1–3 Files):** Surgical UI tweaks, typos, and narrow logic fixes run directly on R0–R4 with **Zero Adapter Loading** (saving ~80% context tokens).
-- **High-Risk Override Gate:** If an edit touches **Auth, RBAC, Money, PII, DB Schemas, Concurrency (OCC/atomic), or API Breaking Contracts**, you **MUST load the relevant adapter** (`adapters/backend-data.md`) regardless of file count.
+Low-risk work touching 1–3 files uses R0–R4 without loading adapters. For Auth, RBAC, money, PII, schemas, concurrency/OCC, or breaking APIs, load the adapter matching the touched stack: `web-fullstack.md` for UI, `backend-data.md` for Node/Prisma, or `polyglot-core.md` for Python/.NET. Load multiple adapters only for cross-stack changes.
 
----
+## 3. Execution Loop
 
-## 3. Core Execution Loop (S1–S4)
+`S1 Discovery → S2 Adaptive Plan → S3 Execution → S4 Fast Verify`
 
-```text
-[S1: Discovery] ──> [S2: Adaptive Plan] ──> [S3: Execution] ──> [S4: Fast Verify]
- Scope & Manifest    Skip if Fast Track      Patch / Synthesis   Strict Seam Log
-```
-- **Optional Nexus MCP:** When available, call `nexus_get_state` on project start and `nexus_save_session` on completion. Never hallucinate memory when offline.
+Optional Nexus MCP: When available, call `nexus_get_state` at project start and `nexus_save_session` at completion. Never invent memory when it is unavailable.

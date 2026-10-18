@@ -97,7 +97,9 @@ for (const file of REQUIRED_ROOT_FILES) {
 console.log('\n\x1b[1m2. Version Synchronization\x1b[0m');
 try {
   const pluginJson = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'plugin.json'), 'utf-8'));
+  const packageLock = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package-lock.json'), 'utf-8'));
   assert(pluginJson.version === frameworkVersion, `Version match: plugin.json (${pluginJson.version}) === package.json (${frameworkVersion})`);
+  assert(packageLock.version === frameworkVersion && packageLock.packages?.['']?.version === frameworkVersion, `Version match: package-lock.json root (${packageLock.version}) === package.json (${frameworkVersion})`);
   assert(Boolean(pluginJson.name) && Boolean(pluginJson.description), 'plugin.json has valid name and description');
 } catch (err) {
   assert(false, `Failed to parse plugin.json or package.json: ${err.message}`);
@@ -228,6 +230,7 @@ for (const [scriptName, command] of Object.entries(pkgScripts)) {
 console.log('\n\x1b[1m12. Documentation Consistency\x1b[0m');
 const readme = fs.readFileSync(path.join(ROOT_DIR, 'README.md'), 'utf-8');
 const readmeThai = fs.readFileSync(path.join(ROOT_DIR, 'README.th.md'), 'utf-8');
+assert(readme.includes(`Current release: \`apex-core@${frameworkVersion}\``) && readmeThai.includes(`Current release: \`apex-core@${frameworkVersion}\``), `README release labels match package.json (${frameworkVersion})`);
 assert(!readme.includes('npm run benchmark') && !readmeThai.includes('npm run benchmark'), 'README files do not advertise removed benchmark scripts');
 assert(!readme.includes('100% accurate') && !readmeThai.includes('แม่นยำ 100%'), 'README files avoid absolute extractor accuracy claims');
 assert(!readme.includes('Deterministic Control Plane') && !readmeThai.includes('Deterministic Control Plane'), 'README files avoid unsupported deterministic-enforcement claims');

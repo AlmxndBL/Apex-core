@@ -14,6 +14,7 @@
 - **Never trust client input:** All incoming data must be validated using type-safe validation libraries (**Zod**).
 - Validate data types, string lengths, formats, and sanitize inputs before processing or persisting to the database.
 - **PII & Data Privacy Masking (Privacy by Design):** Sensitive personal information (phone numbers, national IDs, bank account numbers) must be masked using utility helpers (`templates/utils/mask.ts`) before returning to clients or rendering in public UI surfaces.
+- **Personal Data Lifecycle:** Collect only data needed for the feature's approved purpose; follow project-defined retention, deletion, and data-subject request processes. Do not treat consent as the only possible basis or infer legal requirements from this engineering rule; escalate unclear requirements to the project owner/privacy contact.
 
 ---
 

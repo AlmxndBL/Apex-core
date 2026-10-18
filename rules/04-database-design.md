@@ -30,7 +30,7 @@
 ---
 
 ## 🛡️ 3. Query Performance, Concurrency & Safety
-- **No Raw String SQL Concatenation:** Prevent SQL injection by using parameterized queries or ORM methods.
+- **SQL Injection:** Bind query values or use ORM methods; never concatenate untrusted input into SQL. Allowlist dynamic identifiers and sort directions. See the active backend or polyglot adapter for ORM-specific guidance.
 - **Prevent N+1 Queries:** Use `include` or explicit `select` to join relations rather than querying inside loops.
 - **Transaction Management:**
   - Wrap multi-table state mutations in `prisma.$transaction()`.

@@ -3,7 +3,7 @@
 
 > **Apex helps coding agents understand the task, change only what matters, verify the result, and report evidence.**
 
-Current release: `apex-core@6.0.0`
+Current release: `apex-core@6.1.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 
