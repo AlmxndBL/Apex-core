@@ -1,5 +1,5 @@
 # ==============================================================================
-# Apex v6.0 Docker Compose Development Infrastructure Template
+# Apex v7.0.0 Docker Compose Development Infrastructure Template
 # Standard: "Code on Host (RAM speed) · Stateful Infra in Docker (Clean)"
 # Services: PostgreSQL 17 (Alpine) + Redis 7 (Alpine) with Healthchecks
 # ==============================================================================

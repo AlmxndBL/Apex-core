@@ -1,7 +1,7 @@
 name: Production CI Pipeline
 
 # ==============================================================================
-# Apex v6.0 Production GitHub Actions CI Workflow
+# Apex v7.0.0 Production GitHub Actions CI Workflow
 # Standards: 4-Stage Fail-Fast · Concurrency Cancel · Aggressive Caching
 # Pipeline: 1. Lint & Format -> 2. In-RAM TypeCheck -> 3. Fast Test -> 4. Security
 # ==============================================================================

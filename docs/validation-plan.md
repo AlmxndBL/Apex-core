@@ -15,13 +15,19 @@ Many AI agent frameworks claim drastic reductions in token usage, defect rates, 
 Prior benchmarks conducted in synthetic or single-turn environments provide directional signal but **do not constitute real-world empirical proof**. Until systematically verified against live, multi-file production codebases under rigorous instrumentation, all efficiency claims (such as token savings, regression suppression, or context economy) must be treated as **unverified engineering hypotheses** (`[Inferred]`), not established facts.
 
 ### 1.2 Purpose of this Plan
-This document defines the official, reproducible validation protocol for **Apex-core v5.5+**. Its purpose is to:
+This document defines the official, reproducible validation protocol for **Apex-core v7.0.0**, retaining the historical v5.5+ evaluation framework. Its purpose is to:
 1. Subject the 5 Golden Rules and Tiered Intent Architecture to concrete, real-world development tasks.
 2. Measure agent behavior against observable, binary acceptance criteria rather than qualitative self-assessments.
 3. Establish a baseline for comparing Apex-governed agent execution against ungoverned baseline agents.
 4. Provide structured telemetry for data-driven protocol pruning and evolution.
 
 ---
+
+## v7 Build Workflow Evaluation Extension
+
+Evaluate a new non-UI CLI/API project, a new UI application, a shared-contract feature, and a low-risk small patch. Observe correct routing, necessary clarification, project-appropriate documents, dependency order, acceptance coverage, integration evidence, and fast-track overhead. Add design-only and interrupted-work cases to check scope and continuity.
+
+Use actual agent transcripts and target-project runtime/test evidence for behavioral conclusions. The [v7 checkpoint review](./reviews/2026-10-29-apex-v7-release-checkpoint.md) contains static walkthroughs and packaging checks only; those are not live evaluation results. Record model, harness, starting revision, instructions, tools, costs, and failures when conducting a comparative trial.
 
 ## 2. Core Hypotheses Under Empirical Test
 

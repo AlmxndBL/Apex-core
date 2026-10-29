@@ -3,6 +3,8 @@
 > **Agent Guidance:** Single source of truth architectural map for AI coding agents to onboard instantly without scanning the entire workspace.
 > ⚠️ **Security Notice:** Never store raw connection strings, API keys, or credentials in this file. Use environment variables or `<secret:VAR_NAME>` placeholders.
 
+> Adapt this optional map to the project. Keep only relevant presets and sections; CLI/API projects do not require UI documentation. Track scope, acceptance, and verification in existing project documents.
+
 ---
 
 ## 📌 1. Project Overview

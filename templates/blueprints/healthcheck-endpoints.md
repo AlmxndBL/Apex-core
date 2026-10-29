@@ -1,6 +1,6 @@
 # 🩺 Blueprint: Dual-Probe Production Healthcheck Endpoints
 
-> **Apex v6.0 Blueprint · Domain: Observability & Container Lifecycle**  
+> **Apex v7.0.0 Blueprint · Domain: Observability & Container Lifecycle**
 > Covers Kubernetes / Docker Swarm / Cloudflare / Coolify dual health probes: Liveness (`/api/health/live`) and Readiness (`/api/health/ready`).
 
 ---
@@ -8,7 +8,7 @@
 ## 🎯 Purpose & Threat Model
 
 Single `/health` endpoints that query databases on every request create cascading outages when traffic surges.
-Apex v6.0 standardizes on **Dual Probes**:
+Apex v7.0.0 standardizes on **Dual Probes**:
 1. **Liveness Probe (`GET /api/health/live`):** Is the process event loop running? (Fast in-memory check, zero external I/O).
 2. **Readiness Probe (`GET /api/health/ready`):** Are downstream connections (PostgreSQL connection pool, Redis) healthy and ready to receive user traffic?
 

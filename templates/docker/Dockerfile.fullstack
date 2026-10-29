@@ -1,5 +1,5 @@
 # ==============================================================================
-# Apex v6.0 Production Multi-Stage Dockerfile (Nuxt 4 / Next.js 15 Full-Stack)
+# Apex v7.0.0 Production Multi-Stage Dockerfile (Nuxt 4 / Next.js 15 Full-Stack)
 # Standards: Multi-stage caching · Non-root user · Minimal attack surface
 # ==============================================================================
 

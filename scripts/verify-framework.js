@@ -97,12 +97,14 @@ for (const file of REQUIRED_ROOT_FILES) {
 console.log('\n\x1b[1m2. Version Synchronization\x1b[0m');
 try {
   const pluginJson = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'plugin.json'), 'utf-8'));
+  const codexPlugin = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, '.codex-plugin/plugin.json'), 'utf-8'));
   const packageLock = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package-lock.json'), 'utf-8'));
   assert(pluginJson.version === frameworkVersion, `Version match: plugin.json (${pluginJson.version}) === package.json (${frameworkVersion})`);
+  assert(codexPlugin.version === frameworkVersion, `Version match: .codex-plugin/plugin.json (${codexPlugin.version}) === package.json (${frameworkVersion})`);
   assert(packageLock.version === frameworkVersion && packageLock.packages?.['']?.version === frameworkVersion, `Version match: package-lock.json root (${packageLock.version}) === package.json (${frameworkVersion})`);
   assert(Boolean(pluginJson.name) && Boolean(pluginJson.description), 'plugin.json has valid name and description');
 } catch (err) {
-  assert(false, `Failed to parse plugin.json or package.json: ${err.message}`);
+  assert(false, `Failed to read or parse version manifests: ${err.message}`);
 }
 
 // 3. Universal Principles (Core)
@@ -238,13 +240,28 @@ assert(kernelContent.includes('Optional Nexus MCP'), 'AGENTS.md documents option
 
 // 13. Local Markdown Link Check
 console.log('\n\x1b[1m13. Local Documentation Links\x1b[0m');
-for (const file of ['README.md', 'README.th.md', 'AGENTS.md', 'AI-Context-Index.md']) {
+for (const file of ['README.md', 'README.th.md', 'AGENTS.md', 'AI-Context-Index.md', 'core/principles.md', 'skills/apex-core/SKILL.md', 'skills/apex-core/references/build-workflow.md']) {
+  if (!fs.existsSync(path.join(ROOT_DIR, file))) {
+    assert(false, `${file} exists for link inspection`);
+    continue;
+  }
   const content = fs.readFileSync(path.join(ROOT_DIR, file), 'utf-8');
-  for (const match of content.matchAll(/\]\((\.\/[^)#]+)(?:#[^)]+)?\)/g)) {
-    const target = path.resolve(ROOT_DIR, match[1]);
+  for (const match of content.matchAll(/\]\(((?:\.\.?\/|references\/)[^)#]+)(?:#[^)]+)?\)/g)) {
+    const target = path.resolve(path.dirname(path.join(ROOT_DIR, file)), match[1]);
     assert(fs.existsSync(target), `${file} local link ${match[1]} resolves`);
   }
 }
+
+console.log('\n\x1b[1m14. Release & Build Reference Packaging\x1b[0m');
+for (const file of ['AGENTS.md', 'core/principles.md', ...REQUIRED_SKILLS.map(name => `skills/${name}/SKILL.md`), ...REQUIRED_ADAPTERS.map(name => `adapters/${name}`)]) {
+  const content = fs.readFileSync(path.join(ROOT_DIR, file), 'utf-8');
+  assert(content.includes(`v${frameworkVersion}`), `${file} active release label matches ${frameworkVersion}`);
+}
+const codexManifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, '.codex-plugin/plugin.json'), 'utf-8'));
+const skillsPath = path.resolve(ROOT_DIR, codexManifest.skills);
+assert(skillsPath === path.join(ROOT_DIR, 'skills'), 'Codex skill directory points to packaged skills');
+const packagedBuildReference = path.join(skillsPath, 'apex-core/references/build-workflow.md');
+assert(fs.existsSync(packagedBuildReference), 'Build reference is packaged inside the existing skill directory');
 
 // Summary
 console.log('\n------------------------------------------------------------');

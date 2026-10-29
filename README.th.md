@@ -3,25 +3,25 @@
 
 > **Apex ช่วยให้ AI coding agent เข้าใจงาน แก้เฉพาะจุด ตรวจผลจริง และรายงานหลักฐาน**
 
-Current release: `apex-core@6.1.0`
+Current release: `apex-core@7.0.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 
 Apex คือข้อกำหนดและโปรโตคอลการทำงาน (Operating Protocol & Rule Specification) แบบ local สำหรับ AI coding agent เพื่อวางกรอบการทำงานวิศวกรรมที่รัดกุม ตั้งแต่การล็อกเจตนาของงาน (Intent Locking: ตรวจสอบแบบ read-only vs. การแก้เฉพาะจุดแบบ surgical patch vs. การดำเนินการที่มีความเสี่ยงสูงแบบ guarded gate), การตรวจยืนยันผลในหน่วยความจำที่รวดเร็ว (Fast Targeted In-RAM Verification) ไปจนถึงการส่งมอบหลักฐานจริง (Mandatory Evidence Delivery) เมื่อสำรวจ แก้ไข และทดสอบโค้ดใน repository ซอฟต์แวร์จริง
 
-ใน **v6.0**, Apex ได้ยกเครื่องสถาปัตยกรรมสู่ **Decoupled Micro-Kernel + JIT Modular Adapters** ช่วยลด Token เริ่มต้นลงมากกว่า 70% พร้อมรองรับระบบหลายภาษา (TypeScript, Python, C#) และพิมพ์เขียว DevOps ระดับ Production ครบวงจร
+**v7.0.0** เพิ่ม workflow สร้างระบบที่ปรับ discovery, design และแผนตามความไม่แน่นอนและความเสี่ยง พร้อมติดตาม acceptance กับหลักฐาน โดยคง Micro-Kernel, JIT stack adapters และ fast track สำหรับงานเล็ก
 
 ---
 
-## 🏛️ สถาปัตยกรรม Apex v6.0 (Architecture Overview)
+## 🏛️ สถาปัตยกรรม Apex v7.0.0 (Architecture Overview)
 
-Apex v6.0 แยกกฎแก่นสากล (Invariants), หลักการวิศวกรรม (Universal Principles), และกฎเฉพาะทาง (Stack Adapters) ออกจากกันเป็นชั้นที่ชัดเจน:
+Apex v7.0.0 แยกกฎแก่นสากล (Invariants), หลักการวิศวกรรม (Universal Principles), และกฎเฉพาะทาง (Stack Adapters) ออกจากกันเป็นชั้นที่ชัดเจน:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                              APEX v6.0 KERNEL ARCHITECTURE                             │
+│                              APEX v7.0.0 KERNEL ARCHITECTURE                             │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. ROOT MICRO-KERNEL (AGENTS.md · 4.1 KB · ~510 tokens [Modeled])                       │
+│ 1. ROOT MICRO-KERNEL (AGENTS.md · under 6 KB · measured by npm test)                       │
 │    ├── [R0] Grounding & Anti-Sycophancy: Senior Engineer objectivity, BLUF, Direct      │
 │    ├── [R1] 3-Tier Dynamic Intent & Tiered Planning Gate (Tier A vs Tier B docs/plans/)   │
 │    ├── [R2] In-RAM Fast Targeted Feedback: Native host check (pnpm, pytest -q, dotnet)  │
@@ -44,7 +44,10 @@ Apex v6.0 แยกกฎแก่นสากล (Invariants), หลักก�
 │    └── High-Risk Override Gate ────────────> Required Adapter Loading:                  │
 │        (Auth/RBAC, Money/PII, Schema/DB, Concurrency/OCC, Contested State, API Contract)│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 5. DUAL-SPEED ENVIRONMENT & PRODUCTION DEVOPS                                          │
+│ 5. BUILD WORKFLOW: skills/apex-core/references/build-workflow.md                     │
+│    Discovery -> Design -> Plan -> Implement/Verify -> Acceptance Review              │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 6. DUAL-SPEED ENVIRONMENT & PRODUCTION DEVOPS                                          │
 │    ├── Host Execution: Node 22, pnpm, Python uv, .NET 8 on Windows Host (In-RAM 1-3s)  │
 │    ├── Stateful Infra: PostgreSQL 17 + Redis 7 in Docker Compose (compose.dev.yaml)     │
 │    ├── Fail-Fast CI: 4-Stage GitHub Actions (Lint -> TypeCheck -> FastTest -> Audit)   │
@@ -84,9 +87,24 @@ Apex ออกแบบมาสำหรับจังหวะที่ patch
 
 ---
 
+## การสร้างระบบใน v7
+
+สำหรับระบบใหม่หรือ feature ขนาดใหญ่ entry skill เดิมจะโหลด [Build workflow](./skills/apex-core/references/build-workflow.md) เพื่อกำหนดขอบเขต design ที่จำเป็น acceptance criteria และแผนตาม dependencies จากนั้นสร้างและตรวจทีละส่วน ก่อนตรวจ integration และ acceptance ด้วย quality-verify เดิม งานเพิ่มเล็กที่ชัดเจนและเสี่ยงต่ำยังใช้ fast track
+
+เอกสารปรับตามงาน: CLI/API ไม่จำเป็นต้องมี UI design system และโปรเจกต์เล็กใช้แผนเดียวได้ ถามเฉพาะการตัดสินใจสำคัญที่ข้อมูลขาด และเดินหน้าตามสิทธิ์ที่ผู้ใช้อนุญาตแล้ว โดยไม่บังคับ worktree, subagent หรือ approval เพิ่มทุกงาน
+
+### ย้ายจาก v6
+
+- อัปเดต shared checkout หรือ plugin ทั้งชุดรวม reference โดยชื่อ skills ทั้งห้าและการค้นผ่าน skill directory ยังเหมือนเดิม
+- ใช้ PRD/design/verification เดิมต่อได้ ไม่ต้องเปลี่ยนชื่อหรือลบเอกสารที่ยังมีประโยชน์
+- kernel ไฟล์เดียวใช้เป็นแนวทางพื้นฐานได้ ส่วน Build workflow ฉบับเต็มต้องมี reference และ quality-verify จาก repo นี้ หากไม่มีให้ทำตาม kernel และรายงานข้อจำกัด
+- อ่าน [แผนและเหตุผลการย้าย v7](./docs/plans/2026-10-29-apex-v7-build-workflow.md) และ [แผนประเมินผล](./docs/validation-plan.md) การตรวจ packaging และ static walkthrough ยังไม่ยืนยันประสิทธิภาพของ agent หรือ token savings
+
+---
+
 ## เริ่มต้นใช้งาน: Single Universal Adoption Mode
 
-Apex v6.0 ยุบโหมดติดตั้งเดิมให้เหลือรูปแบบเดียวที่ปราศจากความสับสน:
+Apex v7.0.0 ยุบโหมดติดตั้งเดิมให้เหลือรูปแบบเดียวที่ปราศจากความสับสน:
 
 ### 1. Global Reference (แนะนำสำหรับเครื่อง Dev ส่วนตัว)
 โคลน Apex-core ไว้ที่เครื่องส่วนกลางเพียงจุดเดียว และลงทะเบียน [`AGENTS.md`](./AGENTS.md) ไว้ใน Global System Prompt หรือ Configuration ของ AI Coding Agent:
@@ -99,7 +117,7 @@ cd ~/.agents/Apex-core && npm install && npm test
 *หมายเหตุ:* คำสั่ง `npm install` และ `npm test` ใช้สำหรับการทดสอบความสมบูรณ์ของตัว Framework เท่านั้น ไม่ได้ดัดแปลงหรือติดตั้งอะไรลงในโปรเจกต์งานของคุณ
 
 ### 2. Single-File Drop-in (สำหรับแชร์ในทีมหรือ Pin ไว้นอกเครื่อง)
-คัดลอกเฉพาะไฟล์ [`AGENTS.md`](./AGENTS.md) (~4.1 KB) เพียงไฟล์เดียวไปวางไว้ที่ root ของโปรเจกต์ (เช่นเป็น `AGENTS.md` หรือ `CLAUDE.md`) ตัว Micro-Kernel มีกฎแก่น R0–R4 ครบถ้วนโดยไม่ต้องก๊อปปี้โฟลเดอร์อื่นตามไปด้วย
+คัดลอกเฉพาะไฟล์ [`AGENTS.md`](./AGENTS.md) (under 6 KB) เพียงไฟล์เดียวไปวางไว้ที่ root ของโปรเจกต์ (เช่นเป็น `AGENTS.md` หรือ `CLAUDE.md`) ตัว Micro-Kernel มีกฎแก่น R0–R4 ครบถ้วนโดยไม่ต้องก๊อปปี้โฟลเดอร์อื่นตามไปด้วย
 
 ### ข้อความสั่งงานแรก (First task prompt)
 
@@ -115,7 +133,7 @@ terminal result, and any behavior that could not be verified.
 
 ---
 
-## โครงสร้างภายใน Apex (v6.0 Directory Blueprint)
+## โครงสร้างภายใน Apex (v7.0.0 Directory Blueprint)
 
 - [`AGENTS.md`](./AGENTS.md): Micro-Kernel Operating Protocol ภาษาเป็นกลาง ขนาด ~4.1 KB
 - [`core/principles.md`](./core/principles.md): หลักการวิศวกรรมสากล, Server Authority และ OOP Rule of Three
@@ -157,7 +175,7 @@ terminal result, and any behavior that could not be verified.
 
 Apex ยึดหลักการทางวิศวกรรมที่เชื่อถือหลักฐานเชิงประจักษ์มากกว่าคำกล่าวอ้าง ตรวจสอบรายละเอียดทั้งหมดได้ใน [`EVIDENCE.md`](./EVIDENCE.md):
 
-- **ความสมบูรณ์ของตัว Framework (`Verified`):** การรัน `npm test` จะเรียกสคริปต์ตรวจสอบความสมบูรณ์ (`scripts/verify-framework.js`) ซึ่งตรวจสอบโครงสร้าง repo, manifest, กฎ, Adapter, งบประมาณ Token ของ Micro-Kernel และลิงก์เอกสารทั้งหมด (**ผ่าน 111/111 รายการ**). การทดสอบนี้ยืนยัน **ความสมบูรณ์ในการแพ็กเกจของตัวโปรโตคอลเท่านั้น** ไม่ได้เป็นการรับประกันผลการเขียนโค้ดของ AI บนซอฟต์แวร์ภายนอก
+- **ความสมบูรณ์ของตัว Framework (`Verified`):** การรัน `npm test` จะเรียกสคริปต์ตรวจสอบความสมบูรณ์ (`scripts/verify-framework.js`) ซึ่งตรวจสอบโครงสร้าง repo, manifest, กฎ, Adapter, งบประมาณ Token ของ Micro-Kernel และลิงก์เอกสารทั้งหมด (ดูจำนวนจริงจากผลคำสั่ง). การทดสอบนี้ยืนยัน **ความสมบูรณ์ในการแพ็กเกจของตัวโปรโตคอลเท่านั้น** ไม่ได้เป็นการรับประกันผลการเขียนโค้ดของ AI บนซอฟต์แวร์ภายนอก
 - **สถิติ Benchmark ในอดีต (`Historical / Unverified`):** เอกสารและงานวิจัยก่อนหน้านี้ใน [Apex-eval](https://github.com/AlmxndBL/Apex-eval) เคยระบุตัวเลข เช่น ลด Token ได้ -58.4% หรือ Pass@1 (100%) ซึ่งตามที่ได้รับการตรวจสอบใน [`EVIDENCE.md`](./EVIDENCE.md) ตัวเลขดังกล่าวมาจากตัวรันแบบจำลอง (Mock Runner: `isMock: true`) ตัวเลขเหล่านี้จึงถือเป็น **หลักฐานทางประวัติศาสตร์ของการรัน Mock** ไม่ใช่ข้อเท็จจริงเชิงประจักษ์บนโค้ดจริง
 - **การพิสูจน์การทำงานบน Codebase ของคุณ:** ความแม่นยำและการประหยัด Token ที่แท้จริงขึ้นอยู่กับ codebase เป้าหมาย, โมเดล AI ที่ใช้ และการรีวิวของนักพัฒนา เครื่องวัดผลที่แท้จริงคือร่องรอยการตรวจสอบที่สังเกตได้จริง (คำสั่ง, log การผ่าน test) ที่เกิดขึ้นใน repository ของคุณเอง
 
@@ -168,7 +186,7 @@ Apex ยึดหลักการทางวิศวกรรมที่เ
 ### Apex เป็น AI Agent หรือเป็น Framework ที่แอปต้องติดตั้งหรือไม่?
 ไม่ใช่ทั้งสองอย่าง Apex เป็น Local Operating Protocol สำหรับ AI coding agent ประกอบด้วยคู่มือคำสั่ง, skill เฉพาะทาง, เทมเพลต และตัวตรวจ integrity ไม่มีการติดตั้ง dependency ใดๆ ลงใน runtime แอปของคุณ
 
-### The Rule of Three สำหรับ Design Patterns ใน v6.0 คืออะไร?
+### The Rule of Three สำหรับ Design Patterns ใน v7.0.0 คืออะไร?
 เป็นกฎป้องกัน Overengineering โดยห้ามใส่ Design Pattern ล่วงหน้า จะนำมาใช้ได้ก็ต่อเมื่อพบความหลากหลายหรือรูปแบบที่แตกต่างกันจริงตั้งแต่ 3 รูปแบบขึ้นไป ($\ge 3$) เท่านั้น (เช่น Strategy, Adapter, State, Facade) โดยแบน Manual Singleton และ Deep Inheritance (>2 ระดับ) เด็ดขาด
 
 ### Dual-Speed Environment ทำงานอย่างไร?

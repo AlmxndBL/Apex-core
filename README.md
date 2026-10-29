@@ -3,25 +3,25 @@
 
 > **Apex helps coding agents understand the task, change only what matters, verify the result, and report evidence.**
 
-Current release: `apex-core@6.1.0`
+Current release: `apex-core@7.0.0`
 
 **[English](README.md) · [ภาษาไทย](README.th.md)**
 
 Apex is a disciplined, local operating protocol and rule specification for AI coding agents. It provides structured operational guardrails—intent locking (read-only investigation vs. surgical patching vs. guarded destructive operations), targeted in-RAM verification, and mandatory evidence delivery—to guide coding agents when inspecting, modifying, and testing code in existing software repositories.
 
-In **v6.0**, Apex introduces a **Decoupled Micro-Kernel + JIT Modular Adapters Architecture**, slashing initial context footprint by >70% while adding polyglot support (TypeScript, Python, C#) and production DevOps blueprints.
+**v7.0.0** adds adaptive system building: scope and design proportional to uncertainty and risk, dependency-aware implementation, and acceptance evidence. It keeps the Micro-Kernel, JIT stack adapters, and low-risk patch fast track.
 
 ---
 
-## 🏛️ Apex v6.0 Architecture
+## 🏛️ Apex v7.0.0 Architecture
 
-Apex v6.0 separates core behavioral invariants, universal engineering principles, and domain-specific stacks into distinct, composable layers:
+Apex v7.0.0 separates core behavioral invariants, universal engineering principles, and domain-specific stacks into distinct, composable layers:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                              APEX v6.0 KERNEL ARCHITECTURE                             │
+│                              APEX v7.0.0 KERNEL ARCHITECTURE                             │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. ROOT MICRO-KERNEL (AGENTS.md · 4.1 KB · ~510 tokens [Modeled])                       │
+│ 1. ROOT MICRO-KERNEL (AGENTS.md · under 6 KB · measured by npm test)                       │
 │    ├── [R0] Grounding & Anti-Sycophancy: Senior Engineer objectivity, BLUF, Direct      │
 │    ├── [R1] 3-Tier Dynamic Intent & Tiered Planning Gate (Tier A vs Tier B docs/plans/)   │
 │    ├── [R2] In-RAM Fast Targeted Feedback: Native host check (pnpm, pytest -q, dotnet)  │
@@ -44,7 +44,10 @@ Apex v6.0 separates core behavioral invariants, universal engineering principles
 │    └── High-Risk Override Gate ────────────> Required Adapter Loading:                  │
 │        (Auth/RBAC, Money/PII, Schema/DB, Concurrency/OCC, Contested State, API Contract)│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 5. DUAL-SPEED ENVIRONMENT & PRODUCTION DEVOPS                                          │
+│ 5. BUILD WORKFLOW: skills/apex-core/references/build-workflow.md                     │
+│    Discovery -> Design -> Plan -> Implement/Verify -> Acceptance Review              │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ 6. DUAL-SPEED ENVIRONMENT & PRODUCTION DEVOPS                                          │
 │    ├── Host Execution: Node 22, pnpm, Python uv, .NET 8 on Windows Host (In-RAM 1-3s)  │
 │    ├── Stateful Infra: PostgreSQL 17 + Redis 7 in Docker Compose (compose.dev.yaml)     │
 │    ├── Fail-Fast CI: 4-Stage GitHub Actions (Lint -> TypeCheck -> FastTest -> Audit)   │
@@ -84,9 +87,24 @@ Apex is for the moment when an agent's patch must survive contact with a real re
 
 ---
 
+## System building in v7
+
+For a new system or substantial feature, the existing entry skill loads the [Build workflow](./skills/apex-core/references/build-workflow.md). Establish scope, necessary boundaries, acceptance criteria, and a dependency-aware plan; implement and verify coherent slices, then review integration and acceptance using the existing quality-verify skill. Clear low-risk additions stay on the fast track.
+
+Documentation follows project needs: CLI/API projects do not require a UI design system, and small projects can use one concise plan. Ask for material missing decisions; existing implementation authorization carries forward. Worktrees, subagents, and additional approval gates are not default requirements.
+
+### Migration from v6
+
+- Update the shared checkout or plugin as a complete release, including skill references. The five skill names and plugin skill-directory discovery are unchanged.
+- Existing PRD/design/verification documents remain valid; keep useful content without forced renames or deletion.
+- The single-file kernel remains a lightweight fallback. Full Build guidance requires the linked reference and quality-verify files from this repository. If unavailable, follow the kernel and state the limitation rather than inventing missing guidance.
+- See the [v7 plan and migration rationale](./docs/plans/2026-10-29-apex-v7-build-workflow.md) and [validation plan](./docs/validation-plan.md). Packaging checks and static walkthroughs do not establish live agent effectiveness or comparative token savings.
+
+---
+
 ## Getting Started: Single Universal Adoption Mode
 
-Apex v6.0 unifies previous installation models into a single, zero-friction pattern:
+Apex v7.0.0 unifies previous installation models into a single, zero-friction pattern:
 
 ### 1. Global Reference (Recommended for Local Dev)
 Keep one shared checkout and register its root [`AGENTS.md`](./AGENTS.md) in your AI agent's system prompt or global instructions:
@@ -99,7 +117,7 @@ cd ~/.agents/Apex-core && npm install && npm test
 *Note:* `npm install` and `npm test` are only for running Apex's local framework integrity suite; they do not modify target projects.
 
 ### 2. Single-File Drop-in (For External Teams & Pinned Repos)
-Copy only [`AGENTS.md`](./AGENTS.md) (~4.1 KB) directly into the target project root (e.g. as `AGENTS.md` or `CLAUDE.md`). The Micro-Kernel contains all mandatory invariants (R0–R4) in a single compact file without requiring any vendor directories.
+Copy only [`AGENTS.md`](./AGENTS.md) (under 6 KB) directly into the target project root (e.g. as `AGENTS.md` or `CLAUDE.md`). The Micro-Kernel contains all mandatory invariants (R0–R4) in a single compact file without requiring any vendor directories.
 
 ### First task prompt
 
@@ -115,9 +133,9 @@ terminal result, and any behavior that could not be verified.
 
 ---
 
-## Inside Apex (v6.0 Directory Blueprint)
+## Inside Apex (v7.0.0 Directory Blueprint)
 
-- [`AGENTS.md`](./AGENTS.md): Language-agnostic Micro-Kernel protocol and safety gates (~4.1 KB)
+- [`AGENTS.md`](./AGENTS.md): Language-agnostic Micro-Kernel protocol and safety gates (under 6 KB)
 - [`core/principles.md`](./core/principles.md): Universal engineering principles, server authority, and OOP Rule of Three
 - [`adapters/`](./adapters): Pluggable modular stack adapters:
   - `web-fullstack.md`: Nuxt 4, Next.js 15, Tailwind, 4-State UI, Responsive Data Table
@@ -157,7 +175,7 @@ Use Nexus only when its local MCP tools are available:
 
 Apex operates under an epistemic doctrine of empirical evidence over confident assertions. Consult [`EVIDENCE.md`](./EVIDENCE.md) for the complete, auditable Evidence Register.
 
-- **Internal Framework Integrity (`Verified`):** Running `npm test` executes the local verification script (`scripts/verify-framework.js`), which validates repository structure, schema manifests, rule consistency, Micro-Kernel token budget, and document links (**111/111 checks passing**). This validates **protocol packaging integrity only**; it does not measure or guarantee coding agent performance on external software tasks.
+- **Internal Framework Integrity (`Verified`):** Running `npm test` executes the local verification script (`scripts/verify-framework.js`), which validates repository structure, schema manifests, rule consistency, Micro-Kernel token budget, and document links (see the actual count in the command output). This validates **protocol packaging integrity only**; it does not measure or guarantee coding agent performance on external software tasks.
 - **Historical Benchmark Metrics (`Historical / Unverified`):** Prior documentation and evaluation releases in [Apex-eval](https://github.com/AlmxndBL/Apex-eval) cited figures such as -58.4% token reduction or 100% Pass@1 accuracy. As audited in [`EVIDENCE.md`](./EVIDENCE.md), the saved benchmark artifact was generated by a deterministic mock test runner (`isMock: true`). These figures are historical artifacts of mock execution, not live agent benchmarks across arbitrary codebases.
 - **Operational Proof on Your Codebase:** Real-world agent accuracy and token economy depend on the target codebase, the underlying model, prompt context, and developer review. The true measure of completion is the observable verification trail—exact command outputs, passed tests, and failure-path checks—produced directly within your repository.
 
@@ -168,7 +186,7 @@ Apex operates under an epistemic doctrine of empirical evidence over confident a
 ### Is Apex a coding agent or a framework my application runs on?
 Neither. Apex is a local operating protocol for a coding agent: instructions, focused skills, templates, and integrity checks. It adds no runtime dependency to the application you are building.
 
-### What is the Rule of Three for Design Patterns in v6.0?
+### What is the Rule of Three for Design Patterns in v7.0.0?
 Never introduce design patterns preemptively (anti-overengineering/YAGNI). Patterns (Strategy, Adapter, State, Facade) may only be introduced when there are at least three distinct, concrete variants ($\ge 3$) actively in use. Manual singletons and deep inheritance (>2 levels) are strictly banned.
 
 ### How does the Dual-Speed Environment work?

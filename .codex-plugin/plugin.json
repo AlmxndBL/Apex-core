@@ -1,6 +1,6 @@
 {
   "name": "apex-core",
-  "version": "5.5.0",
+  "version": "7.0.0",
   "description": "Production-safe, evidence-backed workflows for AI code patches, builds, reviews, and releases.",
   "author": {
     "name": "Apex-core"
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Apex",
     "shortDescription": "Production-safe AI code changes with evidence.",
-    "longDescription": "Use Apex-core to scope a change, follow project conventions, apply risk-appropriate safeguards, and verify the result before reporting completion.",
+    "longDescription": "Use Apex-core to discover scope, design and build systems in verifiable slices, follow project conventions, and report risk-appropriate verification evidence.",
     "developerName": "Apex",
     "category": "Developer Tools",
     "capabilities": ["Skills"],

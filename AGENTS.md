@@ -1,4 +1,4 @@
-# Apex Micro-Kernel (v6.1.0)
+# Apex Micro-Kernel (v7.0.0)
 
 > Universal, polyglot operating protocol for AI coding agents.
 
@@ -16,7 +16,7 @@
 
 ## 2. Deterministic JIT Adapter Bus & Risk Override Gate
 
-Inspect the target file and root manifest together. Load only relevant domain adapters, except high-risk work, which must load the backend adapter.
+Inspect the target file and root manifest together. Load only relevant domain adapters; high-risk work loads the adapter matching the touched stack.
 
 | Signal | Adapter | Fast check |
 |---|---|---|
@@ -30,5 +30,7 @@ Low-risk work touching 1–3 files uses R0–R4 without loading adapters. For Au
 ## 3. Execution Loop
 
 `S1 Discovery → S2 Adaptive Plan → S3 Execution → S4 Fast Verify`
+
+For new systems or substantial features, load [Build workflow](./skills/apex-core/references/build-workflow.md). Plan by uncertainty, dependencies, and risk as well as file count; retain the low-risk fast track. Use [quality-verify](./skills/quality-verify/SKILL.md) for completion review. Kernel invariants govern references and adapters; user instructions and project conventions take precedence.
 
 Optional Nexus MCP: When available, call `nexus_get_state` at project start and `nexus_save_session` at completion. Never invent memory when it is unavailable.

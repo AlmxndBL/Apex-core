@@ -17,7 +17,7 @@
 
 ```text
 .
-├── AGENTS.md                  # Micro-Kernel Operating Protocol (v6.0.0)
+├── AGENTS.md                  # Micro-Kernel Operating Protocol (v7.0.0)
 ├── AI-Context-Index.md        # AI Context Index & System Architecture Map (This file)
 ├── README.md                  # Master Documentation & Single Drop-in Guide
 ├── package.json               # Engine Configuration & Scripts
@@ -36,7 +36,7 @@
 │   ├── 05-ux-ui-design.md
 │   └── 06-testing-devops.md
 ├── skills/                    # Specialized Skills (Entry Point + Domain Pillars)
-│   ├── apex-core/             # Entry Point: Dispatches Micro-Kernel & JIT Adapters
+│   ├── apex-core/             # Entry Point: Kernel, JIT Adapters & Build Reference
 │   ├── backend-data/
 │   ├── cartography/
 │   ├── frontend/
@@ -52,6 +52,7 @@
 ## 🗄️ 3. Core Capabilities & Domains
 - **Security & Auth:** Threat-model-driven authentication, RBAC, CORS, and rate limiting; Better Auth and dual-token rotation are optional patterns.
 - **Code Quality:** Strict TypeScript (no any), Zod validation, JSDoc/TSDoc, Container-Presenter pattern
+- **System Building:** Adaptive discovery, design, dependency-aware delivery, and acceptance evidence via `skills/apex-core/references/build-workflow.md`.
 - **Architecture:** Modular Monolith, Domain-Driven Granular Routing, Spec-Driven Development (SDD)
 - **Database:** Relational database patterns, optional Prisma/PostgreSQL, OCC for contested state, and safe seeding when a database exists.
 - **Frontend UI/UX:** Feature Module Separation when useful, applicable async states, and optional responsive table patterns
