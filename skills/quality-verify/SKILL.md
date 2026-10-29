@@ -3,7 +3,7 @@ name: quality-verify
 description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Strike Loop-Breaker, and Evidence Delivery
 ---
 
-# Quality Verification & Fast Test Engine Skill (v6.1.0)
+# Quality Verification & Fast Test Engine Skill (v7.0.0)
 
 > In-memory verification protocols (Universal Definition of Done) with fast targeted checks and automated loop-breaking safeguards.
 
@@ -17,6 +17,7 @@ description: Fast In-Memory Verification Engine, Vitest / Sandbox Testing, 2-Str
   * **React / Next.js:** `pnpm tsc --noEmit` (or `npm`/`bun` matching lockfile)
   * **Polyglot / Other Stacks:** Run language-specific checks (e.g. `pytest -q`, `go test`, `node --check`).
 * [STANDARD] **Targeted Behavior Test:** Run the smallest test suite that observes the changed behavior, direct affected callers/consumers, and a justified failure path. Modified files help locate tests; they do not define the full test scope.
+* [STANDARD] **System Integration:** For new systems, exercise important flows across connected boundaries and tie acceptance criteria to actual evidence. Use production-build evidence when the new application or changed build configuration requires it; compiler checks alone do not establish runtime correctness. Track unverified criteria in the existing plan or delivery report.
 * [STANDARD] **Risk-Based Scope:** Strengthen verification for shared contracts, auth/RBAC, money, PII, durable state, schema/database work, concurrency, and cross-layer user journeys, even if only one file changed.
 
 ---

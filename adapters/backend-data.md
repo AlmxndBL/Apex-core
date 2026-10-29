@@ -1,6 +1,6 @@
 # 🛡️ Modular Stack Adapter: Backend & Data Architecture (Node / Prisma / PostgreSQL)
 
-> **Apex v6.1.0 Adapter Module · Domain: Server API, Database ORM & Backend Security**
+> **Apex v7.0.0 Adapter Module · Domain: Server API, Database ORM & Backend Security**
 > Covers Node.js runtimes, TypeScript server engines (Nitro, Express, Next Route Handlers), Prisma ORM, PostgreSQL, Server Session Guards, Concurrency Control, Idempotency, and Pragmatic OOP Patterns.
 
 ---

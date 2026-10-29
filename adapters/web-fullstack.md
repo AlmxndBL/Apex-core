@@ -1,6 +1,6 @@
 # 🌐 Modular Stack Adapter: Web Full-Stack (Nuxt 4 / Next.js 15 / Tailwind CSS)
 
-> **Apex v6.1.0 Adapter Module · Domain: Frontend & Web Full-Stack UI**
+> **Apex v7.0.0 Adapter Module · Domain: Frontend & Web Full-Stack UI**
 > Covers Nuxt 4 (Vue 3 + Nitro UI), Next.js 15 (React 19 + App Router), Tailwind CSS (v3/v4), 4-State UI, and Responsive Enterprise Design.
 
 ---

@@ -3,7 +3,7 @@ name: frontend
 description: Enterprise UI/UX, Component Architecture, Tailwind CSS, Responsive Design, and Aesthetic Polish for Vue 3 / Nuxt 4 and React / Next.js
 ---
 
-# Enterprise Frontend & UI/UX Skill (v6.1.0)
+# Enterprise Frontend & UI/UX Skill (v7.0.0)
 
 > Practical frontend architecture for Nuxt 4 (Vue 3) and React (Next.js 15), focusing on clean boundaries, resilient async states, and usable visual polish without unnecessary layers.
 

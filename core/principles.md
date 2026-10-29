@@ -1,6 +1,6 @@
 # 🏛️ Apex Core Universal Engineering Principles
 
-> **Apex v6.0 Core · Universal Architecture & Behavioral Invariants**  
+> **Apex v7.0.0 Core · Universal Architecture & Behavioral Invariants**
 > Language-agnostic, cross-stack engineering principles applicable to all software developed under the Apex Operating Protocol.
 
 ---
@@ -79,19 +79,10 @@ Regardless of framework, language, or environment, these non-negotiable security
 - **Zero Repository Pollution:** Never commit temporary scratch scripts (`scratch.js`, `dummy_test.ts`), raw logs, or IDE-specific cache directories.
 
 
-## 5. 🚀 New Project Bootstrapping (Docs-First Architecture)
+## 5. Adaptive New-Project Bootstrapping
 
-When initializing a new project under the Apex Protocol, agents must enforce a strictly "Docs-First" skeleton before writing any application code or executing framework setup commands.
+For new systems and substantial features, follow the [Build workflow](../skills/apex-core/references/build-workflow.md). Establish scope, necessary design boundaries, acceptance criteria, and verification before implementation at the depth justified by uncertainty and risk.
 
-### A. The Master Router (`AGENTS.md`)
-- Place a single `AGENTS.md` file in the project root.
-- It must act ONLY as a router, pointing to `Apex-core/AGENTS.md` for core rules, and mapping local context to the `docs/` directory. Do not embed heavy business logic here.
+Reuse project documents. A small project can keep this information in a single plan; larger systems can retain PRD, architecture, design-system, and verification documents where useful. UI documentation applies to UI projects; RBAC and data lifecycle apply only when needed. Existing v6 documents remain valid and need no forced rename or deletion.
 
-### B. The 3 Core Pillars (in `docs/`)
-Before writing application code, the following 3 specifications must be drafted, reviewed, and placed in the `docs/` directory:
-1. `docs/prd.md`: Product Requirements Document containing epic scope, features, and RBAC matrix. Use explicit state tags like `[Implemented]`, `[WIP]`, and `[Target]`.
-2. `docs/design_system.md`: The single source of truth for UX/UI and styling. Must bind UX theories directly to Code Tokens (e.g., Tailwind classes, UI library components) to prevent UI split-brain and hallucinated styling.
-3. `docs/verification_matrix.md`: The Quality Assurance gate. Contains exact terminal commands for fast in-RAM verification, testing boundaries, and baseline ratchet policies.
-
-### C. Execution Loop
-Once the skeleton is approved, agents will execute features by reading the Router (`AGENTS.md`), mapping requirements from the PRD, applying stylistic tokens from the Design System, and verifying against the Matrix before returning control to the user.
+Ask for material missing decisions or required destructive-action approval. Existing implementation authorization does not require another skeleton sign-off. Create or extend project agent instructions only when useful, following the kernel's single AGENTS.md convention.

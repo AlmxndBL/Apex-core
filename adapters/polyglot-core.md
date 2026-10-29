@@ -1,6 +1,6 @@
 # 🐍 Modular Stack Adapter: Polyglot Core (Python / C# .NET / CLI & Shell)
 
-> **Apex v6.1.0 Adapter Module · Domain: Non-Node Runtimes & Multi-Language Systems**
+> **Apex v7.0.0 Adapter Module · Domain: Non-Node Runtimes & Multi-Language Systems**
 > Covers Python 3.10+ (FastAPI, pytest, mypy, Pydantic), C# / .NET 8+ (ASP.NET Core, EF Core, xUnit), and Cross-Platform Automation CLI / Shell.
 
 ---

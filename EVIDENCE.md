@@ -7,6 +7,12 @@
 
 ---
 
+## v7.0.0 Checkpoint — 2026-10-29
+
+The v7 release's current packaging evidence is recorded in [the checkpoint review](./docs/reviews/2026-10-29-apex-v7-release-checkpoint.md): `npm test` passed 141/141 integrity checks; syntax and diff checks passed, and temporary-copy fault injection confirmed rejection of a missing Build reference and inconsistent Codex version. Historical counts and commit references below describe their original audits, not the v7 suite.
+
+Build workflow walkthroughs are static inspections. Live agent effectiveness, plugin installation behavior, and comparative token/latency/quality improvements remain unverified. The optional external skill validator could not run because PyYAML is absent; repository and narrow scalar-frontmatter fallback checks were used instead.
+
 ## 1. Epistemic Doctrine & Classification Framework
 
 Apex-core operates under a strict anti-sycophancy and evidence-grounding policy ([`AGENTS.md [RULE 0]`](./AGENTS.md)). No performance metrics, token savings, or accuracy claims may be presented as verified facts without reproducible, empirical proof.

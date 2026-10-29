@@ -7,6 +7,23 @@ Benchmark tooling and telemetry referenced in older entries lived in the separat
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2026-10-29 — Adaptive System Building
+
+### Added
+- Conditional Build reference under the existing apex-core skill: discovery, necessary design, dependency-aware slices, systematic diagnosis, acceptance evidence, and resumable delivery.
+- Release/migration rationale and representative static walkthroughs, explicitly separated from live agent evaluations.
+- Reference packaging/link checks and active release-label synchronization in the integrity suite.
+
+### Changed
+- **Breaking protocol change:** Replaced mandatory three-document, approval-gated project bootstrapping with project-appropriate documentation and material-decision clarification. Existing documents remain valid.
+- Routed substantial builds from the kernel and entry skill; retained the five-skill installation surface and low-risk fast track.
+- Connected new-system integration/build evidence to the existing acceptance and standards/risk review; corrected high-risk adapter routing prose.
+- Synchronized manifests, lockfile, EN/TH documentation, active module headers, and indexes. Preserved pre-existing Codex manifest/verifier synchronization changes.
+
+### Evidence and migration
+- Framework checks validate packaging and consistency, not live agent effectiveness. No comparative speed, quality, or token claim is made for v7.
+- Full Build guidance requires repository skill references; a standalone kernel remains a limited fallback. See docs/plans/2026-10-29-apex-v7-build-workflow.md.
+
 ## [6.1.0] - 2026-10-18 — Practical Security & Governance Updates
 
 ### Changed
